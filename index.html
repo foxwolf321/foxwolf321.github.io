@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>数学公式カード Drive同期版</title>
+<meta name="theme-color" content="#2f5fe3">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="数学公式カード">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<style>
+:root {
+  --bg:#f6f7fb; --panel:#fff; --line:#dbe1ee; --text:#202633; --sub:#5f697a;
+  --accent:#2f5fe3; --soft:#eef3ff; --danger:#ffeef0; --warn:#fff6e8; --ok:#edf9f1; --easy:#eef8ff;
+}
+*{box-sizing:border-box;}
+body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Hiragino Kaku Gothic ProN','Yu Gothic UI','Meiryo',sans-serif;line-height:1.55;}
+.wrap{max-width:1040px;margin:0 auto;padding:16px;}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:16px;box-shadow:0 8px 20px rgba(30,50,90,.06);}
+header.panel{margin-bottom:14px;}
+h1{font-size:1.55rem;margin:0 0 8px;}
+p{margin:0 0 10px;}
+.top-actions,.row,.grade-row,.chips,.results,.sync-actions{display:flex;flex-wrap:wrap;gap:10px;}
+button,input{font:inherit;}
+button{border:1px solid var(--line);background:#fff;border-radius:999px;padding:10px 14px;color:var(--text);}
+button.primary{background:var(--accent);border-color:var(--accent);color:#fff;}
+button.soft{background:var(--soft);border-color:#d5defd;color:#2748b7;}
+button.danger{background:var(--danger);border-color:#f1cfd5;color:#a63848;}
+button.warn{background:var(--warn);border-color:#f0ddb6;color:#9d6d19;}
+button.ok{background:var(--ok);border-color:#cfe7d6;color:#247548;}
+button.easy{background:var(--easy);border-color:#cfe2fb;color:#1663a4;}
+button.active{background:#202633;color:#fff;border-color:#202633;}
+button:disabled{opacity:.55;cursor:not-allowed;}
+input[type=search], input[type=text]{width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:14px;background:#fff;}
+label.chk{display:flex;gap:8px;align-items:center;font-size:.95rem;color:var(--sub);}
+#status,#syncStatus{margin-top:8px;padding:10px 12px;border-radius:12px;background:#f8fbff;border:1px solid #e0e8fa;color:#45506a;font-size:.95rem;}
+#syncStatus{background:#fbfcff;}
+#viewBook{display:none;}
+#viewReview{display:block;}
+.card{margin-top:14px;}
+.flashcard{border:1px solid #e6ebf5;border-radius:22px;padding:20px;min-height:260px;background:linear-gradient(180deg,#fff,#fbfcff);}
+.kicker{font-size:.82rem;color:var(--sub);text-transform:uppercase;letter-spacing:.04em;}
+.prompt{font-size:1.35rem;font-weight:700;margin-top:10px;line-height:1.5;white-space:pre-wrap;}
+.answer{margin-top:16px;padding:14px;border-radius:16px;border:1px solid #dce6ff;background:#f8fbff;white-space:pre-wrap;display:none;}
+.meta{margin-top:10px;color:var(--sub);font-size:.95rem;}
+.stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:14px;}
+.stat{background:#f8faff;border:1px solid #e6ecf8;border-radius:14px;padding:12px;}
+.stat .n{display:block;font-size:1.3rem;font-weight:700;}
+.section-title{margin:16px 0 8px;font-weight:700;}
+.note{font-size:.92rem;color:var(--sub);}
+.formula-item{border:1px solid #e7ebf4;border-radius:16px;padding:14px;margin-bottom:10px;scroll-margin-top:16px;background:#fff;}
+.formula-item h3{margin:0 0 6px;font-size:1.05rem;}
+.formula-item .mini{font-size:.92rem;color:var(--sub);}
+.formula-item .ans{margin-top:8px;font-weight:600;white-space:pre-wrap;}
+.unit-block{margin-top:18px;}
+.sync-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px;}
+.sync-box{background:#fbfcff;border:1px solid #e4e9f7;border-radius:16px;padding:14px;}
+.sync-box h2{font-size:1.02rem;margin:0 0 8px;}
+.mono{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.92rem;word-break:break-all;}
+hr{border:none;border-top:1px solid #e8ecf4;margin:18px 0;}
+@media (max-width:720px){
+  .wrap{padding:12px;}
+  .prompt{font-size:1.18rem;}
+  .sync-grid{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="panel">
+    <h1>理系の大学受験生向け 数学公式カード式問題集（Drive同期版）</h1>
+    <p>カード学習・公式集・検索・間隔反復に加えて、Google Drive の <strong>appDataFolder</strong> へのバックアップと復元に対応した版です。</p>
+    <div class="top-actions">
+      <button id="btnStudy" class="primary">カード学習を始める</button>
+      <button id="btnBook" class="soft">すべての公式集を開く</button>
+      <button id="btnReset" class="danger">進捗を初期化</button>
+      <button id="btnInstall" style="display:none;" class="ok">ホーム画面に追加</button>
+    </div>
+    <div id="status">初期化中…</div>
+    <div class="sync-grid">
+      <section class="sync-box">
+        <h2>Google Drive 自動バックアップ</h2>
+        <p class="note">初回のみ Google Cloud 側の設定が必要です。設定後は起動中の学習変更を自動バックアップし、必要時に復元できます。</p>
+        <input id="clientIdInput" type="text" placeholder="OAuth クライアントIDを貼り付け（例: 123...apps.googleusercontent.com）">
+        <div class="sync-actions" style="margin-top:10px;">
+          <button id="btnConnectDrive" class="primary">Googleに接続</button>
+          <button id="btnBackupNow" class="ok">今すぐバックアップ</button>
+          <button id="btnRestoreNow" class="soft">Driveから復元</button>
+          <button id="btnDisconnectDrive">接続解除</button>
+        </div>
+        <div class="row" style="margin-top:10px;">
+          <label class="chk"><input id="autoSyncToggle" type="checkbox"> 学習内容が変わるたび自動バックアップ</label>
+        </div>
+        <div id="syncStatus">Drive未接続です。</div>
+      </section>
+      <section class="sync-box">
+        <h2>最初の設定</h2>
+        <ol class="note" style="padding-left:18px;margin:0;">
+          <li>Google Cloud で <strong>Drive API</strong> を有効化</li>
+          <li>OAuth 同意画面を作成し、<strong>drive.appdata</strong> を追加</li>
+          <li>OAuth クライアントを <strong>Web application</strong> で作成</li>
+          <li>Authorized JavaScript origins に <span class="mono" id="originText"></span> を追加</li>
+          <li>発行されたクライアントIDを左へ貼って接続</li>
+        </ol>
+        <p class="note" style="margin-top:10px;">Drive保存先はアプリ専用・非表示の <strong>appDataFolder</strong> です。通常のDrive一覧には出ません。</p>
+      </section>
+    </div>
+  </header>
+
+  <div class="row" style="margin-bottom:12px;">
+    <button id="tabStudy" class="active">カード学習</button>
+    <button id="tabBookBtn">公式集・検索</button>
+  </div>
+
+  <section id="viewReview" class="panel">
+    <div class="row" style="justify-content:space-between;align-items:center;">
+      <div>
+        <div id="queueLabel">読み込み中…</div>
+        <div class="meta" id="currentMeta"></div>
+      </div>
+      <div class="row">
+        <button id="btnPrev">前へ</button>
+        <button id="btnNext">次へ</button>
+        <button id="btnReveal" class="soft">答えを見る</button>
+      </div>
+    </div>
+
+    <div class="flashcard card" id="cardBox">
+      <div class="kicker">表</div>
+      <div class="prompt" id="cardPrompt">読み込み中…</div>
+      <div class="answer" id="cardAnswer"></div>
+    </div>
+
+    <div class="grade-row" style="margin-top:14px;display:none;" id="gradeRow">
+      <button id="gradeAgain" class="danger">忘れた</button>
+      <button id="gradeHard" class="warn">あやしい</button>
+      <button id="gradeGood" class="ok">できた</button>
+      <button id="gradeEasy" class="easy">余裕</button>
+    </div>
+    <div class="meta" id="schedulePreview"></div>
+
+    <div class="stats">
+      <div class="stat"><span class="n" id="dueCount">0</span><span>今すぐ復習</span></div>
+      <div class="stat"><span class="n" id="allCount">0</span><span>総カード数</span></div>
+      <div class="stat"><span class="n" id="masteredCount">0</span><span>30日以上安定</span></div>
+      <div class="stat"><span class="n" id="weakCount">0</span><span>弱点カード</span></div>
+    </div>
+
+    <div class="section-title">出題設定</div>
+    <div class="chips" style="margin-bottom:10px;">
+      <button id="toggleDueOnly" class="active">期限カード優先</button>
+      <button id="shuffleQueue">並び替え</button>
+      <button id="showCurrentInBook">この公式を一覧で開く</button>
+    </div>
+
+    <div class="section-title">出題範囲</div>
+    <div class="chips" id="unitFilters"></div>
+
+    <div class="note" style="margin-top:12px;">誤答ほど短い間隔で再出題し、安定したカードは数日〜数週間へ伸びます。Drive自動バックアップは接続済みで有効なときだけ動きます。</div>
+  </section>
+
+  <section id="viewBook" class="panel">
+    <div class="row">
+      <input type="search" id="bookSearch" placeholder="公式名・単元名・別名で検索（例：余弦定理、部分積分、解の公式）">
+    </div>
+    <div class="row" style="margin-top:10px;">
+      <button id="jumpFirst" class="soft">先頭一致へ飛ぶ</button>
+      <button id="clearSearch">検索クリア</button>
+    </div>
+    <div class="meta" id="searchSummary"></div>
+    <div class="results" id="searchResults" style="margin-top:10px;"></div>
+    <hr>
+    <div id="bookArea"></div>
+  </section>
+</div>
+
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<script>
+(function() {
+'use strict';
+try {
+  var STORAGE_KEY = 'rikei_math_formula_cards_drive_sync_v1';
+  var DRIVE_SCOPE = 'https://www.googleapis.com/auth/drive.appdata';
+  var BACKUP_FILE_NAME = 'rikei_math_formula_cards_backup_v1.json';
+  var cards = [{"id": 1, "unit": "数と式・方程式", "title": "平方の展開①", "prompt": "(a+b)² の展開公式を述べよ。", "answer": "(a+b)² = a² + 2ab + b²", "aliases": ["展開公式", "二乗展開"]}, {"id": 2, "unit": "数と式・方程式", "title": "平方の展開②", "prompt": "(a-b)² の展開公式を述べよ。", "answer": "(a-b)² = a² - 2ab + b²", "aliases": ["展開公式", "二乗展開"]}, {"id": 3, "unit": "数と式・方程式", "title": "和と差の積", "prompt": "(a+b)(a-b) の展開公式を述べよ。", "answer": "(a+b)(a-b) = a² - b²", "aliases": ["差の平方", "展開公式"]}, {"id": 4, "unit": "数と式・方程式", "title": "たすき型展開", "prompt": "(x+a)(x+b) の展開公式を述べよ。", "answer": "(x+a)(x+b) = x² + (a+b)x + ab", "aliases": ["展開"]}, {"id": 5, "unit": "数と式・方程式", "title": "三項の平方", "prompt": "(a+b+c)² の展開公式を述べよ。", "answer": "(a+b+c)² = a² + b² + c² + 2ab + 2bc + 2ca", "aliases": ["展開"]}, {"id": 6, "unit": "数と式・方程式", "title": "立方の和の展開", "prompt": "(a+b)³ の展開公式を述べよ。", "answer": "(a+b)³ = a³ + 3a²b + 3ab² + b³", "aliases": ["三乗展開"]}, {"id": 7, "unit": "数と式・方程式", "title": "立方の差の展開", "prompt": "(a-b)³ の展開公式を述べよ。", "answer": "(a-b)³ = a³ - 3a²b + 3ab² - b³", "aliases": ["三乗展開"]}, {"id": 8, "unit": "数と式・方程式", "title": "因数分解①", "prompt": "x² + (a+b)x + ab の因数分解を述べよ。", "answer": "x² + (a+b)x + ab = (x+a)(x+b)", "aliases": ["因数分解"]}, {"id": 9, "unit": "数と式・方程式", "title": "因数分解②", "prompt": "x² + 2ax + a² の因数分解を述べよ。", "answer": "x² + 2ax + a² = (x+a)²", "aliases": ["平方完成", "因数分解"]}, {"id": 10, "unit": "数と式・方程式", "title": "因数分解③", "prompt": "x² - 2ax + a² の因数分解を述べよ。", "answer": "x² - 2ax + a² = (x-a)²", "aliases": ["平方完成", "因数分解"]}, {"id": 11, "unit": "数と式・方程式", "title": "立方和の因数分解", "prompt": "a³ + b³ の因数分解を述べよ。", "answer": "a³ + b³ = (a+b)(a² - ab + b²)", "aliases": ["因数分解"]}, {"id": 12, "unit": "数と式・方程式", "title": "立方差の因数分解", "prompt": "a³ - b³ の因数分解を述べよ。", "answer": "a³ - b³ = (a-b)(a² + ab + b²)", "aliases": ["因数分解"]}, {"id": 13, "unit": "数と式・方程式", "title": "剰余の定理", "prompt": "多項式 P(x) を x-a で割った余りを述べよ。", "answer": "P(x) を x-a で割った余りは P(a)", "aliases": ["剰余"]}, {"id": 14, "unit": "数と式・方程式", "title": "因数定理", "prompt": "P(x) が x-a を因数にもつ条件を述べよ。", "answer": "P(a)=0 であることが必要十分条件", "aliases": ["因数"]}, {"id": 15, "unit": "数と式・方程式", "title": "二次方程式の解の公式", "prompt": "ax²+bx+c=0 (a≠0) の解の公式を述べよ。", "answer": "x = (-b ± √(b² - 4ac)) / (2a)", "aliases": ["解の公式"]}, {"id": 16, "unit": "数と式・方程式", "title": "判別式", "prompt": "二次方程式 ax²+bx+c=0 の判別式 D を述べよ。", "answer": "D = b² - 4ac", "aliases": ["D", "重解", "実数解"]}, {"id": 17, "unit": "数と式・方程式", "title": "解と係数の関係", "prompt": "二次方程式 ax²+bx+c=0 の2解を α,β とするとき、α+β と αβ を述べよ。", "answer": "α+β = -b/a,　αβ = c/a", "aliases": ["解と係数", "ヴィエタ"]}, {"id": 18, "unit": "数と式・方程式", "title": "絶対値方程式の基本", "prompt": "|x|=a の解を述べよ。", "answer": "a≥0 のとき x=±a、a<0 のとき解なし", "aliases": ["絶対値"]}, {"id": 19, "unit": "数と式・方程式", "title": "相加相乗平均", "prompt": "a,b>0 のときの相加平均・相乗平均の関係式を述べよ。", "answer": "(a+b)/2 ≥ √(ab)　（等号は a=b のとき）", "aliases": ["AM-GM", "不等式"]}, {"id": 20, "unit": "二次関数・図形", "title": "平方完成", "prompt": "ax²+bx+c の平方完成形を述べよ。", "answer": "ax²+bx+c = a(x + b/(2a))² - (b² - 4ac)/(4a)", "aliases": ["平方完成", "二次関数"]}, {"id": 21, "unit": "二次関数・図形", "title": "頂点のx座標", "prompt": "y=ax²+bx+c の頂点の x 座標を述べよ。", "answer": "x = -b/(2a)", "aliases": ["頂点"]}, {"id": 22, "unit": "二次関数・図形", "title": "頂点のy座標", "prompt": "y=ax²+bx+c の頂点の y 座標を述べよ。", "answer": "y = -(b² - 4ac)/(4a)  または f(-b/(2a))", "aliases": ["頂点"]}, {"id": 23, "unit": "二次関数・図形", "title": "二次関数の標準形", "prompt": "y=ax²+bx+c を頂点 (p,q) を用いて表す標準形を述べよ。", "answer": "y = a(x-p)² + q", "aliases": ["標準形"]}, {"id": 24, "unit": "二次関数・図形", "title": "放物線の軸", "prompt": "y=ax²+bx+c の軸を述べよ。", "answer": "x = -b/(2a)", "aliases": ["軸"]}, {"id": 25, "unit": "二次関数・図形", "title": "2点間の距離", "prompt": "点 A(x₁,y₁), B(x₂,y₂) の距離を述べよ。", "answer": "AB = √{(x₂-x₁)² + (y₂-y₁)²}", "aliases": ["距離"]}, {"id": 26, "unit": "二次関数・図形", "title": "内分点の座標", "prompt": "点 A(x₁,y₁), B(x₂,y₂) を m:n に内分する点 P の座標を述べよ。", "answer": "P((nx₁+mx₂)/(m+n), (ny₁+my₂)/(m+n))", "aliases": ["内分"]}, {"id": 27, "unit": "二次関数・図形", "title": "外分点の座標", "prompt": "点 A(x₁,y₁), B(x₂,y₂) を m:n に外分する点 P の座標を述べよ。", "answer": "P((-nx₁+mx₂)/(m-n), (-ny₁+my₂)/(m-n))", "aliases": ["外分"]}, {"id": 28, "unit": "二次関数・図形", "title": "直線の傾き", "prompt": "2点 A(x₁,y₁), B(x₂,y₂) を通る直線の傾きを述べよ。", "answer": "(y₂-y₁)/(x₂-x₁)", "aliases": ["傾き"]}, {"id": 29, "unit": "二次関数・図形", "title": "直線の方程式", "prompt": "点 (x₁,y₁) を通り傾き m の直線の方程式を述べよ。", "answer": "y-y₁ = m(x-x₁)", "aliases": ["一次関数", "直線"]}, {"id": 30, "unit": "二次関数・図形", "title": "点と直線の距離", "prompt": "点 (x₀,y₀) と直線 ax+by+c=0 の距離を述べよ。", "answer": "d = |ax₀ + by₀ + c| / √(a²+b²)", "aliases": ["距離"]}, {"id": 31, "unit": "二次関数・図形", "title": "円の方程式", "prompt": "中心 (a,b), 半径 r の円の方程式を述べよ。", "answer": "(x-a)² + (y-b)² = r²", "aliases": ["円"]}, {"id": 32, "unit": "二次関数・図形", "title": "一般形の円", "prompt": "x²+y²+lx+my+n=0 の中心と半径を述べよ。", "answer": "中心 (-l/2,-m/2)、半径 √{(l/2)²+(m/2)²-n}", "aliases": ["円"]}, {"id": 33, "unit": "二次関数・図形", "title": "円と直線の位置関係", "prompt": "円の中心から直線までの距離 d と半径 r の大小による位置関係を述べよ。", "answer": "d<r:2点で交わる、d=r:接する、d>r:交わらない", "aliases": ["円", "接線"]}, {"id": 34, "unit": "三角比・三角関数", "title": "sin の定義", "prompt": "直角三角形での sinθ の定義を述べよ。", "answer": "sinθ = 対辺 / 斜辺", "aliases": ["三角比"]}, {"id": 35, "unit": "三角比・三角関数", "title": "cos の定義", "prompt": "直角三角形での cosθ の定義を述べよ。", "answer": "cosθ = 隣辺 / 斜辺", "aliases": ["三角比"]}, {"id": 36, "unit": "三角比・三角関数", "title": "tan の定義", "prompt": "直角三角形での tanθ の定義を述べよ。", "answer": "tanθ = 対辺 / 隣辺 = sinθ / cosθ", "aliases": ["三角比"]}, {"id": 37, "unit": "三角比・三角関数", "title": "三角比の基本関係", "prompt": "sin²θ + cos²θ を述べよ。", "answer": "sin²θ + cos²θ = 1", "aliases": ["基本関係"]}, {"id": 38, "unit": "三角比・三角関数", "title": "tan と sec²", "prompt": "1+tan²θ を述べよ。", "answer": "1 + tan²θ = 1 / cos²θ", "aliases": ["三角関数"]}, {"id": 39, "unit": "三角比・三角関数", "title": "余角の関係①", "prompt": "sin(90°-θ) を述べよ。", "answer": "sin(90°-θ) = cosθ", "aliases": ["余角"]}, {"id": 40, "unit": "三角比・三角関数", "title": "余角の関係②", "prompt": "cos(90°-θ) を述べよ。", "answer": "cos(90°-θ) = sinθ", "aliases": ["余角"]}, {"id": 41, "unit": "三角比・三角関数", "title": "余角の関係③", "prompt": "tan(90°-θ) を述べよ。", "answer": "tan(90°-θ) = 1/tanθ", "aliases": ["余角"]}, {"id": 42, "unit": "三角比・三角関数", "title": "弧度法", "prompt": "180° は何 rad か述べよ。", "answer": "π rad", "aliases": ["ラジアン"]}, {"id": 43, "unit": "三角比・三角関数", "title": "弧長", "prompt": "半径 r、中心角 θ(rad) の扇形の弧長を述べよ。", "answer": "l = rθ", "aliases": ["扇形"]}, {"id": 44, "unit": "三角比・三角関数", "title": "扇形の面積", "prompt": "半径 r、中心角 θ(rad) の扇形の面積を述べよ。", "answer": "S = (1/2)r²θ", "aliases": ["扇形"]}, {"id": 45, "unit": "三角比・三角関数", "title": "正弦定理", "prompt": "三角形 ABC における正弦定理を述べよ。", "answer": "a/sinA = b/sinB = c/sinC = 2R", "aliases": ["正弦定理", "外接円"]}, {"id": 46, "unit": "三角比・三角関数", "title": "余弦定理", "prompt": "三角形 ABC における余弦定理を述べよ。", "answer": "a² = b² + c² - 2bc cosA （循環的に成り立つ）", "aliases": ["余弦定理"]}, {"id": 47, "unit": "三角比・三角関数", "title": "三角形の面積①", "prompt": "2辺とその間の角による三角形の面積公式を述べよ。", "answer": "S = (1/2)bc sinA", "aliases": ["面積"]}, {"id": 48, "unit": "三角比・三角関数", "title": "加法定理 sin", "prompt": "sin(α+β), sin(α-β) を述べよ。", "answer": "sin(α±β) = sinα cosβ ± cosα sinβ", "aliases": ["加法定理"]}, {"id": 49, "unit": "三角比・三角関数", "title": "加法定理 cos", "prompt": "cos(α+β), cos(α-β) を述べよ。", "answer": "cos(α±β) = cosα cosβ ∓ sinα sinβ", "aliases": ["加法定理"]}, {"id": 50, "unit": "三角比・三角関数", "title": "加法定理 tan", "prompt": "tan(α±β) を述べよ。", "answer": "tan(α±β) = (tanα ± tanβ) / (1 ∓ tanα tanβ)", "aliases": ["加法定理"]}, {"id": 51, "unit": "三角比・三角関数", "title": "2倍角 sin", "prompt": "sin2θ を述べよ。", "answer": "sin2θ = 2sinθ cosθ", "aliases": ["二倍角"]}, {"id": 52, "unit": "三角比・三角関数", "title": "2倍角 cos", "prompt": "cos2θ を述べよ。", "answer": "cos2θ = cos²θ - sin²θ = 2cos²θ -1 = 1 - 2sin²θ", "aliases": ["二倍角"]}, {"id": 53, "unit": "三角比・三角関数", "title": "2倍角 tan", "prompt": "tan2θ を述べよ。", "answer": "tan2θ = 2tanθ / (1 - tan²θ)", "aliases": ["二倍角"]}, {"id": 54, "unit": "三角比・三角関数", "title": "半角公式 sin²", "prompt": "sin²(θ/2) を述べよ。", "answer": "sin²(θ/2) = (1 - cosθ)/2", "aliases": ["半角"]}, {"id": 55, "unit": "三角比・三角関数", "title": "半角公式 cos²", "prompt": "cos²(θ/2) を述べよ。", "answer": "cos²(θ/2) = (1 + cosθ)/2", "aliases": ["半角"]}, {"id": 56, "unit": "三角比・三角関数", "title": "半角公式 tan", "prompt": "tan²(θ/2) を述べよ。", "answer": "tan²(θ/2) = (1 - cosθ)/(1 + cosθ)", "aliases": ["半角"]}, {"id": 57, "unit": "三角比・三角関数", "title": "積和公式①", "prompt": "sinα sinβ を和に直す公式を述べよ。", "answer": "sinα sinβ = {cos(α-β) - cos(α+β)}/2", "aliases": ["積和"]}, {"id": 58, "unit": "三角比・三角関数", "title": "積和公式②", "prompt": "cosα cosβ を和に直す公式を述べよ。", "answer": "cosα cosβ = {cos(α-β) + cos(α+β)}/2", "aliases": ["積和"]}, {"id": 59, "unit": "三角比・三角関数", "title": "積和公式③", "prompt": "sinα cosβ を和に直す公式を述べよ。", "answer": "sinα cosβ = {sin(α+β) + sin(α-β)}/2", "aliases": ["積和"]}, {"id": 60, "unit": "三角比・三角関数", "title": "和積公式①", "prompt": "sinα + sinβ を積に直す公式を述べよ。", "answer": "sinα + sinβ = 2sin{(α+β)/2} cos{(α-β)/2}", "aliases": ["和積"]}, {"id": 61, "unit": "三角比・三角関数", "title": "和積公式②", "prompt": "sinα - sinβ を積に直す公式を述べよ。", "answer": "sinα - sinβ = 2cos{(α+β)/2} sin{(α-β)/2}", "aliases": ["和積"]}, {"id": 62, "unit": "三角比・三角関数", "title": "和積公式③", "prompt": "cosα + cosβ を積に直す公式を述べよ。", "answer": "cosα + cosβ = 2cos{(α+β)/2} cos{(α-β)/2}", "aliases": ["和積"]}, {"id": 63, "unit": "三角比・三角関数", "title": "和積公式④", "prompt": "cosα - cosβ を積に直す公式を述べよ。", "answer": "cosα - cosβ = -2sin{(α+β)/2} sin{(α-β)/2}", "aliases": ["和積"]}, {"id": 64, "unit": "三角比・三角関数", "title": "合成公式", "prompt": "a sinx + b cosx の合成を述べよ。", "answer": "a sinx + b cosx = R sin(x+φ) = R cos(x-ψ), ただし R=√(a²+b²)", "aliases": ["三角関数の合成"]}, {"id": 65, "unit": "三角比・三角関数", "title": "三角関数の周期", "prompt": "sinx, cosx, tanx の周期を述べよ。", "answer": "sinx, cosx の周期は 2π、tanx の周期は π", "aliases": ["周期"]}, {"id": 66, "unit": "指数・対数", "title": "指数法則①", "prompt": "a^m × a^n の指数法則を述べよ。", "answer": "a^m × a^n = a^(m+n)", "aliases": ["指数法則"]}, {"id": 67, "unit": "指数・対数", "title": "指数法則②", "prompt": "a^m / a^n の指数法則を述べよ。", "answer": "a^m / a^n = a^(m-n)  (a≠0)", "aliases": ["指数法則"]}, {"id": 68, "unit": "指数・対数", "title": "指数法則③", "prompt": "(a^m)^n の指数法則を述べよ。", "answer": "(a^m)^n = a^(mn)", "aliases": ["指数法則"]}, {"id": 69, "unit": "指数・対数", "title": "指数法則④", "prompt": "(ab)^n, (a/b)^n の指数法則を述べよ。", "answer": "(ab)^n = a^n b^n,　(a/b)^n = a^n / b^n", "aliases": ["指数法則"]}, {"id": 70, "unit": "指数・対数", "title": "対数の定義", "prompt": "log_a b の定義を述べよ。", "answer": "a^x=b をみたす x を log_a b と書く（a>0, a≠1, b>0）", "aliases": ["対数"]}, {"id": 71, "unit": "指数・対数", "title": "対数法則①", "prompt": "log_a(MN) を述べよ。", "answer": "log_a(MN) = log_a M + log_a N", "aliases": ["対数法則"]}, {"id": 72, "unit": "指数・対数", "title": "対数法則②", "prompt": "log_a(M/N) を述べよ。", "answer": "log_a(M/N) = log_a M - log_a N", "aliases": ["対数法則"]}, {"id": 73, "unit": "指数・対数", "title": "対数法則③", "prompt": "log_a(M^k) を述べよ。", "answer": "log_a(M^k) = k log_a M", "aliases": ["対数法則"]}, {"id": 74, "unit": "指数・対数", "title": "底の変換公式", "prompt": "log_a b を別の底 c を用いて表す式を述べよ。", "answer": "log_a b = (log_c b) / (log_c a)", "aliases": ["底の変換"]}, {"id": 75, "unit": "指数・対数", "title": "常用対数の桁数", "prompt": "正の数 N の桁数を常用対数で表す方法を述べよ。", "answer": "桁数 = [log₁₀N] + 1", "aliases": ["常用対数", "桁数"]}, {"id": 76, "unit": "場合の数・確率", "title": "順列", "prompt": "n個からr個を並べる順列 nPr を述べよ。", "answer": "nPr = n! / (n-r)!", "aliases": ["順列"]}, {"id": 77, "unit": "場合の数・確率", "title": "組合せ", "prompt": "n個からr個を選ぶ組合せ nCr を述べよ。", "answer": "nCr = n! / {r!(n-r)!}", "aliases": ["組合せ"]}, {"id": 78, "unit": "場合の数・確率", "title": "階乗", "prompt": "n! の定義を述べよ。", "answer": "n! = n(n-1)(n-2)…2・1", "aliases": ["階乗"]}, {"id": 79, "unit": "場合の数・確率", "title": "円順列", "prompt": "異なる n 個を円形に並べる円順列の数を述べよ。", "answer": "(n-1)!", "aliases": ["円順列"]}, {"id": 80, "unit": "場合の数・確率", "title": "重複順列", "prompt": "n種類から重複を許してr個並べる場合の数を述べよ。", "answer": "n^r", "aliases": ["重複順列"]}, {"id": 81, "unit": "場合の数・確率", "title": "重複組合せ", "prompt": "n種類から重複を許してr個選ぶ重複組合せを述べよ。", "answer": "nHr = (n+r-1)Cr", "aliases": ["重複組合せ"]}, {"id": 82, "unit": "場合の数・確率", "title": "組合せの基本関係", "prompt": "nCr と nC(n-r) の関係を述べよ。", "answer": "nCr = nC(n-r)", "aliases": ["組合せ"]}, {"id": 83, "unit": "場合の数・確率", "title": "組合せの漸化式", "prompt": "nCr と (n-1)C(r-1), (n-1)Cr の関係を述べよ。", "answer": "nCr = (n-1)C(r-1) + (n-1)Cr", "aliases": ["パスカル"]}, {"id": 84, "unit": "場合の数・確率", "title": "確率の定義", "prompt": "同様に確からしいときの確率 P(A) を述べよ。", "answer": "P(A) = n(A) / n(U)", "aliases": ["確率"]}, {"id": 85, "unit": "場合の数・確率", "title": "余事象", "prompt": "余事象 Ā を用いた確率の公式を述べよ。", "answer": "P(Ā) = 1 - P(A)", "aliases": ["余事象"]}, {"id": 86, "unit": "場合の数・確率", "title": "和事象", "prompt": "P(A∪B) を述べよ。", "answer": "P(A∪B) = P(A) + P(B) - P(A∩B)", "aliases": ["和事象"]}, {"id": 87, "unit": "場合の数・確率", "title": "条件付き確率", "prompt": "条件付き確率 P(A|B) を述べよ。", "answer": "P(A|B) = P(A∩B) / P(B)  (P(B)>0)", "aliases": ["条件付き確率"]}, {"id": 88, "unit": "場合の数・確率", "title": "乗法定理", "prompt": "P(A∩B) を条件付き確率で表せ。", "answer": "P(A∩B) = P(B)P(A|B) = P(A)P(B|A)", "aliases": ["乗法定理"]}, {"id": 89, "unit": "場合の数・確率", "title": "独立", "prompt": "A と B が独立である条件を述べよ。", "answer": "P(A∩B) = P(A)P(B)", "aliases": ["独立"]}, {"id": 90, "unit": "場合の数・確率", "title": "反復試行", "prompt": "成功確率 p の試行を n 回行うとき、ちょうど r 回成功する確率を述べよ。", "answer": "nCr p^r (1-p)^(n-r)", "aliases": ["二項分布", "反復試行"]}, {"id": 91, "unit": "場合の数・確率", "title": "期待値（離散）", "prompt": "離散確率変数 X の期待値 E(X) を述べよ。", "answer": "E(X)=Σ xᵢ pᵢ", "aliases": ["期待値"]}, {"id": 92, "unit": "数列・二項定理・Σ", "title": "等差数列の一般項", "prompt": "初項 a、公差 d の等差数列の一般項を述べよ。", "answer": "aₙ = a + (n-1)d", "aliases": ["等差数列"]}, {"id": 93, "unit": "数列・二項定理・Σ", "title": "等差数列の和", "prompt": "初項 a、公差 d の等差数列の和 Sₙ を述べよ。", "answer": "Sₙ = n{2a + (n-1)d}/2 = n(a+l)/2", "aliases": ["等差数列"]}, {"id": 94, "unit": "数列・二項定理・Σ", "title": "等比数列の一般項", "prompt": "初項 a、公比 r の等比数列の一般項を述べよ。", "answer": "aₙ = ar^(n-1)", "aliases": ["等比数列"]}, {"id": 95, "unit": "数列・二項定理・Σ", "title": "等比数列の和", "prompt": "等比数列の和 Sₙ を述べよ。", "answer": "r≠1 のとき Sₙ = a(1-rⁿ)/(1-r) = a(rⁿ-1)/(r-1)", "aliases": ["等比数列"]}, {"id": 96, "unit": "数列・二項定理・Σ", "title": "無限等比級数", "prompt": "|r|<1 のときの無限等比級数の和を述べよ。", "answer": "S = a/(1-r)", "aliases": ["無限等比"]}, {"id": 97, "unit": "数列・二項定理・Σ", "title": "Σk", "prompt": "1 から n までの和 Σk を述べよ。", "answer": "1+2+…+n = n(n+1)/2", "aliases": ["シグマ"]}, {"id": 98, "unit": "数列・二項定理・Σ", "title": "Σk²", "prompt": "1 から n までの平方和 Σk² を述べよ。", "answer": "1²+2²+…+n² = n(n+1)(2n+1)/6", "aliases": ["シグマ"]}, {"id": 99, "unit": "数列・二項定理・Σ", "title": "Σk³", "prompt": "1 から n までの立方和 Σk³ を述べよ。", "answer": "1³+2³+…+n³ = {n(n+1)/2}²", "aliases": ["シグマ"]}, {"id": 100, "unit": "数列・二項定理・Σ", "title": "Σの線形性", "prompt": "Σ(ak+b) の扱いを述べよ。", "answer": "Σ(ak+b)=aΣk + bΣ1", "aliases": ["シグマ"]}, {"id": 101, "unit": "数列・二項定理・Σ", "title": "階差数列", "prompt": "数列 {aₙ} の階差数列 {bₙ} を用いた一般項の復元を述べよ。", "answer": "aₙ = a₁ + Σ[k=1→n-1] b_k", "aliases": ["階差"]}, {"id": 102, "unit": "数列・二項定理・Σ", "title": "等差×等比の和", "prompt": "Σk r^(k-1) を求める典型手法を述べよ。", "answer": "S, rS を作って引く（公式暗記より処理手順重視）", "aliases": ["和の求め方"]}, {"id": 103, "unit": "数列・二項定理・Σ", "title": "漸化式（等差型）", "prompt": "aₙ₊₁ = aₙ + d の一般項を述べよ。", "answer": "aₙ = a₁ + (n-1)d", "aliases": ["漸化式"]}, {"id": 104, "unit": "数列・二項定理・Σ", "title": "漸化式（等比型）", "prompt": "aₙ₊₁ = r aₙ の一般項を述べよ。", "answer": "aₙ = a₁ r^(n-1)", "aliases": ["漸化式"]}, {"id": 105, "unit": "数列・二項定理・Σ", "title": "漸化式（一次非同次）", "prompt": "aₙ₊₁ = p aₙ + q（p≠1）の一般項の基本形を述べよ。", "answer": "定数解 α=q/(1-p) として、aₙ-α が等比数列", "aliases": ["漸化式"]}, {"id": 106, "unit": "数列・二項定理・Σ", "title": "数学的帰納法の型", "prompt": "数学的帰納法の2段階を述べよ。", "answer": "① n=1 で成立　② n=k で成立すると仮定して n=k+1 で成立を示す", "aliases": ["帰納法"]}, {"id": 107, "unit": "数列・二項定理・Σ", "title": "二項定理", "prompt": "(a+b)^n の展開を述べよ。", "answer": "(a+b)^n = Σ[k=0→n] nCk a^(n-k) b^k", "aliases": ["二項定理"]}, {"id": 108, "unit": "数列・二項定理・Σ", "title": "二項係数", "prompt": "二項定理の一般項 Tₖ₊₁ を述べよ。", "answer": "Tₖ₊₁ = nCk a^(n-k)b^k", "aliases": ["一般項"]}, {"id": 109, "unit": "ベクトル・座標・複素数平面", "title": "ベクトルの大きさ", "prompt": "ベクトル a=(x,y) の大きさを述べよ。", "answer": "|a| = √(x²+y²)", "aliases": ["ベクトル"]}, {"id": 110, "unit": "ベクトル・座標・複素数平面", "title": "ベクトルの成分表示", "prompt": "点 A(x₁,y₁), B(x₂,y₂) に対する AB ベクトルを述べよ。", "answer": "AB = (x₂-x₁, y₂-y₁)", "aliases": ["ベクトル"]}, {"id": 111, "unit": "ベクトル・座標・複素数平面", "title": "ベクトルの内積①", "prompt": "成分による内積を述べよ。", "answer": "a·b = a₁b₁ + a₂b₂ (+ a₃b₃)", "aliases": ["内積"]}, {"id": 112, "unit": "ベクトル・座標・複素数平面", "title": "ベクトルの内積②", "prompt": "大きさと角による内積を述べよ。", "answer": "a·b = |a||b|cosθ", "aliases": ["内積"]}, {"id": 113, "unit": "ベクトル・座標・複素数平面", "title": "直交条件", "prompt": "2ベクトル a,b が直交する条件を述べよ。", "answer": "a·b = 0", "aliases": ["垂直", "内積"]}, {"id": 114, "unit": "ベクトル・座標・複素数平面", "title": "平行条件", "prompt": "2ベクトル a,b が平行である条件を述べよ。", "answer": "a = t b（ある実数 t が存在）", "aliases": ["平行"]}, {"id": 115, "unit": "ベクトル・座標・複素数平面", "title": "なす角", "prompt": "ベクトル a,b のなす角 θ の公式を述べよ。", "answer": "cosθ = (a·b)/(|a||b|)", "aliases": ["なす角"]}, {"id": 116, "unit": "ベクトル・座標・複素数平面", "title": "位置ベクトル", "prompt": "点 P の位置ベクトル OP を用いた内分点の表し方を述べよ。", "answer": "OP = (n OA + m OB)/(m+n)", "aliases": ["位置ベクトル", "内分"]}, {"id": 117, "unit": "ベクトル・座標・複素数平面", "title": "重心ベクトル", "prompt": "三角形 ABC の重心 G の位置ベクトルを述べよ。", "answer": "OG = (OA + OB + OC)/3", "aliases": ["重心"]}, {"id": 118, "unit": "ベクトル・座標・複素数平面", "title": "中点ベクトル", "prompt": "線分 AB の中点 M の位置ベクトルを述べよ。", "answer": "OM = (OA + OB)/2", "aliases": ["中点"]}, {"id": 119, "unit": "ベクトル・座標・複素数平面", "title": "ベクトル方程式の直線", "prompt": "点 A を通り方向ベクトル d をもつ直線のベクトル方程式を述べよ。", "answer": "OP = OA + t d", "aliases": ["直線", "ベクトル方程式"]}, {"id": 120, "unit": "ベクトル・座標・複素数平面", "title": "面積（ベクトル）", "prompt": "2次元ベクトル a=(a₁,a₂), b=(b₁,b₂) が作る平行四辺形の面積を述べよ。", "answer": "|a₁b₂ - a₂b₁|", "aliases": ["面積", "行列式"]}, {"id": 121, "unit": "ベクトル・座標・複素数平面", "title": "三角形の面積（座標）", "prompt": "3点 A(x₁,y₁),B(x₂,y₂),C(x₃,y₃) の三角形の面積を述べよ。", "answer": "S = (1/2)| (x₂-x₁)(y₃-y₁) - (x₃-x₁)(y₂-y₁) |", "aliases": ["面積"]}, {"id": 122, "unit": "ベクトル・座標・複素数平面", "title": "複素数の基本", "prompt": "複素数 z の共役複素数 z̄ の定義を述べよ。", "answer": "z=x+iy に対し z̄=x-iy", "aliases": ["複素数"]}, {"id": 123, "unit": "ベクトル・座標・複素数平面", "title": "複素数の絶対値", "prompt": "複素数 z=x+iy の絶対値 |z| を述べよ。", "answer": "|z| = √(x²+y²) = √(z z̄)", "aliases": ["複素数"]}, {"id": 124, "unit": "ベクトル・座標・複素数平面", "title": "複素数の積の絶対値", "prompt": "|zw| を述べよ。", "answer": "|zw| = |z||w|", "aliases": ["複素数"]}, {"id": 125, "unit": "ベクトル・座標・複素数平面", "title": "複素数の商の絶対値", "prompt": "|z/w| を述べよ。", "answer": "|z/w| = |z|/|w|　(w≠0)", "aliases": ["複素数"]}, {"id": 126, "unit": "ベクトル・座標・複素数平面", "title": "複素数の偏角", "prompt": "複素数 z=r(cosθ + i sinθ) の θ を何というか。", "answer": "偏角（argument）", "aliases": ["偏角"]}, {"id": 127, "unit": "ベクトル・座標・複素数平面", "title": "極形式", "prompt": "複素数 z の極形式を述べよ。", "answer": "z = r(cosθ + i sinθ)　(r=|z|)", "aliases": ["極形式"]}, {"id": 128, "unit": "ベクトル・座標・複素数平面", "title": "ド・モアブルの定理", "prompt": "[cosθ + i sinθ]^n を述べよ。", "answer": "[cosθ + i sinθ]^n = cos(nθ) + i sin(nθ)", "aliases": ["ドモアブル"]}, {"id": 129, "unit": "ベクトル・座標・複素数平面", "title": "複素数平面での距離", "prompt": "2点 z₁,z₂ の距離を述べよ。", "answer": "|z₁ - z₂|", "aliases": ["複素数平面"]}, {"id": 130, "unit": "ベクトル・座標・複素数平面", "title": "円の複素数表示", "prompt": "複素数平面で中心 α、半径 r の円を表す式を述べよ。", "answer": "|z - α| = r", "aliases": ["複素数平面", "円"]}, {"id": 131, "unit": "ベクトル・座標・複素数平面", "title": "点の回転", "prompt": "複素数平面で原点中心に角 θ 回転を表す複素数の掛け算を述べよ。", "answer": "z → z(cosθ + i sinθ)", "aliases": ["回転"]}, {"id": 132, "unit": "ベクトル・座標・複素数平面", "title": "数列の漸化式とベクトル", "prompt": "連立漸化式の基本処理を述べよ。", "answer": "ベクトル化して行列的に扱う／和差・固有形を探す", "aliases": ["発展"]}, {"id": 133, "unit": "微分法", "title": "微分係数", "prompt": "微分係数 f'(a) の定義を述べよ。", "answer": "f'(a)= lim[h→0] {f(a+h)-f(a)}/h", "aliases": ["微分係数"]}, {"id": 134, "unit": "微分法", "title": "導関数", "prompt": "導関数 f'(x) の定義を述べよ。", "answer": "f'(x)= lim[h→0] {f(x+h)-f(x)}/h", "aliases": ["導関数"]}, {"id": 135, "unit": "微分法", "title": "べき関数の微分", "prompt": "x^n の微分を述べよ。", "answer": "d/dx (x^n) = n x^(n-1)", "aliases": ["微分公式"]}, {"id": 136, "unit": "微分法", "title": "定数倍の微分", "prompt": "cf(x) の微分を述べよ。", "answer": "d/dx [c f(x)] = c f'(x)", "aliases": ["微分公式"]}, {"id": 137, "unit": "微分法", "title": "和差の微分", "prompt": "f(x)±g(x) の微分を述べよ。", "answer": "(f±g)' = f' ± g'", "aliases": ["微分公式"]}, {"id": 138, "unit": "微分法", "title": "積の微分", "prompt": "f(x)g(x) の微分を述べよ。", "answer": "(fg)' = f'g + fg'", "aliases": ["積の微分"]}, {"id": 139, "unit": "微分法", "title": "商の微分", "prompt": "f(x)/g(x) の微分を述べよ。", "answer": "(f/g)' = (f'g - fg') / g²", "aliases": ["商の微分"]}, {"id": 140, "unit": "微分法", "title": "合成関数の微分", "prompt": "合成関数 f(g(x)) の微分を述べよ。", "answer": "{f(g(x))}' = f'(g(x)) g'(x)", "aliases": ["連鎖律", "合成関数"]}, {"id": 141, "unit": "微分法", "title": "逆関数の微分", "prompt": "y=f(x) の逆関数 x=g(y) に対する微分を述べよ。", "answer": "dy/dx = 1 / (dx/dy)", "aliases": ["逆関数"]}, {"id": 142, "unit": "微分法", "title": "sinx の微分", "prompt": "sinx の微分を述べよ。", "answer": "d/dx (sinx) = cosx", "aliases": ["微分公式"]}, {"id": 143, "unit": "微分法", "title": "cosx の微分", "prompt": "cosx の微分を述べよ。", "answer": "d/dx (cosx) = -sinx", "aliases": ["微分公式"]}, {"id": 144, "unit": "微分法", "title": "tanx の微分", "prompt": "tanx の微分を述べよ。", "answer": "d/dx (tanx) = 1 / cos²x", "aliases": ["微分公式"]}, {"id": 145, "unit": "微分法", "title": "e^x の微分", "prompt": "e^x の微分を述べよ。", "answer": "d/dx (e^x) = e^x", "aliases": ["微分公式"]}, {"id": 146, "unit": "微分法", "title": "a^x の微分", "prompt": "a^x の微分を述べよ。", "answer": "d/dx (a^x) = a^x ln a", "aliases": ["微分公式"]}, {"id": 147, "unit": "微分法", "title": "logx の微分", "prompt": "lnx の微分を述べよ。", "answer": "d/dx (lnx) = 1/x", "aliases": ["微分公式", "対数微分"]}, {"id": 148, "unit": "微分法", "title": "log_a x の微分", "prompt": "log_a x の微分を述べよ。", "answer": "d/dx (log_a x) = 1/(x ln a)", "aliases": ["微分公式"]}, {"id": 149, "unit": "微分法", "title": "接線の方程式", "prompt": "y=f(x) の x=a における接線の方程式を述べよ。", "answer": "y - f(a) = f'(a)(x-a)", "aliases": ["接線"]}, {"id": 150, "unit": "微分法", "title": "法線の方程式", "prompt": "y=f(x) の x=a における法線の方程式を述べよ。", "answer": "y - f(a) = -1/f'(a) · (x-a)　（f'(a)≠0）", "aliases": ["法線"]}, {"id": 151, "unit": "微分法", "title": "増減判定", "prompt": "関数の増減を f'(x) で判定する方法を述べよ。", "answer": "f'(x)>0 で増加、f'(x)<0 で減少", "aliases": ["増減"]}, {"id": 152, "unit": "微分法", "title": "極値条件", "prompt": "x=a で極値をもつための必要条件を述べよ。", "answer": "微分可能なら f'(a)=0", "aliases": ["極値"]}, {"id": 153, "unit": "微分法", "title": "2次導関数", "prompt": "凹凸判定の基本を述べよ。", "answer": "f''(x)>0 で下に凸（convex）、f''(x)<0 で上に凸", "aliases": ["二次導関数"]}, {"id": 154, "unit": "積分法・極限", "title": "不定積分の定義", "prompt": "F'(x)=f(x) のときの不定積分を述べよ。", "answer": "∫f(x)dx = F(x) + C", "aliases": ["不定積分"]}, {"id": 155, "unit": "積分法・極限", "title": "べき関数の積分", "prompt": "x^n (n≠-1) の積分を述べよ。", "answer": "∫x^n dx = x^(n+1)/(n+1) + C", "aliases": ["積分公式"]}, {"id": 156, "unit": "積分法・極限", "title": "1/x の積分", "prompt": "1/x の積分を述べよ。", "answer": "∫(1/x)dx = ln|x| + C", "aliases": ["積分公式"]}, {"id": 157, "unit": "積分法・極限", "title": "sinx の積分", "prompt": "sinx の積分を述べよ。", "answer": "∫sinx dx = -cosx + C", "aliases": ["積分公式"]}, {"id": 158, "unit": "積分法・極限", "title": "cosx の積分", "prompt": "cosx の積分を述べよ。", "answer": "∫cosx dx = sinx + C", "aliases": ["積分公式"]}, {"id": 159, "unit": "積分法・極限", "title": "1/cos²x の積分", "prompt": "1/cos²x の積分を述べよ。", "answer": "∫dx/cos²x = tanx + C", "aliases": ["積分公式"]}, {"id": 160, "unit": "積分法・極限", "title": "e^x の積分", "prompt": "e^x の積分を述べよ。", "answer": "∫e^x dx = e^x + C", "aliases": ["積分公式"]}, {"id": 161, "unit": "積分法・極限", "title": "a^x の積分", "prompt": "a^x の積分を述べよ。", "answer": "∫a^x dx = a^x / ln a + C", "aliases": ["積分公式"]}, {"id": 162, "unit": "積分法・極限", "title": "置換積分の型", "prompt": "∫f(g(x))g'(x)dx の基本形を述べよ。", "answer": "u=g(x) とおけば ∫f(u)du", "aliases": ["置換積分"]}, {"id": 163, "unit": "積分法・極限", "title": "部分積分", "prompt": "部分積分の公式を述べよ。", "answer": "∫f(x)g'(x)dx = f(x)g(x) - ∫f'(x)g(x)dx", "aliases": ["部分積分"]}, {"id": 164, "unit": "積分法・極限", "title": "定積分の基本定理", "prompt": "F'(x)=f(x) のとき ∫[a→b]f(x)dx を述べよ。", "answer": "∫[a→b] f(x)dx = F(b) - F(a)", "aliases": ["微積分の基本定理"]}, {"id": 165, "unit": "積分法・極限", "title": "定積分の区間分割", "prompt": "∫[a→b]f + ∫[b→c]f を述べよ。", "answer": "∫[a→b]f(x)dx + ∫[b→c]f(x)dx = ∫[a→c]f(x)dx", "aliases": ["定積分"]}, {"id": 166, "unit": "積分法・極限", "title": "定積分の反転", "prompt": "∫[a→b]f(x)dx と ∫[b→a]f(x)dx の関係を述べよ。", "answer": "∫[a→b]f(x)dx = -∫[b→a]f(x)dx", "aliases": ["定積分"]}, {"id": 167, "unit": "積分法・極限", "title": "偶関数の積分", "prompt": "f が偶関数のとき ∫[-a→a]f(x)dx を述べよ。", "answer": "2∫[0→a]f(x)dx", "aliases": ["偶関数", "定積分"]}, {"id": 168, "unit": "積分法・極限", "title": "奇関数の積分", "prompt": "f が奇関数のとき ∫[-a→a]f(x)dx を述べよ。", "answer": "0", "aliases": ["奇関数", "定積分"]}, {"id": 169, "unit": "積分法・極限", "title": "面積公式", "prompt": "y=f(x) が x 軸と囲む面積を述べよ。", "answer": "S = ∫|f(x)|dx", "aliases": ["面積"]}, {"id": 170, "unit": "積分法・極限", "title": "2曲線間の面積", "prompt": "y=f(x), y=g(x) で囲まれた面積を述べよ。", "answer": "S = ∫|f(x)-g(x)|dx", "aliases": ["面積"]}, {"id": 171, "unit": "積分法・極限", "title": "体積（回転体）", "prompt": "y=f(x) を x 軸のまわりに回転してできる体積を述べよ。", "answer": "V = π∫[a→b] {f(x)}² dx", "aliases": ["回転体"]}, {"id": 172, "unit": "積分法・極限", "title": "極限の基本①", "prompt": "lim[x→0] (sinx)/x を述べよ。", "answer": "1", "aliases": ["極限"]}, {"id": 173, "unit": "積分法・極限", "title": "極限の基本②", "prompt": "lim[x→0] (1-cosx)/x² を述べよ。", "answer": "1/2", "aliases": ["極限"]}, {"id": 174, "unit": "積分法・極限", "title": "極限の基本③", "prompt": "lim[x→0] (e^x-1)/x を述べよ。", "answer": "1", "aliases": ["極限"]}, {"id": 175, "unit": "積分法・極限", "title": "極限の基本④", "prompt": "lim[x→0] log(1+x)/x を述べよ。", "answer": "1", "aliases": ["極限"]}, {"id": 176, "unit": "積分法・極限", "title": "指数・対数の極限", "prompt": "lim[x→∞] (logx)/x を述べよ。", "answer": "0", "aliases": ["極限"]}, {"id": 177, "unit": "積分法・極限", "title": "有理関数の無限大極限", "prompt": "有理関数の x→∞ の極限の見方を述べよ。", "answer": "最高次の項で割って判定する", "aliases": ["極限"]}, {"id": 178, "unit": "データ・整数・その他", "title": "平均値", "prompt": "データ x₁,…,xₙ の平均値を述べよ。", "answer": "平均値 = (x₁ + x₂ + … + xₙ)/n", "aliases": ["平均"]}, {"id": 179, "unit": "データ・整数・その他", "title": "分散", "prompt": "データ x₁,…,xₙ の分散を述べよ。", "answer": "分散 = (1/n)Σ(xᵢ-平均)² = (1/n)Σxᵢ² - 平均²", "aliases": ["分散"]}, {"id": 180, "unit": "データ・整数・その他", "title": "標準偏差", "prompt": "標準偏差を述べよ。", "answer": "標準偏差 = √(分散)", "aliases": ["標準偏差"]}, {"id": 181, "unit": "データ・整数・その他", "title": "相関係数", "prompt": "相関係数の意味を述べよ。", "answer": "-1 から 1 の値で直線的関係の強さを表す", "aliases": ["相関"]}, {"id": 182, "unit": "データ・整数・その他", "title": "ユークリッドの互除法", "prompt": "最大公約数を求める基本を述べよ。", "answer": "a=bq+r を繰り返し、余りが0になる直前の除数が gcd", "aliases": ["互除法"]}, {"id": 183, "unit": "データ・整数・その他", "title": "n進法", "prompt": "10進法の数を n進法へ直す基本を述べよ。", "answer": "n で割り続け、余りを逆順に読む", "aliases": ["進数"]}, {"id": 184, "unit": "データ・整数・その他", "title": "必要条件・十分条件", "prompt": "A⇒B のときの必要条件・十分条件を述べよ。", "answer": "A は B の十分条件、B は A の必要条件", "aliases": ["条件"]}, {"id": 185, "unit": "データ・整数・その他", "title": "ド・モルガンの法則", "prompt": "集合のド・モルガンの法則を述べよ。", "answer": "(A∪B)̄ = Ā∩B̄,　(A∩B)̄ = Ā∪B̄", "aliases": ["集合"]}, {"id": 186, "unit": "データ・整数・その他", "title": "命題の対偶", "prompt": "命題 p⇒q の対偶を述べよ。", "answer": "¬q ⇒ ¬p", "aliases": ["対偶"]}, {"id": 187, "unit": "データ・整数・その他", "title": "背理法", "prompt": "背理法の型を述べよ。", "answer": "否定を仮定して矛盾を導き、元の命題を示す", "aliases": ["証明法"]}];
+  var unitNames = [];
+  for (var i=0; i<cards.length; i++) { if (unitNames.indexOf(cards[i].unit) === -1) unitNames.push(cards[i].unit); }
+
+  function byId(id) { return document.getElementById(id); }
+  function setStatus(text) { byId('status').textContent = text; }
+  function setSyncStatus(text) { byId('syncStatus').textContent = text; }
+  function clone(obj) { return JSON.parse(JSON.stringify(obj)); }
+  function storageAvailable() { try { var k='__test_math__'; localStorage.setItem(k,'1'); localStorage.removeItem(k); return true; } catch(e) { return false; } }
+  var HAS_STORAGE = storageAvailable();
+
+  function defaultCardState() { return { reps:0, ease:2.5, interval:0, due:0, lapses:0, lastGrade:'未学習', lastReviewed:0 }; }
+  function defaultSyncState() { return { clientId:'', auto:false, connected:false, backupFileId:'', lastSyncedAt:0, lastSyncError:'', remoteModifiedTime:'', lastRestoredAt:0 }; }
+  function freshState() { return { cards: {}, selectedUnits: unitNames.slice(), dueOnly:true, currentIndex:0, revealed:false, shuffleSeed:Math.random(), sync: defaultSyncState() }; }
+
+  function sanitizeLoadedState(saved) {
+    var next = freshState();
+    if (!saved || typeof saved !== 'object') return next;
+    next.cards = saved.cards && typeof saved.cards === 'object' ? saved.cards : {};
+    next.selectedUnits = Array.isArray(saved.selectedUnits) && saved.selectedUnits.length ? saved.selectedUnits.filter(function(u) { return unitNames.indexOf(u) !== -1; }) : unitNames.slice();
+    if (!next.selectedUnits.length) next.selectedUnits = unitNames.slice();
+    next.dueOnly = saved.dueOnly !== false;
+    next.currentIndex = Number.isFinite(saved.currentIndex) ? saved.currentIndex : 0;
+    next.revealed = !!saved.revealed;
+    next.shuffleSeed = typeof saved.shuffleSeed === 'number' ? saved.shuffleSeed : Math.random();
+    next.sync = Object.assign(defaultSyncState(), saved.sync || {});
+    return next;
+  }
+
+  function loadState() {
+    if (HAS_STORAGE) {
+      try {
+        var saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null');
+        if (saved) return sanitizeLoadedState(saved);
+      } catch(e) {}
+    }
+    return freshState();
+  }
+
+  var state = loadState();
+  var tokenClient = null;
+  var driveToken = '';
+  var driveTokenExpiresAt = 0;
+  var syncTimer = null;
+  var syncBusy = false;
+  var deferredPrompt = null;
+
+  function saveState() {
+    if (!HAS_STORAGE) return;
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch(e) {}
+    scheduleAutoSync('state-changed');
+  }
+
+  function getCardState(id) {
+    if (!state.cards[id]) state.cards[id] = defaultCardState();
+    return state.cards[id];
+  }
+
+  function normalize(s) {
+    return String(s || '').toLowerCase().replace(/[\s　]+/g,'').replace(/[!！?？,，.。:：;；\-−ー‐()（）\[\]{}「」『』【】・\/]/g,'');
+  }
+
+  function daysToText(days) {
+    if (days < 1/24) return Math.round(days * 24 * 60) + '分後';
+    if (days < 1) return Math.round(days * 24) + '時間後';
+    if (days < 30) return (Math.round(days * 10) / 10) + '日後';
+    return (Math.round(days / 30 * 10) / 10) + 'か月後';
+  }
+
+  function getFilteredCards() {
+    var arr = [];
+    for (var i=0; i<cards.length; i++) { if (state.selectedUnits.indexOf(cards[i].unit) !== -1) arr.push(cards[i]); }
+    return arr;
+  }
+
+  function getQueue() {
+    var now = Date.now();
+    var arr = getFilteredCards();
+    if (state.dueOnly) {
+      var dueArr = [];
+      for (var i=0; i<arr.length; i++) { if ((getCardState(arr[i].id).due || 0) <= now) dueArr.push(arr[i]); }
+      if (dueArr.length > 0) arr = dueArr;
+    }
+    arr.sort(function(a,b) {
+      var sa = getCardState(a.id), sb = getCardState(b.id);
+      var dueDiff = (sa.due || 0) - (sb.due || 0);
+      if (dueDiff !== 0) return dueDiff;
+      if (sb.lapses !== sa.lapses) return sb.lapses - sa.lapses;
+      if (sa.reps !== sb.reps) return sa.reps - sb.reps;
+      var ha = Math.sin(a.id * 999 + state.shuffleSeed) * 10000;
+      var hb = Math.sin(b.id * 999 + state.shuffleSeed) * 10000;
+      return ha - hb;
+    });
+    return arr;
+  }
+
+  function ensureCurrentIndex(queue) { if (!queue.length) { state.currentIndex = 0; return; } if (state.currentIndex < 0 || state.currentIndex >= queue.length) state.currentIndex = 0; }
+  function getCurrentCard(queue) { ensureCurrentIndex(queue); return queue.length ? queue[state.currentIndex] : null; }
+
+  function computeNextInterval(cs, grade) {
+    var reps = cs.reps || 0;
+    var ease = cs.ease || 2.5;
+    var interval = cs.interval || 0;
+    var lapses = cs.lapses || 0;
+    if (grade === 'again') { ease = Math.max(1.3, ease - 0.20); return { reps:0, ease:ease, interval:10/(60*24), lapsesAdd:1 }; }
+    if (grade === 'hard') {
+      reps += 1; ease = Math.max(1.3, ease - 0.08);
+      var next = reps===1 ? 1 : reps===2 ? 2 : reps===3 ? 5 : Math.max(1, interval * 1.25);
+      next *= Math.max(0.65, 1 - lapses * 0.05);
+      return { reps:reps, ease:ease, interval:next, lapsesAdd:0 };
+    }
+    if (grade === 'good') {
+      reps += 1; ease = Math.min(3.2, ease + 0.02);
+      var next2 = reps===1 ? 1 : reps===2 ? 3 : reps===3 ? 7 : Math.max(2, interval * ease);
+      next2 *= Math.max(0.72, 1 - lapses * 0.04);
+      return { reps:reps, ease:ease, interval:next2, lapsesAdd:0 };
+    }
+    reps += 1; ease = Math.min(3.3, ease + 0.12);
+    var next3 = reps===1 ? 3 : reps===2 ? 7 : reps===3 ? 14 : Math.max(4, interval * ease * 1.25);
+    next3 *= Math.max(0.78, 1 - lapses * 0.03);
+    return { reps:reps, ease:ease, interval:next3, lapsesAdd:0 };
+  }
+
+  function renderStats() {
+    var now = Date.now(), due=0, mastered=0, weak=0;
+    for (var i=0; i<cards.length; i++) {
+      var s = getCardState(cards[i].id);
+      if (state.selectedUnits.indexOf(cards[i].unit) !== -1 && (s.due || 0) <= now) due++;
+      if ((s.interval || 0) >= 30) mastered++;
+      if ((s.lapses || 0) >= 2 || (s.ease || 2.5) < 2.1) weak++;
+    }
+    byId('allCount').textContent = String(cards.length);
+    byId('dueCount').textContent = String(due);
+    byId('masteredCount').textContent = String(mastered);
+    byId('weakCount').textContent = String(weak);
+  }
+
+  function renderUnitFilters() {
+    var host = byId('unitFilters'); host.innerHTML = '';
+    for (var i=0; i<unitNames.length; i++) {
+      (function(unit) {
+        var b = document.createElement('button');
+        b.textContent = unit;
+        if (state.selectedUnits.indexOf(unit) !== -1) b.className = 'active';
+        b.onclick = function() {
+          var idx = state.selectedUnits.indexOf(unit);
+          if (idx !== -1) state.selectedUnits.splice(idx,1); else state.selectedUnits.push(unit);
+          if (state.selectedUnits.length === 0) state.selectedUnits = [unit];
+          state.currentIndex = 0; state.revealed = false; renderReview(); saveState();
+        };
+        host.appendChild(b);
+      })(unitNames[i]);
+    }
+  }
+
+  function renderReview() {
+    var queue = getQueue();
+    var card = getCurrentCard(queue);
+    renderStats(); renderUnitFilters();
+    byId('toggleDueOnly').className = state.dueOnly ? 'active' : '';
+    if (!card) {
+      byId('queueLabel').textContent = 'キュー 0 枚';
+      byId('currentMeta').textContent = '出題条件に合うカードがありません。';
+      byId('cardPrompt').textContent = 'カードがありません。単元を増やすか「期限カード優先」を切ってください。';
+      byId('cardAnswer').style.display = 'none';
+      byId('gradeRow').style.display = 'none';
+      byId('schedulePreview').textContent = '';
+      setStatus('カードが空です。設定を調整してください。');
+      return;
+    }
+    var s = getCardState(card.id);
+    byId('queueLabel').textContent = 'キュー ' + (state.currentIndex + 1) + ' / ' + queue.length;
+    byId('currentMeta').textContent = card.unit + '｜' + card.title + '｜復習回数 ' + s.reps + ' 回｜易しさ ' + Number(s.ease).toFixed(2);
+    byId('cardPrompt').textContent = card.prompt;
+    byId('cardAnswer').textContent = card.answer;
+    if (state.revealed) {
+      byId('cardAnswer').style.display = 'block';
+      byId('gradeRow').style.display = 'flex';
+      var p1 = computeNextInterval(s,'again').interval;
+      var p2 = computeNextInterval(s,'hard').interval;
+      var p3 = computeNextInterval(s,'good').interval;
+      var p4 = computeNextInterval(s,'easy').interval;
+      byId('schedulePreview').textContent = '次回間隔の目安：忘れた ' + daysToText(p1) + ' / あやしい ' + daysToText(p2) + ' / できた ' + daysToText(p3) + ' / 余裕 ' + daysToText(p4);
+    } else {
+      byId('cardAnswer').style.display = 'none';
+      byId('gradeRow').style.display = 'none';
+      var dueText = (s.due || 0) <= Date.now() ? '今すぐ対象' : (s.due ? new Date(s.due).toLocaleString('ja-JP') : '未設定');
+      byId('schedulePreview').textContent = '前回評価：' + (s.lastGrade || '未学習') + '｜次回予定：' + dueText;
+    }
+    setStatus('カード表示中：' + card.title + '。');
+  }
+
+  function reviewCurrent(grade) {
+    var queue = getQueue();
+    var card = getCurrentCard(queue);
+    if (!card) return;
+    var s = getCardState(card.id);
+    var now = Date.now();
+    var updated = computeNextInterval(s, grade);
+    s.reps = updated.reps;
+    s.ease = updated.ease;
+    s.interval = Math.max(updated.interval, 10/(60*24));
+    s.lapses = (s.lapses || 0) + updated.lapsesAdd;
+    s.due = now + s.interval * 24 * 60 * 60 * 1000;
+    s.lastGrade = grade;
+    s.lastReviewed = now;
+    state.revealed = false;
+    state.currentIndex = queue.length > 1 ? (state.currentIndex + 1) % queue.length : 0;
+    saveState();
+    renderReview();
+    byId('cardBox').scrollIntoView();
+  }
+
+  function switchTab(tab) {
+    var study = byId('viewReview'), book = byId('viewBook');
+    var t1 = byId('tabStudy'), t2 = byId('tabBookBtn');
+    if (tab === 'book') {
+      study.style.display = 'none'; book.style.display = 'block'; t1.className = ''; t2.className = 'active'; renderBook();
+    } else {
+      study.style.display = 'block'; book.style.display = 'none'; t1.className = 'active'; t2.className = ''; renderReview();
+    }
+  }
+
+  function startStudy() { switchTab('study'); state.revealed = false; renderReview(); byId('cardBox').scrollIntoView(); }
+  function openBook() { switchTab('book'); byId('bookSearch').scrollIntoView(); }
+
+  function filterCards(keyword) {
+    var k = normalize(keyword);
+    if (!k) return cards.slice();
+    var out = [];
+    for (var i=0; i<cards.length; i++) {
+      var c = cards[i];
+      var hay = normalize(c.title + ' ' + c.unit + ' ' + c.prompt + ' ' + c.answer + ' ' + ((c.aliases || []).join(' ')));
+      if (hay.indexOf(k) !== -1) out.push(c);
+    }
+    return out;
+  }
+
+  function renderBook() {
+    var keyword = byId('bookSearch').value || '';
+    var matches = filterCards(keyword);
+    byId('searchSummary').textContent = keyword ? ('検索結果：' + matches.length + '件') : ('全 ' + cards.length + ' 公式。検索で該当箇所へ飛べます。');
+    var results = byId('searchResults'); results.innerHTML = '';
+    for (var i=0; i<Math.min(matches.length,80); i++) {
+      (function(card) { var b = document.createElement('button'); b.textContent = card.title; b.onclick = function() { scrollToFormula(card.id); }; results.appendChild(b); })(matches[i]);
+    }
+    var bookArea = byId('bookArea'); bookArea.innerHTML = '';
+    for (var u=0; u<unitNames.length; u++) {
+      var unit = unitNames[u]; var has = false; var block = document.createElement('section'); block.className = 'unit-block';
+      var h2 = document.createElement('h2'); h2.textContent = unit; block.appendChild(h2);
+      for (var i2=0; i2<matches.length; i2++) {
+        var card = matches[i2]; if (card.unit !== unit) continue; has = true;
+        var item = document.createElement('article'); item.className = 'formula-item'; item.id = 'formula-' + card.id;
+        var title = document.createElement('h3'); title.textContent = card.title; item.appendChild(title);
+        var mini = document.createElement('div'); mini.className = 'mini'; mini.textContent = card.prompt; item.appendChild(mini);
+        var ans = document.createElement('div'); ans.className = 'ans'; ans.textContent = card.answer; item.appendChild(ans);
+        if (card.aliases && card.aliases.length) { var alias = document.createElement('div'); alias.className = 'mini'; alias.textContent = '別名: ' + card.aliases.join(' / '); item.appendChild(alias); }
+        block.appendChild(item);
+      }
+      if (has) bookArea.appendChild(block);
+    }
+  }
+
+  function scrollToFormula(id) {
+    switchTab('book');
+    setTimeout(function() {
+      try {
+        var el = byId('formula-' + id);
+        if (el) { el.scrollIntoView({behavior:'smooth', block:'start'}); el.style.boxShadow = '0 0 0 3px rgba(47,95,227,.18)'; setTimeout(function() { el.style.boxShadow = ''; }, 1000); }
+      } catch (err) { setStatus('一覧ジャンプでエラー: ' + (err && err.message ? err.message : err)); }
+    }, 50);
+  }
+
+  function updateSyncUi() {
+    byId('clientIdInput').value = state.sync.clientId || '';
+    byId('autoSyncToggle').checked = !!state.sync.auto;
+    byId('originText').textContent = location.origin;
+    var parts = [];
+    parts.push(state.sync.connected ? 'Google接続済み' : 'Drive未接続');
+    if (state.sync.lastSyncedAt) parts.push('最終バックアップ: ' + new Date(state.sync.lastSyncedAt).toLocaleString('ja-JP'));
+    if (state.sync.remoteModifiedTime) parts.push('Drive更新時刻: ' + new Date(state.sync.remoteModifiedTime).toLocaleString('ja-JP'));
+    if (state.sync.lastSyncError) parts.push('直近エラー: ' + state.sync.lastSyncError);
+    setSyncStatus(parts.join('｜'));
+  }
+
+  function ensureGisReady() {
+    return new Promise(function(resolve, reject) {
+      if (window.google && google.accounts && google.accounts.oauth2) return resolve();
+      var tries = 0;
+      var timer = setInterval(function() {
+        tries += 1;
+        if (window.google && google.accounts && google.accounts.oauth2) { clearInterval(timer); resolve(); }
+        else if (tries > 80) { clearInterval(timer); reject(new Error('Google Identity Services の読み込みに失敗しました。')); }
+      }, 250);
+    });
+  }
+
+  function updateStoredClientId() {
+    state.sync.clientId = (byId('clientIdInput').value || '').trim();
+    saveState();
+    updateSyncUi();
+  }
+
+  function getAuthHeader() {
+    if (!driveToken || Date.now() >= driveTokenExpiresAt) throw new Error('Google認証の有効期限が切れました。もう一度「Googleに接続」を押してください。');
+    return { Authorization: 'Bearer ' + driveToken };
+  }
+
+  function requestAccessToken(interactive) {
+    return ensureGisReady().then(function() {
+      var clientId = (state.sync.clientId || '').trim();
+      if (!clientId) throw new Error('OAuthクライアントIDを入力してください。');
+      return new Promise(function(resolve, reject) {
+        tokenClient = google.accounts.oauth2.initTokenClient({
+          client_id: clientId,
+          scope: DRIVE_SCOPE,
+          callback: function(resp) {
+            if (!resp || resp.error) { reject(new Error((resp && (resp.error_description || resp.error)) || 'Google認証に失敗しました。')); return; }
+            driveToken = resp.access_token;
+            driveTokenExpiresAt = Date.now() + Math.max(60, Number(resp.expires_in || 3600) - 60) * 1000;
+            state.sync.connected = true;
+            state.sync.lastSyncError = '';
+            saveState();
+            updateSyncUi();
+            resolve(resp);
+          }
+        });
+        try { tokenClient.requestAccessToken({ prompt: interactive ? 'consent' : '' }); }
+        catch (err) { reject(err); }
+      });
+    });
+  }
+
+  function driveFetchJson(url, options) {
+    options = options || {};
+    options.headers = Object.assign({}, options.headers || {}, getAuthHeader());
+    return fetch(url, options).then(async function(res) {
+      if (!res.ok) {
+        var txt = await res.text();
+        throw new Error('Drive API ' + res.status + ' ' + txt.slice(0, 160));
+      }
+      return res.json();
+    });
+  }
+
+  function escapeDriveQueryName(name) { return String(name || '').split('\\').join('\\\\').split("'").join("\\'"); }
+
+  function findBackupFile() {
+    var q = "name='" + escapeDriveQueryName(BACKUP_FILE_NAME) + "' and trashed=false";
+    var url = 'https://www.googleapis.com/drive/v3/files?spaces=appDataFolder&pageSize=10&fields=files(id,name,modifiedTime)&q=' + encodeURIComponent(q);
+    return driveFetchJson(url).then(function(data) {
+      return data.files && data.files.length ? data.files[0] : null;
+    });
+  }
+
+  function multipartBody(metadataObj, contentText, boundary) {
+    return '--' + boundary + '\r\n' +
+      'Content-Type: application/json; charset=UTF-8\r\n\r\n' +
+      JSON.stringify(metadataObj) + '\r\n' +
+      '--' + boundary + '\r\n' +
+      'Content-Type: application/json; charset=UTF-8\r\n\r\n' +
+      contentText + '\r\n' +
+      '--' + boundary + '--';
+  }
+
+  function buildBackupPayload() {
+    return {
+      app: 'rikei_math_formula_cards',
+      version: 1,
+      exportedAt: new Date().toISOString(),
+      state: sanitizeLoadedState(clone(state))
+    };
+  }
+
+  function writeBackupFile(fileId) {
+    var boundary = 'foo_bar_baz_' + Date.now();
+    var bodyText = JSON.stringify(buildBackupPayload());
+    var metadata = fileId ? { name: BACKUP_FILE_NAME, mimeType: 'application/json' } : { name: BACKUP_FILE_NAME, parents: ['appDataFolder'], mimeType: 'application/json' };
+    var url = fileId
+      ? 'https://www.googleapis.com/upload/drive/v3/files/' + encodeURIComponent(fileId) + '?uploadType=multipart&fields=id,modifiedTime'
+      : 'https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id,modifiedTime';
+    return fetch(url, {
+      method: fileId ? 'PATCH' : 'POST',
+      headers: Object.assign({
+        'Content-Type': 'multipart/related; boundary=' + boundary
+      }, getAuthHeader()),
+      body: multipartBody(metadata, bodyText, boundary)
+    }).then(async function(res) {
+      if (!res.ok) {
+        var txt = await res.text();
+        throw new Error('バックアップ保存失敗: ' + res.status + ' ' + txt.slice(0, 160));
+      }
+      return res.json();
+    });
+  }
+
+  function backupToDrive(sourceLabel) {
+    if (syncBusy) return Promise.resolve(false);
+    syncBusy = true;
+    setSyncStatus('Driveへバックアップ中…');
+    return Promise.resolve().then(function() {
+      if (!driveToken || Date.now() >= driveTokenExpiresAt) throw new Error('Google認証の有効期限が切れています。もう一度「Googleに接続」を押してください。');
+      if (state.sync.backupFileId) return { id: state.sync.backupFileId };
+      return findBackupFile();
+    }).then(function(file) {
+      var fileId = file && file.id ? file.id : '';
+      if (fileId) state.sync.backupFileId = fileId;
+      return writeBackupFile(fileId);
+    }).then(function(result) {
+      state.sync.backupFileId = result.id || state.sync.backupFileId;
+      state.sync.lastSyncedAt = Date.now();
+      state.sync.remoteModifiedTime = result.modifiedTime || state.sync.remoteModifiedTime;
+      state.sync.lastSyncError = '';
+      if (HAS_STORAGE) localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      updateSyncUi();
+      setSyncStatus('Driveへバックアップしました。' + (sourceLabel ? '（' + sourceLabel + '）' : ''));
+      return true;
+    }).catch(function(err) {
+      state.sync.lastSyncError = err && err.message ? err.message : String(err);
+      if (HAS_STORAGE) localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      updateSyncUi();
+      setSyncStatus('バックアップ失敗: ' + state.sync.lastSyncError);
+      return false;
+    }).finally(function() { syncBusy = false; });
+  }
+
+  function scheduleAutoSync(reason) {
+    if (!state.sync.auto || !state.sync.connected) return;
+    if (!driveToken || Date.now() >= driveTokenExpiresAt) {
+      state.sync.lastSyncError = '認証期限切れ。再接続すると自動バックアップを再開できます。';
+      if (HAS_STORAGE) localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      updateSyncUi();
+      return;
+    }
+    if (syncTimer) clearTimeout(syncTimer);
+    syncTimer = setTimeout(function() { backupToDrive(reason || 'autosave'); }, 2500);
+  }
+
+  function downloadBackupFile(fileId) {
+    var url = 'https://www.googleapis.com/drive/v3/files/' + encodeURIComponent(fileId) + '?alt=media';
+    return fetch(url, { headers: getAuthHeader() }).then(async function(res) {
+      if (!res.ok) {
+        var txt = await res.text();
+        throw new Error('バックアップ取得失敗: ' + res.status + ' ' + txt.slice(0, 160));
+      }
+      return res.json();
+    });
+  }
+
+  function restoreFromDrive() {
+    setSyncStatus('Driveから復元を確認中…');
+    return Promise.resolve().then(function() {
+      if (!driveToken || Date.now() >= driveTokenExpiresAt) throw new Error('Google認証の有効期限が切れています。もう一度「Googleに接続」を押してください。');
+      return state.sync.backupFileId ? { id: state.sync.backupFileId } : findBackupFile();
+    }).then(function(file) {
+      if (!file || !file.id) throw new Error('Driveにバックアップが見つかりません。');
+      state.sync.backupFileId = file.id;
+      if (file.modifiedTime) state.sync.remoteModifiedTime = file.modifiedTime;
+      return downloadBackupFile(file.id);
+    }).then(function(payload) {
+      if (!payload || !payload.state) throw new Error('バックアップ形式が不正です。');
+      var remoteState = sanitizeLoadedState(payload.state);
+      remoteState.sync = Object.assign(defaultSyncState(), remoteState.sync || {}, {
+        clientId: state.sync.clientId,
+        auto: state.sync.auto,
+        connected: true,
+        backupFileId: state.sync.backupFileId,
+        lastSyncError: '',
+        remoteModifiedTime: state.sync.remoteModifiedTime,
+        lastRestoredAt: Date.now(),
+        lastSyncedAt: state.sync.lastSyncedAt
+      });
+      state = remoteState;
+      if (HAS_STORAGE) localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      renderReview(); renderBook(); updateSyncUi();
+      setSyncStatus('Driveのバックアップから復元しました。');
+      setStatus('Driveから学習データを復元しました。');
+      return true;
+    }).catch(function(err) {
+      state.sync.lastSyncError = err && err.message ? err.message : String(err);
+      if (HAS_STORAGE) localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      updateSyncUi();
+      setSyncStatus('復元失敗: ' + state.sync.lastSyncError);
+      return false;
+    });
+  }
+
+  function connectDrive(initialRestore) {
+    updateStoredClientId();
+    setSyncStatus('Google認証を開始します…');
+    return requestAccessToken(true).then(function() {
+      state.sync.connected = true;
+      saveState(); updateSyncUi();
+      setSyncStatus('Googleに接続しました。バックアップ先を確認しています…');
+      return findBackupFile();
+    }).then(function(file) {
+      if (file && file.id) { state.sync.backupFileId = file.id; state.sync.remoteModifiedTime = file.modifiedTime || ''; saveState(); updateSyncUi(); }
+      if (initialRestore && file && file.id) return restoreFromDrive();
+      setSyncStatus(file ? 'Googleに接続しました。既存バックアップを確認済みです。' : 'Googleに接続しました。まだDriveバックアップはありません。');
+      return true;
+    }).catch(function(err) {
+      state.sync.connected = false;
+      state.sync.lastSyncError = err && err.message ? err.message : String(err);
+      saveState(); updateSyncUi();
+      setSyncStatus('接続失敗: ' + state.sync.lastSyncError);
+      return false;
+    });
+  }
+
+  function disconnectDrive() {
+    if (window.google && google.accounts && google.accounts.oauth2 && driveToken) {
+      try { google.accounts.oauth2.revoke(driveToken, function(){}); } catch(e) {}
+    }
+    driveToken = ''; driveTokenExpiresAt = 0;
+    state.sync.connected = false; state.sync.lastSyncError = '';
+    saveState(); updateSyncUi();
+    setSyncStatus('Google接続を解除しました。');
+  }
+
+  byId('btnStudy').onclick = startStudy;
+  byId('btnBook').onclick = openBook;
+  byId('tabStudy').onclick = function() { switchTab('study'); };
+  byId('tabBookBtn').onclick = function() { switchTab('book'); };
+  byId('btnReveal').onclick = function() { state.revealed = true; renderReview(); };
+  byId('btnNext').onclick = function() { var q=getQueue(); if (!q.length) return; state.currentIndex=(state.currentIndex+1)%q.length; state.revealed=false; renderReview(); };
+  byId('btnPrev').onclick = function() { var q=getQueue(); if (!q.length) return; state.currentIndex=(state.currentIndex-1+q.length)%q.length; state.revealed=false; renderReview(); };
+  byId('gradeAgain').onclick = function() { reviewCurrent('again'); };
+  byId('gradeHard').onclick = function() { reviewCurrent('hard'); };
+  byId('gradeGood').onclick = function() { reviewCurrent('good'); };
+  byId('gradeEasy').onclick = function() { reviewCurrent('easy'); };
+  byId('toggleDueOnly').onclick = function() { state.dueOnly = !state.dueOnly; state.currentIndex = 0; state.revealed = false; renderReview(); saveState(); };
+  byId('shuffleQueue').onclick = function() { state.shuffleSeed = Math.random(); state.currentIndex = 0; state.revealed = false; renderReview(); saveState(); };
+  byId('showCurrentInBook').onclick = function() { var q=getQueue(), c=getCurrentCard(q); if (c) scrollToFormula(c.id); };
+  byId('bookSearch').addEventListener('input', renderBook);
+  byId('jumpFirst').onclick = function() { var m = filterCards(byId('bookSearch').value || ''); if (m.length) scrollToFormula(m[0].id); };
+  byId('clearSearch').onclick = function() { byId('bookSearch').value=''; renderBook(); };
+  byId('clientIdInput').addEventListener('change', updateStoredClientId);
+  byId('autoSyncToggle').addEventListener('change', function() { state.sync.auto = !!this.checked; saveState(); updateSyncUi(); setSyncStatus(state.sync.auto ? '自動バックアップを有効にしました。' : '自動バックアップを停止しました。'); });
+  byId('btnConnectDrive').onclick = function() { connectDrive(true); };
+  byId('btnBackupNow').onclick = function() { updateStoredClientId(); if (!state.sync.connected) { connectDrive(false).then(function(ok) { if (ok) backupToDrive('manual'); }); } else { backupToDrive('manual'); } };
+  byId('btnRestoreNow').onclick = function() { updateStoredClientId(); if (!state.sync.connected) { connectDrive(true); } else { restoreFromDrive(); } };
+  byId('btnDisconnectDrive').onclick = disconnectDrive;
+  byId('btnReset').onclick = function() {
+    if (!confirm('学習進捗を初期化します。よろしいですか？')) return;
+    if (HAS_STORAGE) { try { localStorage.removeItem(STORAGE_KEY); } catch(e) {} }
+    state = freshState(); renderReview(); renderBook(); updateSyncUi(); saveState(); setStatus('進捗を初期化しました。');
+  };
+
+  renderReview();
+  renderBook();
+  updateSyncUi();
+  saveState();
+  setStatus('初期表示しました。Google Drive同期を使う場合は、OAuthクライアントIDを入れて「Googleに接続」を押してください。');
+
+  if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
+    window.addEventListener('load', function() {
+      navigator.serviceWorker.register('./sw.js').catch(function(err) { console.log('SW registration failed', err); });
+    });
+  }
+
+  var installBtn = byId('btnInstall');
+  window.addEventListener('beforeinstallprompt', function(e) { e.preventDefault(); deferredPrompt = e; if (installBtn) installBtn.style.display = 'inline-flex'; });
+  if (installBtn) {
+    installBtn.addEventListener('click', async function() {
+      if (!deferredPrompt) { setStatus('この環境では自動インストールを出せません。Chrome右上メニューから「ホーム画面に追加」を使ってください。'); return; }
+      deferredPrompt.prompt();
+      await deferredPrompt.userChoice;
+      deferredPrompt = null;
+      installBtn.style.display = 'none';
+    });
+  }
+  window.addEventListener('appinstalled', function() { setStatus('ホーム画面に追加されました。'); });
+} catch (e) {
+  var st = document.getElementById('status');
+  if (st) st.textContent = 'エラー: ' + (e && e.message ? e.message : e);
+  var p = document.getElementById('cardPrompt');
+  if (p) p.textContent = '読み込みエラー: ' + (e && e.message ? e.message : e);
+}
+})();
+</script>
+</body>
+</html>
