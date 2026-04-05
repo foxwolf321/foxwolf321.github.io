@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>化学公式カード｜理系大学受験</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+body{min-height:100vh;background:#0b0c14;font-family:Georgia,'Yu Mincho',serif;color:#ddd4be;overscroll-behavior:none;}
+header{position:sticky;top:0;z-index:200;border-bottom:1px solid rgba(100,220,150,0.22);background:rgba(11,12,20,0.97);backdrop-filter:blur(12px);}
+.header-inner{max-width:920px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:0 16px;height:56px;}
+.logo{font-size:17px;color:#4ade90;letter-spacing:2px;font-weight:bold;}
+.logo-sub{font-size:9px;color:#2a6a4a;letter-spacing:1px;display:block;margin-top:1px;}
+.tab-btns{display:flex;gap:5px;}
+.tab-btn{padding:5px 12px;border-radius:20px;cursor:pointer;font-size:12px;transition:all .2s;border:1px solid rgba(100,220,150,0.2);background:transparent;color:#3a7a5a;font-family:Georgia,serif;}
+.tab-btn.active{border-color:#4ade90;background:rgba(74,222,144,0.12);color:#4ade90;}
+.page{display:none;max-width:680px;margin:0 auto;padding:20px 16px 100px;}
+.page.active{display:block;}
+.page.ref-page{max-width:940px;}
+.save-bar{display:flex;align-items:center;justify-content:space-between;padding:7px 14px;border-radius:10px;margin-bottom:16px;font-size:11px;border:1px solid;}
+.save-bar.local{background:rgba(74,222,128,0.05);border-color:rgba(74,222,128,0.18);color:#4a8a5a;}
+.save-bar.drive{background:rgba(66,133,244,0.08);border-color:rgba(66,133,244,0.28);color:#6898f4;}
+.save-bar.saving{background:rgba(74,222,144,0.06);border-color:rgba(74,222,144,0.2);color:#3a8a5a;}
+.save-bar.error{background:rgba(244,63,94,0.06);border-color:rgba(244,63,94,0.2);color:#c85060;}
+.save-dot{width:6px;height:6px;border-radius:50%;margin-right:6px;display:inline-block;}
+.save-bar.local .save-dot{background:#4ade80;}
+.save-bar.drive .save-dot{background:#4285f4;}
+.save-bar.saving .save-dot{background:#4ade90;animation:pulse 1s infinite;}
+.save-bar.error .save-dot{background:#f43f5e;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.drive-btn-small{font-size:10px;padding:3px 8px;border-radius:4px;cursor:pointer;border:1px solid currentColor;background:transparent;color:inherit;font-family:Georgia,serif;}
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:500;display:none;align-items:center;justify-content:center;padding:20px;}
+.modal-bg.show{display:flex;}
+.modal{background:#0e1a12;border:1px solid rgba(74,222,144,0.3);border-radius:20px;padding:24px 22px;max-width:480px;width:100%;max-height:90vh;overflow-y:auto;}
+.modal h2{font-size:17px;color:#4ade90;margin-bottom:6px;}
+.modal-sub{font-size:12px;color:#2a6a4a;margin-bottom:18px;line-height:1.6;}
+.step-block{background:rgba(255,255,255,0.03);border:1px solid rgba(74,222,144,0.1);border-radius:10px;padding:14px 16px;margin-bottom:12px;}
+.step-num{font-size:10px;color:#4ade90;letter-spacing:1px;margin-bottom:6px;}
+.step-text{font-size:13px;color:#c0b090;line-height:1.65;}
+.step-link{color:#6898f4;text-decoration:none;word-break:break-all;}
+.modal-input{width:100%;padding:10px 14px;font-size:13px;background:rgba(255,255,255,0.05);border:1px solid rgba(74,222,144,0.3);border-radius:8px;color:#ddd4be;outline:none;font-family:monospace;margin-top:10px;}
+.modal-input::placeholder{color:#2a4a3a;}
+.modal-actions{display:flex;gap:10px;margin-top:18px;}
+.modal-btn{flex:1;padding:11px;border-radius:10px;cursor:pointer;font-size:13px;font-family:Georgia,serif;transition:background .2s;}
+.modal-btn-cancel{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);color:#7a6a48;}
+.modal-btn-ok{background:rgba(66,133,244,0.15);border:1px solid rgba(66,133,244,0.4);color:#6898f4;}
+.modal-btn-ok:active{background:rgba(66,133,244,0.25);}
+.warning-box{background:rgba(74,222,144,0.07);border:1px solid rgba(74,222,144,0.2);border-radius:8px;padding:10px 12px;margin-top:12px;font-size:11px;color:#2a6a4a;line-height:1.6;}
+.stats-row{display:flex;gap:8px;margin-bottom:16px;justify-content:center;flex-wrap:wrap;}
+.stat-box{background:rgba(255,255,255,0.03);border:1px solid rgba(74,222,144,0.1);border-radius:10px;padding:6px 12px;text-align:center;min-width:58px;}
+.stat-label{font-size:9px;color:#2a6a4a;letter-spacing:1px;margin-bottom:2px;}
+.stat-val{font-size:16px;font-weight:bold;}
+.weak-btn{background:rgba(255,255,255,0.03);border:1px solid rgba(74,222,144,0.1);border-radius:10px;padding:6px 12px;color:#2a6a4a;cursor:pointer;font-size:11px;font-family:Georgia,serif;}
+.weak-btn.open{background:rgba(74,222,144,0.1);border-color:rgba(74,222,144,0.4);color:#4ade90;}
+.weak-panel{background:rgba(255,255,255,0.02);border:1px solid rgba(74,222,144,0.14);border-radius:14px;padding:14px;margin-bottom:14px;}
+.weak-title{font-size:11px;color:#4ade90;letter-spacing:1px;margin-bottom:10px;}
+.weak-row{display:flex;justify-content:space-between;align-items:center;padding:5px 8px;border-radius:6px;margin-bottom:4px;background:rgba(255,255,255,0.02);}
+.weak-name{font-size:12px;color:#c0b090;}
+.weak-meta{display:flex;gap:6px;align-items:center;}
+.weak-cat{font-size:10px;color:#2a6a4a;}
+.dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.mini-btn{font-size:10px;color:#4ade90;background:none;border:1px solid rgba(74,222,144,0.28);border-radius:4px;padding:2px 6px;cursor:pointer;font-family:Georgia,serif;}
+.prog-bar{height:3px;background:rgba(255,255,255,0.05);border-radius:2px;margin-bottom:16px;overflow:hidden;}
+.prog-fill{height:100%;background:linear-gradient(90deg,#4ade90,#5ab4f0);border-radius:2px;transition:width .4s;}
+.card-wrap{perspective:1200px;cursor:pointer;margin-bottom:16px;user-select:none;}
+.card-inner{position:relative;min-height:280px;transform-style:preserve-3d;transition:transform .55s cubic-bezier(.35,.15,.15,1);}
+.card-inner.flipped{transform:rotateY(180deg);}
+.card-face{position:absolute;top:0;left:0;right:0;min-height:280px;-webkit-backface-visibility:hidden;backface-visibility:hidden;border-radius:20px;padding:24px 22px 20px;display:flex;flex-direction:column;justify-content:space-between;box-shadow:0 20px 50px rgba(0,0,0,0.6);}
+.card-front{background:linear-gradient(145deg,#0e1a12,#0a1510);border:1px solid rgba(74,222,144,0.28);}
+.card-back{background:linear-gradient(145deg,#0a1510,#0e2015);border:1px solid rgba(74,222,144,0.45);transform:rotateY(180deg);}
+.card-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;}
+.card-cat-badge{font-size:10px;letter-spacing:2px;color:#4ade90;background:rgba(74,222,144,0.1);border:1px solid rgba(74,222,144,0.28);border-radius:4px;padding:3px 9px;}
+.card-name{font-size:12px;color:#2a6a4a;margin-top:6px;}
+.card-meta{display:flex;flex-direction:column;align-items:flex-end;gap:4px;}
+.card-id{font-size:9px;color:#0a2a1a;}
+.card-question{font-size:18px;line-height:1.75;color:#e8dfc8;margin-top:8px;}
+.card-hint{text-align:center;color:rgba(74,222,144,0.22);font-size:11px;margin-top:14px;letter-spacing:2px;}
+.card-ans-label{font-size:10px;letter-spacing:2px;color:#4ade90;margin-bottom:10px;}
+.card-answer{font-size:15px;line-height:1.9;color:#a8f0c0;background:rgba(74,222,144,0.05);border:1px solid rgba(74,222,144,0.15);border-radius:12px;padding:12px 15px;margin-bottom:10px;font-family:'Courier New',monospace;}
+.card-detail{font-size:12px;color:#2a6a4a;line-height:1.65;}
+.ref-link-btn{align-self:flex-start;background:rgba(74,222,144,0.07);border:1px solid rgba(74,222,144,0.22);border-radius:8px;padding:6px 12px;color:#4ade90;cursor:pointer;font-size:11px;margin-top:8px;font-family:Georgia,serif;}
+.ans-btns{display:flex;gap:12px;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s;}
+.ans-btns.show{opacity:1;pointer-events:auto;}
+.ans-btn{flex:1;max-width:210px;padding:14px 10px;border-radius:14px;font-size:14px;cursor:pointer;transition:background .2s;font-family:Georgia,serif;}
+.btn-wrong{background:rgba(244,63,94,0.09);border:1px solid rgba(244,63,94,0.38);color:#f87090;}
+.btn-wrong:active{background:rgba(244,63,94,0.2);}
+.btn-ok{background:rgba(74,222,144,0.09);border:1px solid rgba(74,222,144,0.38);color:#4ade90;}
+.btn-ok:active{background:rgba(74,222,144,0.2);}
+.hint-text{text-align:center;font-size:10px;color:rgba(74,160,100,0.4);margin-top:12px;letter-spacing:1px;}
+.ref-search{width:100%;padding:12px 18px;font-size:15px;background:rgba(255,255,255,0.04);border:1px solid rgba(74,222,144,0.28);border-radius:14px;color:#ddd4be;outline:none;font-family:Georgia,serif;margin-bottom:12px;}
+.cat-filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;}
+.cat-btn{padding:5px 12px;border-radius:20px;border:1px solid rgba(74,222,144,0.18);background:transparent;color:#3a7a5a;cursor:pointer;font-size:11px;transition:all .18s;font-family:Georgia,serif;}
+.cat-btn.active{border-color:#4ade90;background:rgba(74,222,144,0.14);color:#4ade90;}
+.ref-count{font-size:11px;color:#1a4a2a;margin-bottom:14px;}
+.cat-section{margin-bottom:30px;}
+.cat-header{font-size:12px;letter-spacing:2px;color:#4ade90;border-bottom:1px solid rgba(74,222,144,0.16);padding-bottom:8px;margin-bottom:12px;display:flex;gap:10px;align-items:center;}
+.cat-count{font-size:10px;color:#1a4a2a;}
+.formula-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px;}
+.formula-card{background:rgba(255,255,255,0.025);border:1px solid rgba(74,222,144,0.1);border-radius:12px;padding:13px 15px;transition:all .4s;}
+.formula-card.highlight{background:rgba(74,222,144,0.1);border-color:rgba(74,222,144,0.52);box-shadow:0 0 20px rgba(74,222,144,0.12);}
+.fc-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;}
+.fc-name{font-size:13px;color:#80c890;font-weight:bold;}
+.fc-right{display:flex;gap:5px;align-items:center;margin-left:8px;}
+.fc-q{font-size:11px;color:#2a5a3a;margin-bottom:7px;line-height:1.5;}
+.fc-ans{font-size:13px;color:#6ad890;background:rgba(74,222,144,0.05);border:1px solid rgba(74,222,144,0.1);border-radius:8px;padding:8px 11px;line-height:1.75;font-family:'Courier New',monospace;}
+.fc-detail{font-size:11px;color:#1a5a2a;margin-top:6px;line-height:1.55;}
+.fab{position:fixed;bottom:26px;right:26px;width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#4ade90,#2a9a60);border:none;color:#0b0c14;font-size:20px;cursor:pointer;box-shadow:0 8px 28px rgba(74,222,144,0.4);display:none;align-items:center;justify-content:center;z-index:300;}
+.fab.show{display:flex;}
+.reset-row{text-align:center;margin-top:8px;}
+.reset-link{font-size:11px;color:#1a3a2a;cursor:pointer;text-decoration:underline;background:none;border:none;font-family:Georgia,serif;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div>
+      <span class="logo">化学公式カード</span>
+      <span class="logo-sub">理系大学受験 全110項目</span>
+    </div>
+    <div class="tab-btns">
+      <button class="tab-btn active" onclick="switchMode('study')">📚 問題</button>
+      <button class="tab-btn" onclick="switchMode('reference')">📖 公式集</button>
+    </div>
+  </div>
+</header>
+
+<div class="page active" id="study-page">
+  <div class="save-bar local" id="save-bar">
+    <span><span class="save-dot"></span><span id="save-text">ローカルに自動保存中</span></span>
+    <button class="drive-btn-small" id="drive-toggle-btn" onclick="openDriveModal()">☁️ Drive連携</button>
+  </div>
+  <div class="stats-row">
+    <div class="stat-box"><div class="stat-label">正解</div><div class="stat-val" id="s-c" style="color:#4ade80">0</div></div>
+    <div class="stat-box"><div class="stat-label">不正解</div><div class="stat-val" id="s-w" style="color:#f43f5e">0</div></div>
+    <div class="stat-box"><div class="stat-label">正答率</div><div class="stat-val" id="s-acc" style="color:#4ade90">--</div></div>
+    <div class="stat-box"><div class="stat-label">回答数</div><div class="stat-val" id="s-t" style="color:#94a3b8">0</div></div>
+    <button class="weak-btn" id="weak-toggle" onclick="toggleWeak()">🔥 苦手一覧</button>
+  </div>
+  <div class="weak-panel" id="weak-panel" style="display:none">
+    <div class="weak-title">苦手な項目 TOP 10</div>
+    <div id="weak-list"></div>
+  </div>
+  <div class="prog-bar"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
+  <div class="card-wrap" onclick="flipCard()">
+    <div class="card-inner" id="card-inner">
+      <div class="card-face card-front">
+        <div>
+          <div class="card-top">
+            <div>
+              <span class="card-cat-badge" id="f-cat">　</span>
+              <div class="card-name" id="f-name"></div>
+            </div>
+            <div class="card-meta">
+              <div class="dot" id="f-dot"></div>
+              <span class="card-id" id="f-id"></span>
+            </div>
+          </div>
+          <div class="card-question" id="f-question"></div>
+        </div>
+        <div class="card-hint">── タップして答えを見る ──</div>
+      </div>
+      <div class="card-face card-back">
+        <div>
+          <div class="card-ans-label">▸ 解答</div>
+          <div class="card-answer" id="b-answer"></div>
+          <div class="card-detail" id="b-detail"></div>
+        </div>
+        <button class="ref-link-btn" onclick="event.stopPropagation();jumpToFormula(currentCardId)">📖 公式集で確認 →</button>
+      </div>
+    </div>
+  </div>
+  <div class="ans-btns" id="ans-btns">
+    <button class="ans-btn btn-wrong" onclick="answer(false)">✗ わからなかった</button>
+    <button class="ans-btn btn-ok" onclick="answer(true)">○ わかった！</button>
+  </div>
+  <div class="hint-text">✦ 間違えた問題ほど出現頻度が増加します ✦</div>
+  <div class="reset-row"><button class="reset-link" onclick="confirmReset()">学習データをリセット</button></div>
+</div>
+
+<div class="page ref-page" id="reference-page">
+  <input class="ref-search" type="text" id="ref-search" placeholder="🔍  公式名・キーワード・分野で検索..." oninput="filterRef()">
+  <div class="cat-filters" id="cat-filters"></div>
+  <div class="ref-count" id="ref-count"></div>
+  <div id="ref-content"></div>
+</div>
+
+<button class="fab" id="fab" onclick="switchMode('study')">📚</button>
+
+<div class="modal-bg" id="drive-modal">
+  <div class="modal">
+    <h2>☁️ Google Drive 連携</h2>
+    <div class="modal-sub">設定すると学習データが自動でGoogleドライブに保存されます。スマホを買い替えても引き継げます。</div>
+    <div id="modal-setup">
+      <div class="step-block">
+        <div class="step-num">STEP 1</div>
+        <div class="step-text"><a class="step-link" href="https://console.cloud.google.com/" target="_blank">Google Cloud Console</a> で新しいプロジェクトを作成（無料）。</div>
+      </div>
+      <div class="step-block">
+        <div class="step-num">STEP 2</div>
+        <div class="step-text">「APIとサービス」→「ライブラリ」→「Google Drive API」を有効化。</div>
+      </div>
+      <div class="step-block">
+        <div class="step-num">STEP 3</div>
+        <div class="step-text">「認証情報」→「OAuthクライアントID」→ウェブアプリ→承認済みJS生成元に <code style="color:#4ade90">https://あなたのユーザー名.github.io</code> を追加。</div>
+      </div>
+      <div class="step-block">
+        <div class="step-num">STEP 4</div>
+        <div class="step-text">作成された「クライアントID」を下に貼り付ける。</div>
+        <input class="modal-input" type="text" id="client-id-input" placeholder="例: 123456789-xxxxx.apps.googleusercontent.com">
+      </div>
+      <div class="warning-box">⚠️ クライアントIDはこのファイル内にのみ保存されます。</div>
+    </div>
+    <div id="modal-connected" style="display:none">
+      <div class="step-block" style="border-color:rgba(66,133,244,0.3)">
+        <div class="step-num" style="color:#6898f4">接続済み</div>
+        <div class="step-text" id="connected-email" style="color:#6898f4">Googleアカウントに接続されています。</div>
+      </div>
+      <div style="margin-top:12px;display:flex;gap:10px;">
+        <button class="modal-btn modal-btn-ok" onclick="forceDriveSync()" style="font-size:12px">🔄 今すぐ同期</button>
+        <button class="modal-btn modal-btn-cancel" onclick="disconnectDrive()" style="font-size:12px;flex:0.6">連携解除</button>
+      </div>
+    </div>
+    <div class="modal-actions" id="modal-actions">
+      <button class="modal-btn modal-btn-cancel" onclick="closeDriveModal()">キャンセル</button>
+      <button class="modal-btn modal-btn-ok" onclick="connectDrive()">🔗 連携する</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://apis.google.com/js/api.js" async onload="gapiLoaded()"></script>
+<script src="https://accounts.google.com/gsi/client" async onload="gisLoaded()"></script>
+
+<script>
+const FORMULAS = [
+  // 物質の構成
+  {id:1,category:"物質の構成",name:"原子の構成",question:"原子番号・質量数・中性子数の関係を述べよ",answer:"質量数 = 陽子数 + 中性子数,  原子番号 = 陽子数",detail:"電気的に中性な原子では陽子数＝電子数。"},
+  {id:2,category:"物質の構成",name:"同位体",question:"同位体とは何か",answer:"陽子数（原子番号）が同じで中性子数が異なる原子",detail:"例：¹H, ²H(重水素), ³H(三重水素)。化学的性質はほぼ同じ。"},
+  {id:3,category:"物質の構成",name:"電子配置",question:"各電子殻の最大電子数を述べよ",answer:"K殻:2, L殻:8, M殻:18, N殻:32  (2n²個)",detail:"最外殻電子が価電子。最大8個で安定（オクテット則）。"},
+  {id:4,category:"物質の構成",name:"周期表の族と性質",question:"1族・17族・18族の名称を述べよ",answer:"1族:アルカリ金属, 17族:ハロゲン, 18族:希ガス",detail:"希ガスは最外殻電子が8個（Heは2個）で安定。"},
+  {id:5,category:"物質の構成",name:"電気陰性度",question:"電気陰性度の周期表上の傾向を述べよ",answer:"右上ほど大きい。F>O>N>Cl>Br>C>H の順",detail:"結合の極性・酸化数の決定に使う。"},
+  {id:6,category:"物質の構成",name:"イオン化エネルギー",question:"イオン化エネルギーの周期表上の傾向を述べよ",answer:"右上ほど大きい（希ガスが最大、アルカリ金属が最小）",detail:"第1イオン化エネルギー：原子から電子1個を取るのに必要なエネルギー。"},
+  // 化学結合
+  {id:7,category:"化学結合",name:"イオン結合",question:"イオン結合とは何か",answer:"陽イオンと陰イオンの静電気的引力による結合",detail:"金属元素＋非金属元素。例：NaCl, MgO。"},
+  {id:8,category:"化学結合",name:"共有結合",question:"共有結合とは何か",answer:"原子間で電子対を共有する結合",detail:"非金属元素間。単結合・二重結合・三重結合がある。"},
+  {id:9,category:"化学結合",name:"配位結合",question:"配位結合とは何か",answer:"一方の原子が電子対を提供して形成する共有結合",detail:"例：NH₄⁺（NH₃がH⁺に電子対を提供）。"},
+  {id:10,category:"化学結合",name:"金属結合",question:"金属結合とは何か",answer:"自由電子が金属陽イオンを結びつける結合",detail:"展性・延性・電気伝導性・熱伝導性が高い。"},
+  {id:11,category:"化学結合",name:"水素結合",question:"水素結合が生じる条件を述べよ",answer:"F, O, N に結合したHが隣の分子のF, O, N と引き合う",detail:"HF, H₂O, NH₃で特に強い。沸点が異常に高い原因。"},
+  {id:12,category:"化学結合",name:"分子の極性",question:"CO₂とH₂Oの極性の違いを述べよ",answer:"CO₂:無極性分子（直線形で打ち消し）, H₂O:極性分子（折れ線形）",detail:"分子の形が対称なら無極性になる。"},
+  {id:13,category:"化学結合",name:"結晶の種類",question:"4種類の結晶とその例を述べよ",answer:"イオン結晶(NaCl), 共有結晶(ダイヤモンド), 金属結晶(Fe), 分子結晶(ドライアイス)",detail:"共有結晶は硬くて融点が非常に高い。"},
+  // 物質量・モル計算
+  {id:14,category:"物質量・モル計算",name:"アボガドロ数",question:"アボガドロ数Nₐを述べよ",answer:"Nₐ = 6.02 × 10²³ /mol",detail:"1molの粒子の数。"},
+  {id:15,category:"物質量・モル計算",name:"モルと質量",question:"物質量n[mol]、質量w[g]、モル質量M[g/mol]の関係",answer:"n = w/M",detail:"モル質量は原子量・分子量にg/molをつけた値。"},
+  {id:16,category:"物質量・モル計算",name:"標準状態の気体モル体積",question:"標準状態（0℃, 1atm）での気体1molの体積",answer:"22.4 L/mol",detail:"気体の種類によらず一定（理想気体）。"},
+  {id:17,category:"物質量・モル計算",name:"モルと粒子数",question:"n[mol]の物質に含まれる粒子数Nを述べよ",answer:"N = n × Nₐ = n × 6.02×10²³",detail:"粒子は原子・分子・イオンなど。"},
+  {id:18,category:"物質量・モル計算",name:"モル濃度",question:"モル濃度c[mol/L]の定義を述べよ",answer:"c = n/V  (n:溶質のmol数, V:溶液の体積[L])",detail:"溶媒ではなく溶液の体積で割る。"},
+  {id:19,category:"物質量・モル計算",name:"質量パーセント濃度",question:"質量パーセント濃度w[%]を述べよ",answer:"w = (溶質の質量/溶液の質量) × 100",detail:"モル濃度との換算には密度が必要。"},
+  {id:20,category:"物質量・モル計算",name:"濃度換算",question:"質量パーセントw%・密度d[g/mL]からモル濃度cを求めよ",answer:"c = 1000dw / (100M)  [mol/L]",detail:"Mは溶質のモル質量[g/mol]。"},
+  // 気体の法則
+  {id:21,category:"気体の法則",name:"ボイルの法則",question:"ボイルの法則を述べよ",answer:"pV = 一定  (温度一定)",detail:"圧力と体積は反比例。p₁V₁ = p₂V₂。"},
+  {id:22,category:"気体の法則",name:"シャルルの法則",question:"シャルルの法則を述べよ",answer:"V/T = 一定  (圧力一定, Tは絶対温度)",detail:"T[K] = t[℃] + 273。"},
+  {id:23,category:"気体の法則",name:"理想気体の状態方程式",question:"理想気体の状態方程式を述べよ",answer:"pV = nRT  (R = 8.3×10³ Pa・L/mol・K = 8.3 J/mol・K)",detail:"圧力の単位に注意（Pa または atm）。"},
+  {id:24,category:"気体の法則",name:"混合気体の分圧",question:"ドルトンの分圧の法則を述べよ",answer:"P全 = P₁ + P₂ + …,  Pᵢ = P全 × (nᵢ/n全)",detail:"各成分気体が単独で占める圧力が分圧。"},
+  {id:25,category:"気体の法則",name:"蒸気圧",question:"蒸気圧とは何か",answer:"液体と蒸気が平衡状態にあるときの蒸気の圧力",detail:"温度のみで決まる。沸点では蒸気圧＝外圧。"},
+  {id:26,category:"気体の法則",name:"ファンデルワールス方程式",question:"実在気体のファンデルワールス方程式を述べよ",answer:"(p + a/V²)(V - b) = nRT",detail:"aは分子間力の補正、bは分子体積の補正。"},
+  // 溶液
+  {id:27,category:"溶液",name:"溶解度",question:"溶解度とは何か",answer:"溶媒100gに溶ける溶質の最大質量[g]",detail:"温度依存性がある。固体は高温で増加、気体は低温で増加。"},
+  {id:28,category:"溶液",name:"ヘンリーの法則",question:"ヘンリーの法則を述べよ",answer:"気体の溶解量は気体の圧力（分圧）に比例する",detail:"温度一定のとき成立。炭酸飲料の原理。"},
+  {id:29,category:"溶液",name:"沸点上昇",question:"沸点上昇Δtbを述べよ",answer:"Δtb = Kb × m  (m:質量モル濃度[mol/kg], Kb:モル沸点上昇)",detail:"溶質の種類によらず質量モル濃度に比例。"},
+  {id:30,category:"溶液",name:"凝固点降下",question:"凝固点降下Δtfを述べよ",answer:"Δtf = Kf × m",detail:"不凍液・融雪剤の原理。電解質は電離度を考慮。"},
+  {id:31,category:"溶液",name:"浸透圧",question:"浸透圧πを述べよ",answer:"πV = nRT  または  π = cRT",detail:"ファントホッフの法則。c:モル濃度[mol/L]。"},
+  {id:32,category:"溶液",name:"質量モル濃度",question:"質量モル濃度m[mol/kg]を述べよ",answer:"m = n(溶質) / w(溶媒)[kg]",detail:"溶媒1kgあたりの溶質のmol数。温度に依存しない。"},
+  // 電気化学
+  {id:33,category:"電気化学",name:"ファラデー定数",question:"ファラデー定数Fを述べよ",answer:"F = 9.65 × 10⁴ C/mol ≈ 96500 C/mol",detail:"電子1molあたりの電気量。"},
+  {id:34,category:"電気化学",name:"電気分解の法則",question:"電気分解で析出する物質の質量を述べよ",answer:"w = (M/nF) × It  (I:電流[A], t:時間[s], n:電子数)",detail:"It = 電気量[C]。ファラデーの法則。"},
+  {id:35,category:"電気化学",name:"電池の起電力",question:"ダニエル電池の反応を述べよ",answer:"負極: Zn → Zn²⁺ + 2e⁻,  正極: Cu²⁺ + 2e⁻ → Cu",detail:"イオン化傾向の差が起電力の源。"},
+  {id:36,category:"電気化学",name:"イオン化傾向",question:"主要金属のイオン化傾向の順を述べよ",answer:"Li>K>Ca>Na>Mg>Al>Zn>Fe>Ni>Sn>Pb>H>Cu>Hg>Ag>Pt>Au",detail:"貸そうかなまああてにすなひどすぎる借金。"},
+  {id:37,category:"電気化学",name:"電気分解の電極反応",question:"CuSO₄水溶液の電気分解の電極反応を述べよ",answer:"陰極: Cu²⁺ + 2e⁻ → Cu,  陽極: H₂O → (1/2)O₂ + 2H⁺ + 2e⁻",detail:"陰極では還元、陽極では酸化が起こる。"},
+  {id:38,category:"電気化学",name:"燃料電池",question:"水素燃料電池の反応を述べよ",answer:"負極: H₂ + 2OH⁻ → 2H₂O + 2e⁻,  正極: (1/2)O₂ + H₂O + 2e⁻ → 2OH⁻",detail:"全体反応: H₂ + (1/2)O₂ → H₂O"},
+  // 熱化学
+  {id:39,category:"熱化学",name:"反応エンタルピー",question:"反応エンタルピーΔHの符号の意味を述べよ",answer:"ΔH < 0:発熱反応,  ΔH > 0:吸熱反応",detail:"系が熱を放出するとエネルギーが下がる（ΔH<0）。"},
+  {id:40,category:"熱化学",name:"ヘスの法則",question:"ヘスの法則を述べよ",answer:"反応エンタルピーは経路によらず始状態と終状態のみで決まる",detail:"エネルギー保存則の化学版。"},
+  {id:41,category:"熱化学",name:"生成エンタルピー",question:"生成エンタルピーとは何か",answer:"単体から化合物1molを生成するときのエンタルピー変化",detail:"単体のΔHf = 0 と定義。"},
+  {id:42,category:"熱化学",name:"結合エネルギー",question:"結合エネルギーを使った反応熱の計算法",answer:"ΔH = Σ(切れる結合のエネルギー) - Σ(生成する結合のエネルギー)",detail:"切断は吸熱、生成は発熱。"},
+  {id:43,category:"熱化学",name:"燃焼エンタルピー",question:"燃焼エンタルピーとは何か",answer:"物質1molを完全燃焼させるときのエンタルピー変化",detail:"常にΔH<0（発熱）。"},
+  {id:44,category:"熱化学",name:"溶解エンタルピー",question:"溶解エンタルピーとは何か",answer:"物質1molを多量の溶媒に溶かすときのエンタルピー変化",detail:"NaOHは発熱（ΔH<0）、NH₄NO₃は吸熱（ΔH>0）。"},
+  // 化学平衡
+  {id:45,category:"化学平衡",name:"平衡定数",question:"aA + bB ⇌ cC + dD の平衡定数Kを述べよ",answer:"K = [C]ᶜ[D]ᵈ / ([A]ᵃ[B]ᵇ)",detail:"温度のみで決まる。固体・純液体は含めない。"},
+  {id:46,category:"化学平衡",name:"ルシャトリエの原理",question:"ルシャトリエの原理を述べよ",answer:"平衡状態に変化を加えると、その変化を打ち消す方向に平衡が移動する",detail:"濃度・圧力・温度の変化に適用できる。"},
+  {id:47,category:"化学平衡",name:"圧力と平衡",question:"圧力増加が平衡に与える影響を述べよ",answer:"気体の分子数が減る方向に平衡が移動する",detail:"気体モル数が変化しない反応では圧力の影響を受けない。"},
+  {id:48,category:"化学平衡",name:"温度と平衡",question:"温度上昇が平衡に与える影響を述べよ",answer:"吸熱方向（ΔH>0の方向）に平衡が移動する",detail:"発熱反応では温度上昇で逆方向（生成物→反応物）に移動。"},
+  {id:49,category:"化学平衡",name:"Kpとkc",question:"Kpとkcの関係を述べよ",answer:"Kp = Kc(RT)^Δn  (Δn:気体の係数の変化)",detail:"Δn=0のとき Kp = Kc。"},
+  {id:50,category:"化学平衡",name:"電離定数",question:"弱酸HAの電離定数Kaを述べよ",answer:"Ka = [H⁺][A⁻] / [HA]",detail:"Kaが大きいほど強い酸。"},
+  // 酸と塩基
+  {id:51,category:"酸と塩基",name:"ブレンステッドの定義",question:"ブレンステッド・ローリーの酸塩基定義を述べよ",answer:"酸:H⁺を与える,  塩基:H⁺を受け取る",detail:"アレニウス定義より広い。NH₃も塩基に含まれる。"},
+  {id:52,category:"酸と塩基",name:"水のイオン積",question:"水のイオン積Kwを述べよ",answer:"Kw = [H⁺][OH⁻] = 1.0×10⁻¹⁴  (25℃)",detail:"純水では[H⁺]=[OH⁻]=1.0×10⁻⁷ mol/L。"},
+  {id:53,category:"酸と塩基",name:"pHの定義",question:"pHの定義を述べよ",answer:"pH = -log₁₀[H⁺]",detail:"pH＋pOH = 14（25℃）。pH<7:酸性、pH=7:中性、pH>7:塩基性。"},
+  {id:54,category:"酸と塩基",name:"強酸のpH計算",question:"0.01mol/LのHCl水溶液のpHを求めよ",answer:"[H⁺] = 0.01 = 10⁻² mol/L → pH = 2",detail:"強酸は完全電離するので濃度＝[H⁺]。"},
+  {id:55,category:"酸と塩基",name:"弱酸のpH計算",question:"濃度c、電離定数KaのHA水溶液の[H⁺]を求めよ",answer:"[H⁺] ≈ √(Ka・c)  (電離度が小さいとき)",detail:"電離度α = [H⁺]/c = √(Ka/c)。"},
+  {id:56,category:"酸と塩基",name:"中和の公式",question:"中和の量的関係を述べよ",answer:"n酸 × c酸 × V酸 = n塩基 × c塩基 × V塩基",detail:"n酸,n塩基は価数（HClは1価、H₂SO₄は2価）。"},
+  {id:57,category:"酸と塩基",name:"緩衝液",question:"緩衝液とは何か",answer:"少量の酸・塩基を加えてもpHがほぼ変化しない溶液",detail:"弱酸とその塩（例:CH₃COOH + CH₃COONa）の混合。"},
+  {id:58,category:"酸と塩基",name:"塩の加水分解",question:"CH₃COONa水溶液が塩基性になる理由",answer:"CH₃COO⁻ + H₂O → CH₃COOH + OH⁻（加水分解）",detail:"弱酸の塩→塩基性、弱塩基の塩→酸性。"},
+  // 酸化還元
+  {id:59,category:"酸化還元",name:"酸化数のルール",question:"酸化数の決め方のルールを述べよ",answer:"単体:0, 単原子イオン:電荷, H:+1, O:-2（例外あり）, 化合物の総和:0",detail:"例外：H₂O₂のOは-1、NaHのHは-1。"},
+  {id:60,category:"酸化還元",name:"酸化還元の定義",question:"酸化・還元を電子の観点から述べよ",answer:"酸化:電子を失う（酸化数増加）, 還元:電子を得る（酸化数減少）",detail:"OIL RIG（Oxidation Is Loss, Reduction Is Gain）。"},
+  {id:61,category:"酸化還元",name:"半反応式",question:"MnO₄⁻の酸性溶液中での半反応式を述べよ",answer:"MnO₄⁻ + 8H⁺ + 5e⁻ → Mn²⁺ + 4H₂O",detail:"酸性ではH⁺とH₂Oを使う。塩基性ではOH⁻とH₂O。"},
+  {id:62,category:"酸化還元",name:"酸化還元滴定",question:"KMnO₄とシュウ酸の反応式を述べよ",answer:"2KMnO₄ + 5H₂C₂O₄ + 3H₂SO₄ → 2MnSO₄ + K₂SO₄ + 10CO₂ + 8H₂O",detail:"電子の移動数（授受）を等しくして係数を決める。"},
+  {id:63,category:"酸化還元",name:"代表的な酸化剤",question:"代表的な酸化剤を述べよ",answer:"KMnO₄, K₂Cr₂O₇, H₂O₂, Cl₂, HNO₃, 濃H₂SO₄, O₂",detail:"酸化剤は自身が還元される。"},
+  {id:64,category:"酸化還元",name:"代表的な還元剤",question:"代表的な還元剤を述べよ",answer:"H₂S, SO₂, Fe²⁺, I⁻, シュウ酸(H₂C₂O₄), Na₂SO₃",detail:"還元剤は自身が酸化される。"},
+  // 無機化学
+  {id:65,category:"無機化学",name:"ハロゲンの性質",question:"ハロゲン（F, Cl, Br, I）の酸化力の順を述べよ",answer:"F > Cl > Br > I",detail:"原子番号が小さいほど酸化力が強い。"},
+  {id:66,category:"無機化学",name:"塩素の製法",question:"塩素の実験室的製法を述べよ",answer:"MnO₂ + 4HCl(濃) → MnCl₂ + Cl₂ + 2H₂O",detail:"加熱が必要。Cl₂は黄緑色で有毒。"},
+  {id:67,category:"無機化学",name:"アンモニアの製法",question:"アンモニアの工業的製法（ハーバー・ボッシュ法）",answer:"N₂ + 3H₂ ⇌ 2NH₃  (高温高圧, Fe触媒)",detail:"平衡を右に移動させるため低温が有利だが速度のため高温。"},
+  {id:68,category:"無機化学",name:"硫酸の工業的製法",question:"接触法による硫酸の製法を述べよ",answer:"S→SO₂→SO₃（V₂O₅触媒）→H₂SO₄",detail:"SO₃を水に直接吸収させず発煙硫酸を経る。"},
+  {id:69,category:"無機化学",name:"硝酸の工業的製法",question:"オストワルト法を述べよ",answer:"NH₃→NO（Pt触媒）→NO₂→HNO₃",detail:"4NH₃+5O₂→4NO+6H₂O（酸化段階）。"},
+  {id:70,category:"無機化学",name:"アルカリ金属の性質",question:"アルカリ金属と水の反応を述べよ",answer:"2Na + 2H₂O → 2NaOH + H₂↑",detail:"Li, Na, Kは水と激しく反応。炎色反応に特徴的な色。"},
+  {id:71,category:"無機化学",name:"炎色反応",question:"主な元素の炎色反応の色を述べよ",answer:"Li:赤, Na:黄, K:紫, Ca:橙赤, Sr:紅, Ba:黄緑, Cu:青緑",detail:"「リアカー無きK村、どう稼ぐか」などで覚える。"},
+  {id:72,category:"無機化学",name:"両性元素",question:"両性元素と両性酸化物を述べよ",answer:"Al, Zn, Sn, Pb（両性元素）。Al₂O₃, ZnOなどが両性酸化物",detail:"酸にも塩基にも溶ける。Al+NaOH水溶液→H₂↑。"},
+  {id:73,category:"無機化学",name:"鉄の反応",question:"鉄と希硫酸・濃硝酸の反応を述べよ",answer:"希硫酸:Fe + H₂SO₄ → FeSO₄ + H₂↑,  濃硝酸:不動態を形成",detail:"Feは希酸に溶けるが濃HNO₃・濃H₂SO₄では不動態になる。"},
+  {id:74,category:"無機化学",name:"銅の反応",question:"銅と各種酸の反応を述べよ",answer:"希HNO₃: 3Cu+8HNO₃→3Cu(NO₃)₂+2NO↑+4H₂O, 濃HNO₃: Cu+4HNO₃→Cu(NO₃)₂+2NO₂↑+2H₂O",detail:"Cuは希塩酸・希硫酸には溶けない（H以下）。"},
+  {id:75,category:"無機化学",name:"気体の製法まとめ",question:"H₂, O₂, CO₂の実験室的製法を述べよ",answer:"H₂: Zn+H₂SO₄,  O₂: H₂O₂+MnO₂,  CO₂: CaCO₃+HCl",detail:"CO₃²⁻+2HCl→CO₂+H₂O+CaCl₂。"},
+  {id:76,category:"無機化学",name:"沈殿反応",question:"AgCl, BaSO₄, CaCO₃の沈殿色を述べよ",answer:"AgCl:白, BaSO₄:白, CaCO₃:白, Fe(OH)₃:赤褐, Cu(OH)₂:青白",detail:"沈殿の色は定性分析に使う。"},
+  {id:77,category:"無機化学",name:"錯イオン",question:"[Cu(NH₃)₄]²⁺の名称と色を述べよ",answer:"テトラアンミン銅(II)イオン。深青色（テトラアンミン銅色）",detail:"[Ag(NH₃)₂]⁺:銀アンミン錯イオン（無色）も頻出。"},
+  // 有機化学
+  {id:78,category:"有機化学",name:"有機化合物の特徴",question:"有機化合物の特徴を述べよ",answer:"炭素骨格を持つ。共有結合。低融点。水に溶けにくい。燃焼するとCO₂とH₂Oを生じる",detail:"C, H, O, N, S, Pなどから構成される。"},
+  {id:79,category:"有機化学",name:"官能基①",question:"ヒドロキシ基・カルボキシ基・アルデヒド基の構造式",answer:"-OH（ヒドロキシ）, -COOH（カルボキシ）, -CHO（アルデヒド）",detail:"カルボキシ基は酸性。アルデヒドは還元性あり。"},
+  {id:80,category:"有機化学",name:"官能基②",question:"ケトン基・アミノ基・エステル結合の構造式",answer:"-CO-（ケトン）, -NH₂（アミノ）, -COO-（エステル）",detail:"アミノ基は塩基性。エステルはカルボン酸＋アルコール。"},
+  {id:81,category:"有機化学",name:"アルカンの命名",question:"炭素数1〜6のアルカンの名称を述べよ",answer:"メタン, エタン, プロパン, ブタン, ペンタン, ヘキサン",detail:"一般式CₙH₂ₙ₊₂。単結合のみ。"},
+  {id:82,category:"有機化学",name:"アルケン・アルキン",question:"アルケンとアルキンの一般式と代表例",answer:"アルケン:CₙH₂ₙ（二重結合1つ）, アルキン:CₙH₂ₙ₋₂（三重結合1つ）",detail:"エチレンC₂H₄, アセチレンC₂H₂が代表例。"},
+  {id:83,category:"有機化学",name:"付加反応",question:"エチレンへの臭素の付加反応を述べよ",answer:"CH₂=CH₂ + Br₂ → CH₂Br-CH₂Br",detail:"二重結合・三重結合に試薬が付加する反応。臭素水の脱色で確認。"},
+  {id:84,category:"有機化学",name:"マルコフニコフ則",question:"プロペンへのHBrの付加の主生成物を述べよ",answer:"CH₃-CHBr-CH₃（2-ブロモプロパン）",detail:"HはH原子の多い炭素に、Brは少ない炭素に付加する。"},
+  {id:85,category:"有機化学",name:"アルコールの酸化",question:"第一・第二・第三アルコールの酸化生成物を述べよ",answer:"第一: アルデヒド→カルボン酸,  第二: ケトン,  第三: 酸化されない",detail:"酸化剤はK₂Cr₂O₇, KMnO₄など。"},
+  {id:86,category:"有機化学",name:"エステル化",question:"エタノールと酢酸のエステル化反応を述べよ",answer:"CH₃COOH + C₂H₅OH ⇌ CH₃COOC₂H₅ + H₂O  (H₂SO₄触媒)",detail:"逆反応は加水分解（けん化）。"},
+  {id:87,category:"有機化学",name:"けん化",question:"油脂のけん化反応を述べよ",answer:"油脂 + 3NaOH → グリセリン + 脂肪酸ナトリウム（石鹸）",detail:"エステルをアルカリで加水分解する反応。"},
+  {id:88,category:"有機化学",name:"ベンゼンの反応",question:"ベンゼンの代表的な反応2つを述べよ",answer:"ニトロ化: C₆H₆+HNO₃→C₆H₅NO₂+H₂O,  スルホン化: C₆H₆+H₂SO₄→C₆H₅SO₃H+H₂O",detail:"ベンゼンは付加より置換反応をしやすい。"},
+  {id:89,category:"有機化学",name:"フェノールの性質",question:"フェノールの酸性と塩との関係を述べよ",answer:"C₆H₅OH + NaOH → C₆H₅ONa + H₂O（弱酸なのでCO₂より弱い）",detail:"炭酸より弱い酸。NaHCO₃とは反応しない。"},
+  {id:90,category:"有機化学",name:"アニリンの性質",question:"アニリンの塩基性と塩形成を述べよ",answer:"C₆H₅NH₂ + HCl → C₆H₅NH₃Cl（アニリン塩酸塩）",detail:"弱塩基。アゾ染料の原料。ジアゾ化→カップリング。"},
+  {id:91,category:"有機化学",name:"アルデヒドの検出",question:"アルデヒドを検出する試薬と反応を2つ述べよ",answer:"フェーリング液:赤色沈殿(Cu₂O),  銀鏡反応:銀(Ag)が析出",detail:"ケトンはこれらの反応を示さない。"},
+  {id:92,category:"有機化学",name:"カルボン酸の酸性",question:"カルボン酸の酸の強さの比較を述べよ",answer:"ギ酸 > 酢酸 > フェノール > 炭酸",detail:"ギ酸HCOOH はアルデヒド基も持ち還元性がある。"},
+  {id:93,category:"有機化学",name:"糖類①",question:"単糖・二糖・多糖の例を述べよ",answer:"単糖:グルコース・フルクトース,  二糖:スクロース・マルトース,  多糖:デンプン・セルロース",detail:"グルコースはアルデヒド型と環状型が平衡。"},
+  {id:94,category:"有機化学",name:"糖類②",question:"スクロース（砂糖）の加水分解を述べよ",answer:"スクロース + H₂O → グルコース + フルクトース",detail:"スクロース自体は還元性なし。加水分解後は還元性あり。"},
+  {id:95,category:"有機化学",name:"アミノ酸・タンパク質",question:"アミノ酸の両性イオンと等電点を述べよ",answer:"アミノ酸は-NH₃⁺と-COO⁻を持つ両性イオン。等電点でゼロ電荷",detail:"ペプチド結合:-CO-NH-。タンパク質は多数のアミノ酸がペプチド結合で連結。"},
+  {id:96,category:"有機化学",name:"高分子化合物",question:"付加重合と縮合重合の違いを述べよ",answer:"付加重合:二重結合が開環して重合（ポリエチレン）,  縮合重合:小分子が脱離して重合（ナイロン）",detail:"共重合は2種以上のモノマーを重合。"},
+  {id:97,category:"有機化学",name:"ポリマーの例",question:"代表的な合成高分子の名称と用途を述べよ",answer:"ポリエチレン(PE):袋, ポリスチレン(PS):発泡剤, ナイロン:繊維, ポリエステル(PET):ペットボトル",detail:"天然高分子:デンプン・セルロース・タンパク質・天然ゴム。"},
+  // 反応速度
+  {id:98,category:"反応速度",name:"反応速度式",question:"反応速度vの定義を述べよ",answer:"v = -Δ[A]/Δt = k[A]ⁿ  (kは速度定数、nは反応次数)",detail:"温度が上がるとkが増大（アレニウス式）。"},
+  {id:99,category:"反応速度",name:"活性化エネルギー",question:"活性化エネルギーと触媒の関係を述べよ",answer:"触媒は活性化エネルギーを下げ反応速度を大きくする。反応熱は変わらない",detail:"正触媒(速度増大)と負触媒(速度低下)がある。"},
+  {id:100,category:"反応速度",name:"アレニウスの式",question:"アレニウスの式を述べよ",answer:"k = A・exp(-Ea/RT)  (Ea:活性化エネルギー, R:気体定数)",detail:"温度が上がるとkは指数的に増大する。"},
+  // 分析化学
+  {id:101,category:"分析化学",name:"定性分析（陽イオン）",question:"Fe³⁺, Cu²⁺, Ca²⁺の確認反応を述べよ",answer:"Fe³⁺: SCN⁻で血赤色,  Cu²⁺: NH₃過剰で深青色,  Ca²⁺: 炎色反応で橙赤色",detail:"陽イオンの系統分析では沈殿反応を組み合わせる。"},
+  {id:102,category:"分析化学",name:"定性分析（陰イオン）",question:"Cl⁻, SO₄²⁻, CO₃²⁻の確認反応を述べよ",answer:"Cl⁻: AgNO₃で白色沈殿,  SO₄²⁻: BaCl₂で白色沈殿,  CO₃²⁻: HClでCO₂発生",detail:"AgClは光で黒変する（感光性）。"},
+  {id:103,category:"分析化学",name:"指示薬",question:"フェノールフタレイン・メチルオレンジの変色域を述べよ",answer:"フェノールフタレイン: pH 8.2〜10.0（無→赤）,  メチルオレンジ: pH 3.1〜4.4（赤→黄）",detail:"強酸+強塩基の中和にはどちらも使える。"},
+  // コロイド
+  {id:104,category:"コロイド",name:"コロイドの性質",question:"チンダル現象・ブラウン運動・電気泳動を述べよ",answer:"チンダル:光散乱,  ブラウン:不規則運動,  電気泳動:電場で移動",detail:"コロイド粒子の大きさは1〜100nm。"},
+  {id:105,category:"コロイド",name:"透析",question:"透析とは何か",answer:"半透膜を使いコロイド粒子と小分子イオンを分離する操作",detail:"人工透析（腎臓の代替）に応用される。"},
+  {id:106,category:"コロイド",name:"塩析と凝析",question:"塩析と凝析の違いを述べよ",answer:"塩析:多量の電解質でタンパク質などを沈殿,  凝析:少量の電解質でコロイドを沈殿",detail:"塩析は可逆的、凝析は不可逆的。"},
+  // 電子軌道・量子化学
+  {id:107,category:"物質の構成",name:"電子軌道",question:"s, p, d軌道の最大電子数を述べよ",answer:"s軌道: 2個,  p軌道: 6個,  d軌道: 10個",detail:"軌道の形: s球形, p亜鈴形, d四葉形。"},
+  {id:108,category:"物質の構成",name:"遮蔽効果",question:"有効核電荷と遮蔽効果を述べよ",answer:"有効核電荷 = 核電荷 - 遮蔽定数。内側の電子が外側の電子を遮蔽する",detail:"同族では下ほど有効核電荷が小さく原子半径が大きい。"},
+  {id:109,category:"化学平衡",name:"溶解度積",question:"難溶性塩AgClの溶解度積Kspを述べよ",answer:"Ksp = [Ag⁺][Cl⁻]",detail:"イオンの積がKspを超えると沈殿が生じる。"},
+  {id:110,category:"酸化還元",name:"標準電極電位",question:"標準電極電位と自発反応の関係を述べよ",answer:"起電力 E°cell = E°正極 - E°負極 > 0 のとき自発反応",detail:"E°が大きい方が正極（酸化剤）になる。"},
+];
+
+const CATEGORIES = [...new Set(FORMULAS.map(f=>f.category))];
+const LS_KEY = 'chemcard_save_v1';
+let weights = FORMULAS.map(()=>1);
+let currentIdx = 0;
+let currentCardId = FORMULAS[0].id;
+let isFlipped = false;
+let stats = {c:0,w:0,t:0};
+let weakOpen = false;
+let refCat = "すべて";
+let refSearch = "";
+let gapiReady = false, gisReady = false, tokenClient = null, accessToken = null;
+let driveFileId = null, driveEmail = null;
+let clientId = localStorage.getItem('chemcard_client_id') || '';
+let driveSaveTimer = null;
+const DRIVE_FILE_NAME = 'chemistry-flashcards-data.json';
+const DRIVE_SCOPE = 'https://www.googleapis.com/auth/drive.appdata';
+
+function saveLocal(){try{localStorage.setItem(LS_KEY,JSON.stringify({weights,stats,currentIdx}));}catch(e){}}
+function loadLocal(){try{const d=JSON.parse(localStorage.getItem(LS_KEY));if(!d)return false;if(d.weights&&d.weights.length===FORMULAS.length)weights=d.weights;if(d.stats)stats=d.stats;if(typeof d.currentIdx==='number')currentIdx=d.currentIdx;return true;}catch(e){return false;}}
+function setSaveBar(type,text){document.getElementById('save-bar').className='save-bar '+type;document.getElementById('save-text').textContent=text;}
+function autoSave(){saveLocal();if(accessToken){setSaveBar('saving','Driveに保存中…');clearTimeout(driveSaveTimer);driveSaveTimer=setTimeout(()=>driveSave().then(()=>setSaveBar('drive','☁️ Driveに自動保存済み')).catch(()=>setSaveBar('error','Drive保存に失敗')),1500);}}
+function gapiLoaded(){gapi.load('client',async()=>{await gapi.client.init({discoveryDocs:['https://www.googleapis.com/discovery/v1/apis/drive/v3/rest']});gapiReady=true;if(clientId&&gisReady)tryAutoConnect();});}
+function gisLoaded(){gisReady=true;if(clientId&&gapiReady)tryAutoConnect();}
+function tryAutoConnect(){if(!clientId)return;initTokenClient(clientId);tokenClient.requestAccessToken({prompt:''});}
+function initTokenClient(cid){tokenClient=google.accounts.oauth2.initTokenClient({client_id:cid,scope:DRIVE_SCOPE,callback:async(resp)=>{if(resp.error){setSaveBar('error','Drive認証に失敗');return;}accessToken=resp.access_token;gapi.client.setToken({access_token:accessToken});driveEmail=await getEmail();document.getElementById('connected-email').textContent=driveEmail?driveEmail+'で接続中':'接続済み';document.getElementById('modal-setup').style.display='none';document.getElementById('modal-connected').style.display='block';document.getElementById('modal-actions').style.display='none';updateDriveBtn();await driveLoad();setSaveBar('drive','☁️ Driveに自動保存済み');}});}
+async function getEmail(){try{const r=await gapi.client.request({path:'https://www.googleapis.com/oauth2/v3/userinfo'});return r.result.email;}catch(e){return null;}}
+async function findDriveFile(){const r=await gapi.client.drive.files.list({spaces:'appDataFolder',q:`name='${DRIVE_FILE_NAME}'`,fields:'files(id)',pageSize:1});return r.result.files[0]?.id||null;}
+async function driveLoad(){try{driveFileId=await findDriveFile();if(!driveFileId)return;const r=await gapi.client.drive.files.get({fileId:driveFileId,alt:'media'});const d=typeof r.result==='string'?JSON.parse(r.result):r.result;if(d.weights&&d.weights.length===FORMULAS.length)weights=d.weights;if(d.stats)stats=d.stats;if(typeof d.currentIdx==='number')currentIdx=d.currentIdx;currentCardId=FORMULAS[currentIdx]?.id||FORMULAS[0].id;renderCard();updateStats();if(weakOpen)renderWeakList();}catch(e){}}
+async function driveSave(){const body=JSON.stringify({weights,stats,currentIdx,updated:new Date().toISOString()});if(!driveFileId){const r=await gapi.client.request({path:'/upload/drive/v3/files',method:'POST',params:{uploadType:'multipart',fields:'id'},headers:{'Content-Type':'multipart/related; boundary=foo'},body:'--foo\r\nContent-Type: application/json\r\n\r\n'+JSON.stringify({name:DRIVE_FILE_NAME,parents:['appDataFolder']})+'\r\n--foo\r\nContent-Type: application/json\r\n\r\n'+body+'\r\n--foo--'});driveFileId=r.result.id;}else{await gapi.client.request({path:'/upload/drive/v3/files/'+driveFileId,method:'PATCH',params:{uploadType:'media'},headers:{'Content-Type':'application/json'},body});}}
+function updateDriveBtn(){const btn=document.getElementById('drive-toggle-btn');if(accessToken){btn.textContent='☁️ Drive接続中';btn.style.color='#6898f4';btn.style.borderColor='rgba(66,133,244,0.4)';}else{btn.textContent='☁️ Drive連携';btn.style.color='';btn.style.borderColor='';}}
+function openDriveModal(){const m=document.getElementById('drive-modal');if(accessToken){document.getElementById('modal-setup').style.display='none';document.getElementById('modal-connected').style.display='block';document.getElementById('modal-actions').style.display='none';}else{document.getElementById('modal-setup').style.display='block';document.getElementById('modal-connected').style.display='none';document.getElementById('modal-actions').style.display='flex';document.getElementById('client-id-input').value=clientId;}m.classList.add('show');}
+function closeDriveModal(){document.getElementById('drive-modal').classList.remove('show');}
+function connectDrive(){const cid=document.getElementById('client-id-input').value.trim();if(!cid){alert('クライアントIDを入力してください');return;}clientId=cid;localStorage.setItem('chemcard_client_id',cid);if(!gapiReady||!gisReady){alert('Google APIの読み込みが完了していません。リロードしてお試しください。');return;}initTokenClient(cid);tokenClient.requestAccessToken({prompt:'consent'});closeDriveModal();}
+function disconnectDrive(){if(accessToken)google.accounts.oauth2.revoke(accessToken);accessToken=null;driveFileId=null;driveEmail=null;localStorage.removeItem('chemcard_client_id');clientId='';setSaveBar('local','ローカルに自動保存中');updateDriveBtn();closeDriveModal();}
+function forceDriveSync(){if(!accessToken){alert('まずDriveに接続してください');return;}setSaveBar('saving','同期中…');driveSave().then(()=>{setSaveBar('drive','☁️ 同期完了');closeDriveModal();}).catch(()=>setSaveBar('error','同期に失敗'));}
+function dc(w){return w<=0.8?"#4ade80":w<=2?"#fbbf24":w<=5?"#f97316":"#f43f5e";}
+function pickNext(wts,lastId){const el=FORMULAS.map((f,i)=>({i,w:f.id===lastId?0:wts[i]}));const tot=el.reduce((s,e)=>s+e.w,0);if(!tot)return 0;let r=Math.random()*tot;for(const e of el){r-=e.w;if(r<=0)return e.i;}return 0;}
+function renderCard(){const f=FORMULAS[currentIdx];currentCardId=f.id;document.getElementById('f-cat').textContent=f.category;document.getElementById('f-name').textContent=f.name;document.getElementById('f-question').textContent=f.question;document.getElementById('f-id').textContent='#'+f.id+'/'+FORMULAS.length;const dot=document.getElementById('f-dot');dot.style.background=dc(weights[currentIdx]);dot.style.boxShadow='0 0 7px '+dc(weights[currentIdx]);document.getElementById('b-answer').textContent=f.answer;document.getElementById('b-detail').textContent='💡 '+f.detail;document.getElementById('card-inner').classList.remove('flipped');isFlipped=false;document.getElementById('ans-btns').classList.remove('show');}
+function flipCard(){isFlipped=!isFlipped;document.getElementById('card-inner').classList.toggle('flipped',isFlipped);document.getElementById('ans-btns').classList.toggle('show',isFlipped);}
+function answer(ok){const nw=[...weights];nw[currentIdx]=ok?Math.max(0.3,nw[currentIdx]*0.55):nw[currentIdx]*4+3;weights=nw;stats.c+=ok?1:0;stats.w+=ok?0:1;stats.t++;updateStats();autoSave();currentIdx=pickNext(weights,currentCardId);renderCard();if(weakOpen)renderWeakList();}
+function updateStats(){document.getElementById('s-c').textContent=stats.c;document.getElementById('s-w').textContent=stats.w;document.getElementById('s-t').textContent=stats.t;document.getElementById('s-acc').textContent=stats.t>0?Math.round(stats.c/stats.t*100)+'%':'--';document.getElementById('prog-fill').style.width=Math.min(100,stats.t/FORMULAS.length*100)+'%';}
+function toggleWeak(){weakOpen=!weakOpen;document.getElementById('weak-panel').style.display=weakOpen?'block':'none';document.getElementById('weak-toggle').classList.toggle('open',weakOpen);if(weakOpen)renderWeakList();}
+function renderWeakList(){const sorted=[...FORMULAS].map((f,i)=>({...f,w:weights[i]})).sort((a,b)=>b.w-a.w).slice(0,10);document.getElementById('weak-list').innerHTML=sorted.map(f=>`<div class="weak-row"><span class="weak-name">${f.name}</span><div class="weak-meta"><span class="weak-cat">${f.category}</span><div class="dot" style="background:${dc(f.w)};box-shadow:0 0 5px ${dc(f.w)}"></div><button class="mini-btn" onclick="jumpToFormula(${f.id})">確認</button></div></div>`).join('');}
+function confirmReset(){if(confirm('学習データをすべてリセットしますか？')){weights=FORMULAS.map(()=>1);stats={c:0,w:0,t:0};currentIdx=0;saveLocal();if(accessToken)driveSave();updateStats();renderCard();if(weakOpen)renderWeakList();}}
+function switchMode(mode){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));document.getElementById(mode+'-page').classList.add('active');document.querySelectorAll('.tab-btn')[mode==='study'?0:1].classList.add('active');document.getElementById('fab').classList.toggle('show',mode==='reference');if(mode==='reference')renderRef();}
+function jumpToFormula(id){refCat="すべて";refSearch="";document.getElementById('ref-search').value="";switchMode('reference');setTimeout(()=>{const el=document.getElementById('fc-'+id);if(el){el.scrollIntoView({behavior:'smooth',block:'center'});el.classList.add('highlight');setTimeout(()=>el.classList.remove('highlight'),2500);}},200);}
+function filterRef(){refSearch=document.getElementById('ref-search').value;renderRef();}
+function setCat(c){refCat=c;document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('active'));event.target.classList.add('active');renderRef();}
+function renderRef(){const q=refSearch.toLowerCase();const filtered=FORMULAS.filter(f=>{const mc=refCat==="すべて"||f.category===refCat;const mq=!q||f.name.toLowerCase().includes(q)||f.question.toLowerCase().includes(q)||f.answer.toLowerCase().includes(q)||f.category.toLowerCase().includes(q);return mc&&mq;});document.getElementById('ref-count').textContent=filtered.length+' 件 / 全 '+FORMULAS.length+' 項目';const cats=CATEGORIES.filter(c=>refCat==="すべて"||refCat===c);let html='';for(const c of cats){const list=filtered.filter(f=>f.category===c);if(!list.length)continue;html+=`<div class="cat-section"><div class="cat-header">▸ ${c} <span class="cat-count">${list.length} 項目</span></div><div class="formula-grid">`;for(const f of list){const fi=FORMULAS.findIndex(x=>x.id===f.id);html+=`<div class="formula-card" id="fc-${f.id}"><div class="fc-top"><span class="fc-name">${f.name}</span><div class="fc-right"><div class="dot" style="background:${dc(weights[fi])}"></div><button class="mini-btn" onclick="goToCard(${fi})">問題へ</button></div></div><div class="fc-q">${f.question}</div><div class="fc-ans">${f.answer}</div><div class="fc-detail">${f.detail}</div></div>`;}html+='</div></div>';}document.getElementById('ref-content').innerHTML=html;}
+function goToCard(i){currentIdx=i;switchMode('study');renderCard();}
+function initCatFilters(){let html=`<button class="cat-btn active" onclick="setCat('すべて')">すべて</button>`;CATEGORIES.forEach(c=>{html+=`<button class="cat-btn" onclick="setCat('${c}')">${c}</button>`;});document.getElementById('cat-filters').innerHTML=html;}
+
+loadLocal();initCatFilters();renderCard();updateStats();renderRef();
+setSaveBar('local','ローカルに自動保存中');
+if(clientId)setSaveBar('local','Drive連携を確認中…');
+</script>
+</body>
+</html>
