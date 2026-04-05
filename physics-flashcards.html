@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>物理公式カード｜理系大学受験</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+body{min-height:100vh;background:#0b0c14;font-family:Georgia,'Yu Mincho',serif;color:#ddd4be;overscroll-behavior:none;}
+header{position:sticky;top:0;z-index:200;border-bottom:1px solid rgba(100,180,255,0.22);background:rgba(11,12,20,0.97);backdrop-filter:blur(12px);}
+.header-inner{max-width:920px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:0 16px;height:56px;}
+.logo{font-size:17px;color:#5ab4f0;letter-spacing:2px;font-weight:bold;}
+.logo-sub{font-size:9px;color:#3a5a7a;letter-spacing:1px;display:block;margin-top:1px;}
+.tab-btns{display:flex;gap:5px;}
+.tab-btn{padding:5px 12px;border-radius:20px;cursor:pointer;font-size:12px;transition:all .2s;border:1px solid rgba(100,180,255,0.2);background:transparent;color:#4a7a9a;font-family:Georgia,serif;}
+.tab-btn.active{border-color:#5ab4f0;background:rgba(90,180,240,0.12);color:#5ab4f0;}
+.page{display:none;max-width:680px;margin:0 auto;padding:20px 16px 100px;}
+.page.active{display:block;}
+.page.ref-page{max-width:940px;}
+.save-bar{display:flex;align-items:center;justify-content:space-between;padding:7px 14px;border-radius:10px;margin-bottom:16px;font-size:11px;border:1px solid;}
+.save-bar.local{background:rgba(74,222,128,0.05);border-color:rgba(74,222,128,0.18);color:#4a8a5a;}
+.save-bar.drive{background:rgba(66,133,244,0.08);border-color:rgba(66,133,244,0.28);color:#6898f4;}
+.save-bar.saving{background:rgba(90,180,240,0.06);border-color:rgba(90,180,240,0.2);color:#4a8ab0;}
+.save-bar.error{background:rgba(244,63,94,0.06);border-color:rgba(244,63,94,0.2);color:#c85060;}
+.save-dot{width:6px;height:6px;border-radius:50%;margin-right:6px;display:inline-block;}
+.save-bar.local .save-dot{background:#4ade80;}
+.save-bar.drive .save-dot{background:#4285f4;}
+.save-bar.saving .save-dot{background:#5ab4f0;animation:pulse 1s infinite;}
+.save-bar.error .save-dot{background:#f43f5e;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.drive-btn-small{font-size:10px;padding:3px 8px;border-radius:4px;cursor:pointer;border:1px solid currentColor;background:transparent;color:inherit;font-family:Georgia,serif;}
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:500;display:none;align-items:center;justify-content:center;padding:20px;}
+.modal-bg.show{display:flex;}
+.modal{background:#0e1520;border:1px solid rgba(90,180,240,0.3);border-radius:20px;padding:24px 22px;max-width:480px;width:100%;max-height:90vh;overflow-y:auto;}
+.modal h2{font-size:17px;color:#5ab4f0;margin-bottom:6px;}
+.modal-sub{font-size:12px;color:#4a6a8a;margin-bottom:18px;line-height:1.6;}
+.step-block{background:rgba(255,255,255,0.03);border:1px solid rgba(90,180,240,0.1);border-radius:10px;padding:14px 16px;margin-bottom:12px;}
+.step-num{font-size:10px;color:#5ab4f0;letter-spacing:1px;margin-bottom:6px;}
+.step-text{font-size:13px;color:#c0b090;line-height:1.65;}
+.step-link{color:#6898f4;text-decoration:none;word-break:break-all;}
+.modal-input{width:100%;padding:10px 14px;font-size:13px;background:rgba(255,255,255,0.05);border:1px solid rgba(90,180,240,0.3);border-radius:8px;color:#ddd4be;outline:none;font-family:monospace;margin-top:10px;}
+.modal-input::placeholder{color:#3a4a5a;}
+.modal-actions{display:flex;gap:10px;margin-top:18px;}
+.modal-btn{flex:1;padding:11px;border-radius:10px;cursor:pointer;font-size:13px;font-family:Georgia,serif;transition:background .2s;}
+.modal-btn-cancel{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);color:#7a6a48;}
+.modal-btn-ok{background:rgba(66,133,244,0.15);border:1px solid rgba(66,133,244,0.4);color:#6898f4;}
+.modal-btn-ok:active{background:rgba(66,133,244,0.25);}
+.warning-box{background:rgba(90,180,240,0.07);border:1px solid rgba(90,180,240,0.2);border-radius:8px;padding:10px 12px;margin-top:12px;font-size:11px;color:#4a7a9a;line-height:1.6;}
+.stats-row{display:flex;gap:8px;margin-bottom:16px;justify-content:center;flex-wrap:wrap;}
+.stat-box{background:rgba(255,255,255,0.03);border:1px solid rgba(90,180,240,0.1);border-radius:10px;padding:6px 12px;text-align:center;min-width:58px;}
+.stat-label{font-size:9px;color:#3a5a7a;letter-spacing:1px;margin-bottom:2px;}
+.stat-val{font-size:16px;font-weight:bold;}
+.weak-btn{background:rgba(255,255,255,0.03);border:1px solid rgba(90,180,240,0.1);border-radius:10px;padding:6px 12px;color:#3a5a7a;cursor:pointer;font-size:11px;font-family:Georgia,serif;}
+.weak-btn.open{background:rgba(90,180,240,0.1);border-color:rgba(90,180,240,0.4);color:#5ab4f0;}
+.weak-panel{background:rgba(255,255,255,0.02);border:1px solid rgba(90,180,240,0.14);border-radius:14px;padding:14px;margin-bottom:14px;}
+.weak-title{font-size:11px;color:#5ab4f0;letter-spacing:1px;margin-bottom:10px;}
+.weak-row{display:flex;justify-content:space-between;align-items:center;padding:5px 8px;border-radius:6px;margin-bottom:4px;background:rgba(255,255,255,0.02);}
+.weak-name{font-size:12px;color:#c0b090;}
+.weak-meta{display:flex;gap:6px;align-items:center;}
+.weak-cat{font-size:10px;color:#3a5a7a;}
+.dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.mini-btn{font-size:10px;color:#5ab4f0;background:none;border:1px solid rgba(90,180,240,0.28);border-radius:4px;padding:2px 6px;cursor:pointer;font-family:Georgia,serif;}
+.prog-bar{height:3px;background:rgba(255,255,255,0.05);border-radius:2px;margin-bottom:16px;overflow:hidden;}
+.prog-fill{height:100%;background:linear-gradient(90deg,#5ab4f0,#4ade80);border-radius:2px;transition:width .4s;}
+.card-wrap{perspective:1200px;cursor:pointer;margin-bottom:16px;user-select:none;}
+.card-inner{position:relative;min-height:280px;transform-style:preserve-3d;transition:transform .55s cubic-bezier(.35,.15,.15,1);}
+.card-inner.flipped{transform:rotateY(180deg);}
+.card-face{position:absolute;top:0;left:0;right:0;min-height:280px;-webkit-backface-visibility:hidden;backface-visibility:hidden;border-radius:20px;padding:24px 22px 20px;display:flex;flex-direction:column;justify-content:space-between;box-shadow:0 20px 50px rgba(0,0,0,0.6);}
+.card-front{background:linear-gradient(145deg,#0e1825,#0a1520);border:1px solid rgba(90,180,240,0.28);}
+.card-back{background:linear-gradient(145deg,#0a1520,#0e1530);border:1px solid rgba(90,180,240,0.4);transform:rotateY(180deg);}
+.card-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;}
+.card-cat-badge{font-size:10px;letter-spacing:2px;color:#5ab4f0;background:rgba(90,180,240,0.1);border:1px solid rgba(90,180,240,0.28);border-radius:4px;padding:3px 9px;}
+.card-name{font-size:12px;color:#3a6a8a;margin-top:6px;}
+.card-meta{display:flex;flex-direction:column;align-items:flex-end;gap:4px;}
+.card-id{font-size:9px;color:#1a2a3a;}
+.card-question{font-size:18px;line-height:1.75;color:#e8dfc8;margin-top:8px;}
+.card-hint{text-align:center;color:rgba(90,180,240,0.22);font-size:11px;margin-top:14px;letter-spacing:2px;}
+.card-ans-label{font-size:10px;letter-spacing:2px;color:#5ab4f0;margin-bottom:10px;}
+.card-answer{font-size:15px;line-height:1.9;color:#b8dcf8;background:rgba(90,180,240,0.05);border:1px solid rgba(90,180,240,0.15);border-radius:12px;padding:12px 15px;margin-bottom:10px;font-family:'Courier New',monospace;}
+.card-detail{font-size:12px;color:#3a6a8a;line-height:1.65;}
+.ref-link-btn{align-self:flex-start;background:rgba(90,180,240,0.07);border:1px solid rgba(90,180,240,0.22);border-radius:8px;padding:6px 12px;color:#5ab4f0;cursor:pointer;font-size:11px;margin-top:8px;font-family:Georgia,serif;}
+.ans-btns{display:flex;gap:12px;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s;}
+.ans-btns.show{opacity:1;pointer-events:auto;}
+.ans-btn{flex:1;max-width:210px;padding:14px 10px;border-radius:14px;font-size:14px;cursor:pointer;transition:background .2s;font-family:Georgia,serif;}
+.btn-wrong{background:rgba(244,63,94,0.09);border:1px solid rgba(244,63,94,0.38);color:#f87090;}
+.btn-wrong:active{background:rgba(244,63,94,0.2);}
+.btn-ok{background:rgba(90,180,240,0.09);border:1px solid rgba(90,180,240,0.38);color:#5ab4f0;}
+.btn-ok:active{background:rgba(90,180,240,0.2);}
+.hint-text{text-align:center;font-size:10px;color:rgba(90,130,160,0.4);margin-top:12px;letter-spacing:1px;}
+.ref-search{width:100%;padding:12px 18px;font-size:15px;background:rgba(255,255,255,0.04);border:1px solid rgba(90,180,240,0.28);border-radius:14px;color:#ddd4be;outline:none;font-family:Georgia,serif;margin-bottom:12px;}
+.cat-filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;}
+.cat-btn{padding:5px 12px;border-radius:20px;border:1px solid rgba(90,180,240,0.18);background:transparent;color:#4a7a9a;cursor:pointer;font-size:11px;transition:all .18s;font-family:Georgia,serif;}
+.cat-btn.active{border-color:#5ab4f0;background:rgba(90,180,240,0.14);color:#5ab4f0;}
+.ref-count{font-size:11px;color:#2a4a6a;margin-bottom:14px;}
+.cat-section{margin-bottom:30px;}
+.cat-header{font-size:12px;letter-spacing:2px;color:#5ab4f0;border-bottom:1px solid rgba(90,180,240,0.16);padding-bottom:8px;margin-bottom:12px;display:flex;gap:10px;align-items:center;}
+.cat-count{font-size:10px;color:#2a4a6a;}
+.formula-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px;}
+.formula-card{background:rgba(255,255,255,0.025);border:1px solid rgba(90,180,240,0.1);border-radius:12px;padding:13px 15px;transition:all .4s;}
+.formula-card.highlight{background:rgba(90,180,240,0.1);border-color:rgba(90,180,240,0.52);box-shadow:0 0 20px rgba(90,180,240,0.12);}
+.fc-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;}
+.fc-name{font-size:13px;color:#90b8d8;font-weight:bold;}
+.fc-right{display:flex;gap:5px;align-items:center;margin-left:8px;}
+.fc-q{font-size:11px;color:#3a5a7a;margin-bottom:7px;line-height:1.5;}
+.fc-ans{font-size:13px;color:#7ab8e8;background:rgba(90,180,240,0.05);border:1px solid rgba(90,180,240,0.1);border-radius:8px;padding:8px 11px;line-height:1.75;font-family:'Courier New',monospace;}
+.fc-detail{font-size:11px;color:#2a5a7a;margin-top:6px;line-height:1.55;}
+.fab{position:fixed;bottom:26px;right:26px;width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#5ab4f0,#2a7ab0);border:none;color:#0b0c14;font-size:20px;cursor:pointer;box-shadow:0 8px 28px rgba(90,180,240,0.4);display:none;align-items:center;justify-content:center;z-index:300;}
+.fab.show{display:flex;}
+.reset-row{text-align:center;margin-top:8px;}
+.reset-link{font-size:11px;color:#2a3a4a;cursor:pointer;text-decoration:underline;background:none;border:none;font-family:Georgia,serif;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div>
+      <span class="logo">物理公式カード</span>
+      <span class="logo-sub">理系大学受験 全100公式</span>
+    </div>
+    <div class="tab-btns">
+      <button class="tab-btn active" onclick="switchMode('study')">📚 問題</button>
+      <button class="tab-btn" onclick="switchMode('reference')">📖 公式集</button>
+    </div>
+  </div>
+</header>
+
+<div class="page active" id="study-page">
+  <div class="save-bar local" id="save-bar">
+    <span><span class="save-dot"></span><span id="save-text">ローカルに自動保存中</span></span>
+    <button class="drive-btn-small" id="drive-toggle-btn" onclick="openDriveModal()">☁️ Drive連携</button>
+  </div>
+  <div class="stats-row">
+    <div class="stat-box"><div class="stat-label">正解</div><div class="stat-val" id="s-c" style="color:#4ade80">0</div></div>
+    <div class="stat-box"><div class="stat-label">不正解</div><div class="stat-val" id="s-w" style="color:#f43f5e">0</div></div>
+    <div class="stat-box"><div class="stat-label">正答率</div><div class="stat-val" id="s-acc" style="color:#5ab4f0">--</div></div>
+    <div class="stat-box"><div class="stat-label">回答数</div><div class="stat-val" id="s-t" style="color:#94a3b8">0</div></div>
+    <button class="weak-btn" id="weak-toggle" onclick="toggleWeak()">🔥 苦手一覧</button>
+  </div>
+  <div class="weak-panel" id="weak-panel" style="display:none">
+    <div class="weak-title">苦手な公式 TOP 10</div>
+    <div id="weak-list"></div>
+  </div>
+  <div class="prog-bar"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
+  <div class="card-wrap" onclick="flipCard()">
+    <div class="card-inner" id="card-inner">
+      <div class="card-face card-front">
+        <div>
+          <div class="card-top">
+            <div>
+              <span class="card-cat-badge" id="f-cat">　</span>
+              <div class="card-name" id="f-name"></div>
+            </div>
+            <div class="card-meta">
+              <div class="dot" id="f-dot"></div>
+              <span class="card-id" id="f-id"></span>
+            </div>
+          </div>
+          <div class="card-question" id="f-question"></div>
+        </div>
+        <div class="card-hint">── タップして答えを見る ──</div>
+      </div>
+      <div class="card-face card-back">
+        <div>
+          <div class="card-ans-label">▸ 解答</div>
+          <div class="card-answer" id="b-answer"></div>
+          <div class="card-detail" id="b-detail"></div>
+        </div>
+        <button class="ref-link-btn" onclick="event.stopPropagation();jumpToFormula(currentCardId)">📖 公式集で確認 →</button>
+      </div>
+    </div>
+  </div>
+  <div class="ans-btns" id="ans-btns">
+    <button class="ans-btn btn-wrong" onclick="answer(false)">✗ わからなかった</button>
+    <button class="ans-btn btn-ok" onclick="answer(true)">○ わかった！</button>
+  </div>
+  <div class="hint-text">✦ 間違えた問題ほど出現頻度が増加します ✦</div>
+  <div class="reset-row"><button class="reset-link" onclick="confirmReset()">学習データをリセット</button></div>
+</div>
+
+<div class="page ref-page" id="reference-page">
+  <input class="ref-search" type="text" id="ref-search" placeholder="🔍  公式名・キーワード・分野で検索..." oninput="filterRef()">
+  <div class="cat-filters" id="cat-filters"></div>
+  <div class="ref-count" id="ref-count"></div>
+  <div id="ref-content"></div>
+</div>
+
+<button class="fab" id="fab" onclick="switchMode('study')">📚</button>
+
+<div class="modal-bg" id="drive-modal">
+  <div class="modal">
+    <h2>☁️ Google Drive 連携</h2>
+    <div class="modal-sub">設定すると学習データが自動でGoogleドライブに保存されます。スマホを買い替えても引き継げます。</div>
+    <div id="modal-setup">
+      <div class="step-block">
+        <div class="step-num">STEP 1</div>
+        <div class="step-text"><a class="step-link" href="https://console.cloud.google.com/" target="_blank">Google Cloud Console</a> で新しいプロジェクトを作成（無料）。</div>
+      </div>
+      <div class="step-block">
+        <div class="step-num">STEP 2</div>
+        <div class="step-text">「APIとサービス」→「ライブラリ」→「Google Drive API」を有効化。</div>
+      </div>
+      <div class="step-block">
+        <div class="step-num">STEP 3</div>
+        <div class="step-text">「認証情報」→「OAuthクライアントID」→ウェブアプリケーション→承認済みJavaScript生成元に <code style="color:#5ab4f0">https://あなたのユーザー名.github.io</code> を追加。</div>
+      </div>
+      <div class="step-block">
+        <div class="step-num">STEP 4</div>
+        <div class="step-text">作成された「クライアントID」を下に貼り付ける。</div>
+        <input class="modal-input" type="text" id="client-id-input" placeholder="例: 123456789-xxxxx.apps.googleusercontent.com">
+      </div>
+      <div class="warning-box">⚠️ クライアントIDは自分だけのものです。このファイル内にのみ保存されます。</div>
+    </div>
+    <div id="modal-connected" style="display:none">
+      <div class="step-block" style="border-color:rgba(66,133,244,0.3)">
+        <div class="step-num" style="color:#6898f4">接続済み</div>
+        <div class="step-text" id="connected-email" style="color:#6898f4">Googleアカウントに接続されています。</div>
+      </div>
+      <div style="margin-top:12px;display:flex;gap:10px;">
+        <button class="modal-btn modal-btn-ok" onclick="forceDriveSync()" style="font-size:12px">🔄 今すぐ同期</button>
+        <button class="modal-btn modal-btn-cancel" onclick="disconnectDrive()" style="font-size:12px;flex:0.6">連携解除</button>
+      </div>
+    </div>
+    <div class="modal-actions" id="modal-actions">
+      <button class="modal-btn modal-btn-cancel" onclick="closeDriveModal()">キャンセル</button>
+      <button class="modal-btn modal-btn-ok" onclick="connectDrive()">🔗 連携する</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://apis.google.com/js/api.js" async onload="gapiLoaded()"></script>
+<script src="https://accounts.google.com/gsi/client" async onload="gisLoaded()"></script>
+
+<script>
+const FORMULAS = [
+  // 力学
+  {id:1,category:"力学",name:"等加速度運動①",question:"初速v₀、加速度aの時刻tでの速度vを述べよ",answer:"v = v₀ + at",detail:"速度＝初速度＋加速度×時間。"},
+  {id:2,category:"力学",name:"等加速度運動②",question:"初速v₀、加速度aの時刻tでの変位xを述べよ",answer:"x = v₀t + (1/2)at²",detail:"変位の公式。面積として導出できる。"},
+  {id:3,category:"力学",name:"等加速度運動③",question:"v²とv₀²の関係式を述べよ",answer:"v² = v₀² + 2ax",detail:"時刻tを消去した形。頻出。"},
+  {id:4,category:"力学",name:"ニュートンの第2法則",question:"力F、質量m、加速度aの関係を述べよ",answer:"F = ma",detail:"運動方程式の基本。単位はN=kg・m/s²。"},
+  {id:5,category:"力学",name:"重力",question:"質量mの物体に働く重力Wを述べよ",answer:"W = mg  (g ≈ 9.8 m/s²)",detail:"鉛直下向きに働く力。"},
+  {id:6,category:"力学",name:"摩擦力",question:"静止摩擦力の最大値と動摩擦力を述べよ",answer:"最大静止摩擦力 = μₛN ,  動摩擦力 = μₖN",detail:"μₛ > μₖ。Nは垂直抗力。"},
+  {id:7,category:"力学",name:"万有引力の法則",question:"万有引力を述べよ",answer:"F = G・m₁m₂/r²",detail:"G = 6.67×10⁻¹¹ N・m²/kg²。距離の二乗に反比例。"},
+  {id:8,category:"力学",name:"仕事",question:"力Fが変位dの仕事Wを述べよ",answer:"W = Fd cosθ",detail:"θは力と変位のなす角。"},
+  {id:9,category:"力学",name:"運動エネルギー",question:"質量m、速度vの運動エネルギーKを述べよ",answer:"K = (1/2)mv²",detail:"スカラー量。常に0以上。"},
+  {id:10,category:"力学",name:"ポテンシャルエネルギー（重力）",question:"高さhでの重力ポテンシャルエネルギーを述べよ",answer:"U = mgh",detail:"基準点からの高さで決まる。"},
+  {id:11,category:"力学",name:"力学的エネルギー保存則",question:"力学的エネルギー保存則を述べよ",answer:"(1/2)mv² + mgh = 一定",detail:"摩擦・空気抵抗がない場合に成立。"},
+  {id:12,category:"力学",name:"仕事とエネルギーの関係",question:"合力のする仕事Wと運動エネルギー変化の関係",answer:"W = ΔK = (1/2)mv₂² - (1/2)mv₁²",detail:"仕事エネルギー定理。"},
+  {id:13,category:"力学",name:"運動量",question:"質量m、速度vの運動量pを述べよ",answer:"p = mv",detail:"ベクトル量。単位はkg・m/s。"},
+  {id:14,category:"力学",name:"力積と運動量変化",question:"力積と運動量変化の関係を述べよ",answer:"Ft = mv - mv₀ = Δp",detail:"力積＝運動量の変化量。"},
+  {id:15,category:"力学",name:"運動量保存則",question:"2物体の衝突における運動量保存則",answer:"m₁v₁ + m₂v₂ = m₁v₁' + m₂v₂'",detail:"外力が0のとき成立。"},
+  {id:16,category:"力学",name:"反発係数（跳ね返り係数）",question:"反発係数eを述べよ",answer:"e = (v₂'-v₁') / (v₁-v₂)",detail:"e=1:弾性衝突、e=0:完全非弾性衝突。"},
+  {id:17,category:"力学",name:"円運動の加速度",question:"半径r、速さvの等速円運動の向心加速度",answer:"a = v²/r = rω²",detail:"中心向き（向心方向）の加速度。"},
+  {id:18,category:"力学",name:"向心力",question:"等速円運動の向心力を述べよ",answer:"F = mv²/r = mrω²",detail:"常に円の中心向きに働く。"},
+  {id:19,category:"力学",name:"角速度と周期",question:"角速度ωと周期T、回転数nの関係",answer:"ω = 2π/T = 2πn",detail:"1周でθ=2πラジアン変化。"},
+  {id:20,category:"力学",name:"単振動の変位",question:"単振動の変位x(t)を述べよ",answer:"x = A sin(ωt + φ)",detail:"Aは振幅、ωは角振動数、φは初位相。"},
+  {id:21,category:"力学",name:"単振動の速度・加速度",question:"単振動の速度vと加速度aを述べよ",answer:"v = Aω cos(ωt+φ) ,  a = -ω²x",detail:"加速度は変位に比例し逆向き。"},
+  {id:22,category:"力学",name:"単振り子の周期",question:"長さLの単振り子の周期Tを述べよ",answer:"T = 2π√(L/g)",detail:"質量・振幅に無関係（等時性）。"},
+  {id:23,category:"力学",name:"ばね振り子の周期",question:"ばね定数k、質量mのばね振り子の周期",answer:"T = 2π√(m/k)",detail:"ばね定数が大きいほど速く振動。"},
+  {id:24,category:"力学",name:"ケプラーの第3法則",question:"ケプラーの第3法則を述べよ",answer:"T² / a³ = 一定  (aは軌道長半径)",detail:"太陽系の惑星すべてで同じ定数。"},
+  // 波動
+  {id:25,category:"波動",name:"波の基本式",question:"波の速さv、振動数f、波長λの関係",answer:"v = fλ = λ/T",detail:"波の最重要公式。"},
+  {id:26,category:"波動",name:"重ね合わせの原理",question:"重ね合わせの原理を述べよ",answer:"2つの波が重なるとき変位は各波の変位の和",detail:"波は互いに独立して伝わる。"},
+  {id:27,category:"波動",name:"定常波の条件",question:"定常波の腹と節の間隔を述べよ",answer:"腹と節の間隔 = λ/4",detail:"腹同士・節同士の間隔 = λ/2。"},
+  {id:28,category:"波動",name:"弦の固有振動",question:"長さLの弦の固有振動の波長を述べよ",answer:"λₙ = 2L/n  (n=1,2,3…)",detail:"両端が固定端（節）。"},
+  {id:29,category:"波動",name:"開管の固有振動",question:"長さLの開管の固有振動数を述べよ",answer:"fₙ = nv/2L  (n=1,2,3…)",detail:"両端が腹。基本振動数f₁=v/2L。"},
+  {id:30,category:"波動",name:"閉管の固有振動",question:"長さLの閉管の固有振動数を述べよ",answer:"fₙ = (2n-1)v/4L  (n=1,2,3…)",detail:"奇数倍のみ。基本振動数f₁=v/4L。"},
+  {id:31,category:"波動",name:"ドップラー効果",question:"音源がvₛ、観測者がvₒで動くときの観測振動数",answer:"f' = f・(v±vₒ)/(v∓vₛ)",detail:"近づく→高く、遠ざかる→低く。"},
+  {id:32,category:"波動",name:"スネルの法則",question:"屈折の法則（スネルの法則）を述べよ",answer:"n₁ sinθ₁ = n₂ sinθ₂",detail:"屈折率×sinθ = 一定。"},
+  {id:33,category:"波動",name:"屈折率と速さ",question:"屈折率nと光速の関係を述べよ",answer:"n = c/v  (cは真空中の光速)",detail:"屈折率が大きい媒質ほど遅い。"},
+  {id:34,category:"波動",name:"全反射条件",question:"全反射の臨界角θcを述べよ",answer:"sin θc = n₂/n₁  (n₁>n₂)",detail:"入射角>臨界角で全反射。"},
+  {id:35,category:"波動",name:"ヤングの実験",question:"ヤングの実験の明線条件を述べよ",answer:"d sinθ = mλ ,  y = mλL/d",detail:"d:スリット間隔、L:スクリーン距離。"},
+  {id:36,category:"波動",name:"薄膜干渉",question:"薄膜（厚さd、屈折率n）の干渉条件",answer:"強め合い: 2nd = (m+1/2)λ,  弱め合い: 2nd = mλ",detail:"両面反射で位相差が生じる場合。"},
+  {id:37,category:"波動",name:"回折格子",question:"回折格子の明線条件を述べよ",answer:"d sinθ = mλ",detail:"dは格子定数（スリット間隔）。"},
+  // 熱力学
+  {id:38,category:"熱力学",name:"熱量と温度変化",question:"熱量Q、比熱c、質量m、温度変化ΔTの関係",answer:"Q = mcΔT",detail:"比熱は物質1kgを1K上げる熱量。"},
+  {id:39,category:"熱力学",name:"熱力学第1法則",question:"熱力学第1法則を述べよ",answer:"ΔU = Q + W",detail:"U:内部エネルギー、Q:吸収熱、W:外からされた仕事。"},
+  {id:40,category:"熱力学",name:"気体がする仕事",question:"気体が体積変化ΔVのときする仕事を述べよ",answer:"W = pΔV  (等圧変化)",detail:"p-Vグラフの面積が仕事。"},
+  {id:41,category:"熱力学",name:"理想気体の状態方程式",question:"理想気体の状態方程式を述べよ",answer:"pV = nRT",detail:"R=8.31 J/(mol・K)。Tはケルビン温度。"},
+  {id:42,category:"熱力学",name:"ボイルの法則",question:"ボイルの法則を述べよ",answer:"pV = 一定  (温度一定)",detail:"圧力と体積は反比例。"},
+  {id:43,category:"熱力学",name:"シャルルの法則",question:"シャルルの法則を述べよ",answer:"V/T = 一定  (圧力一定)",detail:"体積と絶対温度は比例。"},
+  {id:44,category:"熱力学",name:"ボイル・シャルルの法則",question:"ボイル・シャルルの法則を述べよ",answer:"pV/T = 一定",detail:"状態変化前後: p₁V₁/T₁ = p₂V₂/T₂。"},
+  {id:45,category:"熱力学",name:"内部エネルギー（単原子理想気体）",question:"単原子分子理想気体nモルの内部エネルギー",answer:"U = (3/2)nRT",detail:"2原子分子は (5/2)nRT。"},
+  {id:46,category:"熱力学",name:"熱効率",question:"熱機関の熱効率eを述べよ",answer:"e = W/Q₁ = 1 - Q₂/Q₁",detail:"Q₁:高温から吸収、Q₂:低温に放出。"},
+  {id:47,category:"熱力学",name:"カルノー効率",question:"カルノーサイクルの熱効率を述べよ",answer:"e = 1 - T₂/T₁",detail:"T₁:高温熱源、T₂:低温熱源（ケルビン）。"},
+  // 電磁気学
+  {id:48,category:"電磁気学",name:"クーロンの法則",question:"クーロンの法則を述べよ",answer:"F = k・q₁q₂/r²  (k = 9.0×10⁹ N・m²/C²)",detail:"真空中の点電荷間の静電気力。"},
+  {id:49,category:"電磁気学",name:"電場",question:"電場Eと力Fの関係を述べよ",answer:"F = qE",detail:"E = F/q。単位はN/C = V/m。"},
+  {id:50,category:"電磁気学",name:"点電荷の電場",question:"電荷qから距離rの電場を述べよ",answer:"E = kq/r²",detail:"電場の向きは正電荷から遠ざかる方向。"},
+  {id:51,category:"電磁気学",name:"電位と電場の関係",question:"電位Vと電場Eの関係を述べよ",answer:"E = -dV/dx  (一様電場: E = V/d)",detail:"電場は電位の高い方から低い方へ向く。"},
+  {id:52,category:"電磁気学",name:"点電荷の電位",question:"電荷qから距離rの電位を述べよ",answer:"V = kq/r",detail:"無限遠を基準(V=0)とする。"},
+  {id:53,category:"電磁気学",name:"静電エネルギー",question:"コンデンサの静電エネルギーUを述べよ",answer:"U = (1/2)QV = (1/2)CV² = Q²/2C",detail:"Cは電気容量、Qは電荷量。"},
+  {id:54,category:"電磁気学",name:"コンデンサの電気容量",question:"平行板コンデンサの電気容量を述べよ",answer:"C = ε₀S/d  (誘電体あり: C = εS/d)",detail:"S:面積、d:極板間隔。"},
+  {id:55,category:"電磁気学",name:"オームの法則",question:"オームの法則を述べよ",answer:"V = RI",detail:"R:抵抗[Ω]、I:電流[A]、V:電圧[V]。"},
+  {id:56,category:"電磁気学",name:"抵抗の公式",question:"長さL、断面積S、抵抗率ρの抵抗Rを述べよ",answer:"R = ρL/S",detail:"抵抗率は物質固有の値。"},
+  {id:57,category:"電磁気学",name:"電力と電力量",question:"電力Pと電力量Wを述べよ",answer:"P = VI = RI² = V²/R ,  W = Pt",detail:"電力の単位はW、電力量はJ。"},
+  {id:58,category:"電磁気学",name:"抵抗の直列接続",question:"抵抗の直列接続の合成抵抗を述べよ",answer:"R = R₁ + R₂ + …",detail:"電流は同じ、電圧は分かれる。"},
+  {id:59,category:"電磁気学",name:"抵抗の並列接続",question:"抵抗の並列接続の合成抵抗を述べよ",answer:"1/R = 1/R₁ + 1/R₂ + …",detail:"電圧は同じ、電流は分かれる。"},
+  {id:60,category:"電磁気学",name:"キルヒホッフの法則①",question:"キルヒホッフの電流則を述べよ",answer:"節点に流れ込む電流の和 = 流れ出す電流の和",detail:"電荷保存則。ΣI = 0。"},
+  {id:61,category:"電磁気学",name:"キルヒホッフの法則②",question:"キルヒホッフの電圧則を述べよ",answer:"閉回路の起電力の和 = 電圧降下の和",detail:"エネルギー保存則。ΣV = 0。"},
+  {id:62,category:"電磁気学",name:"ローレンツ力",question:"磁場B中で速度vで動く電荷qに働くローレンツ力",answer:"F = qv × B ,  |F| = qvB sinθ",detail:"速度と磁場に垂直な方向に働く。"},
+  {id:63,category:"電磁気学",name:"直線電流が受ける力",question:"磁束密度B中の長さLの電流Iが受ける力",answer:"F = BIL sinθ",detail:"フレミングの左手則で向きを決める。"},
+  {id:64,category:"電磁気学",name:"直線電流の作る磁場",question:"電流Iから距離rの磁束密度Bを述べよ",answer:"B = μ₀I / (2πr)",detail:"μ₀ = 4π×10⁻⁷ T・m/A。"},
+  {id:65,category:"電磁気学",name:"ソレノイドの磁場",question:"単位長さあたりn巻きのソレノイドの磁場",answer:"B = μ₀nI",detail:"内部は一様磁場。外部はほぼ0。"},
+  {id:66,category:"電磁気学",name:"電磁誘導（ファラデーの法則）",question:"ファラデーの電磁誘導の法則を述べよ",answer:"ε = -ΔΦ/Δt = -N・ΔΦ/Δt",detail:"磁束の変化が起電力を生じる。"},
+  {id:67,category:"電磁気学",name:"導体棒の起電力",question:"磁場B中を速さvで動く長さLの導体棒の起電力",answer:"ε = BLv",detail:"フレミングの右手則で電流の向きを決める。"},
+  {id:68,category:"電磁気学",name:"コイルの自己誘導",question:"自己インダクタンスLのコイルの起電力",answer:"ε = -L・ΔI/Δt",detail:"電流変化を妨げる方向に起電力が生じる。"},
+  {id:69,category:"電磁気学",name:"コンデンサーの直列・並列",question:"コンデンサーの合成容量（直列・並列）",answer:"直列: 1/C=1/C₁+1/C₂,  並列: C=C₁+C₂",detail:"抵抗とは逆になる点に注意。"},
+  {id:70,category:"電磁気学",name:"交流の実効値",question:"最大値V₀の交流電圧の実効値Vを述べよ",answer:"V = V₀/√2",detail:"実効値で電力計算ができる。P=VI。"},
+  // 光学
+  {id:71,category:"光学",name:"光の反射の法則",question:"光の反射の法則を述べよ",answer:"入射角 = 反射角",detail:"入射光・反射光・法線は同一平面内。"},
+  {id:72,category:"光学",name:"凸レンズの写像公式",question:"凸レンズの写像公式を述べよ",answer:"1/a + 1/b = 1/f",detail:"a:物体距離、b:像距離、f:焦点距離。"},
+  {id:73,category:"光学",name:"倍率",question:"レンズの倍率mを述べよ",answer:"m = b/a",detail:"m>0:正立像、m<1:縮小像。"},
+  {id:74,category:"光学",name:"光電効果",question:"光電効果の式を述べよ",answer:"hf = W + (1/2)mv²max",detail:"h:プランク定数、W:仕事関数。"},
+  {id:75,category:"光学",name:"コンプトン効果",question:"コンプトン散乱の波長変化を述べよ",answer:"Δλ = (h/mc)(1 - cosθ)",detail:"X線と電子の衝突で波長が増加。"},
+  // 原子・核物理
+  {id:76,category:"原子・核物理",name:"ド・ブロイ波長",question:"運動量pの粒子のド・ブロイ波長λを述べよ",answer:"λ = h/p = h/mv",detail:"h = 6.63×10⁻³⁴ J・s（プランク定数）。"},
+  {id:77,category:"原子・核物理",name:"ボーアの条件",question:"ボーアの量子条件を述べよ",answer:"mvr = nh/2π = nℏ  (n=1,2,3…)",detail:"電子の角運動量は量子化される。"},
+  {id:78,category:"原子・核物理",name:"水素原子のエネルギー準位",question:"水素原子のn番目のエネルギー準位Eₙ",answer:"Eₙ = -13.6/n²  [eV]",detail:"n=1が基底状態。マイナスは束縛状態。"},
+  {id:79,category:"原子・核物理",name:"光子のエネルギー",question:"振動数fの光子のエネルギーEを述べよ",answer:"E = hf = hc/λ",detail:"h = 6.63×10⁻³⁴ J・s。"},
+  {id:80,category:"原子・核物理",name:"放射性崩壊（半減期）",question:"半減期T₁/₂の崩壊の残存量を述べよ",answer:"N = N₀・(1/2)^(t/T₁/₂)",detail:"t時間後の残存数。指数的に減少。"},
+  {id:81,category:"原子・核物理",name:"核反応のエネルギー",question:"質量欠損Δmと放出エネルギーEの関係",answer:"E = Δmc²",detail:"c = 3.0×10⁸ m/s。アインシュタインの式。"},
+  {id:82,category:"原子・核物理",name:"α崩壊",question:"α崩壊の変化を述べよ",answer:"質量数-4、原子番号-2。He核(α粒子)を放出",detail:"₂₄He を放出する崩壊。"},
+  {id:83,category:"原子・核物理",name:"β崩壊",question:"β崩壊の変化を述べよ",answer:"質量数変わらず、原子番号+1。電子(β粒子)を放出",detail:"中性子→陽子+電子+反ニュートリノ。"},
+  // 電気回路
+  {id:84,category:"電気回路",name:"コンデンサーのリアクタンス",question:"容量CのコンデンサーのリアクタンスXcを述べよ",answer:"Xc = 1/(ωC) = 1/(2πfC)",detail:"周波数が高いほど電流が流れやすい。"},
+  {id:85,category:"電気回路",name:"コイルのリアクタンス",question:"インダクタンスLのコイルのリアクタンスXLを述べよ",answer:"XL = ωL = 2πfL",detail:"周波数が高いほど電流が流れにくい。"},
+  {id:86,category:"電気回路",name:"共振回路の共振振動数",question:"LC回路の共振振動数f₀を述べよ",answer:"f₀ = 1/(2π√(LC))",detail:"XL = XcのときインピーダンスはRのみ。"},
+  // 相対性理論
+  {id:87,category:"相対性理論",name:"質量とエネルギーの等価性",question:"静止エネルギーE₀を述べよ",answer:"E₀ = m₀c²",detail:"m₀は静止質量、c = 3.0×10⁸ m/s。"},
+  {id:88,category:"相対性理論",name:"時間の遅れ",question:"速さvで動く観測者の時間の遅れを述べよ",answer:"t = t₀/√(1-v²/c²)",detail:"高速で動くほど時間がゆっくり進む。"},
+  // 力学追加
+  {id:89,category:"力学",name:"弾性力（フックの法則）",question:"ばね定数k、伸びxのばねの弾性力を述べよ",answer:"F = kx",detail:"変形量に比例する復元力。"},
+  {id:90,category:"力学",name:"弾性エネルギー",question:"ばね定数k、伸びxのばねの弾性エネルギーを述べよ",answer:"U = (1/2)kx²",detail:"変形量の二乗に比例。"},
+  {id:91,category:"力学",name:"浮力",question:"アルキメデスの原理（浮力）を述べよ",answer:"F = ρVg",detail:"ρ:流体密度、V:物体が押しのけた流体の体積。"},
+  {id:92,category:"力学",name:"重心の位置",question:"2質点の重心位置を述べよ",answer:"x_G = (m₁x₁ + m₂x₂)/(m₁+m₂)",detail:"質量で重み付けした平均位置。"},
+  {id:93,category:"力学",name:"慣性モーメント",question:"慣性モーメントIを使った回転の運動方程式",answer:"τ = Iα",detail:"τ:トルク、α:角加速度。回転版のF=ma。"},
+  {id:94,category:"力学",name:"角運動量",question:"角運動量Lを述べよ",answer:"L = Iω = mrv",detail:"外力のトルクがないとき保存する。"},
+  {id:95,category:"波動",name:"音の速さ",question:"温度t℃のときの音速を述べよ",answer:"v = 331.5 + 0.6t  [m/s]",detail:"0℃で約331m/s、15℃で約340m/s。"},
+  {id:96,category:"波動",name:"うなり",question:"振動数f₁とf₂の音のうなりの回数を述べよ",answer:"うなりの回数 = |f₁ - f₂|  [回/秒]",detail:"2つの音の振動数の差がうなりの回数。"},
+  {id:97,category:"電磁気学",name:"磁束密度と磁場の関係",question:"真空中の磁束密度Bと磁場Hの関係",answer:"B = μ₀H  (μ₀ = 4π×10⁻⁷ T・m/A)",detail:"媒質中では B = μH = μ₀μrH。"},
+  {id:98,category:"電磁気学",name:"荷電粒子の円運動",question:"磁場B中で速さvの電荷qが描く円の半径rを述べよ",answer:"r = mv/(qB)",detail:"ローレンツ力＝向心力から導出。"},
+  {id:99,category:"熱力学",name:"エントロピー",question:"熱量Qを絶対温度Tで受け取るときのエントロピー変化",answer:"ΔS = Q/T",detail:"不可逆変化ではΔS > 0（熱力学第2法則）。"},
+  {id:100,category:"光学",name:"光速と電磁波",question:"真空中の光速cを透磁率μ₀と誘電率ε₀で表せ",answer:"c = 1/√(μ₀ε₀) ≈ 3.0×10⁸ m/s",detail:"電磁波の速さはすべて同じ。"},
+];
+
+const CATEGORIES = [...new Set(FORMULAS.map(f=>f.category))];
+const LS_KEY = 'physcard_save_v1';
+let weights = FORMULAS.map(()=>1);
+let currentIdx = 0;
+let currentCardId = FORMULAS[0].id;
+let isFlipped = false;
+let stats = {c:0,w:0,t:0};
+let weakOpen = false;
+let refCat = "すべて";
+let refSearch = "";
+let gapiReady = false;
+let gisReady = false;
+let tokenClient = null;
+let accessToken = null;
+let driveFileId = null;
+let driveEmail = null;
+let clientId = localStorage.getItem('physcard_client_id') || '';
+let driveSaveTimer = null;
+const DRIVE_FILE_NAME = 'physics-flashcards-data.json';
+const DRIVE_SCOPE = 'https://www.googleapis.com/auth/drive.appdata';
+
+function saveLocal(){ try{ localStorage.setItem(LS_KEY, JSON.stringify({weights,stats,currentIdx})); }catch(e){} }
+function loadLocal(){
+  try{
+    const d = JSON.parse(localStorage.getItem(LS_KEY));
+    if(!d) return false;
+    if(d.weights&&d.weights.length===FORMULAS.length) weights=d.weights;
+    if(d.stats) stats=d.stats;
+    if(typeof d.currentIdx==='number') currentIdx=d.currentIdx;
+    return true;
+  }catch(e){return false;}
+}
+function setSaveBar(type,text){ const bar=document.getElementById('save-bar'); bar.className='save-bar '+type; document.getElementById('save-text').textContent=text; }
+function autoSave(){
+  saveLocal();
+  if(accessToken){
+    setSaveBar('saving','Driveに保存中…');
+    clearTimeout(driveSaveTimer);
+    driveSaveTimer=setTimeout(()=>driveSave().then(()=>setSaveBar('drive','☁️ Driveに自動保存済み')).catch(()=>setSaveBar('error','Drive保存に失敗')),1500);
+  }
+}
+function gapiLoaded(){ gapi.load('client',async()=>{ await gapi.client.init({discoveryDocs:['https://www.googleapis.com/discovery/v1/apis/drive/v3/rest']}); gapiReady=true; if(clientId&&gisReady) tryAutoConnect(); }); }
+function gisLoaded(){ gisReady=true; if(clientId&&gapiReady) tryAutoConnect(); }
+function tryAutoConnect(){ if(!clientId) return; initTokenClient(clientId); tokenClient.requestAccessToken({prompt:''}); }
+function initTokenClient(cid){
+  tokenClient=google.accounts.oauth2.initTokenClient({client_id:cid,scope:DRIVE_SCOPE,callback:async(resp)=>{
+    if(resp.error){setSaveBar('error','Drive認証に失敗');return;}
+    accessToken=resp.access_token; gapi.client.setToken({access_token:accessToken});
+    driveEmail=await getEmail();
+    document.getElementById('connected-email').textContent=driveEmail?driveEmail+'で接続中':'接続済み';
+    document.getElementById('modal-setup').style.display='none';
+    document.getElementById('modal-connected').style.display='block';
+    document.getElementById('modal-actions').style.display='none';
+    updateDriveBtn(); await driveLoad(); setSaveBar('drive','☁️ Driveに自動保存済み');
+  }});
+}
+async function getEmail(){ try{ const r=await gapi.client.request({path:'https://www.googleapis.com/oauth2/v3/userinfo'}); return r.result.email; }catch(e){return null;} }
+async function findDriveFile(){ const r=await gapi.client.drive.files.list({spaces:'appDataFolder',q:`name='${DRIVE_FILE_NAME}'`,fields:'files(id)',pageSize:1}); return r.result.files[0]?.id||null; }
+async function driveLoad(){
+  try{
+    driveFileId=await findDriveFile(); if(!driveFileId) return;
+    const r=await gapi.client.drive.files.get({fileId:driveFileId,alt:'media'});
+    const d=typeof r.result==='string'?JSON.parse(r.result):r.result;
+    if(d.weights&&d.weights.length===FORMULAS.length) weights=d.weights;
+    if(d.stats) stats=d.stats;
+    if(typeof d.currentIdx==='number') currentIdx=d.currentIdx;
+    currentCardId=FORMULAS[currentIdx]?.id||FORMULAS[0].id;
+    renderCard(); updateStats(); if(weakOpen) renderWeakList();
+  }catch(e){}
+}
+async function driveSave(){
+  const body=JSON.stringify({weights,stats,currentIdx,updated:new Date().toISOString()});
+  if(!driveFileId){
+    const r=await gapi.client.request({path:'/upload/drive/v3/files',method:'POST',params:{uploadType:'multipart',fields:'id'},headers:{'Content-Type':'multipart/related; boundary=foo'},body:'--foo\r\nContent-Type: application/json\r\n\r\n'+JSON.stringify({name:DRIVE_FILE_NAME,parents:['appDataFolder']})+'\r\n--foo\r\nContent-Type: application/json\r\n\r\n'+body+'\r\n--foo--'});
+    driveFileId=r.result.id;
+  }else{
+    await gapi.client.request({path:'/upload/drive/v3/files/'+driveFileId,method:'PATCH',params:{uploadType:'media'},headers:{'Content-Type':'application/json'},body});
+  }
+}
+function updateDriveBtn(){ const btn=document.getElementById('drive-toggle-btn'); if(accessToken){btn.textContent='☁️ Drive接続中';btn.style.color='#6898f4';btn.style.borderColor='rgba(66,133,244,0.4)';}else{btn.textContent='☁️ Drive連携';btn.style.color='';btn.style.borderColor='';} }
+function openDriveModal(){
+  const m=document.getElementById('drive-modal');
+  if(accessToken){document.getElementById('modal-setup').style.display='none';document.getElementById('modal-connected').style.display='block';document.getElementById('modal-actions').style.display='none';}
+  else{document.getElementById('modal-setup').style.display='block';document.getElementById('modal-connected').style.display='none';document.getElementById('modal-actions').style.display='flex';document.getElementById('client-id-input').value=clientId;}
+  m.classList.add('show');
+}
+function closeDriveModal(){ document.getElementById('drive-modal').classList.remove('show'); }
+function connectDrive(){
+  const cid=document.getElementById('client-id-input').value.trim();
+  if(!cid){alert('クライアントIDを入力してください');return;}
+  clientId=cid; localStorage.setItem('physcard_client_id',cid);
+  if(!gapiReady||!gisReady){alert('Google APIの読み込みが完了していません。リロードしてお試しください。');return;}
+  initTokenClient(cid); tokenClient.requestAccessToken({prompt:'consent'}); closeDriveModal();
+}
+function disconnectDrive(){
+  if(accessToken) google.accounts.oauth2.revoke(accessToken);
+  accessToken=null;driveFileId=null;driveEmail=null;
+  localStorage.removeItem('physcard_client_id'); clientId='';
+  setSaveBar('local','ローカルに自動保存中'); updateDriveBtn(); closeDriveModal();
+}
+function forceDriveSync(){ if(!accessToken){alert('まずDriveに接続してください');return;} setSaveBar('saving','同期中…'); driveSave().then(()=>{setSaveBar('drive','☁️ 同期完了');closeDriveModal();}).catch(()=>setSaveBar('error','同期に失敗')); }
+function dc(w){ return w<=0.8?"#4ade80":w<=2?"#fbbf24":w<=5?"#f97316":"#f43f5e"; }
+function pickNext(wts,lastId){ const el=FORMULAS.map((f,i)=>({i,w:f.id===lastId?0:wts[i]})); const tot=el.reduce((s,e)=>s+e.w,0); if(!tot) return 0; let r=Math.random()*tot; for(const e of el){r-=e.w;if(r<=0) return e.i;} return 0; }
+function renderCard(){
+  const f=FORMULAS[currentIdx]; currentCardId=f.id;
+  document.getElementById('f-cat').textContent=f.category;
+  document.getElementById('f-name').textContent=f.name;
+  document.getElementById('f-question').textContent=f.question;
+  document.getElementById('f-id').textContent='#'+f.id+'/'+FORMULAS.length;
+  const dot=document.getElementById('f-dot'); dot.style.background=dc(weights[currentIdx]); dot.style.boxShadow='0 0 7px '+dc(weights[currentIdx]);
+  document.getElementById('b-answer').textContent=f.answer;
+  document.getElementById('b-detail').textContent='💡 '+f.detail;
+  document.getElementById('card-inner').classList.remove('flipped');
+  isFlipped=false; document.getElementById('ans-btns').classList.remove('show');
+}
+function flipCard(){ isFlipped=!isFlipped; document.getElementById('card-inner').classList.toggle('flipped',isFlipped); document.getElementById('ans-btns').classList.toggle('show',isFlipped); }
+function answer(ok){
+  const nw=[...weights]; nw[currentIdx]=ok?Math.max(0.3,nw[currentIdx]*0.55):nw[currentIdx]*4+3;
+  weights=nw; stats.c+=ok?1:0; stats.w+=ok?0:1; stats.t++;
+  updateStats(); autoSave(); currentIdx=pickNext(weights,currentCardId); renderCard(); if(weakOpen) renderWeakList();
+}
+function updateStats(){
+  document.getElementById('s-c').textContent=stats.c;
+  document.getElementById('s-w').textContent=stats.w;
+  document.getElementById('s-t').textContent=stats.t;
+  document.getElementById('s-acc').textContent=stats.t>0?Math.round(stats.c/stats.t*100)+'%':'--';
+  document.getElementById('prog-fill').style.width=Math.min(100,stats.t/FORMULAS.length*100)+'%';
+}
+function toggleWeak(){ weakOpen=!weakOpen; document.getElementById('weak-panel').style.display=weakOpen?'block':'none'; document.getElementById('weak-toggle').classList.toggle('open',weakOpen); if(weakOpen) renderWeakList(); }
+function renderWeakList(){
+  const sorted=[...FORMULAS].map((f,i)=>({...f,w:weights[i]})).sort((a,b)=>b.w-a.w).slice(0,10);
+  document.getElementById('weak-list').innerHTML=sorted.map(f=>`<div class="weak-row"><span class="weak-name">${f.name}</span><div class="weak-meta"><span class="weak-cat">${f.category}</span><div class="dot" style="background:${dc(f.w)};box-shadow:0 0 5px ${dc(f.w)}"></div><button class="mini-btn" onclick="jumpToFormula(${f.id})">確認</button></div></div>`).join('');
+}
+function confirmReset(){ if(confirm('学習データをすべてリセットしますか？')){ weights=FORMULAS.map(()=>1); stats={c:0,w:0,t:0}; currentIdx=0; saveLocal(); if(accessToken) driveSave(); updateStats(); renderCard(); if(weakOpen) renderWeakList(); } }
+function switchMode(mode){ document.querySelectorAll('.page').forEach(p=>p.classList.remove('active')); document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active')); document.getElementById(mode+'-page').classList.add('active'); document.querySelectorAll('.tab-btn')[mode==='study'?0:1].classList.add('active'); document.getElementById('fab').classList.toggle('show',mode==='reference'); if(mode==='reference') renderRef(); }
+function jumpToFormula(id){ refCat="すべて"; refSearch=""; document.getElementById('ref-search').value=""; switchMode('reference'); setTimeout(()=>{ const el=document.getElementById('fc-'+id); if(el){el.scrollIntoView({behavior:'smooth',block:'center'}); el.classList.add('highlight'); setTimeout(()=>el.classList.remove('highlight'),2500);} },200); }
+function filterRef(){ refSearch=document.getElementById('ref-search').value; renderRef(); }
+function setCat(c){ refCat=c; document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('active')); event.target.classList.add('active'); renderRef(); }
+function renderRef(){
+  const q=refSearch.toLowerCase();
+  const filtered=FORMULAS.filter(f=>{ const mc=refCat==="すべて"||f.category===refCat; const mq=!q||f.name.toLowerCase().includes(q)||f.question.toLowerCase().includes(q)||f.answer.toLowerCase().includes(q)||f.category.toLowerCase().includes(q); return mc&&mq; });
+  document.getElementById('ref-count').textContent=filtered.length+' 件 / 全 '+FORMULAS.length+' 公式';
+  const cats=CATEGORIES.filter(c=>refCat==="すべて"||refCat===c);
+  let html='';
+  for(const c of cats){
+    const list=filtered.filter(f=>f.category===c); if(!list.length) continue;
+    html+=`<div class="cat-section"><div class="cat-header">▸ ${c} <span class="cat-count">${list.length} 公式</span></div><div class="formula-grid">`;
+    for(const f of list){ const fi=FORMULAS.findIndex(x=>x.id===f.id); html+=`<div class="formula-card" id="fc-${f.id}"><div class="fc-top"><span class="fc-name">${f.name}</span><div class="fc-right"><div class="dot" style="background:${dc(weights[fi])}"></div><button class="mini-btn" onclick="goToCard(${fi})">問題へ</button></div></div><div class="fc-q">${f.question}</div><div class="fc-ans">${f.answer}</div><div class="fc-detail">${f.detail}</div></div>`; }
+    html+='</div></div>';
+  }
+  document.getElementById('ref-content').innerHTML=html;
+}
+function goToCard(i){ currentIdx=i; switchMode('study'); renderCard(); }
+function initCatFilters(){ let html=`<button class="cat-btn active" onclick="setCat('すべて')">すべて</button>`; CATEGORIES.forEach(c=>{html+=`<button class="cat-btn" onclick="setCat('${c}')">${c}</button>`;}); document.getElementById('cat-filters').innerHTML=html; }
+
+loadLocal(); initCatFilters(); renderCard(); updateStats(); renderRef();
+setSaveBar('local','ローカルに自動保存中');
+if(clientId) setSaveBar('local','Drive連携を確認中…');
+</script>
+</body>
+</html>
