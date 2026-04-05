@@ -1,0 +1,26 @@
+{
+  "name": "数学公式カード Drive同期版",
+  "short_name": "数学公式カード",
+  "id": "/math-g-cards/",
+  "start_url": "/math-g-cards/",
+  "scope": "/math-g-cards/",
+  "display": "standalone",
+  "background_color": "#f6f7fb",
+  "theme_color": "#2f5fe3",
+  "lang": "ja",
+  "description": "理系大学受験向けの数学公式カード式問題集。検索・一覧・間隔反復・Google Drive同期対応。",
+  "icons": [
+    {
+      "src": "/math-g-cards/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/math-g-cards/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
