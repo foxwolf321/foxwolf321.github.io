@@ -228,10 +228,6 @@ summary{cursor:pointer;font-weight:700;}
   const importanceOrder = ['すべての重要度','最重要','重要','標準'];
 
   const $ = (id) => document.getElementById(id);
-  const state = loadState();
-  let deck = [];
-  let current = 0;
-  let deferredPrompt = null;
 
   function storageAvailable() {
     try {
@@ -241,6 +237,10 @@ summary{cursor:pointer;font-weight:700;}
     }
   }
   const HAS_STORAGE = storageAvailable();
+  const state = loadState();
+  let deck = [];
+  let current = 0;
+  let deferredPrompt = null;
 
   function defaultProgress() {
     return { reps:0, ease:2.5, interval:0, due:0, lapses:0, lastGrade:'未学習', lastReviewed:0 };
