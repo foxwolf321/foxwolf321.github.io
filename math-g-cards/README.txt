@@ -1,6 +1,8 @@
-このフォルダは「私立理系 受験物理 基本法則カード（力学編・Drive保存版）」のPWA一式です。
+math-g-cards 用ファイル一式
 
-入っているファイル:
+このフォルダの中身を GitHub の math-g-cards フォルダへ入れてください。
+
+入れるファイル:
 - index.html
 - manifest.webmanifest
 - sw.js
@@ -8,13 +10,10 @@
 - icon-512.png
 - README.txt
 
-使い方:
-1. このフォルダごと GitHub Pages の physics-g-cards などに配置します
-2. index.html を開きます
-3. 必要なら OAuth クライアントIDを入れて Google に接続します
-4. 「今すぐバックアップ」で appDataFolder に保存できます
-5. 「Driveから復元」で同じGoogleアカウントのバックアップを読み戻せます
+公開URL:
+https://foxwolf321.github.io/math-g-cards/
 
-保存先:
-- 学習データは通常はブラウザ内にも保存されます
-- Google Drive 保存は appDataFolder を使うため、通常のDrive一覧には表示されません
+ポイント:
+- 古いホーム画面アイコンは一度削除してください。
+- その後、Chrome で上のURLを開いて「ホーム画面に追加」をやり直してください。
+- Google Drive 同期を使う場合は、OAuth クライアントID欄に有効な client ID を貼って「Googleに接続」を押します。
