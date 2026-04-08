@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>私立理系 受験物理 基本法則カード（力学編）</title>
+<title>私立理系 受験物理 基本法則カード（力学編・Drive保存版）</title>
 <meta name="theme-color" content="#0f4c81">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="物理カード">
@@ -64,7 +64,18 @@ th{background:#f8fbff;white-space:nowrap;}
 details{border:1px solid #e6ebf5;border-radius:14px;padding:12px 14px;background:#fff;margin-bottom:10px;}
 summary{cursor:pointer;font-weight:700;}
 .hidden{display:none !important;}
+
+.sync-grid{display:grid;grid-template-columns:1.3fr 1fr;gap:12px;margin-top:12px;}
+.sync-box{background:#f8fbff;border:1px solid #dce7f5;border-radius:16px;padding:14px;}
+.sync-actions{display:flex;flex-wrap:wrap;gap:10px;}
+.chk{display:flex;align-items:center;gap:8px;color:var(--sub);}
+.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;background:#fff;padding:2px 6px;border-radius:8px;border:1px solid #e5ebf6;}
+#clientIdInput{width:100%;padding:11px 13px;border:1px solid var(--line);border-radius:14px;background:#fff;}
+#syncStatus{margin-top:10px;padding:10px 12px;border-radius:12px;background:#fff;border:1px solid #e1e8f5;color:#45506a;font-size:.95rem;white-space:pre-wrap;}
+
 @media (max-width:820px) {
+  .sync-grid{grid-template-columns:1fr;}
+
   .wrap{padding:12px;}
   .prompt{font-size:1.14rem;}
   .stats{grid-template-columns:repeat(2,minmax(0,1fr));}
@@ -74,8 +85,8 @@ summary{cursor:pointer;font-weight:700;}
 <body>
 <div class="wrap">
   <header class="panel">
-    <h1>私立理系 受験物理 基本法則カード（力学編）</h1>
-    <p>私立理系で最初に得点源にしやすい <strong>力学92枚</strong> を、頻度調整つきカード学習にした版です。公式だけでなく、<strong>条件</strong> と <strong>典型判断</strong> を厚めに入れています。</p>
+    <h1>私立理系 受験物理 基本法則カード（力学編・Drive保存版）</h1>
+    <p>私立理系で最初に得点源にしやすい <strong>力学92枚</strong> を、頻度調整つきカード学習にした版です。公式だけでなく、<strong>条件</strong> と <strong>典型判断</strong> を厚めに入れ、<strong>Google Drive保存</strong> にも対応させています。</p>
     <div class="top-actions">
       <button id="btnStart" class="primary">カード学習を始める</button>
       <button id="btnManual" class="soft">説明書を読む</button>
@@ -85,7 +96,36 @@ summary{cursor:pointer;font-weight:700;}
       <button id="btnInstall" class="ok hidden">ホーム画面に追加</button>
     </div>
     <input id="importFile" type="file" accept="application/json" class="hidden">
+    
     <div id="status">初期化中…</div>
+    <div class="sync-grid">
+      <section class="sync-box">
+        <h2>Google Drive 保存</h2>
+        <p class="note">Google Drive の <strong>appDataFolder</strong> に、学習進捗をバックアップ・復元できます。通常のDrive一覧には表示されません。</p>
+        <input id="clientIdInput" type="text" placeholder="OAuth クライアントIDを貼り付け（例: 123...apps.googleusercontent.com）">
+        <div class="sync-actions" style="margin-top:10px;">
+          <button id="btnConnectDrive" class="primary">Googleに接続</button>
+          <button id="btnBackupNow" class="ok">今すぐバックアップ</button>
+          <button id="btnRestoreNow" class="soft">Driveから復元</button>
+          <button id="btnDisconnectDrive">接続解除</button>
+        </div>
+        <div class="row" style="margin-top:10px;">
+          <label class="chk"><input id="autoSyncToggle" type="checkbox"> 学習内容が変わるたび自動バックアップ</label>
+        </div>
+        <div id="syncStatus">Drive未接続です。</div>
+      </section>
+      <section class="sync-box">
+        <h2>最初の設定</h2>
+        <ol class="note" style="padding-left:18px;margin:0;">
+          <li>Google Cloud で <strong>Drive API</strong> を有効化</li>
+          <li>OAuth 同意画面で <strong>drive.appdata</strong> を追加</li>
+          <li>OAuth クライアントを <strong>Web application</strong> で作成</li>
+          <li>Authorized JavaScript origins に <span class="mono" id="originText"></span> を追加</li>
+          <li>発行されたクライアントIDを左へ貼って接続</li>
+        </ol>
+        <p class="note" style="margin-top:10px;">単独利用なら、普段は <strong>今すぐバックアップ</strong> を押す使い方で十分です。自動保存は必要なときだけオンにできます。</p>
+      </section>
+    </div>
   </header>
 
   <div class="tabbar">
@@ -218,16 +258,21 @@ summary{cursor:pointer;font-weight:700;}
   </section>
 </div>
 
+<script src="https://accounts.google.com/gsi/client" async defer></script>
 <script>
 (() => {
   'use strict';
-  const STORAGE_KEY = 'physics_mechanics_cards_v1';
+  const STORAGE_KEY = 'physics_mechanics_cards_drive_sync_v1';
+  const LEGACY_STORAGE_KEY = 'physics_mechanics_cards_v1';
+  const DRIVE_SCOPE = 'https://www.googleapis.com/auth/drive.appdata';
+  const BACKUP_FILE_NAME = 'physics_mechanics_cards_backup_v1.json';
   const cards = [{"id": 1, "field": "力学", "theme": "位置・速度・加速度／等加速度運動", "type": "公式", "prompt": "速度の定義を述べよ。", "answer": "平均速度は v = Δx/Δt。\n瞬間速度は「ある瞬間での位置の変化率」。", "importance": "最重要", "frequency": "頻出", "law": "速度", "aliases": []}, {"id": 2, "field": "力学", "theme": "位置・速度・加速度／等加速度運動", "type": "公式", "prompt": "加速度の定義を述べよ。", "answer": "平均加速度は a = Δv/Δt。\n瞬間加速度は「ある瞬間での速度の変化率」。", "importance": "最重要", "frequency": "頻出", "law": "加速度", "aliases": []}, {"id": 3, "field": "力学", "theme": "位置・速度・加速度／等加速度運動", "type": "公式", "prompt": "等加速度直線運動における速度の式を述べよ。", "answer": "v = v₀ + at", "importance": "最重要", "frequency": "頻出", "law": "等加速度運動", "aliases": []}, {"id": 4, "field": "力学", "theme": "位置・速度・加速度／等加速度運動", "type": "公式", "prompt": "等加速度直線運動における位置の式を述べよ。", "answer": "x = x₀ + v₀t + (1/2)at²", "importance": "最重要", "frequency": "頻出", "law": "等加速度運動", "aliases": []}, {"id": 5, "field": "力学", "theme": "位置・速度・加速度／等加速度運動", "type": "条件", "prompt": "式 v² - v₀² = 2a(x-x₀) はどんなときに使いやすいか。", "answer": "時間 t を消したいとき。\n速度・加速度・変位を直接つなぎたいときに使いやすい。", "importance": "重要", "frequency": "頻出", "law": "等加速度運動", "aliases": []}, {"id": 6, "field": "力学", "theme": "位置・速度・加速度／等加速度運動", "type": "条件", "prompt": "等加速度運動の公式が使える条件は何か。", "answer": "加速度が一定であること。\n加速度が途中で変わるなら区間ごとに分ける。", "importance": "最重要", "frequency": "頻出", "law": "等加速度運動", "aliases": []}, {"id": 7, "field": "力学", "theme": "位置・速度・加速度／等加速度運動", "type": "意味", "prompt": "速度と加速度の違いを述べよ。", "answer": "速度は位置の変化、加速度は速度の変化を表す。\n速度が正でも加速度が負なら減速することがある。", "importance": "重要", "frequency": "頻出", "law": "速度・加速度", "aliases": []}, {"id": 8, "field": "力学", "theme": "位置・速度・加速度／等加速度運動", "type": "意味", "prompt": "x-t, v-t, a-t グラフの傾きや面積の意味を述べよ。", "answer": "x-t の傾き→速度\nv-t の傾き→加速度\nv-t の面積→変位\na-t の面積→速度変化量", "importance": "最重要", "frequency": "頻出", "law": "グラフ", "aliases": []}, {"id": 9, "field": "力学", "theme": "位置・速度・加速度／等加速度運動", "type": "単位", "prompt": "速度と加速度の単位を述べよ。", "answer": "速度は m/s，加速度は m/s²。", "importance": "重要", "frequency": "標準", "law": "単位", "aliases": []}, {"id": 10, "field": "力学", "theme": "位置・速度・加速度／等加速度運動", "type": "典型判断", "prompt": "等加速度運動の文章題を見たらまず何を確認するか。", "answer": "正方向，初速度 v₀，加速度 a の符号の3つを最初に決める。特に落下・投げ上げでは符号が最重要。", "importance": "最重要", "frequency": "頻出", "law": "等加速度運動", "aliases": []}, {"id": 11, "field": "力学", "theme": "力のつり合い・作用反作用・力の分解", "type": "公式", "prompt": "力のつり合いの条件を述べよ。", "answer": "物体に働く合力が 0 であること。", "importance": "最重要", "frequency": "頻出", "law": "つり合い", "aliases": []}, {"id": 12, "field": "力学", "theme": "力のつり合い・作用反作用・力の分解", "type": "条件", "prompt": "静止と等速直線運動で共通する力学条件は何か。", "answer": "どちらも加速度 0、したがって合力 0。", "importance": "重要", "frequency": "頻出", "law": "つり合い", "aliases": []}, {"id": 13, "field": "力学", "theme": "力のつり合い・作用反作用・力の分解", "type": "条件", "prompt": "力のつり合いと作用反作用の違いを述べよ。", "answer": "つり合いは「同一物体」に働く力同士、作用反作用は「別々の2物体」に働く力の組。", "importance": "最重要", "frequency": "頻出", "law": "作用反作用", "aliases": []}, {"id": 14, "field": "力学", "theme": "力のつり合い・作用反作用・力の分解", "type": "意味", "prompt": "作用反作用の2力の特徴を述べよ。", "answer": "大きさ等しい・向き反対・一直線上・別々の物体に働く。", "importance": "重要", "frequency": "頻出", "law": "作用反作用", "aliases": []}, {"id": 15, "field": "力学", "theme": "力のつり合い・作用反作用・力の分解", "type": "意味", "prompt": "垂直抗力とは何か。", "answer": "接触面が物体を押す力。面に垂直に働く。", "importance": "重要", "frequency": "標準", "law": "垂直抗力", "aliases": []}, {"id": 16, "field": "力学", "theme": "力のつり合い・作用反作用・力の分解", "type": "典型判断", "prompt": "斜面上の物体で、力はどの向きに分解するのが基本か。", "answer": "斜面に平行な向きと垂直な向きに分ける。", "importance": "最重要", "frequency": "頻出", "law": "力の分解", "aliases": []}, {"id": 17, "field": "力学", "theme": "力のつり合い・作用反作用・力の分解", "type": "典型判断", "prompt": "図を書き始めるとき、最初に何をするか。", "answer": "着目する物体を1つ決め、その物体だけに働く力を矢印で全部書く。", "importance": "最重要", "frequency": "頻出", "law": "作図", "aliases": []}, {"id": 18, "field": "力学", "theme": "力のつり合い・作用反作用・力の分解", "type": "典型判断", "prompt": "2物体が糸でつながれている問題で、最初に見抜くべきことは何か。", "answer": "一体で見るか別々に見るかを決めること。\n張力を消したいなら一体、個別の加速度や張力を求めるなら別々。", "importance": "最重要", "frequency": "頻出", "law": "連結体", "aliases": []}, {"id": 19, "field": "力学", "theme": "運動方程式", "type": "公式", "prompt": "ニュートンの第2法則を述べよ。", "answer": "合力 F = ma。", "importance": "最重要", "frequency": "頻出", "law": "運動方程式", "aliases": []}, {"id": 20, "field": "力学", "theme": "運動方程式", "type": "公式", "prompt": "x方向の運動方程式の形を述べよ。", "answer": "ΣFₓ = maₓ", "importance": "最重要", "frequency": "頻出", "law": "運動方程式", "aliases": []}, {"id": 21, "field": "力学", "theme": "運動方程式", "type": "公式", "prompt": "y方向の運動方程式の形を述べよ。", "answer": "ΣFᵧ = maᵧ", "importance": "最重要", "frequency": "頻出", "law": "運動方程式", "aliases": []}, {"id": 22, "field": "力学", "theme": "運動方程式", "type": "条件", "prompt": "運動方程式で使う F は何の力か。", "answer": "1つ1つの力ではなく、その物体に働く力の合力。", "importance": "最重要", "frequency": "頻出", "law": "運動方程式", "aliases": []}, {"id": 23, "field": "力学", "theme": "運動方程式", "type": "条件", "prompt": "運動方程式を立てるとき、必ず1本ごとに決める対象は何か。", "answer": "「どの物体について立てる式か」を必ず決める。1本の式は1つの物体に対して立てる。", "importance": "最重要", "frequency": "頻出", "law": "運動方程式", "aliases": []}, {"id": 24, "field": "力学", "theme": "運動方程式", "type": "条件", "prompt": "運動方程式をそのまま使う前提としての座標系の条件を述べよ。", "answer": "慣性系であること。高校物理では通常、地面基準などを慣性系として扱う。", "importance": "重要", "frequency": "標準", "law": "慣性系", "aliases": []}, {"id": 25, "field": "力学", "theme": "運動方程式", "type": "意味", "prompt": "合力とは何か。", "answer": "その物体に働く全ての力をベクトル和したもの。", "importance": "重要", "frequency": "頻出", "law": "合力", "aliases": []}, {"id": 26, "field": "力学", "theme": "運動方程式", "type": "意味", "prompt": "質量が大きいと同じ力で加速度はどうなるか。", "answer": "a = F/m なので小さくなる。", "importance": "重要", "frequency": "標準", "law": "質量", "aliases": []}, {"id": 27, "field": "力学", "theme": "運動方程式", "type": "単位", "prompt": "力の単位 N を基本単位で表せ。", "answer": "1 N = 1 kg·m/s²", "importance": "重要", "frequency": "標準", "law": "単位", "aliases": []}, {"id": 28, "field": "力学", "theme": "運動方程式", "type": "典型判断", "prompt": "運動方程式を立てるとき、座標軸はどう取るのが基本か。", "answer": "加速度や運動しそうな向きに合わせて取り、未知数や力の分解を減らす。", "importance": "最重要", "frequency": "頻出", "law": "運動方程式", "aliases": []}, {"id": 29, "field": "力学", "theme": "運動方程式", "type": "典型判断", "prompt": "鉛直投げ上げで運動方程式を立てるとき、まず決めるべきことは何か。", "answer": "上向きを正にするか下向きを正にするか。\n重力加速度の符号がそれで決まる。", "importance": "最重要", "frequency": "頻出", "law": "運動方程式", "aliases": []}, {"id": 30, "field": "力学", "theme": "運動方程式", "type": "典型判断", "prompt": "エレベーター内のばねばかり問題で、まず何に着目するか。", "answer": "人や物体そのものに着目し、接触力（ばねばかりの示す力）を未知数にする。", "importance": "重要", "frequency": "標準", "law": "見かけの重さ", "aliases": []}, {"id": 31, "field": "力学", "theme": "運動方程式", "type": "典型判断", "prompt": "連結体の張力を求めたいとき、物体はどう扱うのが基本か。", "answer": "別々の物体として運動方程式を立てる。", "importance": "最重要", "frequency": "頻出", "law": "連結体", "aliases": []}, {"id": 32, "field": "力学", "theme": "運動方程式", "type": "典型判断", "prompt": "張力を消して加速度だけ素早く求めたいときはどう考えるか。", "answer": "連結された全体を1つの物体として見る。内部力である張力を消せる。", "importance": "最重要", "frequency": "頻出", "law": "連結体", "aliases": []}, {"id": 33, "field": "力学", "theme": "摩擦", "type": "公式", "prompt": "最大静止摩擦力の式を述べよ。", "answer": "f ≤ μN、最大値は fmax = μN。", "importance": "最重要", "frequency": "頻出", "law": "静止摩擦", "aliases": []}, {"id": 34, "field": "力学", "theme": "摩擦", "type": "公式", "prompt": "動摩擦力の式を述べよ。", "answer": "f' = μ'N", "importance": "最重要", "frequency": "頻出", "law": "動摩擦", "aliases": []}, {"id": 35, "field": "力学", "theme": "摩擦", "type": "条件", "prompt": "静止摩擦力の大きさはいつでも μN か。", "answer": "違う。静止している間は必要なだけ働き、上限が μN。", "importance": "最重要", "frequency": "頻出", "law": "静止摩擦", "aliases": []}, {"id": 36, "field": "力学", "theme": "摩擦", "type": "条件", "prompt": "静止摩擦と動摩擦の使い分けを述べよ。", "answer": "すべっていない間は静止摩擦、すべっている最中は動摩擦。", "importance": "最重要", "frequency": "頻出", "law": "摩擦", "aliases": []}, {"id": 37, "field": "力学", "theme": "摩擦", "type": "意味", "prompt": "摩擦力の向きは何で決まるか。", "answer": "接触面に沿って、相対運動または相対運動しようとする向きと反対。", "importance": "最重要", "frequency": "頻出", "law": "摩擦の向き", "aliases": []}, {"id": 38, "field": "力学", "theme": "摩擦", "type": "典型判断", "prompt": "「動き出す直前」とあれば何を使うか。", "answer": "最大静止摩擦力 f = μN を使う。", "importance": "最重要", "frequency": "頻出", "law": "静止摩擦", "aliases": []}, {"id": 39, "field": "力学", "theme": "摩擦", "type": "典型判断", "prompt": "「一定の速さですべっている」とあれば何が言えるか。", "answer": "加速度 0、したがって合力 0。摩擦力と他の力がつり合う。", "importance": "重要", "frequency": "標準", "law": "摩擦", "aliases": []}, {"id": 40, "field": "力学", "theme": "摩擦", "type": "典型判断", "prompt": "斜面上で摩擦力の向きに迷ったらどう考えるか。", "answer": "物体がすべりそうな向きを想像し、その逆向きに摩擦力を置く。", "importance": "最重要", "frequency": "頻出", "law": "摩擦の向き", "aliases": []}, {"id": 41, "field": "力学", "theme": "円運動", "type": "公式", "prompt": "向心加速度の式を述べよ。", "answer": "a = v²/r", "importance": "最重要", "frequency": "頻出", "law": "向心加速度", "aliases": []}, {"id": 42, "field": "力学", "theme": "円運動", "type": "公式", "prompt": "向心力の式を述べよ。", "answer": "F = mv²/r", "importance": "最重要", "frequency": "頻出", "law": "向心力", "aliases": []}, {"id": 43, "field": "力学", "theme": "円運動", "type": "公式", "prompt": "速さ v と周期 T の関係を述べよ。", "answer": "v = 2πr/T", "importance": "重要", "frequency": "頻出", "law": "周期", "aliases": []}, {"id": 44, "field": "力学", "theme": "円運動", "type": "条件", "prompt": "等速円運動とは何か。", "answer": "速さ一定で円周上を動く運動。速度ベクトルの向きは変わるので加速度は 0 ではない。", "importance": "最重要", "frequency": "頻出", "law": "等速円運動", "aliases": []}, {"id": 45, "field": "力学", "theme": "円運動", "type": "条件", "prompt": "向心力はどの向きに働くか。", "answer": "常に円の中心向き。", "importance": "最重要", "frequency": "頻出", "law": "向心力", "aliases": []}, {"id": 46, "field": "力学", "theme": "円運動", "type": "意味", "prompt": "向心力は新しい種類の力か。", "answer": "違う。既存の力（重力・張力・垂直抗力など）の合力が向心力の役割を果たす。", "importance": "最重要", "frequency": "頻出", "law": "向心力", "aliases": []}, {"id": 47, "field": "力学", "theme": "円運動", "type": "典型判断", "prompt": "円運動の問題で最初に確認すべきことは何か。", "answer": "「何の力の合力が中心向きになるか」を確認する。", "importance": "最重要", "frequency": "頻出", "law": "円運動", "aliases": []}, {"id": 48, "field": "力学", "theme": "円運動", "type": "典型判断", "prompt": "鉛直面内の円運動で最高点・最低点を解くときの着目点は何か。", "answer": "中心向きに働く力を正しく足し引きすること。最高点と最低点で向き関係が変わる。", "importance": "最重要", "frequency": "頻出", "law": "鉛直円運動", "aliases": []}, {"id": 49, "field": "力学", "theme": "円運動", "type": "典型判断", "prompt": "円錐振り子の問題でまず立てる関係は何か。", "answer": "鉛直方向のつり合いと、水平方向の向心力の2本。", "importance": "重要", "frequency": "標準", "law": "円錐振り子", "aliases": []}, {"id": 50, "field": "力学", "theme": "円運動", "type": "典型判断", "prompt": "遠心力という言葉が出ても、高校の解法の基本は何か。", "answer": "慣性系では遠心力を使わず、中心向きの合力 = mv²/r を立てる。", "importance": "重要", "frequency": "標準", "law": "遠心力", "aliases": []}, {"id": 51, "field": "力学", "theme": "単振動", "type": "公式", "prompt": "単振動の復元力の式を述べよ。", "answer": "F = -kx", "importance": "最重要", "frequency": "頻出", "law": "単振動", "aliases": []}, {"id": 52, "field": "力学", "theme": "単振動", "type": "公式", "prompt": "ばね振り子の周期を述べよ。", "answer": "T = 2π√(m/k)", "importance": "最重要", "frequency": "頻出", "law": "ばね振り子", "aliases": []}, {"id": 53, "field": "力学", "theme": "単振動", "type": "条件", "prompt": "どんなときに単振動とみなせるか。", "answer": "平衡位置の近くで、変位に比例し平衡位置向きの復元力が働くとき。", "importance": "最重要", "frequency": "頻出", "law": "単振動", "aliases": []}, {"id": 54, "field": "力学", "theme": "単振動", "type": "条件", "prompt": "単振動で加速度の向きはどうなるか。", "answer": "常に平衡位置向き。変位と逆向き。", "importance": "重要", "frequency": "頻出", "law": "単振動", "aliases": []}, {"id": 55, "field": "力学", "theme": "単振動", "type": "意味", "prompt": "復元力とは何か。", "answer": "物体を平衡位置へ戻そうとする力。", "importance": "重要", "frequency": "標準", "law": "復元力", "aliases": []}, {"id": 56, "field": "力学", "theme": "単振動", "type": "保存則", "prompt": "単振動で力学的エネルギーはどうなるか。", "answer": "摩擦などを無視できれば保存される。位置エネルギーと運動エネルギーが入れ替わる。", "importance": "重要", "frequency": "頻出", "law": "単振動", "aliases": []}, {"id": 57, "field": "力学", "theme": "単振動", "type": "典型判断", "prompt": "単振動で速さが最大になるのはどこか。", "answer": "平衡位置。そこで位置エネルギー最小、運動エネルギー最大。", "importance": "最重要", "frequency": "頻出", "law": "単振動", "aliases": []}, {"id": 58, "field": "力学", "theme": "単振動", "type": "典型判断", "prompt": "単振動で加速度の大きさが最大になるのはどこか。", "answer": "端点。変位の大きさが最大なので復元力も加速度も最大。", "importance": "重要", "frequency": "頻出", "law": "単振動", "aliases": []}, {"id": 59, "field": "力学", "theme": "万有引力・重力場", "type": "公式", "prompt": "万有引力の法則を述べよ。", "answer": "F = G Mm/r²", "importance": "最重要", "frequency": "頻出", "law": "万有引力", "aliases": []}, {"id": 60, "field": "力学", "theme": "万有引力・重力場", "type": "公式", "prompt": "地表付近の重力加速度 g と天体の質量・半径の関係を述べよ。", "answer": "g = GM/R²", "importance": "重要", "frequency": "頻出", "law": "重力加速度", "aliases": []}, {"id": 61, "field": "力学", "theme": "万有引力・重力場", "type": "条件", "prompt": "地表付近で重力加速度を一定とみなせるのはなぜか。", "answer": "地表近くでは地球中心からの距離変化が半径に比べ小さく、g の変化が小さいから。", "importance": "重要", "frequency": "標準", "law": "重力加速度", "aliases": []}, {"id": 62, "field": "力学", "theme": "万有引力・重力場", "type": "意味", "prompt": "重力と万有引力の関係を述べよ。", "answer": "地球と物体の間の万有引力が、地表付近では重力として扱われる。", "importance": "重要", "frequency": "標準", "law": "重力", "aliases": []}, {"id": 63, "field": "力学", "theme": "万有引力・重力場", "type": "典型判断", "prompt": "人工衛星の速さや周期を求めるとき、まず何を等置するか。", "answer": "万有引力 = 向心力 を等置する。", "importance": "最重要", "frequency": "頻出", "law": "人工衛星", "aliases": []}, {"id": 64, "field": "力学", "theme": "仕事・仕事率", "type": "公式", "prompt": "一定力 F が変位 x にした仕事を述べよ。", "answer": "W = Fx cosθ", "importance": "最重要", "frequency": "頻出", "law": "仕事", "aliases": []}, {"id": 65, "field": "力学", "theme": "仕事・仕事率", "type": "公式", "prompt": "仕事率の式を述べよ。", "answer": "P = W/t。一定速度で同方向なら P = Fv。", "importance": "重要", "frequency": "標準", "law": "仕事率", "aliases": []}, {"id": 66, "field": "力学", "theme": "仕事・仕事率", "type": "条件", "prompt": "重力やばねの力がする仕事の符号は何で決まるか。", "answer": "力の向きと変位の向きのなす角で決まる。", "importance": "重要", "frequency": "頻出", "law": "仕事", "aliases": []}, {"id": 67, "field": "力学", "theme": "仕事・仕事率", "type": "意味", "prompt": "負の仕事とは何か。", "answer": "力が物体の運動を妨げ、物体の力学的エネルギーを減らす向きの仕事。", "importance": "重要", "frequency": "標準", "law": "仕事", "aliases": []}, {"id": 68, "field": "力学", "theme": "仕事・仕事率", "type": "単位", "prompt": "仕事と仕事率の単位を述べよ。", "answer": "仕事は J、仕事率は W。", "importance": "重要", "frequency": "標準", "law": "単位", "aliases": []}, {"id": 69, "field": "力学", "theme": "力学的エネルギー保存", "type": "公式", "prompt": "運動エネルギーの式を述べよ。", "answer": "K = (1/2)mv²", "importance": "最重要", "frequency": "頻出", "law": "運動エネルギー", "aliases": []}, {"id": 70, "field": "力学", "theme": "力学的エネルギー保存", "type": "公式", "prompt": "重力による位置エネルギーの式を述べよ。", "answer": "U = mgh", "importance": "最重要", "frequency": "頻出", "law": "位置エネルギー", "aliases": []}, {"id": 71, "field": "力学", "theme": "力学的エネルギー保存", "type": "条件", "prompt": "力学的エネルギー保存則が使える条件を述べよ。", "answer": "摩擦などの非保存力の仕事を無視できるとき。", "importance": "最重要", "frequency": "頻出", "law": "エネルギー保存", "aliases": []}, {"id": 72, "field": "力学", "theme": "力学的エネルギー保存", "type": "条件", "prompt": "ばねの弾性エネルギーの式を使う場面を述べよ。", "answer": "ばねの伸び・縮みが x のとき U = (1/2)kx² を使う。", "importance": "重要", "frequency": "頻出", "law": "弾性エネルギー", "aliases": []}, {"id": 73, "field": "力学", "theme": "力学的エネルギー保存", "type": "意味", "prompt": "保存力とは何か。", "answer": "する仕事が経路によらず始点と終点だけで決まる力。", "importance": "重要", "frequency": "標準", "law": "保存力", "aliases": []}, {"id": 74, "field": "力学", "theme": "力学的エネルギー保存", "type": "保存則", "prompt": "力学的エネルギー保存則を式で述べよ。", "answer": "K₁ + U₁ = K₂ + U₂", "importance": "最重要", "frequency": "頻出", "law": "エネルギー保存", "aliases": []}, {"id": 75, "field": "力学", "theme": "力学的エネルギー保存", "type": "保存則", "prompt": "仕事と運動エネルギーの関係を述べよ。", "answer": "合力のした仕事 = 運動エネルギーの変化 ΔK", "importance": "最重要", "frequency": "頻出", "law": "仕事とエネルギー", "aliases": []}, {"id": 76, "field": "力学", "theme": "力学的エネルギー保存", "type": "保存則", "prompt": "非保存力があるときのエネルギーの扱いを述べよ。", "answer": "非保存力のした仕事を含めて K + U の変化を考える。", "importance": "重要", "frequency": "標準", "law": "エネルギー保存", "aliases": []}, {"id": 77, "field": "力学", "theme": "力学的エネルギー保存", "type": "典型判断", "prompt": "斜面問題で、運動方程式よりエネルギー法が向くのはどんなときか。", "answer": "速度と高さ・ばねの伸びの関係を求めたいとき。時間を出さないならエネルギー法が速い。", "importance": "最重要", "frequency": "頻出", "law": "エネルギー法", "aliases": []}, {"id": 78, "field": "力学", "theme": "力学的エネルギー保存", "type": "典型判断", "prompt": "エネルギー保存を使う前に必ず確認することは何か。", "answer": "摩擦・空気抵抗・外力の仕事を無視してよいか。", "importance": "最重要", "frequency": "頻出", "law": "エネルギー保存", "aliases": []}, {"id": 79, "field": "力学", "theme": "運動量・力積", "type": "公式", "prompt": "運動量の式を述べよ。", "answer": "p = mv", "importance": "最重要", "frequency": "頻出", "law": "運動量", "aliases": []}, {"id": 80, "field": "力学", "theme": "運動量・力積", "type": "公式", "prompt": "力積の式を述べよ。", "answer": "I = FΔt = Δp", "importance": "最重要", "frequency": "頻出", "law": "力積", "aliases": []}, {"id": 81, "field": "力学", "theme": "運動量・力積", "type": "条件", "prompt": "運動量保存則が使える条件を述べよ。", "answer": "外力の合計の力積が 0 とみなせる閉じた系。", "importance": "最重要", "frequency": "頻出", "law": "運動量保存", "aliases": []}, {"id": 82, "field": "力学", "theme": "運動量・力積", "type": "意味", "prompt": "運動量がベクトル量であるとはどういうことか。", "answer": "向きをもち、1次元では符号、2次元以上では成分で扱う。", "importance": "重要", "frequency": "標準", "law": "運動量", "aliases": []}, {"id": 83, "field": "力学", "theme": "運動量・力積", "type": "保存則", "prompt": "運動量保存則を式で述べよ。", "answer": "衝突前の全運動量 = 衝突後の全運動量", "importance": "最重要", "frequency": "頻出", "law": "運動量保存", "aliases": []}, {"id": 84, "field": "力学", "theme": "運動量・力積", "type": "典型判断", "prompt": "運動量保存の問題で最初に決めるべき「系」とは何か。", "answer": "どの物体群をまとめて1つの系とみるか。外力を無視できる組み方にする。", "importance": "最重要", "frequency": "頻出", "law": "系の設定", "aliases": []}, {"id": 85, "field": "力学", "theme": "衝突・反発係数", "type": "公式", "prompt": "反発係数 e の定義を述べよ。", "answer": "e = （衝突後の相対速度）/（衝突前の相対速度）\n1次元では「離れる速さ / 近づく速さ」。", "importance": "最重要", "frequency": "頻出", "law": "反発係数", "aliases": []}, {"id": 86, "field": "力学", "theme": "衝突・反発係数", "type": "条件", "prompt": "反発係数の式を使う典型的な場面は何か。", "answer": "1次元衝突・正面衝突。速度の向きに注意して立式する。", "importance": "重要", "frequency": "頻出", "law": "反発係数", "aliases": []}, {"id": 87, "field": "力学", "theme": "衝突・反発係数", "type": "保存則", "prompt": "衝突でいつも保存される量と、いつも保存ではない量を述べよ。", "answer": "外力を無視できれば運動量は保存。力学的エネルギーは一般には保存しない。", "importance": "最重要", "frequency": "頻出", "law": "衝突", "aliases": []}, {"id": 88, "field": "力学", "theme": "衝突・反発係数", "type": "典型判断", "prompt": "衝突問題を見たら、何をセットで疑うか。", "answer": "まず運動量保存、必要なら反発係数。エネルギー保存をむやみに使わない。", "importance": "最重要", "frequency": "頻出", "law": "衝突", "aliases": []}, {"id": 89, "field": "力学", "theme": "図・グラフ・総合判断", "type": "意味", "prompt": "v-t グラフで傾きが正・負・0 のとき、何を意味するか。", "answer": "正→加速度正、負→加速度負、0→加速度0。", "importance": "重要", "frequency": "標準", "law": "グラフ", "aliases": []}, {"id": 90, "field": "力学", "theme": "図・グラフ・総合判断", "type": "単位", "prompt": "v-t グラフの面積と a-t グラフの面積の単位を述べよ。", "answer": "v-t の面積は m（変位）、a-t の面積は m/s（速度変化）。", "importance": "重要", "frequency": "標準", "law": "グラフ", "aliases": []}, {"id": 91, "field": "力学", "theme": "図・グラフ・総合判断", "type": "典型判断", "prompt": "文章題を解き始めるときの共通手順を述べよ。", "answer": "状況図を書く → 着目物体を決める → 力を書く → 何を求めるかで運動方程式・エネルギー・運動量を選ぶ。", "importance": "最重要", "frequency": "頻出", "law": "総合判断", "aliases": []}, {"id": 92, "field": "力学", "theme": "図・グラフ・総合判断", "type": "典型判断", "prompt": "「何を使えばよいか分からない」ときの判断基準を述べよ。", "answer": "時間が絡むなら運動方程式・等加速度、\n速さと位置だけならエネルギー、\n衝突・爆発なら運動量をまず疑う。", "importance": "最重要", "frequency": "頻出", "law": "総合判断", "aliases": []}];
   const themeOrder = ["位置・速度・加速度／等加速度運動", "力のつり合い・作用反作用・力の分解", "運動方程式", "摩擦", "円運動", "単振動", "万有引力・重力場", "仕事・仕事率", "力学的エネルギー保存", "運動量・力積", "衝突・反発係数", "図・グラフ・総合判断"];
   const typeOrder = ["公式", "条件", "意味", "保存則", "単位", "典型判断"];
   const importanceOrder = ['すべての重要度','最重要','重要','標準'];
 
   const $ = (id) => document.getElementById(id);
+  const clone = (obj) => JSON.parse(JSON.stringify(obj));
 
   function storageAvailable() {
     try {
@@ -237,13 +282,31 @@ summary{cursor:pointer;font-weight:700;}
     }
   }
   const HAS_STORAGE = storageAvailable();
-  const state = loadState();
+  let state = loadState();
   let deck = [];
   let current = 0;
   let deferredPrompt = null;
+  let tokenClient = null;
+  let driveToken = '';
+  let driveTokenExpiresAt = 0;
+  let syncTimer = null;
+  let syncBusy = false;
 
   function defaultProgress() {
     return { reps:0, ease:2.5, interval:0, due:0, lapses:0, lastGrade:'未学習', lastReviewed:0 };
+  }
+
+  function defaultSyncState() {
+    return {
+      clientId: '',
+      auto: false,
+      connected: false,
+      backupFileId: '',
+      lastSyncedAt: 0,
+      lastSyncError: '',
+      remoteModifiedTime: '',
+      lastRestoredAt: 0
+    };
   }
 
   function freshState() {
@@ -260,23 +323,29 @@ summary{cursor:pointer;font-weight:700;}
         listImportance: 'all'
       },
       revealed: false,
-      currentId: cards[0].id
+      currentId: cards[0].id,
+      sync: defaultSyncState()
     };
   }
 
   function loadState() {
-    if (!HAS_STORAGE) return freshState();
+    const base = freshState();
+    if (!HAS_STORAGE) return base;
     try {
-      const raw = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null');
-      return Object.assign(freshState(), raw || {});
+      const raw = JSON.parse(localStorage.getItem(STORAGE_KEY) || localStorage.getItem(LEGACY_STORAGE_KEY) || 'null');
+      const next = Object.assign(base, raw || {});
+      next.sync = Object.assign(defaultSyncState(), raw && raw.sync ? raw.sync : {});
+      return next;
     } catch(e) {
-      return freshState();
+      return base;
     }
   }
 
   function saveState() {
-    if (!HAS_STORAGE) return;
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    if (HAS_STORAGE) {
+      try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch(e) {}
+    }
+    scheduleAutoSync('state-changed');
   }
 
   function progressFor(id) {
@@ -397,6 +466,305 @@ summary{cursor:pointer;font-weight:700;}
 
   function setStatus(msg) {
     $('status').textContent = msg;
+  }
+
+  function setSyncStatus(msg) {
+    const el = $('syncStatus');
+    if (el) el.textContent = msg;
+  }
+
+  function updateSyncUi() {
+    if ($('clientIdInput')) $('clientIdInput').value = state.sync.clientId || '';
+    if ($('autoSyncToggle')) $('autoSyncToggle').checked = !!state.sync.auto;
+    const parts = [];
+    parts.push(state.sync.connected ? 'Google接続済み' : 'Drive未接続');
+    if (state.sync.backupFileId) parts.push('バックアップID記録済み');
+    if (state.sync.lastSyncedAt) parts.push('最終保存: ' + new Date(state.sync.lastSyncedAt).toLocaleString('ja-JP'));
+    if (state.sync.lastRestoredAt) parts.push('最終復元: ' + new Date(state.sync.lastRestoredAt).toLocaleString('ja-JP'));
+    if (state.sync.remoteModifiedTime) parts.push('Drive更新: ' + new Date(state.sync.remoteModifiedTime).toLocaleString('ja-JP'));
+    if (state.sync.lastSyncError) parts.push('直近エラー: ' + state.sync.lastSyncError);
+    setSyncStatus(parts.join('｜'));
+  }
+
+  function ensureGisReady() {
+    return new Promise((resolve, reject) => {
+      if (window.google && google.accounts && google.accounts.oauth2) return resolve();
+      let tries = 0;
+      const timer = setInterval(() => {
+        tries += 1;
+        if (window.google && google.accounts && google.accounts.oauth2) {
+          clearInterval(timer); resolve();
+        } else if (tries > 80) {
+          clearInterval(timer); reject(new Error('Google Identity Services の読み込みに失敗しました。'));
+        }
+      }, 250);
+    });
+  }
+
+  function updateStoredClientId() {
+    state.sync.clientId = ($('clientIdInput').value || '').trim();
+    if (HAS_STORAGE) {
+      try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch(e) {}
+    }
+    updateSyncUi();
+  }
+
+  function getAuthHeader() {
+    if (!driveToken || Date.now() >= driveTokenExpiresAt) throw new Error('Google認証の有効期限が切れました。もう一度「Googleに接続」を押してください。');
+    return { Authorization: 'Bearer ' + driveToken };
+  }
+
+  function requestAccessToken(interactive) {
+    return ensureGisReady().then(() => {
+      const clientId = (state.sync.clientId || '').trim();
+      if (!clientId) throw new Error('OAuthクライアントIDを入力してください。');
+      return new Promise((resolve, reject) => {
+        tokenClient = google.accounts.oauth2.initTokenClient({
+          client_id: clientId,
+          scope: DRIVE_SCOPE,
+          callback: (resp) => {
+            if (!resp || resp.error) {
+              reject(new Error((resp && (resp.error_description || resp.error)) || 'Google認証に失敗しました。'));
+              return;
+            }
+            driveToken = resp.access_token;
+            driveTokenExpiresAt = Date.now() + Math.max(60, Number(resp.expires_in || 3600) - 60) * 1000;
+            state.sync.connected = true;
+            state.sync.lastSyncError = '';
+            if (HAS_STORAGE) {
+              try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch(e) {}
+            }
+            updateSyncUi();
+            resolve(resp);
+          }
+        });
+        try {
+          tokenClient.requestAccessToken({ prompt: interactive ? 'consent' : '' });
+        } catch (err) {
+          reject(err);
+        }
+      });
+    });
+  }
+
+  function driveFetchJson(url, options = {}) {
+    options.headers = Object.assign({}, options.headers || {}, getAuthHeader());
+    return fetch(url, options).then(async (res) => {
+      if (!res.ok) {
+        const txt = await res.text();
+        throw new Error('Drive API ' + res.status + ' ' + txt.slice(0, 160));
+      }
+      return res.json();
+    });
+  }
+
+  function escapeDriveQueryName(name) {
+    return String(name || '').replace(/'/g, "\'");
+  }
+
+  function findBackupFile() {
+    const q = "name='" + escapeDriveQueryName(BACKUP_FILE_NAME) + "' and trashed=false";
+    const url = 'https://www.googleapis.com/drive/v3/files?spaces=appDataFolder&pageSize=10&fields=files(id,name,modifiedTime)&q=' + encodeURIComponent(q);
+    return driveFetchJson(url).then((data) => (data.files && data.files.length ? data.files[0] : null));
+  }
+
+  function multipartBody(metadataObj, contentText, boundary) {
+    return '--' + boundary + '\r\n' +
+      'Content-Type: application/json; charset=UTF-8\r\n\r\n' +
+      JSON.stringify(metadataObj) + '\r\n' +
+      '--' + boundary + '\r\n' +
+      'Content-Type: application/json; charset=UTF-8\r\n\r\n' +
+      contentText + '\r\n' +
+      '--' + boundary + '--';
+  }
+
+  function buildBackupPayload() {
+    const payloadState = clone(state);
+    payloadState.sync = Object.assign({}, payloadState.sync || {}, {
+      connected: false,
+      lastSyncError: '',
+      lastRestoredAt: 0
+    });
+    return {
+      app: 'physics_mechanics_cards',
+      version: 1,
+      exportedAt: new Date().toISOString(),
+      state: payloadState
+    };
+  }
+
+  function writeBackupFile(fileId) {
+    const boundary = 'physics_sync_' + Date.now();
+    const bodyText = JSON.stringify(buildBackupPayload());
+    const metadata = fileId
+      ? { name: BACKUP_FILE_NAME, mimeType: 'application/json' }
+      : { name: BACKUP_FILE_NAME, parents: ['appDataFolder'], mimeType: 'application/json' };
+    const url = fileId
+      ? 'https://www.googleapis.com/upload/drive/v3/files/' + encodeURIComponent(fileId) + '?uploadType=multipart&fields=id,modifiedTime'
+      : 'https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id,modifiedTime';
+    return fetch(url, {
+      method: fileId ? 'PATCH' : 'POST',
+      headers: Object.assign({ 'Content-Type': 'multipart/related; boundary=' + boundary }, getAuthHeader()),
+      body: multipartBody(metadata, bodyText, boundary)
+    }).then(async (res) => {
+      if (!res.ok) {
+        const txt = await res.text();
+        throw new Error('バックアップ保存失敗: ' + res.status + ' ' + txt.slice(0, 160));
+      }
+      return res.json();
+    });
+  }
+
+  function backupToDrive(sourceLabel) {
+    if (syncBusy) return Promise.resolve(false);
+    syncBusy = true;
+    setSyncStatus('Driveへバックアップ中…');
+    return Promise.resolve().then(() => {
+      if (!driveToken || Date.now() >= driveTokenExpiresAt) throw new Error('Google認証の有効期限が切れています。もう一度「Googleに接続」を押してください。');
+      if (state.sync.backupFileId) return { id: state.sync.backupFileId };
+      return findBackupFile();
+    }).then((file) => {
+      const fileId = file && file.id ? file.id : '';
+      if (fileId) state.sync.backupFileId = fileId;
+      return writeBackupFile(fileId);
+    }).then((result) => {
+      state.sync.backupFileId = result.id || state.sync.backupFileId;
+      state.sync.lastSyncedAt = Date.now();
+      state.sync.remoteModifiedTime = result.modifiedTime || state.sync.remoteModifiedTime;
+      state.sync.lastSyncError = '';
+      if (HAS_STORAGE) {
+        try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch(e) {}
+      }
+      updateSyncUi();
+      setSyncStatus('Driveへバックアップしました。' + (sourceLabel ? '（' + sourceLabel + '）' : ''));
+      return true;
+    }).catch((err) => {
+      state.sync.lastSyncError = err && err.message ? err.message : String(err);
+      if (HAS_STORAGE) {
+        try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch(e) {}
+      }
+      updateSyncUi();
+      setSyncStatus('バックアップ失敗: ' + state.sync.lastSyncError);
+      return false;
+    }).finally(() => { syncBusy = false; });
+  }
+
+  function scheduleAutoSync(reason) {
+    if (!state.sync || !state.sync.auto || !state.sync.connected) return;
+    if (!driveToken || Date.now() >= driveTokenExpiresAt) {
+      state.sync.lastSyncError = '認証期限切れ。再接続すると自動バックアップを再開できます。';
+      if (HAS_STORAGE) {
+        try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch(e) {}
+      }
+      updateSyncUi();
+      return;
+    }
+    if (syncTimer) clearTimeout(syncTimer);
+    syncTimer = setTimeout(() => { backupToDrive(reason || 'autosave'); }, 2500);
+  }
+
+  function downloadBackupFile(fileId) {
+    const url = 'https://www.googleapis.com/drive/v3/files/' + encodeURIComponent(fileId) + '?alt=media';
+    return fetch(url, { headers: getAuthHeader() }).then(async (res) => {
+      if (!res.ok) {
+        const txt = await res.text();
+        throw new Error('バックアップ取得失敗: ' + res.status + ' ' + txt.slice(0, 160));
+      }
+      return res.json();
+    });
+  }
+
+  function restoreFromDrive() {
+    setSyncStatus('Driveから復元を確認中…');
+    return Promise.resolve().then(() => {
+      if (!driveToken || Date.now() >= driveTokenExpiresAt) throw new Error('Google認証の有効期限が切れています。もう一度「Googleに接続」を押してください。');
+      return state.sync.backupFileId ? { id: state.sync.backupFileId } : findBackupFile();
+    }).then((file) => {
+      if (!file || !file.id) throw new Error('Driveにバックアップが見つかりません。');
+      state.sync.backupFileId = file.id;
+      if (file.modifiedTime) state.sync.remoteModifiedTime = file.modifiedTime;
+      return downloadBackupFile(file.id);
+    }).then((payload) => {
+      if (!payload || !payload.state) throw new Error('バックアップ形式が不正です。');
+      const loaded = Object.assign(freshState(), payload.state || {});
+      loaded.sync = Object.assign(defaultSyncState(), loaded.sync || {}, {
+        clientId: state.sync.clientId,
+        auto: state.sync.auto,
+        connected: true,
+        backupFileId: state.sync.backupFileId,
+        lastSyncError: '',
+        remoteModifiedTime: state.sync.remoteModifiedTime,
+        lastRestoredAt: Date.now(),
+        lastSyncedAt: state.sync.lastSyncedAt
+      });
+      state = loaded;
+      if (HAS_STORAGE) {
+        try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch(e) {}
+      }
+      populateSelectors();
+      updateStudyView();
+      renderList();
+      updateSyncUi();
+      setSyncStatus('Driveのバックアップから復元しました。');
+      setStatus('Driveから学習データを復元しました。');
+      return true;
+    }).catch((err) => {
+      state.sync.lastSyncError = err && err.message ? err.message : String(err);
+      if (HAS_STORAGE) {
+        try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch(e) {}
+      }
+      updateSyncUi();
+      setSyncStatus('復元失敗: ' + state.sync.lastSyncError);
+      return false;
+    });
+  }
+
+  function connectDrive(initialRestore) {
+    updateStoredClientId();
+    setSyncStatus('Google認証を開始します…');
+    return requestAccessToken(true).then(() => {
+      state.sync.connected = true;
+      if (HAS_STORAGE) {
+        try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch(e) {}
+      }
+      updateSyncUi();
+      setSyncStatus('Googleに接続しました。バックアップ先を確認しています…');
+      return findBackupFile();
+    }).then((file) => {
+      if (file && file.id) {
+        state.sync.backupFileId = file.id;
+        state.sync.remoteModifiedTime = file.modifiedTime || '';
+        if (HAS_STORAGE) {
+          try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch(e) {}
+        }
+        updateSyncUi();
+      }
+      if (initialRestore && file && file.id) return restoreFromDrive();
+      setSyncStatus(file ? 'Googleに接続しました。既存バックアップを確認済みです。' : 'Googleに接続しました。まだDriveバックアップはありません。');
+      return true;
+    }).catch((err) => {
+      state.sync.connected = false;
+      state.sync.lastSyncError = err && err.message ? err.message : String(err);
+      if (HAS_STORAGE) {
+        try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch(e) {}
+      }
+      updateSyncUi();
+      setSyncStatus('接続失敗: ' + state.sync.lastSyncError);
+      return false;
+    });
+  }
+
+  function disconnectDrive() {
+    if (window.google && google.accounts && google.accounts.oauth2 && driveToken) {
+      try { google.accounts.oauth2.revoke(driveToken, function(){}); } catch(e) {}
+    }
+    driveToken = '';
+    driveTokenExpiresAt = 0;
+    state.sync.connected = false;
+    state.sync.lastSyncError = '';
+    saveState();
+    updateSyncUi();
+    setSyncStatus('Google接続を解除しました。');
   }
 
   function gradeCard(kind) {
@@ -662,6 +1030,29 @@ summary{cursor:pointer;font-weight:700;}
     });
     $('btnReset').addEventListener('click', resetProgress);
 
+    $('clientIdInput').addEventListener('change', updateStoredClientId);
+    $('autoSyncToggle').addEventListener('change', function() {
+      state.sync.auto = !!this.checked;
+      saveState();
+      updateSyncUi();
+      setSyncStatus(state.sync.auto ? '自動バックアップを有効にしました。' : '自動バックアップを停止しました。');
+    });
+    $('btnConnectDrive').addEventListener('click', () => connectDrive(true));
+    $('btnBackupNow').addEventListener('click', () => {
+      updateStoredClientId();
+      if (!state.sync.connected) {
+        connectDrive(false).then((ok) => { if (ok) backupToDrive('manual'); });
+      } else {
+        backupToDrive('manual');
+      }
+    });
+    $('btnRestoreNow').addEventListener('click', () => {
+      updateStoredClientId();
+      if (!state.sync.connected) connectDrive(true);
+      else restoreFromDrive();
+    });
+    $('btnDisconnectDrive').addEventListener('click', disconnectDrive);
+
     window.addEventListener('beforeinstallprompt', (e) => {
       e.preventDefault();
       deferredPrompt = e;
@@ -679,13 +1070,15 @@ summary{cursor:pointer;font-weight:700;}
   function init() {
     populateSelectors();
     $('searchInput').value = state.filters.search || '';
+    $('originText').textContent = location.origin;
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('./sw.js').catch(() => {});
     }
     installHandlers();
     updateStudyView();
     renderList();
-    setStatus('初期表示しました。説明書ボタンから、このアプリの狙いと構成理由を読めます。');
+    updateSyncUi();
+    setStatus('初期表示しました。説明書ボタンから、このアプリの狙いと構成理由を読めます。Drive保存を使う場合はOAuthクライアントIDを入れて「Googleに接続」を押してください。');
   }
 
   init();
