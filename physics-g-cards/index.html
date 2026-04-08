@@ -932,10 +932,18 @@ summary{cursor:pointer;font-weight:700;}
       showTab('study');
       document.querySelector('.flashcard').scrollIntoView({behavior:'smooth', block:'start'});
     });
-    $('btnManual').addEventListener('click', () => showTab('guide'));
+    const openGuide = () => {
+      showTab('guide');
+      requestAnimationFrame(() => {
+        const el = $('viewGuide');
+        if (el) el.scrollIntoView({behavior:'smooth', block:'start'});
+      });
+      setStatus('説明書を開きました。学習の狙いと構成理由を読めます。');
+    };
+    $('btnManual').addEventListener('click', openGuide);
     $('tabStudy').addEventListener('click', () => showTab('study'));
     $('tabList').addEventListener('click', () => showTab('list'));
-    $('tabGuide').addEventListener('click', () => showTab('guide'));
+    $('tabGuide').addEventListener('click', openGuide);
 
     $('btnReveal').addEventListener('click', () => {
       state.revealed = true;
