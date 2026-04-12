@@ -1,4 +1,4 @@
-const CACHE='physics-g-cards-v2';
+const CACHE='physics-g-cards-v3';
 const ASSETS=['./','./index.html','./manifest.webmanifest','./sw.js','./icon-192.png','./icon-512.png'];
 self.addEventListener('install', event => {
   event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(ASSETS)));

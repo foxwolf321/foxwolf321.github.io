@@ -65,6 +65,18 @@ details{border:1px solid #e6ebf5;border-radius:14px;padding:12px 14px;background
 summary{cursor:pointer;font-weight:700;}
 .hidden{display:none !important;}
 
+.formula-item{border:1px solid #e6ebf5;border-radius:16px;padding:16px;margin-bottom:12px;background:#fff;scroll-margin-top:18px;}
+.formula-item h3{margin:0 0 8px;font-size:1.06rem;}
+.formula-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:10px;}
+.formula-block{border:1px solid #e9eef6;border-radius:14px;padding:12px;background:#fafcff;}
+.formula-block h4{margin:0 0 8px;font-size:.95rem;}
+.formula-block ul{margin:0;padding-left:18px;}
+.formula-block li{margin:0 0 6px;}
+.formula-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px;}
+.formula-lead{color:var(--sub);margin:6px 0 10px;}
+@media (max-width:820px){.formula-grid{grid-template-columns:1fr;}}
+
+
 .sync-grid{display:grid;grid-template-columns:1.3fr 1fr;gap:12px;margin-top:12px;}
 .sync-box{background:#f8fbff;border:1px solid #dce7f5;border-radius:16px;padding:14px;}
 .sync-actions{display:flex;flex-wrap:wrap;gap:10px;}
@@ -90,6 +102,7 @@ summary{cursor:pointer;font-weight:700;}
     <div class="top-actions">
       <button id="btnStart" class="primary">カード学習を始める</button>
       <button id="btnManual" class="soft">説明書を読む</button>
+      <button id="btnFormula" class="soft">公式集を開く</button>
       <button id="btnExport">進捗を書き出す</button>
       <button id="btnImport">進捗を読み込む</button>
       <button id="btnReset" class="danger">進捗を初期化</button>
@@ -131,6 +144,7 @@ summary{cursor:pointer;font-weight:700;}
   <div class="tabbar">
     <button id="tabStudy" class="active">カード学習</button>
     <button id="tabList">カード一覧・検索</button>
+    <button id="tabFormula">公式集</button>
     <button id="tabGuide">説明書</button>
   </div>
 
@@ -147,7 +161,7 @@ summary{cursor:pointer;font-weight:700;}
       </div>
     </div>
 
-    <div class="flashcard" id="flashcard" style="margin-top:14px;" role="button" tabindex="0" aria-label="カード。タップまたはEnterで答えを表示">
+    <div class="flashcard" style="margin-top:14px;">
       <div class="kicker">表</div>
       <div class="prompt" id="cardPrompt">読み込み中…</div>
       <div class="answer" id="cardAnswer"></div>
@@ -160,7 +174,6 @@ summary{cursor:pointer;font-weight:700;}
       <button id="gradeEasy" class="easy">余裕</button>
     </div>
     <div class="meta" id="scheduleText"></div>
-    <p class="note" id="tapHint" style="margin-top:8px;">カード本体をタップしても答えを表示できます。</p>
 
     <div class="stats">
       <div class="stat"><span class="n" id="dueCount">0</span><span>今すぐ復習</span></div>
@@ -177,6 +190,7 @@ summary{cursor:pointer;font-weight:700;}
       <button id="dueOnlyToggle" class="active">期限カード優先</button>
       <button id="btnShuffle">並び替え</button>
       <button id="btnOpenCurrent" class="soft">このカードを一覧で開く</button>
+      <button id="btnOpenCurrentFormula" class="soft">このテーマの公式集</button>
     </div>
 
     <div class="section-title">使い分けの目安</div>
@@ -197,9 +211,29 @@ summary{cursor:pointer;font-weight:700;}
     <div style="margin-top:12px;" id="cardList"></div>
   </section>
 
+
+  <section id="viewFormula" class="view panel">
+    <h2>力学 公式集</h2>
+    <p class="formula-lead">カード学習で点になった知識を、テーマごとにまとめて見直す参照モードです。ここを読んでも正誤や頻度は変わりません。</p>
+    <div class="row">
+      <input type="search" id="formulaSearch" placeholder="テーマ名・法則名・キーワードで検索（例：向心力、運動量保存、反発係数）">
+      <select id="formulaThemeFilter"></select>
+      <button id="btnClearFormulaSearch">検索クリア</button>
+    </div>
+    <div class="meta" id="formulaSummary"></div>
+    <div id="formulaList" style="margin-top:12px;"></div>
+  </section>
+
   <section id="viewGuide" class="view panel">
     <h2>このアプリの趣旨</h2>
-    <p>このアプリは、私立理系の受験物理でまず得点源にしやすい「力学」を、カード学習で回せる形にしたものです。<br>狙いは単なる公式暗記ではなく、法則の想起・使用条件の確認・解法方針の即断を一体化することです。<br><br>物理は「公式を覚えただけ」では解けませんが、逆に公式・条件・判断基準が頭に入っていないと問題文を読んでも手が止まります。<br>そこで本アプリでは、1つのテーマを「公式」「条件」「意味」「保存則」「単位」「典型判断」の6型で分解し、<br>特に私立理系で差がつきやすい『典型判断』を厚めにしています。<br><br>学習順としては、まず力学全体を回して、次に苦手テーマだけを絞り込む使い方を想定しています。</p>
+    <p>このアプリは、私立理系の受験物理でまず得点源にしやすい「力学」を、カード学習で回せる形にしたものです。<br>狙いは単なる公式暗記ではなく、法則の想起・使用条件の確認・解法方針の即断を一体化することです。<br><br>物理は「公式を覚えただけ」では解けませんが、逆に公式・条件・判断基準が頭に入っていないと問題文を読んでも手が止まります。<br>そこで本アプリでは、1つのテーマを「公式」「条件」「意味」「保存則」「単位」「典型判断」の6型で分解し、<br>特に私立理系で差がつきやすい『典型判断』を厚めにしています。<br><br>さらに今回は、カード学習だけでは全体像が見えにくい欠点を補うため、<strong>公式集</strong> を追加しました。<br>カードは「思い出す訓練」、公式集は「全体を見渡す参照」という役割分担です。<br><br>学習順としては、まずカードで回し、詰まったら公式集で整理し、問題演習の前に公式集で通覧する使い方を想定しています。</p>
+
+
+    <details open>
+      <summary>公式集を入れた理由</summary>
+      <p>カード学習は「思い出す」ことに強い一方で、知識が細かく分かれるため、全体の見通しを失いやすい欠点があります。そこで、テーマごとの主要公式・使用条件・単位・典型判断をまとめた <strong>公式集</strong> を入れました。</p>
+      <p>公式集は参照専用です。眺めても正解扱いにはならず、出題頻度にも影響しません。問題演習前の短時間確認や、カード学習で詰まったときの整理に使う想定です。</p>
+    </details>
 
     <details open>
       <summary>この構成にした理由</summary>
@@ -282,6 +316,7 @@ summary{cursor:pointer;font-weight:700;}
       return false;
     }
   }
+  const formulas = [{"theme": "位置・速度・加速度／等加速度運動", "importance": "最重要", "laws": ["速度  v = Δx/Δt", "加速度  a = Δv/Δt", "v = v₀ + at", "x = x₀ + v₀t + (1/2)at²", "v² - v₀² = 2a(x - x₀)"], "conditions": ["加速度が一定の区間で使う", "正方向と符号を最初に決める", "時間を消したいときは v² - v₀² = 2aΔx が便利"], "units": ["速度: m/s", "加速度: m/s²"], "pitfalls": ["速度が正でも加速度が負なら減速する", "落下・投げ上げは符号ミスが多い"], "judgment": ["x-t の傾き→速度", "v-t の傾き→加速度", "v-t の面積→変位", "a-t の面積→速度変化量"]}, {"theme": "力のつり合い・作用反作用・力の分解", "importance": "最重要", "laws": ["つり合い: 合力 = 0", "力は必要に応じて成分分解する"], "conditions": ["静止と等速直線運動では加速度 0 → 合力 0", "作用反作用は別物体、つり合いは同一物体に働く力"], "units": ["力: N"], "pitfalls": ["作用反作用をつり合いと混同しない", "力は着目した1物体だけに書く"], "judgment": ["斜面では平行・垂直方向に分ける", "連結体は一体で見るか別々で見るかを先に決める"]}, {"theme": "運動方程式", "importance": "最重要", "laws": ["F = ma", "ΣFₓ = maₓ", "ΣFᵧ = maᵧ"], "conditions": ["1本の式は1つの物体について立てる", "F は合力", "高校物理では通常、地面基準などの慣性系で考える"], "units": ["1 N = 1 kg·m/s²"], "pitfalls": ["個々の力と合力を混同しない", "張力を消したいか求めたいかで一体視と分離を使い分ける"], "judgment": ["座標軸は加速度や運動しそうな向きに合わせる", "途中の力関係を追うならまず運動方程式を疑う"]}, {"theme": "摩擦", "importance": "重要", "laws": ["最大静止摩擦力  f ≤ μN, 最大値 f = μN", "動摩擦力  f' = μ'N"], "conditions": ["静止している間は必要なだけ働き、上限が μN", "すべっている最中は動摩擦を使う"], "units": ["摩擦力: N"], "pitfalls": ["静止摩擦力が常に μN ではない", "向きは相対運動（またはその向き）と反対"], "judgment": ["「動き出す直前」→ 最大静止摩擦力", "「一定の速さですべる」→ 加速度 0 を使う"]}, {"theme": "円運動", "importance": "最重要", "laws": ["向心加速度  a = v²/r", "向心力  F = mv²/r", "v = 2πr/T"], "conditions": ["等速円運動では速さ一定でも加速度は 0 ではない", "向心力は常に中心向き"], "units": ["向心加速度: m/s²", "向心力: N"], "pitfalls": ["向心力は新しい力ではなく、既存の力の合力", "最高点・最低点で力の向き関係が変わる"], "judgment": ["何の力の合力が中心向きになるかを最初に確認する", "円運動 + 高さ変化ならエネルギーとの併用も疑う"]}, {"theme": "単振動", "importance": "重要", "laws": ["復元力  F = -kx", "周期  T = 2π√(m/k)", "角振動数  ω = √(k/m)"], "conditions": ["変位に比例して中心向きの力が働くとき単振動として扱える", "振幅が決まると端では速さ 0"], "units": ["ばね定数 k: N/m", "角振動数 ω: rad/s"], "pitfalls": ["速度最大は中心、加速度最大は端", "符号は『中心に戻す向き』になる"], "judgment": ["単振動は円運動の射影として見ると整理しやすい", "ばね + 質点はエネルギーでも追える"]}, {"theme": "万有引力", "importance": "重要", "laws": ["万有引力  F = G Mm/r²", "重力加速度  g = GM/r²"], "conditions": ["地表付近では g を一定近似することが多い", "衛星運動では万有引力が向心力を担う"], "units": ["G: N·m²/kg²", "g: m/s²"], "pitfalls": ["重力と万有引力の使い分けを混同しない", "中心向きで考える"], "judgment": ["衛星問題はまず『万有引力 = 向心力』を置く"]}, {"theme": "仕事・仕事率", "importance": "重要", "laws": ["仕事  W = Fd cosθ", "仕事率  P = W/t = Fv（同方向）"], "conditions": ["一定力なら W = Fd cosθ を使いやすい", "力と移動方向のなす角に注意する"], "units": ["仕事: J", "仕事率: W"], "pitfalls": ["力が垂直なら仕事 0", "正の仕事・負の仕事の区別を落としやすい"], "judgment": ["どの力が仕事をするかを先に列挙する", "エネルギーに持ち込めるかを考える入口になる"]}, {"theme": "力学的エネルギー", "importance": "最重要", "laws": ["運動エネルギー  K = (1/2)mv²", "重力による位置エネルギー  U = mgh", "ばねの弾性エネルギー  U = (1/2)kx²", "力学的エネルギー保存  K + U = 一定"], "conditions": ["非保存力の仕事を無視できるとき保存則を使う", "摩擦や外力の仕事があるときは仕事とエネルギーの関係まで広げる"], "units": ["エネルギー: J"], "pitfalls": ["保存するのは K と U の和", "位置エネルギーの基準位置は任意だが一貫させる"], "judgment": ["途中の力より始点・終点の速さや高さが大事ならエネルギーを優先する"]}, {"theme": "運動量・力積", "importance": "最重要", "laws": ["運動量  p = mv", "力積  I = FΔt = Δp", "運動量保存  Σp(前) = Σp(後)"], "conditions": ["外力の合計の力積が無視できる系で運動量保存", "運動量はベクトル量"], "units": ["運動量: kg·m/s", "力積: N·s"], "pitfalls": ["運動量保存は系全体に対して使う", "力積と仕事を混同しない"], "judgment": ["衝突・爆発を見たらまず運動量保存を疑う", "どの物体群を1つの系とみるかを最初に決める"]}, {"theme": "衝突・反発係数", "importance": "重要", "laws": ["反発係数  e = （離れる相対速度）/（近づく相対速度）"], "conditions": ["1次元衝突で特に使いやすい", "反発係数は運動量保存と併用することが多い"], "units": ["反発係数: 無次元"], "pitfalls": ["反発係数だけでは式が足りない", "力学的エネルギーは一般には保存しない"], "judgment": ["完全非弾性衝突なら合体後を考える", "『はね返る強さ』が問われたら反発係数を使う"]}, {"theme": "グラフ・典型判断メモ", "importance": "最重要", "laws": ["x-t 傾き→速度", "v-t 傾き→加速度", "v-t 面積→変位", "a-t 面積→速度変化量"], "conditions": ["グラフは軸の意味を先に確認する", "保存則は使える条件を満たすか必ず確認する"], "units": ["傾きや面積の次元を意識する"], "pitfalls": ["面積の符号を落としやすい", "『どの物体に着目するか』が曖昧だと全体が崩れる"], "judgment": ["まず正方向・着目物体・使えそうな保存則の候補を決める", "運動方程式 / エネルギー / 運動量 のどれが主役かを最初に選ぶ"]}];
   const HAS_STORAGE = storageAvailable();
   let state = loadState();
   let deck = [];
@@ -828,12 +863,14 @@ summary{cursor:pointer;font-weight:700;}
     fill('listThemeFilter', '全テーマ', themeOrder);
     fill('listTypeFilter', '全カード型', typeOrder);
     fill('listImportanceFilter', '全重要度', ['最重要','重要','標準']);
+    fill('formulaThemeFilter', '全テーマ', formulas.map(f => f.theme));
     $('themeFilter').value = state.filters.theme;
     $('typeFilter').value = state.filters.type;
     $('importanceFilter').value = state.filters.importance;
     $('listThemeFilter').value = state.filters.listTheme;
     $('listTypeFilter').value = state.filters.listType;
     $('listImportanceFilter').value = state.filters.listImportance;
+    $('formulaThemeFilter').value = state.filters.formulaTheme || 'all';
     $('dueOnlyToggle').classList.toggle('active', !!state.filters.dueOnly);
   }
 
@@ -862,6 +899,70 @@ summary{cursor:pointer;font-weight:700;}
     });
   }
 
+
+  function renderFormulaList() {
+    const q = (state.filters.formulaSearch || '').trim().toLowerCase();
+    const theme = state.filters.formulaTheme || 'all';
+    const list = formulas.filter(item => {
+      if (theme !== 'all' && item.theme !== theme) return false;
+      if (!q) return true;
+      const text = [item.theme, item.importance].concat(item.laws, item.conditions, item.units, item.pitfalls, item.judgment).join(' ').toLowerCase();
+      return text.includes(q);
+    });
+    $('formulaSummary').textContent = `該当 ${list.length} テーマ / 全${formulas.length}テーマ`;
+    const wrap = $('formulaList');
+    wrap.innerHTML = '';
+    list.forEach(item => {
+      const box = document.createElement('div');
+      box.className = 'formula-item';
+      box.id = 'formula-' + item.theme.replace(/[^\w\u3040-\u30ff\u3400-\u9fff-]+/g,'-');
+      const renderItems = arr => `<ul>${arr.map(v => `<li>${escapeHtml(v)}</li>`).join('')}</ul>`;
+      box.innerHTML = `
+        <h3>${escapeHtml(item.theme)} <span class="badge">${escapeHtml(item.importance)}</span></h3>
+        <div class="formula-grid">
+          <div class="formula-block"><h4>主要公式</h4>${renderItems(item.laws)}</div>
+          <div class="formula-block"><h4>使う条件</h4>${renderItems(item.conditions)}</div>
+          <div class="formula-block"><h4>単位</h4>${renderItems(item.units)}</div>
+          <div class="formula-block"><h4>混同しやすい点</h4>${renderItems(item.pitfalls)}</div>
+          <div class="formula-block" style="grid-column:1 / -1;"><h4>典型判断メモ</h4>${renderItems(item.judgment)}</div>
+        </div>
+        <div class="formula-actions">
+          <button class="soft formula-open-study" data-theme="${escapeHtml(item.theme)}">このテーマのカードを学習</button>
+          <button class="formula-open-list" data-theme="${escapeHtml(item.theme)}">このテーマを一覧で開く</button>
+        </div>
+      `;
+      wrap.appendChild(box);
+    });
+  }
+
+  function openThemeInStudy(theme) {
+    state.filters.theme = theme;
+    state.filters.type = 'all';
+    state.filters.importance = 'all';
+    $('themeFilter').value = theme;
+    $('typeFilter').value = 'all';
+    $('importanceFilter').value = 'all';
+    state.revealed = false;
+    showTab('study');
+    updateStudyView();
+    document.querySelector('.flashcard').scrollIntoView({behavior:'smooth', block:'start'});
+    saveState();
+  }
+
+  function openThemeInList(theme) {
+    state.filters.search = '';
+    $('searchInput').value = '';
+    state.filters.listTheme = theme;
+    state.filters.listType = 'all';
+    state.filters.listImportance = 'all';
+    $('listThemeFilter').value = theme;
+    $('listTypeFilter').value = 'all';
+    $('listImportanceFilter').value = 'all';
+    showTab('list');
+    renderList();
+    saveState();
+  }
+
   function escapeHtml(str) {
     return str
       .replace(/&/g,'&amp;')
@@ -874,6 +975,7 @@ summary{cursor:pointer;font-weight:700;}
     const map = {
       study: ['tabStudy','viewStudy'],
       list: ['tabList','viewList'],
+      formula: ['tabFormula','viewFormula'],
       guide: ['tabGuide','viewGuide'],
     };
     for (const key in map) {
@@ -881,6 +983,7 @@ summary{cursor:pointer;font-weight:700;}
       $(map[key][1]).classList.toggle('active', key === tab);
     }
     if (tab === 'list') renderList();
+    if (tab === 'formula') renderFormulaList();
   }
 
   function exportProgress() {
@@ -934,23 +1037,18 @@ summary{cursor:pointer;font-weight:700;}
       document.querySelector('.flashcard').scrollIntoView({behavior:'smooth', block:'start'});
     });
     $('btnManual').addEventListener('click', () => showTab('guide'));
+    $('btnFormula').addEventListener('click', () => {
+      showTab('formula');
+      document.getElementById('viewFormula').scrollIntoView({behavior:'smooth', block:'start'});
+    });
     $('tabStudy').addEventListener('click', () => showTab('study'));
     $('tabList').addEventListener('click', () => showTab('list'));
+    $('tabFormula').addEventListener('click', () => showTab('formula'));
     $('tabGuide').addEventListener('click', () => showTab('guide'));
 
-    function revealCurrentCard() {
+    $('btnReveal').addEventListener('click', () => {
       state.revealed = true;
       updateStudyView();
-    }
-    $('btnReveal').addEventListener('click', revealCurrentCard);
-    $('flashcard').addEventListener('click', () => {
-      if (!state.revealed) revealCurrentCard();
-    });
-    $('flashcard').addEventListener('keydown', (e) => {
-      if ((e.key === 'Enter' || e.key === ' ') && !state.revealed) {
-        e.preventDefault();
-        revealCurrentCard();
-      }
     });
     $('btnPrev').addEventListener('click', () => {
       if (!deck.length) return;
@@ -1000,6 +1098,30 @@ summary{cursor:pointer;font-weight:700;}
       renderList();
       saveState();
     });
+    $('formulaSearch').addEventListener('input', (e) => {
+      state.filters.formulaSearch = e.target.value;
+      renderFormulaList();
+      saveState();
+    });
+    $('formulaThemeFilter').addEventListener('change', () => {
+      state.filters.formulaTheme = $('formulaThemeFilter').value;
+      renderFormulaList();
+      saveState();
+    });
+    $('btnClearFormulaSearch').addEventListener('click', () => {
+      state.filters.formulaSearch = '';
+      state.filters.formulaTheme = 'all';
+      $('formulaSearch').value = '';
+      $('formulaThemeFilter').value = 'all';
+      renderFormulaList();
+      saveState();
+    });
+    $('formulaList').addEventListener('click', (e) => {
+      const theme = e.target.getAttribute('data-theme');
+      if (!theme) return;
+      if (e.target.classList.contains('formula-open-study')) openThemeInStudy(theme);
+      if (e.target.classList.contains('formula-open-list')) openThemeInList(theme);
+    });
     $('dueOnlyToggle').addEventListener('click', () => {
       state.filters.dueOnly = !state.filters.dueOnly;
       $('dueOnlyToggle').classList.toggle('active', !!state.filters.dueOnly);
@@ -1031,6 +1153,17 @@ summary{cursor:pointer;font-weight:700;}
         const el = $('card-' + card.id);
         if (el) el.scrollIntoView({behavior:'smooth', block:'start'});
       });
+    });
+    $('btnOpenCurrentFormula').addEventListener('click', () => {
+      const card = deck[current];
+      if (!card) return;
+      state.filters.formulaSearch = '';
+      state.filters.formulaTheme = card.theme;
+      $('formulaSearch').value = '';
+      $('formulaThemeFilter').value = card.theme;
+      showTab('formula');
+      renderFormulaList();
+      saveState();
     });
 
     $('btnExport').addEventListener('click', exportProgress);
@@ -1088,8 +1221,9 @@ summary{cursor:pointer;font-weight:700;}
     installHandlers();
     updateStudyView();
     renderList();
+    renderFormulaList();
     updateSyncUi();
-    setStatus('初期表示しました。説明書ボタンから、このアプリの狙いと構成理由を読めます。Drive保存を使う場合はOAuthクライアントIDを入れて「Googleに接続」を押してください。');
+    setStatus('初期表示しました。カード学習・公式集・説明書を切り替えて使えます。Drive保存を使う場合はOAuthクライアントIDを入れて「Googleに接続」を押してください。');
   }
 
   init();
