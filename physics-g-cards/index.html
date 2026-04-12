@@ -147,7 +147,7 @@ summary{cursor:pointer;font-weight:700;}
       </div>
     </div>
 
-    <div class="flashcard" style="margin-top:14px;">
+    <div class="flashcard" id="flashcard" style="margin-top:14px;" role="button" tabindex="0" aria-label="カード。タップまたはEnterで答えを表示">
       <div class="kicker">表</div>
       <div class="prompt" id="cardPrompt">読み込み中…</div>
       <div class="answer" id="cardAnswer"></div>
@@ -160,6 +160,7 @@ summary{cursor:pointer;font-weight:700;}
       <button id="gradeEasy" class="easy">余裕</button>
     </div>
     <div class="meta" id="scheduleText"></div>
+    <p class="note" id="tapHint" style="margin-top:8px;">カード本体をタップしても答えを表示できます。</p>
 
     <div class="stats">
       <div class="stat"><span class="n" id="dueCount">0</span><span>今すぐ復習</span></div>
@@ -932,22 +933,24 @@ summary{cursor:pointer;font-weight:700;}
       showTab('study');
       document.querySelector('.flashcard').scrollIntoView({behavior:'smooth', block:'start'});
     });
-    const openGuide = () => {
-      showTab('guide');
-      requestAnimationFrame(() => {
-        const el = $('viewGuide');
-        if (el) el.scrollIntoView({behavior:'smooth', block:'start'});
-      });
-      setStatus('説明書を開きました。学習の狙いと構成理由を読めます。');
-    };
-    $('btnManual').addEventListener('click', openGuide);
+    $('btnManual').addEventListener('click', () => showTab('guide'));
     $('tabStudy').addEventListener('click', () => showTab('study'));
     $('tabList').addEventListener('click', () => showTab('list'));
-    $('tabGuide').addEventListener('click', openGuide);
+    $('tabGuide').addEventListener('click', () => showTab('guide'));
 
-    $('btnReveal').addEventListener('click', () => {
+    function revealCurrentCard() {
       state.revealed = true;
       updateStudyView();
+    }
+    $('btnReveal').addEventListener('click', revealCurrentCard);
+    $('flashcard').addEventListener('click', () => {
+      if (!state.revealed) revealCurrentCard();
+    });
+    $('flashcard').addEventListener('keydown', (e) => {
+      if ((e.key === 'Enter' || e.key === ' ') && !state.revealed) {
+        e.preventDefault();
+        revealCurrentCard();
+      }
     });
     $('btnPrev').addEventListener('click', () => {
       if (!deck.length) return;
