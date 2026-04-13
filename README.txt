@@ -1,16 +1,22 @@
-数学公式カード Drive同期版
+このフォルダは「私立理系 受験物理 基本法則カード（力学編・Drive保存版・公式集つき版）」のPWA一式です。
 
-これは GitHub Pages など HTTPS 上で動かす前提の PWA です。
+入っているファイル:
+- index.html
+- manifest.webmanifest
+- sw.js
+- icon-192.png
+- icon-512.png
+- README.txt
 
-Google Drive 自動バックアップを使うには:
-1. Google Cloud で Google Drive API を有効化
-2. OAuth consent / Data Access で drive.appdata を追加
-3. OAuth Client ID を Web application で作成
-4. Authorized JavaScript origins に公開URLの origin を追加
-   例: https://foxwolf321.github.io
-5. アプリの設定欄にクライアントIDを貼り付けて Google に接続
+特徴:
+1. 力学92枚の頻度調整カード学習
+2. Google Drive保存（appDataFolder）
+3. 公式集タブあり
+4. 説明書タブあり
+5. JSON書き出し・読み込みあり
 
-補足:
-- 保存先は Drive の appDataFolder です。通常の Drive 一覧には表示されません。
-- 自動バックアップは、接続済みかつ有効なアクセストークンがある間だけ動きます。
-- 認証期限が切れた場合は「Googleに接続」を押して再接続してください。
+使い方:
+1. このフォルダごと GitHub Pages の physics-g-cards などに配置します
+2. https://.../physics-g-cards/ を開きます
+3. Drive保存を使う場合は OAuth クライアントID を入れて Google に接続します
+4. 公式集ボタンまたは公式集タブから、テーマごとの主要公式・条件・単位・典型判断を参照できます

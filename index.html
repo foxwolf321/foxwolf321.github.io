@@ -1,0 +1,1233 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>私立理系 受験物理 基本法則カード（力学編・Drive保存版・公式集つき版）</title>
+<meta name="theme-color" content="#0f4c81">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="物理カード">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="192x192" href="./icon-192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="./icon-512.png">
+<link rel="apple-touch-icon" href="./icon-192.png">
+<style>
+:root {
+  --bg:#f5f7fb; --panel:#ffffff; --line:#dbe3ef; --text:#1f2837; --sub:#5d6677;
+  --accent:#0f4c81; --accent-2:#eaf3fb; --danger:#ffeef0; --warn:#fff7e8; --ok:#ecf9f0; --easy:#eef7ff;
+}
+*{box-sizing:border-box;}
+body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Hiragino Kaku Gothic ProN","Yu Gothic UI","Meiryo",sans-serif;line-height:1.58;}
+.wrap{max-width:1080px;margin:0 auto;padding:16px;}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:16px;box-shadow:0 8px 24px rgba(20,40,90,.06);}
+header.panel{margin-bottom:14px;}
+h1{font-size:1.55rem;margin:0 0 8px;}
+h2{font-size:1.15rem;margin:0 0 10px;}
+p{margin:0 0 10px;}
+.top-actions,.row,.chips,.grade-row,.results,.filters{display:flex;flex-wrap:wrap;gap:10px;}
+button,input,select{font:inherit;}
+button{border:1px solid var(--line);background:#fff;color:var(--text);border-radius:999px;padding:10px 14px;}
+button.primary{background:var(--accent);border-color:var(--accent);color:#fff;}
+button.soft{background:var(--accent-2);border-color:#cfe0f1;color:#0f4c81;}
+button.danger{background:var(--danger);border-color:#f2d3da;color:#a33f55;}
+button.warn{background:var(--warn);border-color:#f2dfbb;color:#996c1d;}
+button.ok{background:var(--ok);border-color:#d3ebdb;color:#256a41;}
+button.easy{background:var(--easy);border-color:#d0e2fb;color:#1e5f96;}
+button.active{background:#1f2837;color:#fff;border-color:#1f2837;}
+button:disabled{opacity:.6;}
+input[type=search], select{padding:11px 13px;border:1px solid var(--line);border-radius:14px;background:#fff;}
+input[type=search]{flex:1;min-width:220px;}
+select{min-width:180px;}
+#status{margin-top:8px;padding:10px 12px;border-radius:12px;background:#f8fbff;border:1px solid #e1e8f5;color:#45506a;font-size:.95rem;}
+.tabbar{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap;}
+.view{display:none;}
+.view.active{display:block;}
+.flashcard{border:1px solid #e6edf6;border-radius:22px;padding:20px;min-height:260px;background:linear-gradient(180deg,#fff,#fbfcff);}
+.kicker{font-size:.82rem;color:var(--sub);text-transform:uppercase;letter-spacing:.04em;}
+.prompt{font-size:1.32rem;font-weight:700;margin-top:10px;white-space:pre-wrap;line-height:1.52;}
+.answer{margin-top:16px;padding:14px;border-radius:16px;border:1px solid #d8e5fb;background:#f7fbff;white-space:pre-wrap;display:none;}
+.meta{margin-top:10px;color:var(--sub);font-size:.95rem;}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:14px;}
+.stat{background:#f8faff;border:1px solid #e6ecf8;border-radius:14px;padding:12px;}
+.stat .n{display:block;font-size:1.32rem;font-weight:700;}
+.section-title{margin:16px 0 8px;font-weight:700;}
+.note{font-size:.93rem;color:var(--sub);}
+.badge{display:inline-block;padding:4px 9px;border-radius:999px;background:#f2f5fb;border:1px solid #e0e7f2;font-size:.85rem;color:#4d5565;}
+.card-item{border:1px solid #e6ebf5;border-radius:16px;padding:14px;margin-bottom:10px;background:#fff;scroll-margin-top:18px;}
+.card-item h3{margin:0 0 8px;font-size:1.02rem;}
+.card-item .ans{margin-top:10px;font-weight:600;white-space:pre-wrap;}
+.card-item .tags{margin-top:10px;display:flex;flex-wrap:wrap;gap:6px;}
+.table-wrap{overflow:auto;}
+table{width:100%;border-collapse:collapse;background:#fff;border:1px solid #e6ebf5;border-radius:14px;overflow:hidden;}
+th,td{padding:10px 12px;border-bottom:1px solid #e9eef6;vertical-align:top;text-align:left;}
+th{background:#f8fbff;white-space:nowrap;}
+details{border:1px solid #e6ebf5;border-radius:14px;padding:12px 14px;background:#fff;margin-bottom:10px;}
+summary{cursor:pointer;font-weight:700;}
+.hidden{display:none !important;}
+
+.formula-item{border:1px solid #e6ebf5;border-radius:16px;padding:16px;margin-bottom:12px;background:#fff;scroll-margin-top:18px;}
+.formula-item h3{margin:0 0 8px;font-size:1.06rem;}
+.formula-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:10px;}
+.formula-block{border:1px solid #e9eef6;border-radius:14px;padding:12px;background:#fafcff;}
+.formula-block h4{margin:0 0 8px;font-size:.95rem;}
+.formula-block ul{margin:0;padding-left:18px;}
+.formula-block li{margin:0 0 6px;}
+.formula-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px;}
+.formula-lead{color:var(--sub);margin:6px 0 10px;}
+@media (max-width:820px){.formula-grid{grid-template-columns:1fr;}}
+
+
+.sync-grid{display:grid;grid-template-columns:1.3fr 1fr;gap:12px;margin-top:12px;}
+.sync-box{background:#f8fbff;border:1px solid #dce7f5;border-radius:16px;padding:14px;}
+.sync-actions{display:flex;flex-wrap:wrap;gap:10px;}
+.chk{display:flex;align-items:center;gap:8px;color:var(--sub);}
+.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;background:#fff;padding:2px 6px;border-radius:8px;border:1px solid #e5ebf6;}
+#clientIdInput{width:100%;padding:11px 13px;border:1px solid var(--line);border-radius:14px;background:#fff;}
+#syncStatus{margin-top:10px;padding:10px 12px;border-radius:12px;background:#fff;border:1px solid #e1e8f5;color:#45506a;font-size:.95rem;white-space:pre-wrap;}
+
+@media (max-width:820px) {
+  .sync-grid{grid-template-columns:1fr;}
+
+  .wrap{padding:12px;}
+  .prompt{font-size:1.14rem;}
+  .stats{grid-template-columns:repeat(2,minmax(0,1fr));}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="panel">
+    <h1>私立理系 受験物理 基本法則カード（力学編・Drive保存版・公式集つき版）</h1>
+    <p>私立理系で最初に得点源にしやすい <strong>力学92枚</strong> を、頻度調整つきカード学習にした版です。公式だけでなく、<strong>条件</strong> と <strong>典型判断</strong> を厚めに入れ、<strong>Google Drive保存</strong> と <strong>公式集</strong> にも対応させています。</p>
+    <div class="top-actions">
+      <button id="btnStart" class="primary">カード学習を始める</button>
+      <button id="btnManual" class="soft">説明書を読む</button>
+      <button id="btnFormula" class="soft">公式集を開く</button>
+      <button id="btnExport">進捗を書き出す</button>
+      <button id="btnImport">進捗を読み込む</button>
+      <button id="btnReset" class="danger">進捗を初期化</button>
+      <button id="btnInstall" class="ok hidden">ホーム画面に追加</button>
+    </div>
+    <input id="importFile" type="file" accept="application/json" class="hidden">
+    
+    <div id="status">初期化中…</div>
+    <div class="sync-grid">
+      <section class="sync-box">
+        <h2>Google Drive 保存</h2>
+        <p class="note">Google Drive の <strong>appDataFolder</strong> に、学習進捗をバックアップ・復元できます。通常のDrive一覧には表示されません。</p>
+        <input id="clientIdInput" type="text" placeholder="OAuth クライアントIDを貼り付け（例: 123...apps.googleusercontent.com）">
+        <div class="sync-actions" style="margin-top:10px;">
+          <button id="btnConnectDrive" class="primary">Googleに接続</button>
+          <button id="btnBackupNow" class="ok">今すぐバックアップ</button>
+          <button id="btnRestoreNow" class="soft">Driveから復元</button>
+          <button id="btnDisconnectDrive">接続解除</button>
+        </div>
+        <div class="row" style="margin-top:10px;">
+          <label class="chk"><input id="autoSyncToggle" type="checkbox"> 学習内容が変わるたび自動バックアップ</label>
+        </div>
+        <div id="syncStatus">Drive未接続です。</div>
+      </section>
+      <section class="sync-box">
+        <h2>最初の設定</h2>
+        <ol class="note" style="padding-left:18px;margin:0;">
+          <li>Google Cloud で <strong>Drive API</strong> を有効化</li>
+          <li>OAuth 同意画面で <strong>drive.appdata</strong> を追加</li>
+          <li>OAuth クライアントを <strong>Web application</strong> で作成</li>
+          <li>Authorized JavaScript origins に <span class="mono" id="originText"></span> を追加</li>
+          <li>発行されたクライアントIDを左へ貼って接続</li>
+        </ol>
+        <p class="note" style="margin-top:10px;">単独利用なら、普段は <strong>今すぐバックアップ</strong> を押す使い方で十分です。自動保存は必要なときだけオンにできます。</p>
+      </section>
+    </div>
+  </header>
+
+  <div class="tabbar">
+    <button id="tabStudy" class="active">カード学習</button>
+    <button id="tabList">カード一覧・検索</button>
+    <button id="tabFormula">公式集</button>
+    <button id="tabGuide">説明書</button>
+  </div>
+
+  <section id="viewStudy" class="view active panel">
+    <div class="row" style="justify-content:space-between;align-items:center;">
+      <div>
+        <div id="queueLabel">読み込み中…</div>
+        <div class="meta" id="cardMeta"></div>
+      </div>
+      <div class="row">
+        <button id="btnPrev">前へ</button>
+        <button id="btnNext">次へ</button>
+        <button id="btnReveal" class="soft">答えを見る</button>
+      </div>
+    </div>
+
+    <div class="flashcard" style="margin-top:14px;">
+      <div class="kicker">表</div>
+      <div class="prompt" id="cardPrompt">読み込み中…</div>
+      <div class="answer" id="cardAnswer"></div>
+    </div>
+
+    <div class="grade-row hidden" id="gradeRow" style="margin-top:14px;">
+      <button id="gradeAgain" class="danger">忘れた</button>
+      <button id="gradeHard" class="warn">あやしい</button>
+      <button id="gradeGood" class="ok">できた</button>
+      <button id="gradeEasy" class="easy">余裕</button>
+    </div>
+    <div class="meta" id="scheduleText"></div>
+
+    <div class="stats">
+      <div class="stat"><span class="n" id="dueCount">0</span><span>今すぐ復習</span></div>
+      <div class="stat"><span class="n" id="totalCount">0</span><span>総カード数</span></div>
+      <div class="stat"><span class="n" id="masteredCount">0</span><span>安定カード</span></div>
+      <div class="stat"><span class="n" id="weakCount">0</span><span>弱点カード</span></div>
+    </div>
+
+    <div class="section-title">出題設定</div>
+    <div class="filters">
+      <select id="themeFilter"></select>
+      <select id="typeFilter"></select>
+      <select id="importanceFilter"></select>
+      <button id="dueOnlyToggle" class="active">期限カード優先</button>
+      <button id="btnShuffle">並び替え</button>
+      <button id="btnOpenCurrent" class="soft">このカードを一覧で開く</button>
+      <button id="btnOpenCurrentFormula" class="soft">このテーマの公式集</button>
+    </div>
+
+    <div class="section-title">使い分けの目安</div>
+    <p class="note">時間や加速度まで追うなら <strong>運動方程式</strong>、速さと高さ・位置の関係なら <strong>エネルギー</strong>、衝突や爆発なら <strong>運動量</strong> をまず疑う、という思想で設計しています。</p>
+  </section>
+
+  <section id="viewList" class="view panel">
+    <div class="row">
+      <input type="search" id="searchInput" placeholder="法則名・テーマ・キーワードで検索（例：向心力、反発係数、エネルギー保存）">
+    </div>
+    <div class="filters" style="margin-top:10px;">
+      <select id="listThemeFilter"></select>
+      <select id="listTypeFilter"></select>
+      <select id="listImportanceFilter"></select>
+      <button id="btnClearSearch">検索クリア</button>
+    </div>
+    <div class="meta" id="searchSummary"></div>
+    <div style="margin-top:12px;" id="cardList"></div>
+  </section>
+
+
+  <section id="viewFormula" class="view panel">
+    <h2>力学 公式集</h2>
+    <p class="formula-lead">カード学習で点になった知識を、テーマごとにまとめて見直す参照モードです。ここを読んでも正誤や頻度は変わりません。</p>
+    <div class="row">
+      <input type="search" id="formulaSearch" placeholder="テーマ名・法則名・キーワードで検索（例：向心力、運動量保存、反発係数）">
+      <select id="formulaThemeFilter"></select>
+      <button id="btnClearFormulaSearch">検索クリア</button>
+    </div>
+    <div class="meta" id="formulaSummary"></div>
+    <div id="formulaList" style="margin-top:12px;"></div>
+  </section>
+
+  <section id="viewGuide" class="view panel">
+    <h2>このアプリの趣旨</h2>
+    <p>このアプリは、私立理系の受験物理でまず得点源にしやすい「力学」を、カード学習で回せる形にしたものです。<br>狙いは単なる公式暗記ではなく、法則の想起・使用条件の確認・解法方針の即断を一体化することです。<br><br>物理は「公式を覚えただけ」では解けませんが、逆に公式・条件・判断基準が頭に入っていないと問題文を読んでも手が止まります。<br>そこで本アプリでは、1つのテーマを「公式」「条件」「意味」「保存則」「単位」「典型判断」の6型で分解し、<br>特に私立理系で差がつきやすい『典型判断』を厚めにしています。<br><br>さらに今回は、カード学習だけでは全体像が見えにくい欠点を補うため、<strong>公式集</strong> を追加しました。<br>カードは「思い出す訓練」、公式集は「全体を見渡す参照」という役割分担です。<br><br>学習順としては、まずカードで回し、詰まったら公式集で整理し、問題演習の前に公式集で通覧する使い方を想定しています。</p>
+
+
+    <details open>
+      <summary>公式集を入れた理由</summary>
+      <p>カード学習は「思い出す」ことに強い一方で、知識が細かく分かれるため、全体の見通しを失いやすい欠点があります。そこで、テーマごとの主要公式・使用条件・単位・典型判断をまとめた <strong>公式集</strong> を入れました。</p>
+      <p>公式集は参照専用です。眺めても正解扱いにはならず、出題頻度にも影響しません。問題演習前の短時間確認や、カード学習で詰まったときの整理に使う想定です。</p>
+    </details>
+
+    <details open>
+      <summary>この構成にした理由</summary>
+      <p>物理は「公式を知っている」だけでは不十分ですが、公式・条件・判断基準が頭にないと問題文を読んでも着手できません。そこで、このアプリでは <strong>想起</strong>・<strong>条件判定</strong>・<strong>解法の入口判断</strong> をまとめて鍛えるように設計しています。</p>
+      <p>私立理系では、力学・電磁気が軸になりやすく、しかも標準問題を速く正確に処理する力が重要です。そのため、力学の中でも <strong>運動方程式・円運動・エネルギー保存</strong> を特に厚くしています。</p>
+    </details>
+
+    <details open>
+      <summary>カード型ごとの狙い</summary>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>カード型</th><th>枚数</th><th>狙い</th></tr></thead>
+          <tbody>
+            <tr><td>公式</td><td>24枚</td><td>法則・定義・基本式を即答するためのカードです。知らなければスタート地点に立てない内容を集めています。</td></tr>
+<tr><td>条件</td><td>19枚</td><td>「その式や法則が使えるのはいつか」を確認するカードです。物理では条件を外して使う誤りが多いため、公式と同じくらい重要です。</td></tr>
+<tr><td>意味</td><td>14枚</td><td>量や概念の意味を押さえるカードです。式の丸暗記を避け、向き・符号・物理的イメージを定着させます。</td></tr>
+<tr><td>保存則</td><td>6枚</td><td>エネルギー保存・運動量保存など、方針選択の軸になる内容です。何が保存され、何が保存されないかを整理します。</td></tr>
+<tr><td>単位</td><td>4枚</td><td>軽視されやすいですが、単位は式の意味確認とミス防止に効きます。特に混同しやすいところだけを厳選しています。</td></tr>
+<tr><td>典型判断</td><td>25枚</td><td>このアプリの核です。「何を使うか」「どこに着目するか」「図をどう描くか」を素早く選ぶためのカードです。私立理系向けに最も厚くしています。</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </details>
+
+    <details open>
+      <summary>項目ごとの狙い（力学12テーマ）</summary>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>テーマ</th><th>枚数</th><th>狙い</th></tr></thead>
+          <tbody>
+            <tr><td>位置・速度・加速度／等加速度運動</td><td>10枚</td><td>力学の土台です。速度・加速度・グラフの意味を瞬時に区別できないと、その後の立式が不安定になります。私立の標準問題でも、符号処理とグラフ読解で失点しやすいので最初に固めます。</td></tr>
+<tr><td>力のつり合い・作用反作用・力の分解</td><td>8枚</td><td>運動方程式に入る前の準備です。「同一物体に働く力」と「別物体に働く力」を混同しないことが重要です。斜面・連結体・垂直抗力にすぐ入れるようにします。</td></tr>
+<tr><td>運動方程式</td><td>14枚</td><td>力学の中心です。私立理系では頻度も高く、他分野の基盤にもなります。ここでは式そのものより、「どの物体に」「どの方向で」立てるかの判断力を重視しています。</td></tr>
+<tr><td>摩擦</td><td>8枚</td><td>静止摩擦と動摩擦、向きの判定、動き出す直前の判断など、混乱しやすい点を切り分ける目的で作っています。問題演習で差がつきやすい分野です。</td></tr>
+<tr><td>円運動</td><td>10枚</td><td>向心力を「新しい力」と誤解しないこと、鉛直円運動で中心向きの合力を正しく作ることがポイントです。私立では典型処理が頻出なので厚めです。</td></tr>
+<tr><td>単振動</td><td>8枚</td><td>単振動は円運動・エネルギー・波動への橋渡しです。どこで速さ最大か、加速度最大かを反射的に言える状態を狙います。</td></tr>
+<tr><td>万有引力・重力場</td><td>5枚</td><td>衛星運動や重力加速度の理解に必要です。出題頻度は上位ほどではありませんが、知っていれば短く取れる問題が多いので押さえます。</td></tr>
+<tr><td>仕事・仕事率</td><td>5枚</td><td>エネルギー法の入口です。力と変位の向き、負の仕事、仕事率の意味を曖昧にしないための区画です。</td></tr>
+<tr><td>力学的エネルギー保存</td><td>10枚</td><td>私立理系で特に得点効率が高い分野です。運動方程式で行くかエネルギーで行くかの分岐点になるため、保存則と典型判断を重くしています。</td></tr>
+<tr><td>運動量・力積</td><td>6枚</td><td>衝突・爆発・短時間作用に強くなるための基盤です。「系」の切り方を意識して、ただ公式を知るだけでなく閉じた系を見抜く訓練にしています。</td></tr>
+<tr><td>衝突・反発係数</td><td>4枚</td><td>私立では標準問題としてよく出ます。運動量保存と反発係数をセットで思い出せるようにし、エネルギー保存をむやみに使わない癖をつけます。</td></tr>
+<tr><td>図・グラフ・総合判断</td><td>4枚</td><td>最後に残るのは、式を知っていても何を使うか迷う場面です。この区画は「問題の入口判断」を鍛えるために入れています。</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </details>
+
+    <details open>
+      <summary>学習の回し方</summary>
+      <p>おすすめの使い方：<br>1. 最初は「全テーマ・全型」で回し、苦手カードをあぶり出す<br>2. 次に「運動方程式」「円運動」「エネルギー保存」などの頻出テーマで絞る<br>3. 直前期は「典型判断」だけを重点的に回す<br>4. 問題演習の前後に、該当テーマだけ短く回す<br><br>評価ボタンの意味：<br>・忘れた → かなり短い間隔で再出題<br>・あやしい → 近いうちに再出題<br>・できた → 標準的に間隔を伸ばす<br>・余裕 → 長めに間隔を伸ばす<br><br>つまり、「苦手ほどよく出る」仕組みです。</p>
+    </details>
+
+    <details>
+      <summary>この版に入っている範囲</summary>
+      <p>この版は <strong>力学編 92枚</strong> です。今後、同じ設計思想で <strong>電磁気 → 波動 → 熱 → 原子</strong> を増やせるように、タグ構造と学習ロジックは最初から拡張しやすくしてあります。</p>
+    </details>
+  </section>
+</div>
+
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<script>
+(() => {
+  'use strict';
+  const STORAGE_KEY = 'physics_mechanics_cards_drive_sync_v1';
+  const LEGACY_STORAGE_KEY = 'physics_mechanics_cards_v1';
+  const DRIVE_SCOPE = 'https://www.googleapis.com/auth/drive.appdata';
+  const BACKUP_FILE_NAME = 'physics_mechanics_cards_backup_v1.json';
+  const cards = [{"id": 1, "field": "力学", "theme": "位置・速度・加速度／等加速度運動", "type": "公式", "prompt": "速度の定義を述べよ。", "answer": "平均速度は v = Δx/Δt。\n瞬間速度は「ある瞬間での位置の変化率」。", "importance": "最重要", "frequency": "頻出", "law": "速度", "aliases": []}, {"id": 2, "field": "力学", "theme": "位置・速度・加速度／等加速度運動", "type": "公式", "prompt": "加速度の定義を述べよ。", "answer": "平均加速度は a = Δv/Δt。\n瞬間加速度は「ある瞬間での速度の変化率」。", "importance": "最重要", "frequency": "頻出", "law": "加速度", "aliases": []}, {"id": 3, "field": "力学", "theme": "位置・速度・加速度／等加速度運動", "type": "公式", "prompt": "等加速度直線運動における速度の式を述べよ。", "answer": "v = v₀ + at", "importance": "最重要", "frequency": "頻出", "law": "等加速度運動", "aliases": []}, {"id": 4, "field": "力学", "theme": "位置・速度・加速度／等加速度運動", "type": "公式", "prompt": "等加速度直線運動における位置の式を述べよ。", "answer": "x = x₀ + v₀t + (1/2)at²", "importance": "最重要", "frequency": "頻出", "law": "等加速度運動", "aliases": []}, {"id": 5, "field": "力学", "theme": "位置・速度・加速度／等加速度運動", "type": "条件", "prompt": "式 v² - v₀² = 2a(x-x₀) はどんなときに使いやすいか。", "answer": "時間 t を消したいとき。\n速度・加速度・変位を直接つなぎたいときに使いやすい。", "importance": "重要", "frequency": "頻出", "law": "等加速度運動", "aliases": []}, {"id": 6, "field": "力学", "theme": "位置・速度・加速度／等加速度運動", "type": "条件", "prompt": "等加速度運動の公式が使える条件は何か。", "answer": "加速度が一定であること。\n加速度が途中で変わるなら区間ごとに分ける。", "importance": "最重要", "frequency": "頻出", "law": "等加速度運動", "aliases": []}, {"id": 7, "field": "力学", "theme": "位置・速度・加速度／等加速度運動", "type": "意味", "prompt": "速度と加速度の違いを述べよ。", "answer": "速度は位置の変化、加速度は速度の変化を表す。\n速度が正でも加速度が負なら減速することがある。", "importance": "重要", "frequency": "頻出", "law": "速度・加速度", "aliases": []}, {"id": 8, "field": "力学", "theme": "位置・速度・加速度／等加速度運動", "type": "意味", "prompt": "x-t, v-t, a-t グラフの傾きや面積の意味を述べよ。", "answer": "x-t の傾き→速度\nv-t の傾き→加速度\nv-t の面積→変位\na-t の面積→速度変化量", "importance": "最重要", "frequency": "頻出", "law": "グラフ", "aliases": []}, {"id": 9, "field": "力学", "theme": "位置・速度・加速度／等加速度運動", "type": "単位", "prompt": "速度と加速度の単位を述べよ。", "answer": "速度は m/s，加速度は m/s²。", "importance": "重要", "frequency": "標準", "law": "単位", "aliases": []}, {"id": 10, "field": "力学", "theme": "位置・速度・加速度／等加速度運動", "type": "典型判断", "prompt": "等加速度運動の文章題を見たらまず何を確認するか。", "answer": "正方向，初速度 v₀，加速度 a の符号の3つを最初に決める。特に落下・投げ上げでは符号が最重要。", "importance": "最重要", "frequency": "頻出", "law": "等加速度運動", "aliases": []}, {"id": 11, "field": "力学", "theme": "力のつり合い・作用反作用・力の分解", "type": "公式", "prompt": "力のつり合いの条件を述べよ。", "answer": "物体に働く合力が 0 であること。", "importance": "最重要", "frequency": "頻出", "law": "つり合い", "aliases": []}, {"id": 12, "field": "力学", "theme": "力のつり合い・作用反作用・力の分解", "type": "条件", "prompt": "静止と等速直線運動で共通する力学条件は何か。", "answer": "どちらも加速度 0、したがって合力 0。", "importance": "重要", "frequency": "頻出", "law": "つり合い", "aliases": []}, {"id": 13, "field": "力学", "theme": "力のつり合い・作用反作用・力の分解", "type": "条件", "prompt": "力のつり合いと作用反作用の違いを述べよ。", "answer": "つり合いは「同一物体」に働く力同士、作用反作用は「別々の2物体」に働く力の組。", "importance": "最重要", "frequency": "頻出", "law": "作用反作用", "aliases": []}, {"id": 14, "field": "力学", "theme": "力のつり合い・作用反作用・力の分解", "type": "意味", "prompt": "作用反作用の2力の特徴を述べよ。", "answer": "大きさ等しい・向き反対・一直線上・別々の物体に働く。", "importance": "重要", "frequency": "頻出", "law": "作用反作用", "aliases": []}, {"id": 15, "field": "力学", "theme": "力のつり合い・作用反作用・力の分解", "type": "意味", "prompt": "垂直抗力とは何か。", "answer": "接触面が物体を押す力。面に垂直に働く。", "importance": "重要", "frequency": "標準", "law": "垂直抗力", "aliases": []}, {"id": 16, "field": "力学", "theme": "力のつり合い・作用反作用・力の分解", "type": "典型判断", "prompt": "斜面上の物体で、力はどの向きに分解するのが基本か。", "answer": "斜面に平行な向きと垂直な向きに分ける。", "importance": "最重要", "frequency": "頻出", "law": "力の分解", "aliases": []}, {"id": 17, "field": "力学", "theme": "力のつり合い・作用反作用・力の分解", "type": "典型判断", "prompt": "図を書き始めるとき、最初に何をするか。", "answer": "着目する物体を1つ決め、その物体だけに働く力を矢印で全部書く。", "importance": "最重要", "frequency": "頻出", "law": "作図", "aliases": []}, {"id": 18, "field": "力学", "theme": "力のつり合い・作用反作用・力の分解", "type": "典型判断", "prompt": "2物体が糸でつながれている問題で、最初に見抜くべきことは何か。", "answer": "一体で見るか別々に見るかを決めること。\n張力を消したいなら一体、個別の加速度や張力を求めるなら別々。", "importance": "最重要", "frequency": "頻出", "law": "連結体", "aliases": []}, {"id": 19, "field": "力学", "theme": "運動方程式", "type": "公式", "prompt": "ニュートンの第2法則を述べよ。", "answer": "合力 F = ma。", "importance": "最重要", "frequency": "頻出", "law": "運動方程式", "aliases": []}, {"id": 20, "field": "力学", "theme": "運動方程式", "type": "公式", "prompt": "x方向の運動方程式の形を述べよ。", "answer": "ΣFₓ = maₓ", "importance": "最重要", "frequency": "頻出", "law": "運動方程式", "aliases": []}, {"id": 21, "field": "力学", "theme": "運動方程式", "type": "公式", "prompt": "y方向の運動方程式の形を述べよ。", "answer": "ΣFᵧ = maᵧ", "importance": "最重要", "frequency": "頻出", "law": "運動方程式", "aliases": []}, {"id": 22, "field": "力学", "theme": "運動方程式", "type": "条件", "prompt": "運動方程式で使う F は何の力か。", "answer": "1つ1つの力ではなく、その物体に働く力の合力。", "importance": "最重要", "frequency": "頻出", "law": "運動方程式", "aliases": []}, {"id": 23, "field": "力学", "theme": "運動方程式", "type": "条件", "prompt": "運動方程式を立てるとき、必ず1本ごとに決める対象は何か。", "answer": "「どの物体について立てる式か」を必ず決める。1本の式は1つの物体に対して立てる。", "importance": "最重要", "frequency": "頻出", "law": "運動方程式", "aliases": []}, {"id": 24, "field": "力学", "theme": "運動方程式", "type": "条件", "prompt": "運動方程式をそのまま使う前提としての座標系の条件を述べよ。", "answer": "慣性系であること。高校物理では通常、地面基準などを慣性系として扱う。", "importance": "重要", "frequency": "標準", "law": "慣性系", "aliases": []}, {"id": 25, "field": "力学", "theme": "運動方程式", "type": "意味", "prompt": "合力とは何か。", "answer": "その物体に働く全ての力をベクトル和したもの。", "importance": "重要", "frequency": "頻出", "law": "合力", "aliases": []}, {"id": 26, "field": "力学", "theme": "運動方程式", "type": "意味", "prompt": "質量が大きいと同じ力で加速度はどうなるか。", "answer": "a = F/m なので小さくなる。", "importance": "重要", "frequency": "標準", "law": "質量", "aliases": []}, {"id": 27, "field": "力学", "theme": "運動方程式", "type": "単位", "prompt": "力の単位 N を基本単位で表せ。", "answer": "1 N = 1 kg·m/s²", "importance": "重要", "frequency": "標準", "law": "単位", "aliases": []}, {"id": 28, "field": "力学", "theme": "運動方程式", "type": "典型判断", "prompt": "運動方程式を立てるとき、座標軸はどう取るのが基本か。", "answer": "加速度や運動しそうな向きに合わせて取り、未知数や力の分解を減らす。", "importance": "最重要", "frequency": "頻出", "law": "運動方程式", "aliases": []}, {"id": 29, "field": "力学", "theme": "運動方程式", "type": "典型判断", "prompt": "鉛直投げ上げで運動方程式を立てるとき、まず決めるべきことは何か。", "answer": "上向きを正にするか下向きを正にするか。\n重力加速度の符号がそれで決まる。", "importance": "最重要", "frequency": "頻出", "law": "運動方程式", "aliases": []}, {"id": 30, "field": "力学", "theme": "運動方程式", "type": "典型判断", "prompt": "エレベーター内のばねばかり問題で、まず何に着目するか。", "answer": "人や物体そのものに着目し、接触力（ばねばかりの示す力）を未知数にする。", "importance": "重要", "frequency": "標準", "law": "見かけの重さ", "aliases": []}, {"id": 31, "field": "力学", "theme": "運動方程式", "type": "典型判断", "prompt": "連結体の張力を求めたいとき、物体はどう扱うのが基本か。", "answer": "別々の物体として運動方程式を立てる。", "importance": "最重要", "frequency": "頻出", "law": "連結体", "aliases": []}, {"id": 32, "field": "力学", "theme": "運動方程式", "type": "典型判断", "prompt": "張力を消して加速度だけ素早く求めたいときはどう考えるか。", "answer": "連結された全体を1つの物体として見る。内部力である張力を消せる。", "importance": "最重要", "frequency": "頻出", "law": "連結体", "aliases": []}, {"id": 33, "field": "力学", "theme": "摩擦", "type": "公式", "prompt": "最大静止摩擦力の式を述べよ。", "answer": "f ≤ μN、最大値は fmax = μN。", "importance": "最重要", "frequency": "頻出", "law": "静止摩擦", "aliases": []}, {"id": 34, "field": "力学", "theme": "摩擦", "type": "公式", "prompt": "動摩擦力の式を述べよ。", "answer": "f' = μ'N", "importance": "最重要", "frequency": "頻出", "law": "動摩擦", "aliases": []}, {"id": 35, "field": "力学", "theme": "摩擦", "type": "条件", "prompt": "静止摩擦力の大きさはいつでも μN か。", "answer": "違う。静止している間は必要なだけ働き、上限が μN。", "importance": "最重要", "frequency": "頻出", "law": "静止摩擦", "aliases": []}, {"id": 36, "field": "力学", "theme": "摩擦", "type": "条件", "prompt": "静止摩擦と動摩擦の使い分けを述べよ。", "answer": "すべっていない間は静止摩擦、すべっている最中は動摩擦。", "importance": "最重要", "frequency": "頻出", "law": "摩擦", "aliases": []}, {"id": 37, "field": "力学", "theme": "摩擦", "type": "意味", "prompt": "摩擦力の向きは何で決まるか。", "answer": "接触面に沿って、相対運動または相対運動しようとする向きと反対。", "importance": "最重要", "frequency": "頻出", "law": "摩擦の向き", "aliases": []}, {"id": 38, "field": "力学", "theme": "摩擦", "type": "典型判断", "prompt": "「動き出す直前」とあれば何を使うか。", "answer": "最大静止摩擦力 f = μN を使う。", "importance": "最重要", "frequency": "頻出", "law": "静止摩擦", "aliases": []}, {"id": 39, "field": "力学", "theme": "摩擦", "type": "典型判断", "prompt": "「一定の速さですべっている」とあれば何が言えるか。", "answer": "加速度 0、したがって合力 0。摩擦力と他の力がつり合う。", "importance": "重要", "frequency": "標準", "law": "摩擦", "aliases": []}, {"id": 40, "field": "力学", "theme": "摩擦", "type": "典型判断", "prompt": "斜面上で摩擦力の向きに迷ったらどう考えるか。", "answer": "物体がすべりそうな向きを想像し、その逆向きに摩擦力を置く。", "importance": "最重要", "frequency": "頻出", "law": "摩擦の向き", "aliases": []}, {"id": 41, "field": "力学", "theme": "円運動", "type": "公式", "prompt": "向心加速度の式を述べよ。", "answer": "a = v²/r", "importance": "最重要", "frequency": "頻出", "law": "向心加速度", "aliases": []}, {"id": 42, "field": "力学", "theme": "円運動", "type": "公式", "prompt": "向心力の式を述べよ。", "answer": "F = mv²/r", "importance": "最重要", "frequency": "頻出", "law": "向心力", "aliases": []}, {"id": 43, "field": "力学", "theme": "円運動", "type": "公式", "prompt": "速さ v と周期 T の関係を述べよ。", "answer": "v = 2πr/T", "importance": "重要", "frequency": "頻出", "law": "周期", "aliases": []}, {"id": 44, "field": "力学", "theme": "円運動", "type": "条件", "prompt": "等速円運動とは何か。", "answer": "速さ一定で円周上を動く運動。速度ベクトルの向きは変わるので加速度は 0 ではない。", "importance": "最重要", "frequency": "頻出", "law": "等速円運動", "aliases": []}, {"id": 45, "field": "力学", "theme": "円運動", "type": "条件", "prompt": "向心力はどの向きに働くか。", "answer": "常に円の中心向き。", "importance": "最重要", "frequency": "頻出", "law": "向心力", "aliases": []}, {"id": 46, "field": "力学", "theme": "円運動", "type": "意味", "prompt": "向心力は新しい種類の力か。", "answer": "違う。既存の力（重力・張力・垂直抗力など）の合力が向心力の役割を果たす。", "importance": "最重要", "frequency": "頻出", "law": "向心力", "aliases": []}, {"id": 47, "field": "力学", "theme": "円運動", "type": "典型判断", "prompt": "円運動の問題で最初に確認すべきことは何か。", "answer": "「何の力の合力が中心向きになるか」を確認する。", "importance": "最重要", "frequency": "頻出", "law": "円運動", "aliases": []}, {"id": 48, "field": "力学", "theme": "円運動", "type": "典型判断", "prompt": "鉛直面内の円運動で最高点・最低点を解くときの着目点は何か。", "answer": "中心向きに働く力を正しく足し引きすること。最高点と最低点で向き関係が変わる。", "importance": "最重要", "frequency": "頻出", "law": "鉛直円運動", "aliases": []}, {"id": 49, "field": "力学", "theme": "円運動", "type": "典型判断", "prompt": "円錐振り子の問題でまず立てる関係は何か。", "answer": "鉛直方向のつり合いと、水平方向の向心力の2本。", "importance": "重要", "frequency": "標準", "law": "円錐振り子", "aliases": []}, {"id": 50, "field": "力学", "theme": "円運動", "type": "典型判断", "prompt": "遠心力という言葉が出ても、高校の解法の基本は何か。", "answer": "慣性系では遠心力を使わず、中心向きの合力 = mv²/r を立てる。", "importance": "重要", "frequency": "標準", "law": "遠心力", "aliases": []}, {"id": 51, "field": "力学", "theme": "単振動", "type": "公式", "prompt": "単振動の復元力の式を述べよ。", "answer": "F = -kx", "importance": "最重要", "frequency": "頻出", "law": "単振動", "aliases": []}, {"id": 52, "field": "力学", "theme": "単振動", "type": "公式", "prompt": "ばね振り子の周期を述べよ。", "answer": "T = 2π√(m/k)", "importance": "最重要", "frequency": "頻出", "law": "ばね振り子", "aliases": []}, {"id": 53, "field": "力学", "theme": "単振動", "type": "条件", "prompt": "どんなときに単振動とみなせるか。", "answer": "平衡位置の近くで、変位に比例し平衡位置向きの復元力が働くとき。", "importance": "最重要", "frequency": "頻出", "law": "単振動", "aliases": []}, {"id": 54, "field": "力学", "theme": "単振動", "type": "条件", "prompt": "単振動で加速度の向きはどうなるか。", "answer": "常に平衡位置向き。変位と逆向き。", "importance": "重要", "frequency": "頻出", "law": "単振動", "aliases": []}, {"id": 55, "field": "力学", "theme": "単振動", "type": "意味", "prompt": "復元力とは何か。", "answer": "物体を平衡位置へ戻そうとする力。", "importance": "重要", "frequency": "標準", "law": "復元力", "aliases": []}, {"id": 56, "field": "力学", "theme": "単振動", "type": "保存則", "prompt": "単振動で力学的エネルギーはどうなるか。", "answer": "摩擦などを無視できれば保存される。位置エネルギーと運動エネルギーが入れ替わる。", "importance": "重要", "frequency": "頻出", "law": "単振動", "aliases": []}, {"id": 57, "field": "力学", "theme": "単振動", "type": "典型判断", "prompt": "単振動で速さが最大になるのはどこか。", "answer": "平衡位置。そこで位置エネルギー最小、運動エネルギー最大。", "importance": "最重要", "frequency": "頻出", "law": "単振動", "aliases": []}, {"id": 58, "field": "力学", "theme": "単振動", "type": "典型判断", "prompt": "単振動で加速度の大きさが最大になるのはどこか。", "answer": "端点。変位の大きさが最大なので復元力も加速度も最大。", "importance": "重要", "frequency": "頻出", "law": "単振動", "aliases": []}, {"id": 59, "field": "力学", "theme": "万有引力・重力場", "type": "公式", "prompt": "万有引力の法則を述べよ。", "answer": "F = G Mm/r²", "importance": "最重要", "frequency": "頻出", "law": "万有引力", "aliases": []}, {"id": 60, "field": "力学", "theme": "万有引力・重力場", "type": "公式", "prompt": "地表付近の重力加速度 g と天体の質量・半径の関係を述べよ。", "answer": "g = GM/R²", "importance": "重要", "frequency": "頻出", "law": "重力加速度", "aliases": []}, {"id": 61, "field": "力学", "theme": "万有引力・重力場", "type": "条件", "prompt": "地表付近で重力加速度を一定とみなせるのはなぜか。", "answer": "地表近くでは地球中心からの距離変化が半径に比べ小さく、g の変化が小さいから。", "importance": "重要", "frequency": "標準", "law": "重力加速度", "aliases": []}, {"id": 62, "field": "力学", "theme": "万有引力・重力場", "type": "意味", "prompt": "重力と万有引力の関係を述べよ。", "answer": "地球と物体の間の万有引力が、地表付近では重力として扱われる。", "importance": "重要", "frequency": "標準", "law": "重力", "aliases": []}, {"id": 63, "field": "力学", "theme": "万有引力・重力場", "type": "典型判断", "prompt": "人工衛星の速さや周期を求めるとき、まず何を等置するか。", "answer": "万有引力 = 向心力 を等置する。", "importance": "最重要", "frequency": "頻出", "law": "人工衛星", "aliases": []}, {"id": 64, "field": "力学", "theme": "仕事・仕事率", "type": "公式", "prompt": "一定力 F が変位 x にした仕事を述べよ。", "answer": "W = Fx cosθ", "importance": "最重要", "frequency": "頻出", "law": "仕事", "aliases": []}, {"id": 65, "field": "力学", "theme": "仕事・仕事率", "type": "公式", "prompt": "仕事率の式を述べよ。", "answer": "P = W/t。一定速度で同方向なら P = Fv。", "importance": "重要", "frequency": "標準", "law": "仕事率", "aliases": []}, {"id": 66, "field": "力学", "theme": "仕事・仕事率", "type": "条件", "prompt": "重力やばねの力がする仕事の符号は何で決まるか。", "answer": "力の向きと変位の向きのなす角で決まる。", "importance": "重要", "frequency": "頻出", "law": "仕事", "aliases": []}, {"id": 67, "field": "力学", "theme": "仕事・仕事率", "type": "意味", "prompt": "負の仕事とは何か。", "answer": "力が物体の運動を妨げ、物体の力学的エネルギーを減らす向きの仕事。", "importance": "重要", "frequency": "標準", "law": "仕事", "aliases": []}, {"id": 68, "field": "力学", "theme": "仕事・仕事率", "type": "単位", "prompt": "仕事と仕事率の単位を述べよ。", "answer": "仕事は J、仕事率は W。", "importance": "重要", "frequency": "標準", "law": "単位", "aliases": []}, {"id": 69, "field": "力学", "theme": "力学的エネルギー保存", "type": "公式", "prompt": "運動エネルギーの式を述べよ。", "answer": "K = (1/2)mv²", "importance": "最重要", "frequency": "頻出", "law": "運動エネルギー", "aliases": []}, {"id": 70, "field": "力学", "theme": "力学的エネルギー保存", "type": "公式", "prompt": "重力による位置エネルギーの式を述べよ。", "answer": "U = mgh", "importance": "最重要", "frequency": "頻出", "law": "位置エネルギー", "aliases": []}, {"id": 71, "field": "力学", "theme": "力学的エネルギー保存", "type": "条件", "prompt": "力学的エネルギー保存則が使える条件を述べよ。", "answer": "摩擦などの非保存力の仕事を無視できるとき。", "importance": "最重要", "frequency": "頻出", "law": "エネルギー保存", "aliases": []}, {"id": 72, "field": "力学", "theme": "力学的エネルギー保存", "type": "条件", "prompt": "ばねの弾性エネルギーの式を使う場面を述べよ。", "answer": "ばねの伸び・縮みが x のとき U = (1/2)kx² を使う。", "importance": "重要", "frequency": "頻出", "law": "弾性エネルギー", "aliases": []}, {"id": 73, "field": "力学", "theme": "力学的エネルギー保存", "type": "意味", "prompt": "保存力とは何か。", "answer": "する仕事が経路によらず始点と終点だけで決まる力。", "importance": "重要", "frequency": "標準", "law": "保存力", "aliases": []}, {"id": 74, "field": "力学", "theme": "力学的エネルギー保存", "type": "保存則", "prompt": "力学的エネルギー保存則を式で述べよ。", "answer": "K₁ + U₁ = K₂ + U₂", "importance": "最重要", "frequency": "頻出", "law": "エネルギー保存", "aliases": []}, {"id": 75, "field": "力学", "theme": "力学的エネルギー保存", "type": "保存則", "prompt": "仕事と運動エネルギーの関係を述べよ。", "answer": "合力のした仕事 = 運動エネルギーの変化 ΔK", "importance": "最重要", "frequency": "頻出", "law": "仕事とエネルギー", "aliases": []}, {"id": 76, "field": "力学", "theme": "力学的エネルギー保存", "type": "保存則", "prompt": "非保存力があるときのエネルギーの扱いを述べよ。", "answer": "非保存力のした仕事を含めて K + U の変化を考える。", "importance": "重要", "frequency": "標準", "law": "エネルギー保存", "aliases": []}, {"id": 77, "field": "力学", "theme": "力学的エネルギー保存", "type": "典型判断", "prompt": "斜面問題で、運動方程式よりエネルギー法が向くのはどんなときか。", "answer": "速度と高さ・ばねの伸びの関係を求めたいとき。時間を出さないならエネルギー法が速い。", "importance": "最重要", "frequency": "頻出", "law": "エネルギー法", "aliases": []}, {"id": 78, "field": "力学", "theme": "力学的エネルギー保存", "type": "典型判断", "prompt": "エネルギー保存を使う前に必ず確認することは何か。", "answer": "摩擦・空気抵抗・外力の仕事を無視してよいか。", "importance": "最重要", "frequency": "頻出", "law": "エネルギー保存", "aliases": []}, {"id": 79, "field": "力学", "theme": "運動量・力積", "type": "公式", "prompt": "運動量の式を述べよ。", "answer": "p = mv", "importance": "最重要", "frequency": "頻出", "law": "運動量", "aliases": []}, {"id": 80, "field": "力学", "theme": "運動量・力積", "type": "公式", "prompt": "力積の式を述べよ。", "answer": "I = FΔt = Δp", "importance": "最重要", "frequency": "頻出", "law": "力積", "aliases": []}, {"id": 81, "field": "力学", "theme": "運動量・力積", "type": "条件", "prompt": "運動量保存則が使える条件を述べよ。", "answer": "外力の合計の力積が 0 とみなせる閉じた系。", "importance": "最重要", "frequency": "頻出", "law": "運動量保存", "aliases": []}, {"id": 82, "field": "力学", "theme": "運動量・力積", "type": "意味", "prompt": "運動量がベクトル量であるとはどういうことか。", "answer": "向きをもち、1次元では符号、2次元以上では成分で扱う。", "importance": "重要", "frequency": "標準", "law": "運動量", "aliases": []}, {"id": 83, "field": "力学", "theme": "運動量・力積", "type": "保存則", "prompt": "運動量保存則を式で述べよ。", "answer": "衝突前の全運動量 = 衝突後の全運動量", "importance": "最重要", "frequency": "頻出", "law": "運動量保存", "aliases": []}, {"id": 84, "field": "力学", "theme": "運動量・力積", "type": "典型判断", "prompt": "運動量保存の問題で最初に決めるべき「系」とは何か。", "answer": "どの物体群をまとめて1つの系とみるか。外力を無視できる組み方にする。", "importance": "最重要", "frequency": "頻出", "law": "系の設定", "aliases": []}, {"id": 85, "field": "力学", "theme": "衝突・反発係数", "type": "公式", "prompt": "反発係数 e の定義を述べよ。", "answer": "e = （衝突後の相対速度）/（衝突前の相対速度）\n1次元では「離れる速さ / 近づく速さ」。", "importance": "最重要", "frequency": "頻出", "law": "反発係数", "aliases": []}, {"id": 86, "field": "力学", "theme": "衝突・反発係数", "type": "条件", "prompt": "反発係数の式を使う典型的な場面は何か。", "answer": "1次元衝突・正面衝突。速度の向きに注意して立式する。", "importance": "重要", "frequency": "頻出", "law": "反発係数", "aliases": []}, {"id": 87, "field": "力学", "theme": "衝突・反発係数", "type": "保存則", "prompt": "衝突でいつも保存される量と、いつも保存ではない量を述べよ。", "answer": "外力を無視できれば運動量は保存。力学的エネルギーは一般には保存しない。", "importance": "最重要", "frequency": "頻出", "law": "衝突", "aliases": []}, {"id": 88, "field": "力学", "theme": "衝突・反発係数", "type": "典型判断", "prompt": "衝突問題を見たら、何をセットで疑うか。", "answer": "まず運動量保存、必要なら反発係数。エネルギー保存をむやみに使わない。", "importance": "最重要", "frequency": "頻出", "law": "衝突", "aliases": []}, {"id": 89, "field": "力学", "theme": "図・グラフ・総合判断", "type": "意味", "prompt": "v-t グラフで傾きが正・負・0 のとき、何を意味するか。", "answer": "正→加速度正、負→加速度負、0→加速度0。", "importance": "重要", "frequency": "標準", "law": "グラフ", "aliases": []}, {"id": 90, "field": "力学", "theme": "図・グラフ・総合判断", "type": "単位", "prompt": "v-t グラフの面積と a-t グラフの面積の単位を述べよ。", "answer": "v-t の面積は m（変位）、a-t の面積は m/s（速度変化）。", "importance": "重要", "frequency": "標準", "law": "グラフ", "aliases": []}, {"id": 91, "field": "力学", "theme": "図・グラフ・総合判断", "type": "典型判断", "prompt": "文章題を解き始めるときの共通手順を述べよ。", "answer": "状況図を書く → 着目物体を決める → 力を書く → 何を求めるかで運動方程式・エネルギー・運動量を選ぶ。", "importance": "最重要", "frequency": "頻出", "law": "総合判断", "aliases": []}, {"id": 92, "field": "力学", "theme": "図・グラフ・総合判断", "type": "典型判断", "prompt": "「何を使えばよいか分からない」ときの判断基準を述べよ。", "answer": "時間が絡むなら運動方程式・等加速度、\n速さと位置だけならエネルギー、\n衝突・爆発なら運動量をまず疑う。", "importance": "最重要", "frequency": "頻出", "law": "総合判断", "aliases": []}];
+  const themeOrder = ["位置・速度・加速度／等加速度運動", "力のつり合い・作用反作用・力の分解", "運動方程式", "摩擦", "円運動", "単振動", "万有引力・重力場", "仕事・仕事率", "力学的エネルギー保存", "運動量・力積", "衝突・反発係数", "図・グラフ・総合判断"];
+  const typeOrder = ["公式", "条件", "意味", "保存則", "単位", "典型判断"];
+  const importanceOrder = ['すべての重要度','最重要','重要','標準'];
+
+  const $ = (id) => document.getElementById(id);
+  const clone = (obj) => JSON.parse(JSON.stringify(obj));
+
+  function storageAvailable() {
+    try {
+      localStorage.setItem('__p__','1'); localStorage.removeItem('__p__'); return true;
+    } catch(e) {
+      return false;
+    }
+  }
+  const formulas = [{"theme": "位置・速度・加速度／等加速度運動", "importance": "最重要", "laws": ["速度  v = Δx/Δt", "加速度  a = Δv/Δt", "v = v₀ + at", "x = x₀ + v₀t + (1/2)at²", "v² - v₀² = 2a(x - x₀)"], "conditions": ["加速度が一定の区間で使う", "正方向と符号を最初に決める", "時間を消したいときは v² - v₀² = 2aΔx が便利"], "units": ["速度: m/s", "加速度: m/s²"], "pitfalls": ["速度が正でも加速度が負なら減速する", "落下・投げ上げは符号ミスが多い"], "judgment": ["x-t の傾き→速度", "v-t の傾き→加速度", "v-t の面積→変位", "a-t の面積→速度変化量"]}, {"theme": "力のつり合い・作用反作用・力の分解", "importance": "最重要", "laws": ["つり合い: 合力 = 0", "力は必要に応じて成分分解する"], "conditions": ["静止と等速直線運動では加速度 0 → 合力 0", "作用反作用は別物体、つり合いは同一物体に働く力"], "units": ["力: N"], "pitfalls": ["作用反作用をつり合いと混同しない", "力は着目した1物体だけに書く"], "judgment": ["斜面では平行・垂直方向に分ける", "連結体は一体で見るか別々で見るかを先に決める"]}, {"theme": "運動方程式", "importance": "最重要", "laws": ["F = ma", "ΣFₓ = maₓ", "ΣFᵧ = maᵧ"], "conditions": ["1本の式は1つの物体について立てる", "F は合力", "高校物理では通常、地面基準などの慣性系で考える"], "units": ["1 N = 1 kg·m/s²"], "pitfalls": ["個々の力と合力を混同しない", "張力を消したいか求めたいかで一体視と分離を使い分ける"], "judgment": ["座標軸は加速度や運動しそうな向きに合わせる", "途中の力関係を追うならまず運動方程式を疑う"]}, {"theme": "摩擦", "importance": "重要", "laws": ["最大静止摩擦力  f ≤ μN, 最大値 f = μN", "動摩擦力  f' = μ'N"], "conditions": ["静止している間は必要なだけ働き、上限が μN", "すべっている最中は動摩擦を使う"], "units": ["摩擦力: N"], "pitfalls": ["静止摩擦力が常に μN ではない", "向きは相対運動（またはその向き）と反対"], "judgment": ["「動き出す直前」→ 最大静止摩擦力", "「一定の速さですべる」→ 加速度 0 を使う"]}, {"theme": "円運動", "importance": "最重要", "laws": ["向心加速度  a = v²/r", "向心力  F = mv²/r", "v = 2πr/T"], "conditions": ["等速円運動では速さ一定でも加速度は 0 ではない", "向心力は常に中心向き"], "units": ["向心加速度: m/s²", "向心力: N"], "pitfalls": ["向心力は新しい力ではなく、既存の力の合力", "最高点・最低点で力の向き関係が変わる"], "judgment": ["何の力の合力が中心向きになるかを最初に確認する", "円運動 + 高さ変化ならエネルギーとの併用も疑う"]}, {"theme": "単振動", "importance": "重要", "laws": ["復元力  F = -kx", "周期  T = 2π√(m/k)", "角振動数  ω = √(k/m)"], "conditions": ["変位に比例して中心向きの力が働くとき単振動として扱える", "振幅が決まると端では速さ 0"], "units": ["ばね定数 k: N/m", "角振動数 ω: rad/s"], "pitfalls": ["速度最大は中心、加速度最大は端", "符号は『中心に戻す向き』になる"], "judgment": ["単振動は円運動の射影として見ると整理しやすい", "ばね + 質点はエネルギーでも追える"]}, {"theme": "万有引力", "importance": "重要", "laws": ["万有引力  F = G Mm/r²", "重力加速度  g = GM/r²"], "conditions": ["地表付近では g を一定近似することが多い", "衛星運動では万有引力が向心力を担う"], "units": ["G: N·m²/kg²", "g: m/s²"], "pitfalls": ["重力と万有引力の使い分けを混同しない", "中心向きで考える"], "judgment": ["衛星問題はまず『万有引力 = 向心力』を置く"]}, {"theme": "仕事・仕事率", "importance": "重要", "laws": ["仕事  W = Fd cosθ", "仕事率  P = W/t = Fv（同方向）"], "conditions": ["一定力なら W = Fd cosθ を使いやすい", "力と移動方向のなす角に注意する"], "units": ["仕事: J", "仕事率: W"], "pitfalls": ["力が垂直なら仕事 0", "正の仕事・負の仕事の区別を落としやすい"], "judgment": ["どの力が仕事をするかを先に列挙する", "エネルギーに持ち込めるかを考える入口になる"]}, {"theme": "力学的エネルギー", "importance": "最重要", "laws": ["運動エネルギー  K = (1/2)mv²", "重力による位置エネルギー  U = mgh", "ばねの弾性エネルギー  U = (1/2)kx²", "力学的エネルギー保存  K + U = 一定"], "conditions": ["非保存力の仕事を無視できるとき保存則を使う", "摩擦や外力の仕事があるときは仕事とエネルギーの関係まで広げる"], "units": ["エネルギー: J"], "pitfalls": ["保存するのは K と U の和", "位置エネルギーの基準位置は任意だが一貫させる"], "judgment": ["途中の力より始点・終点の速さや高さが大事ならエネルギーを優先する"]}, {"theme": "運動量・力積", "importance": "最重要", "laws": ["運動量  p = mv", "力積  I = FΔt = Δp", "運動量保存  Σp(前) = Σp(後)"], "conditions": ["外力の合計の力積が無視できる系で運動量保存", "運動量はベクトル量"], "units": ["運動量: kg·m/s", "力積: N·s"], "pitfalls": ["運動量保存は系全体に対して使う", "力積と仕事を混同しない"], "judgment": ["衝突・爆発を見たらまず運動量保存を疑う", "どの物体群を1つの系とみるかを最初に決める"]}, {"theme": "衝突・反発係数", "importance": "重要", "laws": ["反発係数  e = （離れる相対速度）/（近づく相対速度）"], "conditions": ["1次元衝突で特に使いやすい", "反発係数は運動量保存と併用することが多い"], "units": ["反発係数: 無次元"], "pitfalls": ["反発係数だけでは式が足りない", "力学的エネルギーは一般には保存しない"], "judgment": ["完全非弾性衝突なら合体後を考える", "『はね返る強さ』が問われたら反発係数を使う"]}, {"theme": "グラフ・典型判断メモ", "importance": "最重要", "laws": ["x-t 傾き→速度", "v-t 傾き→加速度", "v-t 面積→変位", "a-t 面積→速度変化量"], "conditions": ["グラフは軸の意味を先に確認する", "保存則は使える条件を満たすか必ず確認する"], "units": ["傾きや面積の次元を意識する"], "pitfalls": ["面積の符号を落としやすい", "『どの物体に着目するか』が曖昧だと全体が崩れる"], "judgment": ["まず正方向・着目物体・使えそうな保存則の候補を決める", "運動方程式 / エネルギー / 運動量 のどれが主役かを最初に選ぶ"]}];
+  const HAS_STORAGE = storageAvailable();
+  let state = loadState();
+  let deck = [];
+  let current = 0;
+  let deferredPrompt = null;
+  let tokenClient = null;
+  let driveToken = '';
+  let driveTokenExpiresAt = 0;
+  let syncTimer = null;
+  let syncBusy = false;
+
+  function defaultProgress() {
+    return { reps:0, ease:2.5, interval:0, due:0, lapses:0, lastGrade:'未学習', lastReviewed:0 };
+  }
+
+  function defaultSyncState() {
+    return {
+      clientId: '',
+      auto: false,
+      connected: false,
+      backupFileId: '',
+      lastSyncedAt: 0,
+      lastSyncError: '',
+      remoteModifiedTime: '',
+      lastRestoredAt: 0
+    };
+  }
+
+  function freshState() {
+    return {
+      progress: {},
+      filters: {
+        theme: 'all',
+        type: 'all',
+        importance: 'all',
+        dueOnly: true,
+        search: '',
+        listTheme: 'all',
+        listType: 'all',
+        listImportance: 'all'
+      },
+      revealed: false,
+      currentId: cards[0].id,
+      sync: defaultSyncState()
+    };
+  }
+
+  function loadState() {
+    const base = freshState();
+    if (!HAS_STORAGE) return base;
+    try {
+      const raw = JSON.parse(localStorage.getItem(STORAGE_KEY) || localStorage.getItem(LEGACY_STORAGE_KEY) || 'null');
+      const next = Object.assign(base, raw || {});
+      next.sync = Object.assign(defaultSyncState(), raw && raw.sync ? raw.sync : {});
+      return next;
+    } catch(e) {
+      return base;
+    }
+  }
+
+  function saveState() {
+    if (HAS_STORAGE) {
+      try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch(e) {}
+    }
+    scheduleAutoSync('state-changed');
+  }
+
+  function progressFor(id) {
+    if (!state.progress[id]) state.progress[id] = defaultProgress();
+    return state.progress[id];
+  }
+
+  function now() { return Date.now(); }
+
+  function formatDue(ts) {
+    if (!ts) return '未設定';
+    const d = new Date(ts);
+    return `${d.getFullYear()}/${d.getMonth()+1}/${d.getDate()} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+  }
+
+  function intervalLabel(days) {
+    if (days < 1) {
+      const hours = Math.max(1, Math.round(days * 24));
+      return `約${hours}時間後`;
+    }
+    if (days < 30) return `約${Math.round(days)}日後`;
+    return `約${Math.round(days)}日後`;
+  }
+
+  function getFilteredCards(forList=false) {
+    const filters = state.filters;
+    const theme = forList ? filters.listTheme : filters.theme;
+    const type = forList ? filters.listType : filters.type;
+    const importance = forList ? filters.listImportance : filters.importance;
+    const search = (filters.search || '').trim().toLowerCase();
+
+    return cards.filter(card => {
+      if (theme !== 'all' && card.theme !== theme) return false;
+      if (type !== 'all' && card.type !== type) return false;
+      if (importance !== 'all' && card.importance !== importance) return false;
+      if (search) {
+        const hay = [card.prompt, card.answer, card.theme, card.type, card.law, ...(card.aliases || [])].join(' ').toLowerCase();
+        if (!hay.includes(search)) return false;
+      }
+      return true;
+    });
+  }
+
+  function shuffle(arr) {
+    const a = arr.slice();
+    for (let i=a.length-1; i>0; i--) {
+      const j = Math.floor(Math.random()*(i+1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  function rebuildDeck() {
+    const filtered = getFilteredCards(false);
+    const t = now();
+    const due = filtered.filter(c => (progressFor(c.id).due || 0) <= t);
+    if (state.filters.dueOnly && due.length) {
+      deck = due.sort((a,b) => (progressFor(a.id).due||0) - (progressFor(b.id).due||0));
+    } else {
+      deck = shuffle(filtered).sort((a,b) => {
+        const pa = progressFor(a.id), pb = progressFor(b.id);
+        return (pa.due||0) - (pb.due||0);
+      });
+    }
+    if (!deck.length) deck = filtered.slice();
+    const idx = deck.findIndex(c => c.id === state.currentId);
+    current = idx >= 0 ? idx : 0;
+    if (deck[current]) state.currentId = deck[current].id;
+  }
+
+  function updateStats() {
+    const t = now();
+    const total = cards.length;
+    let due = 0, mastered = 0, weak = 0;
+    for (const card of cards) {
+      const p = progressFor(card.id);
+      if ((p.due || 0) <= t) due++;
+      if (p.interval >= 30) mastered++;
+      if (p.lapses >= 2 || p.lastGrade === '忘れた') weak++;
+    }
+    $('dueCount').textContent = due;
+    $('totalCount').textContent = total;
+    $('masteredCount').textContent = mastered;
+    $('weakCount').textContent = weak;
+  }
+
+  function updateStudyView() {
+    rebuildDeck();
+    updateStats();
+
+    const card = deck[current];
+    if (!card) {
+      $('cardPrompt').textContent = '条件に合うカードがありません。フィルタを緩めてください。';
+      $('cardAnswer').style.display = 'none';
+      $('cardMeta').textContent = '';
+      $('queueLabel').textContent = '0 / 0';
+      $('gradeRow').classList.add('hidden');
+      $('scheduleText').textContent = '';
+      return;
+    }
+    state.currentId = card.id;
+    const p = progressFor(card.id);
+    $('queueLabel').textContent = `${current+1} / ${deck.length}`;
+    $('cardMeta').innerHTML = `
+      <span class="badge">${card.theme}</span>
+      <span class="badge">${card.type}</span>
+      <span class="badge">${card.importance}</span>
+      <span class="badge">前回: ${p.lastGrade}</span>
+      <span class="badge">次回予定: ${formatDue(p.due)}</span>
+    `;
+    $('cardPrompt').textContent = card.prompt;
+    $('cardAnswer').textContent = card.answer;
+    $('cardAnswer').style.display = state.revealed ? 'block' : 'none';
+    $('gradeRow').classList.toggle('hidden', !state.revealed);
+    $('scheduleText').textContent = state.revealed ? '理解度に応じて次回間隔が伸びます。特に「典型判断」の苦手は優先的に戻ります。' : 'まずは表だけ見て、自力で答えを思い出してから「答えを見る」を押してください。';
+    saveState();
+  }
+
+  function setStatus(msg) {
+    $('status').textContent = msg;
+  }
+
+  function setSyncStatus(msg) {
+    const el = $('syncStatus');
+    if (el) el.textContent = msg;
+  }
+
+  function updateSyncUi() {
+    if ($('clientIdInput')) $('clientIdInput').value = state.sync.clientId || '';
+    if ($('autoSyncToggle')) $('autoSyncToggle').checked = !!state.sync.auto;
+    const parts = [];
+    parts.push(state.sync.connected ? 'Google接続済み' : 'Drive未接続');
+    if (state.sync.backupFileId) parts.push('バックアップID記録済み');
+    if (state.sync.lastSyncedAt) parts.push('最終保存: ' + new Date(state.sync.lastSyncedAt).toLocaleString('ja-JP'));
+    if (state.sync.lastRestoredAt) parts.push('最終復元: ' + new Date(state.sync.lastRestoredAt).toLocaleString('ja-JP'));
+    if (state.sync.remoteModifiedTime) parts.push('Drive更新: ' + new Date(state.sync.remoteModifiedTime).toLocaleString('ja-JP'));
+    if (state.sync.lastSyncError) parts.push('直近エラー: ' + state.sync.lastSyncError);
+    setSyncStatus(parts.join('｜'));
+  }
+
+  function ensureGisReady() {
+    return new Promise((resolve, reject) => {
+      if (window.google && google.accounts && google.accounts.oauth2) return resolve();
+      let tries = 0;
+      const timer = setInterval(() => {
+        tries += 1;
+        if (window.google && google.accounts && google.accounts.oauth2) {
+          clearInterval(timer); resolve();
+        } else if (tries > 80) {
+          clearInterval(timer); reject(new Error('Google Identity Services の読み込みに失敗しました。'));
+        }
+      }, 250);
+    });
+  }
+
+  function updateStoredClientId() {
+    state.sync.clientId = ($('clientIdInput').value || '').trim();
+    if (HAS_STORAGE) {
+      try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch(e) {}
+    }
+    updateSyncUi();
+  }
+
+  function getAuthHeader() {
+    if (!driveToken || Date.now() >= driveTokenExpiresAt) throw new Error('Google認証の有効期限が切れました。もう一度「Googleに接続」を押してください。');
+    return { Authorization: 'Bearer ' + driveToken };
+  }
+
+  function requestAccessToken(interactive) {
+    return ensureGisReady().then(() => {
+      const clientId = (state.sync.clientId || '').trim();
+      if (!clientId) throw new Error('OAuthクライアントIDを入力してください。');
+      return new Promise((resolve, reject) => {
+        tokenClient = google.accounts.oauth2.initTokenClient({
+          client_id: clientId,
+          scope: DRIVE_SCOPE,
+          callback: (resp) => {
+            if (!resp || resp.error) {
+              reject(new Error((resp && (resp.error_description || resp.error)) || 'Google認証に失敗しました。'));
+              return;
+            }
+            driveToken = resp.access_token;
+            driveTokenExpiresAt = Date.now() + Math.max(60, Number(resp.expires_in || 3600) - 60) * 1000;
+            state.sync.connected = true;
+            state.sync.lastSyncError = '';
+            if (HAS_STORAGE) {
+              try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch(e) {}
+            }
+            updateSyncUi();
+            resolve(resp);
+          }
+        });
+        try {
+          tokenClient.requestAccessToken({ prompt: interactive ? 'consent' : '' });
+        } catch (err) {
+          reject(err);
+        }
+      });
+    });
+  }
+
+  function driveFetchJson(url, options = {}) {
+    options.headers = Object.assign({}, options.headers || {}, getAuthHeader());
+    return fetch(url, options).then(async (res) => {
+      if (!res.ok) {
+        const txt = await res.text();
+        throw new Error('Drive API ' + res.status + ' ' + txt.slice(0, 160));
+      }
+      return res.json();
+    });
+  }
+
+  function escapeDriveQueryName(name) {
+    return String(name || '').replace(/'/g, "\'");
+  }
+
+  function findBackupFile() {
+    const q = "name='" + escapeDriveQueryName(BACKUP_FILE_NAME) + "' and trashed=false";
+    const url = 'https://www.googleapis.com/drive/v3/files?spaces=appDataFolder&pageSize=10&fields=files(id,name,modifiedTime)&q=' + encodeURIComponent(q);
+    return driveFetchJson(url).then((data) => (data.files && data.files.length ? data.files[0] : null));
+  }
+
+  function multipartBody(metadataObj, contentText, boundary) {
+    return '--' + boundary + '\r\n' +
+      'Content-Type: application/json; charset=UTF-8\r\n\r\n' +
+      JSON.stringify(metadataObj) + '\r\n' +
+      '--' + boundary + '\r\n' +
+      'Content-Type: application/json; charset=UTF-8\r\n\r\n' +
+      contentText + '\r\n' +
+      '--' + boundary + '--';
+  }
+
+  function buildBackupPayload() {
+    const payloadState = clone(state);
+    payloadState.sync = Object.assign({}, payloadState.sync || {}, {
+      connected: false,
+      lastSyncError: '',
+      lastRestoredAt: 0
+    });
+    return {
+      app: 'physics_mechanics_cards',
+      version: 1,
+      exportedAt: new Date().toISOString(),
+      state: payloadState
+    };
+  }
+
+  function writeBackupFile(fileId) {
+    const boundary = 'physics_sync_' + Date.now();
+    const bodyText = JSON.stringify(buildBackupPayload());
+    const metadata = fileId
+      ? { name: BACKUP_FILE_NAME, mimeType: 'application/json' }
+      : { name: BACKUP_FILE_NAME, parents: ['appDataFolder'], mimeType: 'application/json' };
+    const url = fileId
+      ? 'https://www.googleapis.com/upload/drive/v3/files/' + encodeURIComponent(fileId) + '?uploadType=multipart&fields=id,modifiedTime'
+      : 'https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id,modifiedTime';
+    return fetch(url, {
+      method: fileId ? 'PATCH' : 'POST',
+      headers: Object.assign({ 'Content-Type': 'multipart/related; boundary=' + boundary }, getAuthHeader()),
+      body: multipartBody(metadata, bodyText, boundary)
+    }).then(async (res) => {
+      if (!res.ok) {
+        const txt = await res.text();
+        throw new Error('バックアップ保存失敗: ' + res.status + ' ' + txt.slice(0, 160));
+      }
+      return res.json();
+    });
+  }
+
+  function backupToDrive(sourceLabel) {
+    if (syncBusy) return Promise.resolve(false);
+    syncBusy = true;
+    setSyncStatus('Driveへバックアップ中…');
+    return Promise.resolve().then(() => {
+      if (!driveToken || Date.now() >= driveTokenExpiresAt) throw new Error('Google認証の有効期限が切れています。もう一度「Googleに接続」を押してください。');
+      if (state.sync.backupFileId) return { id: state.sync.backupFileId };
+      return findBackupFile();
+    }).then((file) => {
+      const fileId = file && file.id ? file.id : '';
+      if (fileId) state.sync.backupFileId = fileId;
+      return writeBackupFile(fileId);
+    }).then((result) => {
+      state.sync.backupFileId = result.id || state.sync.backupFileId;
+      state.sync.lastSyncedAt = Date.now();
+      state.sync.remoteModifiedTime = result.modifiedTime || state.sync.remoteModifiedTime;
+      state.sync.lastSyncError = '';
+      if (HAS_STORAGE) {
+        try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch(e) {}
+      }
+      updateSyncUi();
+      setSyncStatus('Driveへバックアップしました。' + (sourceLabel ? '（' + sourceLabel + '）' : ''));
+      return true;
+    }).catch((err) => {
+      state.sync.lastSyncError = err && err.message ? err.message : String(err);
+      if (HAS_STORAGE) {
+        try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch(e) {}
+      }
+      updateSyncUi();
+      setSyncStatus('バックアップ失敗: ' + state.sync.lastSyncError);
+      return false;
+    }).finally(() => { syncBusy = false; });
+  }
+
+  function scheduleAutoSync(reason) {
+    if (!state.sync || !state.sync.auto || !state.sync.connected) return;
+    if (!driveToken || Date.now() >= driveTokenExpiresAt) {
+      state.sync.lastSyncError = '認証期限切れ。再接続すると自動バックアップを再開できます。';
+      if (HAS_STORAGE) {
+        try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch(e) {}
+      }
+      updateSyncUi();
+      return;
+    }
+    if (syncTimer) clearTimeout(syncTimer);
+    syncTimer = setTimeout(() => { backupToDrive(reason || 'autosave'); }, 2500);
+  }
+
+  function downloadBackupFile(fileId) {
+    const url = 'https://www.googleapis.com/drive/v3/files/' + encodeURIComponent(fileId) + '?alt=media';
+    return fetch(url, { headers: getAuthHeader() }).then(async (res) => {
+      if (!res.ok) {
+        const txt = await res.text();
+        throw new Error('バックアップ取得失敗: ' + res.status + ' ' + txt.slice(0, 160));
+      }
+      return res.json();
+    });
+  }
+
+  function restoreFromDrive() {
+    setSyncStatus('Driveから復元を確認中…');
+    return Promise.resolve().then(() => {
+      if (!driveToken || Date.now() >= driveTokenExpiresAt) throw new Error('Google認証の有効期限が切れています。もう一度「Googleに接続」を押してください。');
+      return state.sync.backupFileId ? { id: state.sync.backupFileId } : findBackupFile();
+    }).then((file) => {
+      if (!file || !file.id) throw new Error('Driveにバックアップが見つかりません。');
+      state.sync.backupFileId = file.id;
+      if (file.modifiedTime) state.sync.remoteModifiedTime = file.modifiedTime;
+      return downloadBackupFile(file.id);
+    }).then((payload) => {
+      if (!payload || !payload.state) throw new Error('バックアップ形式が不正です。');
+      const loaded = Object.assign(freshState(), payload.state || {});
+      loaded.sync = Object.assign(defaultSyncState(), loaded.sync || {}, {
+        clientId: state.sync.clientId,
+        auto: state.sync.auto,
+        connected: true,
+        backupFileId: state.sync.backupFileId,
+        lastSyncError: '',
+        remoteModifiedTime: state.sync.remoteModifiedTime,
+        lastRestoredAt: Date.now(),
+        lastSyncedAt: state.sync.lastSyncedAt
+      });
+      state = loaded;
+      if (HAS_STORAGE) {
+        try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch(e) {}
+      }
+      populateSelectors();
+      updateStudyView();
+      renderList();
+      updateSyncUi();
+      setSyncStatus('Driveのバックアップから復元しました。');
+      setStatus('Driveから学習データを復元しました。');
+      return true;
+    }).catch((err) => {
+      state.sync.lastSyncError = err && err.message ? err.message : String(err);
+      if (HAS_STORAGE) {
+        try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch(e) {}
+      }
+      updateSyncUi();
+      setSyncStatus('復元失敗: ' + state.sync.lastSyncError);
+      return false;
+    });
+  }
+
+  function connectDrive(initialRestore) {
+    updateStoredClientId();
+    setSyncStatus('Google認証を開始します…');
+    return requestAccessToken(true).then(() => {
+      state.sync.connected = true;
+      if (HAS_STORAGE) {
+        try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch(e) {}
+      }
+      updateSyncUi();
+      setSyncStatus('Googleに接続しました。バックアップ先を確認しています…');
+      return findBackupFile();
+    }).then((file) => {
+      if (file && file.id) {
+        state.sync.backupFileId = file.id;
+        state.sync.remoteModifiedTime = file.modifiedTime || '';
+        if (HAS_STORAGE) {
+          try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch(e) {}
+        }
+        updateSyncUi();
+      }
+      if (initialRestore && file && file.id) return restoreFromDrive();
+      setSyncStatus(file ? 'Googleに接続しました。既存バックアップを確認済みです。' : 'Googleに接続しました。まだDriveバックアップはありません。');
+      return true;
+    }).catch((err) => {
+      state.sync.connected = false;
+      state.sync.lastSyncError = err && err.message ? err.message : String(err);
+      if (HAS_STORAGE) {
+        try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch(e) {}
+      }
+      updateSyncUi();
+      setSyncStatus('接続失敗: ' + state.sync.lastSyncError);
+      return false;
+    });
+  }
+
+  function disconnectDrive() {
+    if (window.google && google.accounts && google.accounts.oauth2 && driveToken) {
+      try { google.accounts.oauth2.revoke(driveToken, function(){}); } catch(e) {}
+    }
+    driveToken = '';
+    driveTokenExpiresAt = 0;
+    state.sync.connected = false;
+    state.sync.lastSyncError = '';
+    saveState();
+    updateSyncUi();
+    setSyncStatus('Google接続を解除しました。');
+  }
+
+  function gradeCard(kind) {
+    const card = deck[current];
+    if (!card) return;
+    const p = progressFor(card.id);
+    let intervalDays = p.interval || 0;
+    let ease = p.ease || 2.5;
+    if (kind === 'again') {
+      intervalDays = 0.15;
+      ease = Math.max(1.3, ease - 0.2);
+      p.lapses += 1;
+      p.reps = Math.max(0, p.reps - 1);
+      p.lastGrade = '忘れた';
+    } else if (kind === 'hard') {
+      intervalDays = p.reps < 1 ? 0.7 : Math.max(1, intervalDays * 1.2);
+      ease = Math.max(1.3, ease - 0.05);
+      p.reps += 1;
+      p.lastGrade = 'あやしい';
+    } else if (kind === 'good') {
+      intervalDays = p.reps === 0 ? 1 : (p.reps === 1 ? 3 : Math.max(2, intervalDays * ease * 1.15));
+      p.reps += 1;
+      p.lastGrade = 'できた';
+    } else if (kind === 'easy') {
+      intervalDays = p.reps === 0 ? 3 : (p.reps === 1 ? 7 : Math.max(4, intervalDays * ease * 1.7));
+      ease = Math.min(3.2, ease + 0.1);
+      p.reps += 1;
+      p.lastGrade = '余裕';
+    }
+    p.ease = ease;
+    p.interval = Math.round(intervalDays * 10) / 10;
+    p.lastReviewed = now();
+    p.due = now() + p.interval * 24 * 60 * 60 * 1000;
+    state.revealed = false;
+    saveState();
+    rebuildDeck();
+    current = Math.min(current, Math.max(0, deck.length - 1));
+    setStatus(`「${kind === 'again' ? '忘れた' : kind === 'hard' ? 'あやしい' : kind === 'good' ? 'できた' : '余裕'}」で記録しました。次回は ${intervalLabel(p.interval)} の予定です。`);
+    updateStudyView();
+  }
+
+  function populateSelectors() {
+    function fill(selectId, firstLabel, options) {
+      const el = $(selectId);
+      el.innerHTML = '';
+      const first = document.createElement('option');
+      first.value = 'all';
+      first.textContent = firstLabel;
+      el.appendChild(first);
+      options.forEach(opt => {
+        const o = document.createElement('option');
+        o.value = opt;
+        o.textContent = opt;
+        el.appendChild(o);
+      });
+    }
+    fill('themeFilter', '全テーマ', themeOrder);
+    fill('typeFilter', '全カード型', typeOrder);
+    fill('importanceFilter', '全重要度', ['最重要','重要','標準']);
+    fill('listThemeFilter', '全テーマ', themeOrder);
+    fill('listTypeFilter', '全カード型', typeOrder);
+    fill('listImportanceFilter', '全重要度', ['最重要','重要','標準']);
+    fill('formulaThemeFilter', '全テーマ', formulas.map(f => f.theme));
+    $('themeFilter').value = state.filters.theme;
+    $('typeFilter').value = state.filters.type;
+    $('importanceFilter').value = state.filters.importance;
+    $('listThemeFilter').value = state.filters.listTheme;
+    $('listTypeFilter').value = state.filters.listType;
+    $('listImportanceFilter').value = state.filters.listImportance;
+    $('formulaThemeFilter').value = state.filters.formulaTheme || 'all';
+    $('dueOnlyToggle').classList.toggle('active', !!state.filters.dueOnly);
+  }
+
+  function renderList() {
+    const list = getFilteredCards(true);
+    const wrap = $('cardList');
+    $('searchSummary').textContent = `該当 ${list.length} 枚 / 全${cards.length}枚`;
+    wrap.innerHTML = '';
+    list.forEach(card => {
+      const p = progressFor(card.id);
+      const box = document.createElement('div');
+      box.className = 'card-item';
+      box.id = 'card-' + card.id;
+      box.innerHTML = `
+        <h3>${card.prompt}</h3>
+        <div class="ans">${escapeHtml(card.answer).replace(/\n/g,'<br>')}</div>
+        <div class="tags">
+          <span class="badge">${card.theme}</span>
+          <span class="badge">${card.type}</span>
+          <span class="badge">${card.importance}</span>
+          <span class="badge">前回: ${p.lastGrade}</span>
+          <span class="badge">次回: ${formatDue(p.due)}</span>
+        </div>
+      `;
+      wrap.appendChild(box);
+    });
+  }
+
+
+  function renderFormulaList() {
+    const q = (state.filters.formulaSearch || '').trim().toLowerCase();
+    const theme = state.filters.formulaTheme || 'all';
+    const list = formulas.filter(item => {
+      if (theme !== 'all' && item.theme !== theme) return false;
+      if (!q) return true;
+      const text = [item.theme, item.importance].concat(item.laws, item.conditions, item.units, item.pitfalls, item.judgment).join(' ').toLowerCase();
+      return text.includes(q);
+    });
+    $('formulaSummary').textContent = `該当 ${list.length} テーマ / 全${formulas.length}テーマ`;
+    const wrap = $('formulaList');
+    wrap.innerHTML = '';
+    list.forEach(item => {
+      const box = document.createElement('div');
+      box.className = 'formula-item';
+      box.id = 'formula-' + item.theme.replace(/[^\w\u3040-\u30ff\u3400-\u9fff-]+/g,'-');
+      const renderItems = arr => `<ul>${arr.map(v => `<li>${escapeHtml(v)}</li>`).join('')}</ul>`;
+      box.innerHTML = `
+        <h3>${escapeHtml(item.theme)} <span class="badge">${escapeHtml(item.importance)}</span></h3>
+        <div class="formula-grid">
+          <div class="formula-block"><h4>主要公式</h4>${renderItems(item.laws)}</div>
+          <div class="formula-block"><h4>使う条件</h4>${renderItems(item.conditions)}</div>
+          <div class="formula-block"><h4>単位</h4>${renderItems(item.units)}</div>
+          <div class="formula-block"><h4>混同しやすい点</h4>${renderItems(item.pitfalls)}</div>
+          <div class="formula-block" style="grid-column:1 / -1;"><h4>典型判断メモ</h4>${renderItems(item.judgment)}</div>
+        </div>
+        <div class="formula-actions">
+          <button class="soft formula-open-study" data-theme="${escapeHtml(item.theme)}">このテーマのカードを学習</button>
+          <button class="formula-open-list" data-theme="${escapeHtml(item.theme)}">このテーマを一覧で開く</button>
+        </div>
+      `;
+      wrap.appendChild(box);
+    });
+  }
+
+  function openThemeInStudy(theme) {
+    state.filters.theme = theme;
+    state.filters.type = 'all';
+    state.filters.importance = 'all';
+    $('themeFilter').value = theme;
+    $('typeFilter').value = 'all';
+    $('importanceFilter').value = 'all';
+    state.revealed = false;
+    showTab('study');
+    updateStudyView();
+    document.querySelector('.flashcard').scrollIntoView({behavior:'smooth', block:'start'});
+    saveState();
+  }
+
+  function openThemeInList(theme) {
+    state.filters.search = '';
+    $('searchInput').value = '';
+    state.filters.listTheme = theme;
+    state.filters.listType = 'all';
+    state.filters.listImportance = 'all';
+    $('listThemeFilter').value = theme;
+    $('listTypeFilter').value = 'all';
+    $('listImportanceFilter').value = 'all';
+    showTab('list');
+    renderList();
+    saveState();
+  }
+
+  function escapeHtml(str) {
+    return str
+      .replace(/&/g,'&amp;')
+      .replace(/</g,'&lt;')
+      .replace(/>/g,'&gt;')
+      .replace(/"/g,'&quot;');
+  }
+
+  function showTab(tab) {
+    const map = {
+      study: ['tabStudy','viewStudy'],
+      list: ['tabList','viewList'],
+      formula: ['tabFormula','viewFormula'],
+      guide: ['tabGuide','viewGuide'],
+    };
+    for (const key in map) {
+      $(map[key][0]).classList.toggle('active', key === tab);
+      $(map[key][1]).classList.toggle('active', key === tab);
+    }
+    if (tab === 'list') renderList();
+    if (tab === 'formula') renderFormulaList();
+  }
+
+  function exportProgress() {
+    const blob = new Blob([JSON.stringify(state, null, 2)], {type:'application/json'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    const d = new Date();
+    const stamp = `${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}_${String(d.getHours()).padStart(2,'0')}${String(d.getMinutes()).padStart(2,'0')}`;
+    a.href = url;
+    a.download = `physics_mechanics_progress_${stamp}.json`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+    setStatus('進捗をJSONで書き出しました。');
+  }
+
+  function importProgress(file) {
+    const reader = new FileReader();
+    reader.onload = () => {
+      try {
+        const loaded = JSON.parse(reader.result);
+        if (!loaded || typeof loaded !== 'object') throw new Error('bad');
+        Object.assign(state, freshState(), loaded);
+        state.revealed = false;
+        saveState();
+        populateSelectors();
+        updateStudyView();
+        renderList();
+        setStatus('進捗を読み込みました。');
+      } catch(e) {
+        setStatus('読み込みに失敗しました。JSONファイルを確認してください。');
+      }
+    };
+    reader.readAsText(file);
+  }
+
+  function resetProgress() {
+    if (!confirm('進捗を初期化しますか？')) return;
+    Object.assign(state, freshState());
+    saveState();
+    populateSelectors();
+    updateStudyView();
+    renderList();
+    setStatus('進捗を初期化しました。');
+  }
+
+  function installHandlers() {
+    $('btnStart').addEventListener('click', () => {
+      showTab('study');
+      document.querySelector('.flashcard').scrollIntoView({behavior:'smooth', block:'start'});
+    });
+    $('btnManual').addEventListener('click', () => showTab('guide'));
+    $('btnFormula').addEventListener('click', () => {
+      showTab('formula');
+      document.getElementById('viewFormula').scrollIntoView({behavior:'smooth', block:'start'});
+    });
+    $('tabStudy').addEventListener('click', () => showTab('study'));
+    $('tabList').addEventListener('click', () => showTab('list'));
+    $('tabFormula').addEventListener('click', () => showTab('formula'));
+    $('tabGuide').addEventListener('click', () => showTab('guide'));
+
+    $('btnReveal').addEventListener('click', () => {
+      state.revealed = true;
+      updateStudyView();
+    });
+    $('btnPrev').addEventListener('click', () => {
+      if (!deck.length) return;
+      current = (current - 1 + deck.length) % deck.length;
+      state.currentId = deck[current].id;
+      state.revealed = false;
+      updateStudyView();
+    });
+    $('btnNext').addEventListener('click', () => {
+      if (!deck.length) return;
+      current = (current + 1) % deck.length;
+      state.currentId = deck[current].id;
+      state.revealed = false;
+      updateStudyView();
+    });
+    $('gradeAgain').addEventListener('click', () => gradeCard('again'));
+    $('gradeHard').addEventListener('click', () => gradeCard('hard'));
+    $('gradeGood').addEventListener('click', () => gradeCard('good'));
+    $('gradeEasy').addEventListener('click', () => gradeCard('easy'));
+
+    ['themeFilter','typeFilter','importanceFilter'].forEach(id => {
+      $(id).addEventListener('change', () => {
+        state.filters.theme = $('themeFilter').value;
+        state.filters.type = $('typeFilter').value;
+        state.filters.importance = $('importanceFilter').value;
+        state.revealed = false;
+        updateStudyView();
+      });
+    });
+    ['listThemeFilter','listTypeFilter','listImportanceFilter'].forEach(id => {
+      $(id).addEventListener('change', () => {
+        state.filters.listTheme = $('listThemeFilter').value;
+        state.filters.listType = $('listTypeFilter').value;
+        state.filters.listImportance = $('listImportanceFilter').value;
+        renderList();
+        saveState();
+      });
+    });
+    $('searchInput').addEventListener('input', (e) => {
+      state.filters.search = e.target.value;
+      renderList();
+      saveState();
+    });
+    $('btnClearSearch').addEventListener('click', () => {
+      state.filters.search = '';
+      $('searchInput').value = '';
+      renderList();
+      saveState();
+    });
+    $('formulaSearch').addEventListener('input', (e) => {
+      state.filters.formulaSearch = e.target.value;
+      renderFormulaList();
+      saveState();
+    });
+    $('formulaThemeFilter').addEventListener('change', () => {
+      state.filters.formulaTheme = $('formulaThemeFilter').value;
+      renderFormulaList();
+      saveState();
+    });
+    $('btnClearFormulaSearch').addEventListener('click', () => {
+      state.filters.formulaSearch = '';
+      state.filters.formulaTheme = 'all';
+      $('formulaSearch').value = '';
+      $('formulaThemeFilter').value = 'all';
+      renderFormulaList();
+      saveState();
+    });
+    $('formulaList').addEventListener('click', (e) => {
+      const theme = e.target.getAttribute('data-theme');
+      if (!theme) return;
+      if (e.target.classList.contains('formula-open-study')) openThemeInStudy(theme);
+      if (e.target.classList.contains('formula-open-list')) openThemeInList(theme);
+    });
+    $('dueOnlyToggle').addEventListener('click', () => {
+      state.filters.dueOnly = !state.filters.dueOnly;
+      $('dueOnlyToggle').classList.toggle('active', !!state.filters.dueOnly);
+      state.revealed = false;
+      updateStudyView();
+    });
+    $('btnShuffle').addEventListener('click', () => {
+      deck = shuffle(deck);
+      current = 0;
+      if (deck[0]) state.currentId = deck[0].id;
+      state.revealed = false;
+      updateStudyView();
+      setStatus('表示順を並び替えました。');
+    });
+    $('btnOpenCurrent').addEventListener('click', () => {
+      const card = deck[current];
+      if (!card) return;
+      state.filters.search = '';
+      $('searchInput').value = '';
+      state.filters.listTheme = card.theme;
+      state.filters.listType = card.type;
+      state.filters.listImportance = 'all';
+      $('listThemeFilter').value = card.theme;
+      $('listTypeFilter').value = card.type;
+      $('listImportanceFilter').value = 'all';
+      showTab('list');
+      renderList();
+      requestAnimationFrame(() => {
+        const el = $('card-' + card.id);
+        if (el) el.scrollIntoView({behavior:'smooth', block:'start'});
+      });
+    });
+    $('btnOpenCurrentFormula').addEventListener('click', () => {
+      const card = deck[current];
+      if (!card) return;
+      state.filters.formulaSearch = '';
+      state.filters.formulaTheme = card.theme;
+      $('formulaSearch').value = '';
+      $('formulaThemeFilter').value = card.theme;
+      showTab('formula');
+      renderFormulaList();
+      saveState();
+    });
+
+    $('btnExport').addEventListener('click', exportProgress);
+    $('btnImport').addEventListener('click', () => $('importFile').click());
+    $('importFile').addEventListener('change', (e) => {
+      if (e.target.files && e.target.files[0]) importProgress(e.target.files[0]);
+      e.target.value = '';
+    });
+    $('btnReset').addEventListener('click', resetProgress);
+
+    $('clientIdInput').addEventListener('change', updateStoredClientId);
+    $('autoSyncToggle').addEventListener('change', function() {
+      state.sync.auto = !!this.checked;
+      saveState();
+      updateSyncUi();
+      setSyncStatus(state.sync.auto ? '自動バックアップを有効にしました。' : '自動バックアップを停止しました。');
+    });
+    $('btnConnectDrive').addEventListener('click', () => connectDrive(true));
+    $('btnBackupNow').addEventListener('click', () => {
+      updateStoredClientId();
+      if (!state.sync.connected) {
+        connectDrive(false).then((ok) => { if (ok) backupToDrive('manual'); });
+      } else {
+        backupToDrive('manual');
+      }
+    });
+    $('btnRestoreNow').addEventListener('click', () => {
+      updateStoredClientId();
+      if (!state.sync.connected) connectDrive(true);
+      else restoreFromDrive();
+    });
+    $('btnDisconnectDrive').addEventListener('click', disconnectDrive);
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      $('btnInstall').classList.remove('hidden');
+    });
+    $('btnInstall').addEventListener('click', async () => {
+      if (!deferredPrompt) return;
+      deferredPrompt.prompt();
+      await deferredPrompt.userChoice;
+      deferredPrompt = null;
+      $('btnInstall').classList.add('hidden');
+    });
+  }
+
+  function init() {
+    populateSelectors();
+    $('searchInput').value = state.filters.search || '';
+    $('originText').textContent = location.origin;
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('./sw.js').catch(() => {});
+    }
+    installHandlers();
+    updateStudyView();
+    renderList();
+    renderFormulaList();
+    updateSyncUi();
+    setStatus('初期表示しました。カード学習・公式集・説明書を切り替えて使えます。Drive保存を使う場合はOAuthクライアントIDを入れて「Googleに接続」を押してください。');
+  }
+
+  init();
+})();
+</script>
+</body>
+</html>
