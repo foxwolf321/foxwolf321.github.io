@@ -1,0 +1,888 @@
+<!DOCTYPE html><html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#1f2937" />
+  <title>理系数学・物理公式カード</title>  <!-- KaTeX: GitHub Pages上でそのまま使えるCDN読み込み -->  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.css" crossorigin="anonymous" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.js" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>  <style>
+    :root {
+      --bg: #f5f2eb;
+      --card: rgba(255, 255, 255, 0.94);
+      --ink: #1f2937;
+      --muted: #64748b;
+      --line: rgba(30, 41, 59, 0.14);
+      --accent: #334155;
+      --soft: rgba(255, 255, 255, 0.72);
+      --formula-bg: rgba(248, 250, 252, 0.96);
+      --ok: #166534;
+      --warn: #92400e;
+      --bad: #991b1b;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      min-height: 100%;
+      background: var(--bg);
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Noto Sans JP", "Yu Gothic", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 20% 0%, rgba(255,255,255,0.9), transparent 34%),
+        linear-gradient(135deg, rgba(255,248,235,0.95), rgba(232,238,244,0.94));
+      overflow-x: hidden;
+    }
+
+    /* 後で assets/bike-bg.webp を置くと、薄い背景として出ます。不要ならこの部分を削除してください。 */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      background: url("./assets/bike-bg.webp") center / cover no-repeat;
+      opacity: 0.13;
+      filter: saturate(0.8) contrast(0.95) blur(0.2px);
+      pointer-events: none;
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      background: rgba(255, 255, 255, 0.58);
+      pointer-events: none;
+    }
+
+    .app-shell {
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 18px 14px 80px;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .brand-icon {
+      width: 44px;
+      height: 44px;
+      display: grid;
+      place-items: center;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #1f2937, #64748b);
+      color: white;
+      font-size: 24px;
+      box-shadow: 0 8px 22px rgba(15, 23, 42, 0.18);
+      flex: none;
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: clamp(1.15rem, 5vw, 1.65rem);
+      letter-spacing: 0.02em;
+      line-height: 1.2;
+    }
+
+    .brand p {
+      margin: 2px 0 0;
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+
+    .toolbar {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: var(--soft);
+      backdrop-filter: blur(8px);
+      margin-bottom: 14px;
+      box-shadow: 0 8px 26px rgba(15, 23, 42, 0.08);
+    }
+
+    .controls-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    input,
+    select,
+    button {
+      font: inherit;
+    }
+
+    input,
+    select {
+      width: 100%;
+      min-height: 44px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 10px 12px;
+      background: rgba(255, 255, 255, 0.92);
+      color: var(--ink);
+      outline: none;
+    }
+
+    input:focus,
+    select:focus {
+      border-color: rgba(51, 65, 85, 0.65);
+      box-shadow: 0 0 0 4px rgba(51, 65, 85, 0.12);
+    }
+
+    .status-line {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      color: var(--muted);
+      font-size: 0.88rem;
+      padding: 0 4px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid rgba(255, 255, 255, 0.55);
+      border-radius: 26px;
+      box-shadow: 0 16px 44px rgba(15, 23, 42, 0.14);
+      overflow: hidden;
+      backdrop-filter: blur(8px);
+    }
+
+    .card-inner {
+      padding: clamp(16px, 4vw, 26px);
+    }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 5px 10px;
+      border-radius: 999px;
+      background: rgba(226, 232, 240, 0.78);
+      color: #334155;
+      font-size: 0.82rem;
+      white-space: nowrap;
+    }
+
+    .difficulty-easy { background: rgba(220, 252, 231, 0.85); color: #166534; }
+    .difficulty-mid { background: rgba(254, 243, 199, 0.9); color: #92400e; }
+    .difficulty-hard { background: rgba(254, 226, 226, 0.9); color: #991b1b; }
+
+    .card-title {
+      margin: 0 0 10px;
+      font-size: clamp(1.45rem, 6vw, 2.2rem);
+      line-height: 1.25;
+    }
+
+    .question {
+      margin: 0 0 18px;
+      color: #334155;
+      font-size: clamp(1rem, 3.8vw, 1.16rem);
+      line-height: 1.72;
+    }
+
+    .formula-box {
+      margin: 18px 0 20px;
+      padding: clamp(16px, 5vw, 24px) 12px;
+      border: 1px solid rgba(51, 65, 85, 0.16);
+      border-radius: 22px;
+      background: var(--formula-bg);
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .formula-main {
+      min-width: max-content;
+      text-align: center;
+      padding: 2px 10px;
+    }
+
+    .formula-box .katex-display {
+      margin: 0.35em 0;
+      font-size: clamp(1.45rem, 7vw, 2.45rem);
+    }
+
+    .section {
+      border-top: 1px solid var(--line);
+      padding-top: 16px;
+      margin-top: 16px;
+    }
+
+    .section h2 {
+      margin: 0 0 8px;
+      font-size: 1rem;
+      color: #0f172a;
+    }
+
+    .section p,
+    .section li {
+      line-height: 1.78;
+    }
+
+    .answer-panel {
+      display: none;
+    }
+
+    .answer-panel.open {
+      display: block;
+    }
+
+    .derivation {
+      border-radius: 18px;
+      background: rgba(248, 250, 252, 0.78);
+      padding: 12px;
+      overflow-x: auto;
+    }
+
+    .derivation .katex-display {
+      font-size: clamp(1.08rem, 4.8vw, 1.45rem);
+      margin: 0.75em 0;
+    }
+
+    .button-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .rating-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    button {
+      border: 0;
+      border-radius: 16px;
+      min-height: 46px;
+      padding: 10px 12px;
+      cursor: pointer;
+      color: white;
+      background: var(--accent);
+      box-shadow: 0 8px 18px rgba(15, 23, 42, 0.16);
+      transition: transform 0.08s ease, filter 0.12s ease;
+    }
+
+    button:active {
+      transform: translateY(1px);
+      filter: brightness(0.96);
+    }
+
+    .secondary {
+      background: #64748b;
+    }
+
+    .good {
+      background: var(--ok);
+    }
+
+    .middle {
+      background: var(--warn);
+    }
+
+    .bad {
+      background: var(--bad);
+    }
+
+    .empty {
+      padding: 26px;
+      border-radius: 22px;
+      background: var(--card);
+      color: var(--muted);
+      text-align: center;
+      border: 1px solid var(--line);
+    }
+
+    .small-note {
+      margin: 12px 0 0;
+      color: var(--muted);
+      font-size: 0.85rem;
+      line-height: 1.6;
+    }
+
+    @media (min-width: 760px) {
+      .toolbar {
+        grid-template-columns: 1.2fr 1fr;
+        align-items: center;
+      }
+      .controls-row {
+        grid-template-columns: 1fr 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .topbar {
+        align-items: flex-start;
+      }
+      .controls-row,
+      .button-row,
+      .rating-row {
+        grid-template-columns: 1fr;
+      }
+      .brand-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 13px;
+      }
+      .card {
+        border-radius: 22px;
+      }
+    }
+  </style></head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-icon" aria-hidden="true">∑</div>
+        <div>
+          <h1>理系数学・物理公式カード</h1>
+          <p>上下分数で見やすく、導出まで確認できる公式集</p>
+        </div>
+      </div>
+    </header><section class="toolbar" aria-label="カード検索とフィルタ">
+  <input id="searchInput" type="search" placeholder="検索：万有引力、三角関数、微分、積分…" />
+  <div class="controls-row">
+    <select id="subjectFilter" aria-label="科目で絞り込み">
+      <option value="all">全科目</option>
+    </select>
+    <select id="unitFilter" aria-label="単元で絞り込み">
+      <option value="all">全単元</option>
+    </select>
+    <select id="modeFilter" aria-label="出題モード">
+      <option value="all">全カード</option>
+      <option value="weak">苦手優先</option>
+      <option value="unseen">未学習</option>
+    </select>
+  </div>
+</section>
+
+<div class="status-line">
+  <span id="cardCounter">0 / 0</span>
+  <span id="scoreSummary">学習記録：0件</span>
+</div>
+
+<main id="app" aria-live="polite"></main>
+
+  </div>  <script>
+    // =========================================================
+    // カードデータ
+    // 数式は String.raw`...` で書くと、\dfrac などのバックスラッシュが安全です。
+    // メイン公式は \dfrac を優先し、斜め分数 a/b は避けます。
+    // =========================================================
+    const cards = [
+      {
+        id: "physics-gravity-001",
+        subject: "物理",
+        unit: "力学",
+        difficulty: "標準",
+        title: "万有引力の法則",
+        question: "質量をもつ2物体の間にはたらく万有引力の大きさを表す。",
+        formula: String.raw`F = G\dfrac{m_1m_2}{r^2}`,
+        meaning: "力は2物体の質量の積に比例し、距離の2乗に反比例する。",
+        derivation: String.raw`
+\begin{aligned}
+F &\propto m_1m_2 \\
+F &\propto \dfrac{1}{r^2} \\
+\therefore\quad F &= G\dfrac{m_1m_2}{r^2}
+\end{aligned}`,
+        usage: "天体の運動、人工衛星、重力場の基本式として使う。"
+      },
+      {
+        id: "physics-kinematics-001",
+        subject: "物理",
+        unit: "力学",
+        difficulty: "基本",
+        title: "等加速度直線運動：速度",
+        question: "加速度が一定のとき、時刻 t における速度を表す。",
+        formula: String.raw`v = v_0 + at`,
+        meaning: "初速度に、加速度による速度変化を加えたもの。",
+        derivation: String.raw`
+\begin{aligned}
+a &= \dfrac{v-v_0}{t} \\
+at &= v-v_0 \\
+\therefore\quad v &= v_0 + at
+\end{aligned}`,
+        usage: "落下運動、斜面上の運動、電車や車の加速問題で頻出。"
+      },
+      {
+        id: "physics-kinematics-002",
+        subject: "物理",
+        unit: "力学",
+        difficulty: "基本",
+        title: "等加速度直線運動：位置",
+        question: "加速度が一定のとき、時刻 t における変位を表す。",
+        formula: String.raw`x = v_0t + \dfrac{1}{2}at^2`,
+        meaning: "初速度で進む分と、加速度で増える分を足したもの。",
+        derivation: String.raw`
+\begin{aligned}
+\bar{v} &= \dfrac{v_0+v}{2} \\
+&= \dfrac{v_0+(v_0+at)}{2} \\
+&= v_0 + \dfrac{1}{2}at \\
+x &= \bar{v}t \\
+\therefore\quad x &= v_0t + \dfrac{1}{2}at^2
+\end{aligned}`,
+        usage: "自由落下、鉛直投げ上げ、水平投射の分解で使う。"
+      },
+      {
+        id: "math-trig-limit-001",
+        subject: "数学",
+        unit: "微分・積分",
+        difficulty: "標準",
+        title: "三角関数の基本極限",
+        question: "微分法で重要になる三角関数の基本極限。",
+        formula: String.raw`\lim_{x\to 0}\dfrac{\sin x}{x}=1`,
+        meaning: "x が 0 に近いとき、\sin x は x とほぼ同じ大きさになる。",
+        derivation: String.raw`
+\begin{aligned}
+\sin x &< x < \tan x \quad (0<x<\dfrac{\pi}{2}) \\
+\dfrac{\sin x}{x} &< 1 < \dfrac{\tan x}{x} \\
+\cos x &< \dfrac{\sin x}{x} < 1 \\
+\therefore\quad \lim_{x\to 0}\dfrac{\sin x}{x} &= 1
+\end{aligned}`,
+        usage: "\sin x の微分、極限計算、近似で使う。"
+      },
+      {
+        id: "math-differential-001",
+        subject: "数学",
+        unit: "微分・積分",
+        difficulty: "基本",
+        title: "べき関数の微分",
+        question: "x^n の導関数を求める公式。",
+        formula: String.raw`\dfrac{d}{dx}x^n = nx^{n-1}`,
+        meaning: "指数を前に出し、指数を1つ下げる。",
+        derivation: String.raw`
+\begin{aligned}
+\dfrac{d}{dx}x^n
+&= \lim_{h\to 0}\dfrac{(x+h)^n-x^n}{h} \\
+&= \lim_{h\to 0}\dfrac{nx^{n-1}h+{}_{n}C_2x^{n-2}h^2+\cdots+h^n}{h} \\
+&= nx^{n-1}
+\end{aligned}`,
+        usage: "接線、増減表、最大最小、積分計算の基礎。"
+      },
+      {
+        id: "math-integral-001",
+        subject: "数学",
+        unit: "微分・積分",
+        difficulty: "基本",
+        title: "べき関数の積分",
+        question: "x^n の不定積分を求める公式。",
+        formula: String.raw`\int x^n\,dx = \dfrac{x^{n+1}}{n+1}+C \quad (n\neq -1)`,
+        meaning: "指数を1つ上げ、その新しい指数で割る。",
+        derivation: String.raw`
+\begin{aligned}
+\dfrac{d}{dx}\left(\dfrac{x^{n+1}}{n+1}\right)
+&= \dfrac{1}{n+1}\cdot (n+1)x^n \\
+&= x^n
+\end{aligned}`,
+        usage: "面積、体積、物理の変位・仕事の計算にもつながる。"
+      },
+      {
+        id: "math-trig-identity-001",
+        subject: "数学",
+        unit: "三角関数",
+        difficulty: "基本",
+        title: "三角関数の相互関係",
+        question: "\sin\theta と \cos\theta の基本関係。",
+        formula: String.raw`\sin^2\theta + \cos^2\theta = 1`,
+        meaning: "単位円上の点 (\cos\theta,\sin\theta) が半径1の円上にあることを表す。",
+        derivation: String.raw`
+\begin{aligned}
+x^2+y^2 &= 1 \\
+x &= \cos\theta,\quad y=\sin\theta \\
+\therefore\quad \cos^2\theta+\sin^2\theta &= 1
+\end{aligned}`,
+        usage: "三角関数の変形、最大最小、合成、積分でよく使う。"
+      },
+      {
+        id: "math-probability-001",
+        subject: "数学",
+        unit: "場合の数・確率",
+        difficulty: "標準",
+        title: "条件付き確率",
+        question: "B が起こった条件のもとで A が起こる確率。",
+        formula: String.raw`P(A\mid B)=\dfrac{P(A\cap B)}{P(B)}`,
+        meaning: "全体を B が起きた世界に限定して、その中で A も起きる割合を見る。",
+        derivation: String.raw`
+\begin{aligned}
+P(A\mid B)
+&= \dfrac{\text{A かつ B が起こる場合}}{\text{B が起こる場合}} \\
+&= \dfrac{P(A\cap B)}{P(B)}
+\end{aligned}`,
+        usage: "ベイズの定理、検査の陽性的中率、くじ・カード問題で重要。"
+      }
+    ];
+
+    const state = {
+      index: 0,
+      filtered: [...cards],
+      showAnswer: false,
+      progress: loadProgress()
+    };
+
+    const app = document.getElementById("app");
+    const searchInput = document.getElementById("searchInput");
+    const subjectFilter = document.getElementById("subjectFilter");
+    const unitFilter = document.getElementById("unitFilter");
+    const modeFilter = document.getElementById("modeFilter");
+    const cardCounter = document.getElementById("cardCounter");
+    const scoreSummary = document.getElementById("scoreSummary");
+
+    function init() {
+      buildFilters();
+      createInlineManifest();
+      applyFilters();
+      bindEvents();
+    }
+
+    function buildFilters() {
+      const subjects = [...new Set(cards.map(card => card.subject))].sort();
+      const units = [...new Set(cards.map(card => card.unit))].sort();
+
+      for (const subject of subjects) {
+        const option = document.createElement("option");
+        option.value = subject;
+        option.textContent = subject;
+        subjectFilter.appendChild(option);
+      }
+
+      for (const unit of units) {
+        const option = document.createElement("option");
+        option.value = unit;
+        option.textContent = unit;
+        unitFilter.appendChild(option);
+      }
+    }
+
+    function bindEvents() {
+      searchInput.addEventListener("input", () => {
+        state.index = 0;
+        applyFilters();
+      });
+      subjectFilter.addEventListener("change", () => {
+        state.index = 0;
+        applyFilters();
+      });
+      unitFilter.addEventListener("change", () => {
+        state.index = 0;
+        applyFilters();
+      });
+      modeFilter.addEventListener("change", () => {
+        state.index = 0;
+        applyFilters();
+      });
+    }
+
+    function applyFilters() {
+      const keyword = normalize(searchInput.value);
+      const subject = subjectFilter.value;
+      const unit = unitFilter.value;
+      const mode = modeFilter.value;
+
+      let result = cards.filter(card => {
+        const text = normalize([
+          card.subject,
+          card.unit,
+          card.title,
+          card.question,
+          card.meaning,
+          card.usage,
+          card.formula
+        ].join(" "));
+
+        const matchesKeyword = !keyword || text.includes(keyword);
+        const matchesSubject = subject === "all" || card.subject === subject;
+        const matchesUnit = unit === "all" || card.unit === unit;
+        const record = state.progress[card.id];
+        const matchesMode =
+          mode === "all" ||
+          (mode === "weak" && record && record.score < 0) ||
+          (mode === "unseen" && !record);
+
+        return matchesKeyword && matchesSubject && matchesUnit && matchesMode;
+      });
+
+      if (mode === "weak") {
+        result = result.sort((a, b) => {
+          const scoreA = state.progress[a.id]?.score ?? 0;
+          const scoreB = state.progress[b.id]?.score ?? 0;
+          return scoreA - scoreB;
+        });
+      }
+
+      state.filtered = result;
+      state.index = Math.min(state.index, Math.max(0, result.length - 1));
+      state.showAnswer = false;
+      render();
+    }
+
+    function render() {
+      updateStatus();
+
+      if (state.filtered.length === 0) {
+        app.innerHTML = `
+          <div class="empty">
+            条件に合うカードがありません。検索語やフィルタを変えてください。
+          </div>
+        `;
+        return;
+      }
+
+      const card = state.filtered[state.index];
+      const record = state.progress[card.id];
+      const difficultyClass = getDifficultyClass(card.difficulty);
+
+      app.innerHTML = `
+        <article class="card">
+          <div class="card-inner">
+            <div class="tags">
+              <span class="tag">${escapeHtml(card.subject)}</span>
+              <span class="tag">${escapeHtml(card.unit)}</span>
+              <span class="tag ${difficultyClass}">${escapeHtml(card.difficulty)}</span>
+              <span class="tag">記録：${formatRecord(record)}</span>
+            </div>
+
+            <h2 class="card-title">${escapeHtml(card.title)}</h2>
+            <p class="question">${renderInlineText(card.question)}</p>
+
+            <div class="formula-box" aria-label="公式">
+              <div class="formula-main">
+                \\[${card.formula}\\]
+              </div>
+            </div>
+
+            <section class="section">
+              <h2>意味</h2>
+              <p>${renderInlineText(card.meaning)}</p>
+            </section>
+
+            <div class="button-row">
+              <button type="button" id="toggleAnswerBtn">${state.showAnswer ? "答えを隠す" : "導出・使いどころを見る"}</button>
+              <button type="button" class="secondary" id="shuffleBtn">ランダムに出題</button>
+            </div>
+
+            <div class="answer-panel ${state.showAnswer ? "open" : ""}" id="answerPanel">
+              <section class="section">
+                <h2>導出</h2>
+                <div class="derivation">
+                  \\[${card.derivation}\\]
+                </div>
+              </section>
+
+              <section class="section">
+                <h2>使いどころ</h2>
+                <p>${renderInlineText(card.usage)}</p>
+              </section>
+
+              <section class="section">
+                <h2>理解度を記録</h2>
+                <div class="rating-row">
+                  <button type="button" class="good" data-rate="good">わかった</button>
+                  <button type="button" class="middle" data-rate="middle">微妙</button>
+                  <button type="button" class="bad" data-rate="bad">間違えた</button>
+                </div>
+                <p class="small-note">「苦手優先」では、間違えたカードが上に来ます。記録はこの端末のブラウザ内に保存されます。</p>
+              </section>
+            </div>
+
+            <div class="button-row">
+              <button type="button" class="secondary" id="prevBtn">前へ</button>
+              <button type="button" id="nextBtn">次へ</button>
+            </div>
+          </div>
+        </article>
+      `;
+
+      document.getElementById("toggleAnswerBtn").addEventListener("click", () => {
+        state.showAnswer = !state.showAnswer;
+        render();
+      });
+
+      document.getElementById("shuffleBtn").addEventListener("click", () => {
+        if (state.filtered.length <= 1) return;
+        let next = state.index;
+        while (next === state.index) {
+          next = Math.floor(Math.random() * state.filtered.length);
+        }
+        state.index = next;
+        state.showAnswer = false;
+        render();
+      });
+
+      document.getElementById("prevBtn").addEventListener("click", () => {
+        state.index = (state.index - 1 + state.filtered.length) % state.filtered.length;
+        state.showAnswer = false;
+        render();
+      });
+
+      document.getElementById("nextBtn").addEventListener("click", nextCard);
+
+      for (const button of document.querySelectorAll("[data-rate]")) {
+        button.addEventListener("click", () => {
+          rateCard(card.id, button.dataset.rate);
+          nextCard();
+        });
+      }
+
+      typesetMath(app);
+    }
+
+    function nextCard() {
+      if (state.filtered.length === 0) return;
+      state.index = (state.index + 1) % state.filtered.length;
+      state.showAnswer = false;
+      render();
+    }
+
+    function rateCard(cardId, rating) {
+      const current = state.progress[cardId] || {
+        score: 0,
+        good: 0,
+        middle: 0,
+        bad: 0,
+        seen: 0,
+        last: null
+      };
+
+      current.seen += 1;
+      current.last = new Date().toISOString();
+
+      if (rating === "good") {
+        current.good += 1;
+        current.score += 2;
+      } else if (rating === "middle") {
+        current.middle += 1;
+        current.score -= 1;
+      } else if (rating === "bad") {
+        current.bad += 1;
+        current.score -= 3;
+      }
+
+      state.progress[cardId] = current;
+      saveProgress();
+    }
+
+    function updateStatus() {
+      cardCounter.textContent = state.filtered.length
+        ? `${state.index + 1} / ${state.filtered.length}`
+        : "0 / 0";
+
+      const learned = Object.keys(state.progress).length;
+      const weak = Object.values(state.progress).filter(record => record.score < 0).length;
+      scoreSummary.textContent = `学習記録：${learned}件 / 苦手：${weak}件`;
+    }
+
+    function typesetMath(root) {
+      if (typeof renderMathInElement !== "function") return;
+      renderMathInElement(root, {
+        delimiters: [
+          { left: "\", right: "\", display: true },
+          { left: "\", right: "\", display: false },
+          { left: "$$", right: "$$", display: true }
+        ],
+        throwOnError: false,
+        strict: "ignore",
+        ignoredTags: ["script", "noscript", "style", "textarea", "pre", "code"]
+      });
+    }
+
+    function normalize(text) {
+      return String(text || "")
+        .toLowerCase()
+        .replace(/[Ａ-Ｚａ-ｚ０-９]/g, char => String.fromCharCode(char.charCodeAt(0) - 0xFEE0))
+        .replace(/\s+/g, " ")
+        .trim();
+    }
+
+    function escapeHtml(text) {
+      return String(text)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function renderInlineText(text) {
+      // 信頼済みの自作カードデータ前提。ユーザー入力を直接入れる場合は別途サニタイズしてください。
+      return String(text).replace(/\n/g, "<br>");
+    }
+
+    function getDifficultyClass(difficulty) {
+      if (difficulty === "基本") return "difficulty-easy";
+      if (difficulty === "標準") return "difficulty-mid";
+      return "difficulty-hard";
+    }
+
+    function formatRecord(record) {
+      if (!record) return "未学習";
+      if (record.score >= 4) return "得意";
+      if (record.score < 0) return "苦手";
+      return "学習中";
+    }
+
+    function loadProgress() {
+      try {
+        return JSON.parse(localStorage.getItem("rikeiFormulaProgress") || "{}");
+      } catch {
+        return {};
+      }
+    }
+
+    function saveProgress() {
+      localStorage.setItem("rikeiFormulaProgress", JSON.stringify(state.progress));
+    }
+
+    function createInlineManifest() {
+      // 1ファイル試作用。正式運用では manifest.json を別ファイルにする方が管理しやすいです。
+      const manifest = {
+        name: "理系数学・物理公式カード",
+        short_name: "公式カード",
+        start_url: "./index.html",
+        display: "standalone",
+        background_color: "#f5f2eb",
+        theme_color: "#1f2937",
+        icons: []
+      };
+
+      const blob = new Blob([JSON.stringify(manifest)], { type: "application/manifest+json" });
+      const manifestUrl = URL.createObjectURL(blob);
+      const link = document.createElement("link");
+      link.rel = "manifest";
+      link.href = manifestUrl;
+      document.head.appendChild(link);
+    }
+
+    document.addEventListener("DOMContentLoaded", init);
+  </script></body>
+</html>
