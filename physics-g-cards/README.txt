@@ -1,22 +1,30 @@
-このフォルダは「私立理系 受験物理 基本法則カード（力学編・Drive保存版・公式集つき版）」のPWA一式です。
+# 物理受験カード v2（かわいいUI版）
 
-入っているファイル:
-- index.html
-- manifest.webmanifest
-- sw.js
-- icon-192.png
-- icon-512.png
-- README.txt
+## 内容
+- 力学 92枚
+- 電磁気 第1段階 56枚（静電気・コンデンサー・直流回路）
+- 公式集
+- 進捗タブ
+- 説明書
+- Google Drive 保存（appDataFolder / v2専用ファイル名）
+- JSON書き出し・読み込み
+- PWA / ホーム画面追加対応
 
-特徴:
-1. 力学92枚の頻度調整カード学習
-2. Google Drive保存（appDataFolder）
-3. 公式集タブあり
-4. 説明書タブあり
-5. JSON書き出し・読み込みあり
+## 設置先
+GitHub Pages の `physics-g-cards` フォルダに、この6ファイルを直接置いてください。
 
-使い方:
-1. このフォルダごと GitHub Pages の physics-g-cards などに配置します
-2. https://.../physics-g-cards/ を開きます
-3. Drive保存を使う場合は OAuth クライアントID を入れて Google に接続します
-4. 公式集ボタンまたは公式集タブから、テーマごとの主要公式・条件・単位・典型判断を参照できます
+URL:
+https://foxwolf321.github.io/physics-g-cards/
+
+## Drive保存
+OAuthクライアントIDは既存のものを使えます。承認済み JavaScript 生成元に
+https://foxwolf321.github.io
+が入っていれば利用できます。
+
+v2は `physics-g-cards-v2-progress.json` という別名で保存するため、旧版のDrive保存とは衝突しません。
+
+
+## 修正内容
+- 公式集タブとプルダウンのイベント登録を強化
+- 起動エラーがある場合は画面上に表示
+- Service Worker のキャッシュ名を更新

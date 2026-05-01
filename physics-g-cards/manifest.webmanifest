@@ -1,20 +1,20 @@
 {
-  "name": "私立理系 受験物理 基本法則カード（力学編・Drive保存版・公式集つき版）",
-  "short_name": "物理カード",
-  "id": "./",
-  "start_url": "./",
-  "scope": "./",
+  "name": "物理受験カード v2",
+  "short_name": "物理カードv2",
+  "id": "/physics-g-cards/",
+  "start_url": "/physics-g-cards/",
+  "scope": "/physics-g-cards/",
   "display": "standalone",
-  "background_color": "#f5f7fb",
-  "theme_color": "#0f4c81",
+  "background_color": "#fff7fb",
+  "theme_color": "#f7a8c8",
   "icons": [
     {
-      "src": "icon-192.png",
+      "src": "/physics-g-cards/icon-192.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "icon-512.png",
+      "src": "/physics-g-cards/icon-512.png",
       "sizes": "512x512",
       "type": "image/png"
     }
