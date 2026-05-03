@@ -1,30 +1,27 @@
-# 物理受験カード v2（かわいいUI版）
+# 物理受験カード v2.1.0 差し替え用ファイル
 
-## 内容
-- 力学 92枚
-- 電磁気 第1段階 56枚（静電気・コンデンサー・直流回路）
-- 公式集
-- 進捗タブ
-- 説明書
-- Google Drive 保存（appDataFolder / v2専用ファイル名）
-- JSON書き出し・読み込み
-- PWA / ホーム画面追加対応
+このフォルダ内のファイルを、GitHub の `physics-g-cards/` フォルダへ上書きアップロードしてください。
 
-## 設置先
-GitHub Pages の `physics-g-cards` フォルダに、この6ファイルを直接置いてください。
+## 主な変更
 
-URL:
-https://foxwolf321.github.io/physics-g-cards/
+- 薄いイラスト背景
+- 漫画風アイコン
+- 教科書風の横線分数表示
+- タブ・プルダウン動作の整理
+- Service Workerキャッシュ更新
 
-## Drive保存
-OAuthクライアントIDは既存のものを使えます。承認済み JavaScript 生成元に
-https://foxwolf321.github.io
-が入っていれば利用できます。
+## 上書きする主なファイル
 
-v2は `physics-g-cards-v2-progress.json` という別名で保存するため、旧版のDrive保存とは衝突しません。
+- `index.html`
+- `manifest.webmanifest`
+- `sw.js`
+- `icon-192.png`
+- `icon-512.png`
+- `bg-bike-physics.png`
+- `HANDOFF.md`
+- `CHANGELOG.md`
+- `TODO.md`
 
+## 注意
 
-## 修正内容
-- 公式集タブとプルダウンのイベント登録を強化
-- 起動エラーがある場合は画面上に表示
-- Service Worker のキャッシュ名を更新
+古い表示が残る場合は、スマホのホーム画面アイコンを削除し、Chromeのサイトデータから `foxwolf321.github.io` を削除してから開き直してください。

@@ -3,64 +3,27 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>物理受験カード v2.0.1｜力学＋電磁気</title>
+<title>物理受験カード v2.1.0｜力学＋電磁気</title>
 <link rel="manifest" href="/physics-g-cards/manifest.webmanifest">
 <meta name="theme-color" content="#f7a8c8">
+<link rel="icon" href="/physics-g-cards/icon-192.png">
 <style>
-:root {
-  --bg:#fff7fb; --bg2:#f6fbff; --card:#ffffff; --ink:#3a2b35; --muted:#7b6674;
+
+:root{
+  --bg:#fff7fb; --bg2:#f6fbff; --card:rgba(255,255,255,.94); --ink:#382a34; --muted:#765f6e;
   --pink:#f7a8c8; --pink2:#ffd6e8; --blue:#b8e7ff; --lav:#d8c7ff; --mint:#bff3df; --yellow:#ffe9a6;
-  --line:#f1d9e6; --shadow:0 10px 30px rgba(214,116,160,.18); --radius:22px;
+  --line:#efd7e5; --shadow:0 12px 34px rgba(150,90,120,.18); --radius:24px;
 }
 *{box-sizing:border-box}
-body{margin:0; font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; color:var(--ink); background:linear-gradient(160deg,var(--bg),var(--bg2));}
-header{position:sticky; top:0; z-index:5; backdrop-filter:blur(14px); background:rgba(255,247,251,.86); border-bottom:1px solid var(--line);}
-.wrap{max-width:980px; margin:0 auto; padding:14px;}
-.hero{display:flex; gap:12px; align-items:center;}
-.logo{width:54px;height:54px;border-radius:18px;background:linear-gradient(135deg,var(--pink),var(--lav));display:grid;place-items:center;box-shadow:var(--shadow);font-size:28px;}
-h1{font-size:20px;line-height:1.25;margin:0}
-.sub{font-size:12px;color:var(--muted);margin-top:4px}
-.nav{display:flex;gap:8px;overflow:auto;padding:12px 0 4px}
-button,.btn{border:0;border-radius:999px;padding:10px 14px;font-weight:700;background:#fff;color:var(--ink);box-shadow:0 4px 12px rgba(130,80,110,.10);border:1px solid var(--line);}
-button.primary{background:linear-gradient(135deg,var(--pink),var(--lav));color:#402436;border:0}
-button.soft{background:#fff8fc}
-button.good{background:#e6fff3}
-button.warn{background:#fff4cd}
-button.bad{background:#ffe5ed}
-button.easy{background:#eaf1ff}
-button:active{transform:translateY(1px)}
-.grid{display:grid;gap:14px}
-.card{background:rgba(255,255,255,.92);border:1px solid var(--line);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow)}
-.view{display:none} .view.active{display:block}
-.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-select,input[type=text]{width:100%;border:1px solid var(--line);border-radius:16px;padding:12px;background:#fff;color:var(--ink);font-size:15px}
-label{font-size:13px;color:var(--muted);font-weight:700}
-.filters{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
-@media(max-width:720px){.filters{grid-template-columns:1fr 1fr} h1{font-size:18px}}
-@media(max-width:420px){.filters{grid-template-columns:1fr}}
-.badge{display:inline-flex;align-items:center;gap:4px;border-radius:999px;padding:5px 10px;background:#fff0f7;border:1px solid var(--line);font-size:12px;color:#6d4359;font-weight:700}
-.bigq{font-size:22px;line-height:1.55;font-weight:800;margin:14px 0}
-.answer{white-space:pre-wrap;line-height:1.7;background:linear-gradient(180deg,#fff,#fff8fd);border:1px dashed #efb6cf;border-radius:18px;padding:14px;margin-top:12px}
-.hidden{display:none!important}
-.small{font-size:12px;color:var(--muted)}
-hr{border:0;border-top:1px solid var(--line);margin:14px 0}
-.kpi{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
-.kpi .box{background:#fff;border:1px solid var(--line);border-radius:18px;padding:12px;text-align:center;box-shadow:0 4px 14px rgba(130,80,110,.08)}
-.kpi .num{font-size:24px;font-weight:900}
-@media(max-width:720px){.kpi{grid-template-columns:1fr 1fr}}
-.pie{width:190px;height:190px;border-radius:50%;margin:10px auto;border:10px solid #fff;box-shadow:var(--shadow)}
-.legend{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
-.dot{width:12px;height:12px;border-radius:50%;display:inline-block;margin-right:6px}
-.bar{height:18px;background:#fff;border:1px solid var(--line);border-radius:999px;overflow:hidden}
-.fill{height:100%;background:linear-gradient(90deg,var(--pink),var(--lav));border-radius:999px}
-.formula-item{border:1px solid var(--line);border-radius:20px;padding:14px;background:#fff;margin:12px 0;box-shadow:0 4px 14px rgba(130,80,110,.08)}
-.formula-item h3{margin:0 0 8px;font-size:18px}
-.formula-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.formula-grid div{background:#fff8fc;border-radius:14px;padding:10px}
-@media(max-width:720px){.formula-grid{grid-template-columns:1fr}}
-.notice{background:#fff6df;border:1px solid #f4d58a;border-radius:16px;padding:12px;color:#6b5530}
-.mascot{font-size:24px}
-.footer-space{height:40px}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--ink);background:linear-gradient(160deg,var(--bg),var(--bg2));min-height:100vh;}
+body::before{content:"";position:fixed;inset:0;z-index:-2;background:linear-gradient(180deg,rgba(255,250,253,.72),rgba(255,255,255,.86)),url('bg-bike-physics.png') center top/cover no-repeat;filter:saturate(.92);}
+body::after{content:"";position:fixed;inset:0;z-index:-1;background:radial-gradient(circle at 20% 10%,rgba(255,255,255,.75),transparent 35%),linear-gradient(180deg,rgba(255,255,255,.2),rgba(255,247,251,.45));pointer-events:none;}
+header{position:sticky;top:0;z-index:5;backdrop-filter:blur(14px);background:rgba(255,247,251,.82);border-bottom:1px solid var(--line)}
+.wrap{max-width:980px;margin:0 auto;padding:14px}.hero{display:flex;gap:12px;align-items:center}.logo{width:58px;height:58px;border-radius:20px;background:#fff;box-shadow:var(--shadow);overflow:hidden;display:grid;place-items:center;flex:0 0 auto}.logo img{width:100%;height:100%;object-fit:cover}h1{font-size:20px;line-height:1.25;margin:0}.sub{font-size:12px;color:var(--muted);margin-top:4px}.nav{display:flex;gap:8px;overflow:auto;padding:12px 0 4px}.nav button{white-space:nowrap}
+button,.btn{border:0;border-radius:999px;padding:10px 14px;font-weight:800;background:#fff;color:var(--ink);box-shadow:0 4px 12px rgba(130,80,110,.10);border:1px solid var(--line);cursor:pointer}button.primary,.nav button.active{background:linear-gradient(135deg,var(--pink),var(--lav));color:#402436;border:0}button.soft{background:#fff8fc}button.good{background:#e6fff3}button.warn{background:#fff4cd}button.bad{background:#ffe5ed}button.easy{background:#eaf1ff}button:active{transform:translateY(1px)}button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid rgba(247,168,200,.45);outline-offset:2px}.grid{display:grid;gap:14px}.card{background:var(--card);border:1px solid rgba(239,215,229,.82);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow)}.view{display:none}.view.active{display:block}.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}select,input[type=text]{width:100%;border:1px solid var(--line);border-radius:16px;padding:12px;background:#fff;color:var(--ink);font-size:15px}label{font-size:13px;color:var(--muted);font-weight:800}.filters{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}@media(max-width:720px){.filters{grid-template-columns:1fr 1fr}h1{font-size:18px}.wrap{padding:10px}.card{padding:14px}}@media(max-width:430px){.filters{grid-template-columns:1fr}.row button{flex:1 1 auto}}
+.badge{display:inline-flex;align-items:center;gap:4px;border-radius:999px;padding:5px 10px;background:#fff0f7;border:1px solid var(--line);font-size:12px;color:#6d4359;font-weight:800}.bigq{font-size:22px;line-height:1.55;font-weight:900;margin:14px 0}.answer{line-height:1.75;background:linear-gradient(180deg,#fff,#fff8fd);border:1px dashed #efb6cf;border-radius:18px;padding:14px;margin-top:12px}.hidden{display:none!important}.small{font-size:12px;color:var(--muted)}hr{border:0;border-top:1px solid var(--line);margin:14px 0}.kpi{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.kpi .box{background:#fff;border:1px solid var(--line);border-radius:18px;padding:12px;text-align:center;box-shadow:0 4px 14px rgba(130,80,110,.08)}.kpi .num{font-size:24px;font-weight:900}@media(max-width:720px){.kpi{grid-template-columns:1fr 1fr}}.pie{width:190px;height:190px;border-radius:50%;margin:10px auto;border:10px solid #fff;box-shadow:var(--shadow)}.legend{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.dot{width:12px;height:12px;border-radius:50%;display:inline-block;margin-right:6px}.bar{height:18px;background:#fff;border:1px solid var(--line);border-radius:999px;overflow:hidden}.fill{height:100%;background:linear-gradient(90deg,var(--pink),var(--lav));border-radius:999px}.formula-item{border:1px solid var(--line);border-radius:22px;padding:14px;background:rgba(255,255,255,.96);margin:12px 0;box-shadow:0 4px 14px rgba(130,80,110,.08)}.formula-item h3{margin:0 0 8px;font-size:18px}.formula-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.formula-grid>div{background:#fff8fc;border-radius:16px;padding:12px;border:1px solid rgba(239,215,229,.55)}@media(max-width:720px){.formula-grid{grid-template-columns:1fr}}.notice{background:#fff6df;border:1px solid #f4d58a;border-radius:16px;padding:12px;color:#6b5530}.footer-space{height:40px}.formula-display{display:flex;align-items:center;justify-content:center;gap:.34em;flex-wrap:wrap;margin:10px 0 12px;padding:12px 10px;border-radius:18px;background:linear-gradient(180deg,#fff,#f8fbff);border:1px solid #d9e8f8;font-family:"Times New Roman","Cambria Math",serif;font-size:clamp(25px,6vw,38px);font-weight:700;line-height:1.2;color:#263447;overflow-x:auto}.formula-inline{display:inline-flex;align-items:center;gap:.18em;font-family:"Times New Roman","Cambria Math",serif;font-weight:700;font-size:1.12em}.frac{display:inline-flex;vertical-align:middle;flex-direction:column;align-items:center;justify-content:center;margin:0 .12em;line-height:1.05}.frac .num{display:block;border-bottom:2px solid currentColor;padding:0 .24em .06em}.frac .den{display:block;padding:.06em .24em 0}.formula-list{list-style:none;padding-left:0;margin:8px 0}.formula-list li{margin:10px 0}.formula-mini{font-size:clamp(20px,5vw,30px);justify-content:flex-start}.note-list{margin:8px 0;padding-left:1.25em}.note-list li{margin:5px 0}.formula-help{font-size:12px;color:#6c6070;margin-top:8px}.answer p{margin:8px 0}.danger{color:#8b2746}.formula-search-hit{background:#fffbef}.theme-list-card{margin:10px 0;padding:12px;border-radius:16px;background:#fff;border:1px solid var(--line)}
+
 </style>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
@@ -68,14 +31,14 @@ hr{border:0;border-top:1px solid var(--line);margin:14px 0}
 <header>
   <div class="wrap">
     <div class="hero">
-      <div class="logo">🧲</div>
+      <div class="logo"><img src="icon-192.png" alt="物理カードアイコン"></div>
       <div>
-        <h1>物理受験カード v2.0.1 <span class="small">力学＋電磁気第1段階・修正版</span></h1>
-        <div class="sub">公式・条件・典型判断を、やさしい頻度調整で復習するカードアプリ</div>
+        <h1>物理受験カード v2.1.0 <span class="small">力学＋電磁気第1段階・教科書風数式版</span></h1>
+        <div class="sub">公式・条件・典型判断を、横線分数の見やすい式で復習するカードアプリ</div>
       </div>
     </div>
     <div class="nav">
-      <button class="primary" data-tab="study">カード学習</button>
+      <button class="primary active" data-tab="study">カード学習</button>
       <button class="soft" data-tab="formulas">公式集</button>
       <button class="soft" data-tab="progress">進捗</button>
       <button class="soft" data-tab="guide">説明書</button>
@@ -120,6 +83,7 @@ hr{border:0;border-top:1px solid var(--line);margin:14px 0}
       </div>
       <label><input id="dueOnly" type="checkbox"> 期限カード優先</label>
     </div>
+
     <div class="card" id="cardBox">
       <div class="row" id="cardMeta"></div>
       <div class="bigq" id="front">カードを読み込み中...</div>
@@ -142,7 +106,7 @@ hr{border:0;border-top:1px solid var(--line);margin:14px 0}
   <section id="formulas" class="view">
     <div class="card grid">
       <h2>公式集</h2>
-      <p class="small">見るだけなら進捗には影響しません。問題演習前の確認、カードで詰まった時の見直しに使います。</p>
+      <p class="small">分数は斜線ではなく、横線つきの教科書風表示にしました。見るだけなら進捗には影響しません。</p>
       <div class="filters">
         <div><label>分野</label><select id="formulaField"></select></div>
         <div><label>検索</label><input id="formulaSearch" type="text" placeholder="例：向心力、電位、キルヒホッフ"></div>
@@ -173,6 +137,13 @@ hr{border:0;border-top:1px solid var(--line);margin:14px 0}
     <div class="card">
       <h2>説明書：このアプリの考え方</h2>
       <div class="notice">このアプリは「公式だけ覚える」ためではなく、公式・条件・意味・典型判断をセットで思い出すための受験物理カードです。</div>
+      <h3>今回の改良</h3>
+      <ul>
+        <li>背景を、文字の邪魔にならない薄いイラストに変更しました。</li>
+        <li>アイコンを、漫画っぽいバイク＋物理式のデザインに変更しました。</li>
+        <li>公式集と答え欄の主要公式を、斜線分数ではなく横線分数で表示するようにしました。</li>
+        <li>タブ・ボタン・プルダウンのイベント登録を整理しました。</li>
+      </ul>
       <h3>なぜカード化するのか</h3>
       <p>物理は公式だけでは解けません。しかし、公式や条件が即座に出ないと、問題文を読んでも入口に立てません。そこで、公式を短く思い出すカードと、「いつ使うか」を問うカードを混ぜています。</p>
       <h3>6種類のカード型</h3>
@@ -184,12 +155,8 @@ hr{border:0;border-top:1px solid var(--line);margin:14px 0}
         <li><b>単位</b>：式の確認と混同防止。</li>
         <li><b>典型判断</b>：問題を見た瞬間に、どの道具で入るかを決める。</li>
       </ul>
-      <h3>v2の収録範囲</h3>
-      <p>現在は、力学92枚と、電磁気第1段階56枚を入れています。電磁気第1段階は、静電気・コンデンサー・直流回路までです。磁場・ローレンツ力・電磁誘導・波動・熱・原子は、今後このアプリに同じ構造で追加できます。</p>
-      <h3>公式集の役割</h3>
-      <p>カードは思い出す訓練、公式集は全体を見渡す参照です。公式集を見ても正解扱いにはしません。問題演習前の確認や、カードで詰まった時に使ってください。</p>
-      <h3>進捗の見方</h3>
-      <p>進捗タブでは、新規・学習中・復習中・安定・弱点をざっくり見られます。複雑な統計より、「今どのくらい定着しているか」を俯瞰する目的です。</p>
+      <h3>v2.1.0の収録範囲</h3>
+      <p>力学92枚と、電磁気第1段階56枚を入れています。電磁気第1段階は、静電気・コンデンサー・直流回路までです。磁場・ローレンツ力・電磁誘導・波動・熱・原子は、今後このアプリに同じ構造で追加できます。</p>
       <h3>おすすめの使い方</h3>
       <ol>
         <li>まず分野を「力学」または「電磁気」に絞る。</li>
@@ -203,13 +170,169 @@ hr{border:0;border-top:1px solid var(--line);margin:14px 0}
   <div class="footer-space"></div>
 </main>
 <script>
-const APP_VERSION = '2.0.1-kawaii-fixed';
+
+const APP_VERSION = '2.1.0-textbook-formulas';
 window.addEventListener('error', e => { try { const s=document.getElementById('status'); if(s) s.textContent='起動エラー: '+(e.message||e.error||'不明'); } catch(_){} console.error(e.error||e.message); });
 const STORAGE_KEY = 'physics_g_cards_v2_kawaii_local';
 const DRIVE_FILE_NAME = 'physics-g-cards-v2-progress.json';
-const CARD_DATA = [{"id":"m-kin-001","field":"mechanics","topic":"kinematics","type":"formula","importance":"highest","front":"速度の定義を述べよ。","back":"平均速度は v=Δx/Δt。瞬間速度は位置 x の時間変化率。向きも持つ量なので符号に注意。","tags":["速度","定義"]},{"id":"m-kin-002","field":"mechanics","topic":"kinematics","type":"formula","importance":"highest","front":"加速度の定義を述べよ。","back":"平均加速度は a=Δv/Δt。瞬間加速度は速度 v の時間変化率。","tags":["加速度","定義"]},{"id":"m-kin-003","field":"mechanics","topic":"kinematics","type":"formula","importance":"highest","front":"等加速度直線運動の速度の式を述べよ。","back":"v = v0 + at。加速度 a が一定のときに使う。","tags":["等加速度","速度"]},{"id":"m-kin-004","field":"mechanics","topic":"kinematics","type":"formula","importance":"highest","front":"等加速度直線運動の位置の式を述べよ。","back":"x = x0 + v0t + (1/2)at^2。変位なら x-x0 = v0t + (1/2)at^2。","tags":["等加速度","位置"]},{"id":"m-kin-005","field":"mechanics","topic":"kinematics","type":"formula","importance":"high","front":"時間 t を消去した等加速度運動の式を述べよ。","back":"v^2 - v0^2 = 2a(x-x0)。時間が与えられていないときに強い。","tags":["等加速度","時間消去"]},{"id":"m-kin-006","field":"mechanics","topic":"kinematics","type":"condition","importance":"highest","front":"等加速度運動の公式が使える条件は何か。","back":"加速度の大きさと向きが一定であること。途中で加速度が変わるなら区間ごとに分ける。","tags":["条件"]},{"id":"m-kin-007","field":"mechanics","topic":"kinematics","type":"meaning","importance":"highest","front":"速度と加速度の違いを述べよ。","back":"速度は位置の変化、加速度は速度の変化。速度が正でも加速度が負なら進みながら減速している場合がある。","tags":["意味"]},{"id":"m-kin-008","field":"mechanics","topic":"kinematics","type":"meaning","importance":"high","front":"x-t、v-t、a-t グラフの傾きと面積の意味を述べよ。","back":"x-t の傾きは速度。v-t の傾きは加速度、面積は変位。a-t の面積は速度変化。","tags":["グラフ"]},{"id":"m-kin-009","field":"mechanics","topic":"kinematics","type":"unit","importance":"high","front":"速度と加速度の単位を述べよ。","back":"速度は m/s、加速度は m/s^2。グラフの傾きや面積の次元確認にも使う。","tags":["単位"]},{"id":"m-kin-010","field":"mechanics","topic":"kinematics","type":"strategy","importance":"highest","front":"等加速度運動の文章題で最初に決めることは何か。","back":"正方向、初速度 v0、加速度 a の符号。投げ上げ・落下では符号決めが最初の勝負。","tags":["典型判断"]},{"id":"m-eq-001","field":"mechanics","topic":"equilibrium","type":"formula","importance":"highest","front":"力のつり合いの条件を述べよ。","back":"合力が0。成分で ΣFx=0、ΣFy=0。回転も扱うならモーメントのつり合いも考える。","tags":["つり合い"]},{"id":"m-eq-002","field":"mechanics","topic":"equilibrium","type":"condition","importance":"high","front":"つり合いと等速直線運動の共通点は何か。","back":"どちらも加速度が0で合力が0。静止だけがつり合いではない。","tags":["つり合い","等速"]},{"id":"m-eq-003","field":"mechanics","topic":"equilibrium","type":"meaning","importance":"highest","front":"作用反作用とつり合いの違いを述べよ。","back":"作用反作用は別々の物体にはたらく同じ大きさ反対向きの力。つり合いは同じ物体にはたらく力の合力が0。","tags":["作用反作用"]},{"id":"m-eq-004","field":"mechanics","topic":"equilibrium","type":"meaning","importance":"high","front":"力の分解で重要な考え方を述べよ。","back":"運動する方向・拘束される方向に分ける。斜面では斜面方向と垂直方向が基本。","tags":["力の分解"]},{"id":"m-eq-005","field":"mechanics","topic":"equilibrium","type":"strategy","importance":"highest","front":"斜面上の物体では、どの方向に軸を取ることが多いか。","back":"斜面に平行な方向と垂直な方向。垂直方向は加速度0になりやすく、垂直抗力を求めやすい。","tags":["斜面"]},{"id":"m-eq-006","field":"mechanics","topic":"equilibrium","type":"strategy","importance":"high","front":"複数の物体がある問題で最初に意識することは何か。","back":"どの物体に着目するか。物体ごとの力の図を分けて描く。","tags":["着目物体"]},{"id":"m-eq-007","field":"mechanics","topic":"equilibrium","type":"condition","importance":"high","front":"糸の張力を同じとみなせる条件を述べよ。","back":"軽くて伸びない糸、摩擦のない軽い滑車などの理想条件で同じ張力として扱う。","tags":["張力"]},{"id":"m-dyn-001","field":"mechanics","topic":"dynamics","type":"formula","importance":"highest","front":"運動方程式を述べよ。","back":"合力 F と加速度 a について F=ma。F は個別の力ではなく合力。","tags":["運動方程式"]},{"id":"m-dyn-002","field":"mechanics","topic":"dynamics","type":"formula","importance":"highest","front":"運動方程式の成分形を述べよ。","back":"x方向: ΣFx=max、y方向: ΣFy=may。軸ごとに立てる。","tags":["成分形"]},{"id":"m-dyn-003","field":"mechanics","topic":"dynamics","type":"condition","importance":"highest","front":"運動方程式を立てるときの最重要ルールは何か。","back":"1つの物体ごとに、はたらく力をすべて描き、各方向の合力=ma とする。","tags":["立式"]},{"id":"m-dyn-004","field":"mechanics","topic":"dynamics","type":"condition","importance":"high","front":"F=ma をそのまま使いやすい座標系はどう選ぶか。","back":"加速度の向き、運動方向、拘束方向に合わせて軸を取る。斜面では斜面方向・垂直方向。","tags":["座標軸"]},{"id":"m-dyn-005","field":"mechanics","topic":"dynamics","type":"meaning","importance":"highest","front":"合力とは何か。","back":"同じ物体にはたらくすべての力をベクトル的に合成したもの。加速度を生むのは合力。","tags":["合力"]},{"id":"m-dyn-006","field":"mechanics","topic":"dynamics","type":"unit","importance":"high","front":"力の単位 N を基本単位で表せ。","back":"1 N = 1 kg·m/s^2。F=ma から分かる。","tags":["単位"]},{"id":"m-dyn-007","field":"mechanics","topic":"dynamics","type":"strategy","importance":"highest","front":"連結した2物体の問題では、まず何をするか。","back":"各物体ごとの力の図を描く。必要なら全体を1つの系として見て、内部張力を消す。","tags":["連結体"]},{"id":"m-dyn-008","field":"mechanics","topic":"dynamics","type":"strategy","importance":"highest","front":"運動方程式とつり合いのどちらで入るかの判断は。","back":"加速度が0ならつり合い、加速度があるなら運動方程式。文中の「静止」「等速」「加速」に注目。","tags":["判断"]},{"id":"m-dyn-009","field":"mechanics","topic":"dynamics","type":"strategy","importance":"high","front":"物体が接触している問題で注意すべき力は何か。","back":"垂直抗力と摩擦力。接触していない物体間に垂直抗力は生じない。","tags":["接触力"]},{"id":"m-dyn-010","field":"mechanics","topic":"dynamics","type":"meaning","importance":"high","front":"質量と重さの違いを述べよ。","back":"質量は物体固有の量 kg。重さは重力 mg で単位は N。","tags":["質量","重さ"]},{"id":"m-dyn-011","field":"mechanics","topic":"dynamics","type":"formula","importance":"high","front":"重力を式で表せ。","back":"地表付近では重力の大きさは mg、向きは鉛直下向き。","tags":["重力"]},{"id":"m-dyn-012","field":"mechanics","topic":"dynamics","type":"condition","importance":"high","front":"垂直抗力 N は常に mg と等しいか。","back":"常に等しいわけではない。斜面、加速系、円運動などでは運動方程式から決める。","tags":["垂直抗力"]},{"id":"m-fr-001","field":"mechanics","topic":"friction","type":"formula","importance":"highest","front":"最大静止摩擦力の式を述べよ。","back":"f_max = μN。ただし実際の静止摩擦力は必要な分だけ変化し、最大値が μN。","tags":["静止摩擦"]},{"id":"m-fr-002","field":"mechanics","topic":"friction","type":"formula","importance":"highest","front":"動摩擦力の式を述べよ。","back":"f = μ'N。向きは相対運動を妨げる向き。","tags":["動摩擦"]},{"id":"m-fr-003","field":"mechanics","topic":"friction","type":"condition","importance":"highest","front":"静止摩擦力と動摩擦力の使い分けを述べよ。","back":"すべっていないなら静止摩擦、すべっているなら動摩擦。「動く直前」は最大静止摩擦。","tags":["使い分け"]},{"id":"m-fr-004","field":"mechanics","topic":"friction","type":"meaning","importance":"high","front":"摩擦力の向きはどう決めるか。","back":"接触面に沿って、相対運動または相対運動しようとする傾向を妨げる向き。","tags":["向き"]},{"id":"m-fr-005","field":"mechanics","topic":"friction","type":"condition","importance":"high","front":"静止摩擦力は常に μN か。","back":"違う。0から最大 μN まで変化する。μN は最大値。","tags":["静止摩擦"]},{"id":"m-fr-006","field":"mechanics","topic":"friction","type":"strategy","importance":"highest","front":"「動き出す直前」とあれば何を使うか。","back":"最大静止摩擦力 f=μN を使う。つり合いの限界条件として扱う。","tags":["動く直前"]},{"id":"m-fr-007","field":"mechanics","topic":"friction","type":"strategy","importance":"high","front":"摩擦つき斜面問題で最初にすることは何か。","back":"斜面方向・垂直方向に力を分解し、垂直方向から N を求める。摩擦はその後。","tags":["斜面","摩擦"]},{"id":"m-cir-001","field":"mechanics","topic":"circular","type":"formula","importance":"highest","front":"等速円運動の向心加速度を述べよ。","back":"a = v^2/r = rω^2。向きは常に中心向き。","tags":["円運動"]},{"id":"m-cir-002","field":"mechanics","topic":"circular","type":"formula","importance":"highest","front":"向心力の式を述べよ。","back":"F = mv^2/r = mrω^2。これは新しい種類の力ではなく、中心向き合力の名前。","tags":["向心力"]},{"id":"m-cir-003","field":"mechanics","topic":"circular","type":"formula","importance":"high","front":"円運動の速さ・角速度・周期の関係を述べよ。","back":"v = rω、ω = 2π/T、v = 2πr/T。","tags":["周期","角速度"]},{"id":"m-cir-004","field":"mechanics","topic":"circular","type":"condition","importance":"highest","front":"円運動で立てる運動方程式の向きは。","back":"中心向きに ΣF = mv^2/r を立てる。半径方向が最重要。","tags":["半径方向"]},{"id":"m-cir-005","field":"mechanics","topic":"circular","type":"meaning","importance":"highest","front":"向心力は新しい力か。","back":"新しい力ではない。張力、重力、垂直抗力、摩擦などの中心向き成分が向心力の役割をする。","tags":["向心力"]},{"id":"m-cir-006","field":"mechanics","topic":"circular","type":"strategy","importance":"highest","front":"円運動問題で最初に確認することは何か。","back":"何が中心向き合力を担っているか。中心方向へ力を分解する。","tags":["典型判断"]},{"id":"m-cir-007","field":"mechanics","topic":"circular","type":"strategy","importance":"high","front":"鉛直円運動の最高点・最低点で注意することは何か。","back":"中心方向が場所で変わる。最高点では下向き、最低点では上向きが中心方向。","tags":["鉛直円"]},{"id":"m-cir-008","field":"mechanics","topic":"circular","type":"condition","importance":"high","front":"円運動で速さが変わる場合、何を併用しやすいか。","back":"半径方向の運動方程式に加えて、エネルギー保存を併用することが多い。","tags":["エネルギー併用"]},{"id":"m-cir-009","field":"mechanics","topic":"circular","type":"strategy","importance":"high","front":"カーブを曲がる車の向心力を担う代表的な力は何か。","back":"摩擦力や垂直抗力の成分。問題設定により何が中心向きかを見抜く。","tags":["向心力","摩擦"]},{"id":"m-shm-001","field":"mechanics","topic":"shm","type":"formula","importance":"highest","front":"単振動の復元力を述べよ。","back":"F = -kx。変位と逆向きで、変位の大きさに比例する力。","tags":["単振動"]},{"id":"m-shm-002","field":"mechanics","topic":"shm","type":"formula","importance":"highest","front":"ばね振り子の周期を述べよ。","back":"T = 2π√(m/k)。振幅には依存しない理想モデル。","tags":["ばね振り子"]},{"id":"m-shm-003","field":"mechanics","topic":"shm","type":"formula","importance":"high","front":"単振動の角振動数と周期の関係を述べよ。","back":"ω = 2π/T。ばね振り子なら ω=√(k/m)。","tags":["角振動数"]},{"id":"m-shm-004","field":"mechanics","topic":"shm","type":"condition","importance":"highest","front":"単振動とみなせる条件は何か。","back":"つり合い位置からの変位に比例し、逆向きの復元力が働くこと。","tags":["条件"]},{"id":"m-shm-005","field":"mechanics","topic":"shm","type":"meaning","importance":"high","front":"単振動で速度最大・加速度最大の位置を述べよ。","back":"速度最大はつり合い位置。加速度最大は端。加速度は変位と逆向き。","tags":["位置"]},{"id":"m-shm-006","field":"mechanics","topic":"shm","type":"conservation","importance":"high","front":"単振動でのエネルギーの見方を述べよ。","back":"運動エネルギーと弾性エネルギーが入れ替わり、摩擦がなければ全エネルギーは保存。","tags":["エネルギー"]},{"id":"m-shm-007","field":"mechanics","topic":"shm","type":"strategy","importance":"highest","front":"単振動問題でまず探すものは何か。","back":"つり合い位置と、そこからの変位 x。復元力を x で表す。","tags":["典型判断"]},{"id":"m-shm-008","field":"mechanics","topic":"shm","type":"strategy","importance":"high","front":"単振動と円運動の対応で重要な点は何か。","back":"単振動は等速円運動の射影として扱える。位相や最大値の理解に役立つ。","tags":["円運動対応"]},{"id":"m-gr-001","field":"mechanics","topic":"gravitation","type":"formula","importance":"highest","front":"万有引力の式を述べよ。","back":"F = G m1 m2 / r^2。向きは2物体を結ぶ直線上で互いに引き合う向き。","tags":["万有引力"]},{"id":"m-gr-002","field":"mechanics","topic":"gravitation","type":"formula","importance":"high","front":"中心天体から距離 r の重力加速度を述べよ。","back":"g = GM/r^2。地表付近ではほぼ一定として扱うことが多い。","tags":["重力加速度"]},{"id":"m-gr-003","field":"mechanics","topic":"gravitation","type":"meaning","importance":"high","front":"重力と万有引力の関係を述べよ。","back":"重力は地球などの天体による万有引力を地表付近で扱いやすくしたもの。","tags":["意味"]},{"id":"m-gr-004","field":"mechanics","topic":"gravitation","type":"strategy","importance":"highest","front":"人工衛星の円運動で何を等置するか。","back":"万有引力が向心力を担うので、GMm/r^2 = mv^2/r を立てる。","tags":["衛星"]},{"id":"m-gr-005","field":"mechanics","topic":"gravitation","type":"condition","importance":"high","front":"万有引力で距離 r は何を表すか。","back":"物体の中心間距離。半径や高さとの混同に注意。","tags":["距離"]},{"id":"m-work-001","field":"mechanics","topic":"work_power","type":"formula","importance":"highest","front":"一定力がする仕事の式を述べよ。","back":"W = F s cosθ。力と変位の向きが同じなら正、逆なら負。","tags":["仕事"]},{"id":"m-work-002","field":"mechanics","topic":"work_power","type":"formula","importance":"high","front":"仕事率の式を述べよ。","back":"P = W/t。瞬間的には P=Fv cosθ。単位は W。","tags":["仕事率"]},{"id":"m-work-003","field":"mechanics","topic":"work_power","type":"condition","importance":"high","front":"W=Fs がそのまま使える条件は何か。","back":"力と変位が同じ向きで、力が一定の場合。向きが違うなら cosθ を入れる。","tags":["条件"]},{"id":"m-work-004","field":"mechanics","topic":"work_power","type":"meaning","importance":"high","front":"正の仕事・負の仕事の意味を述べよ。","back":"正の仕事は物体の運動を助ける向き、負の仕事は運動を妨げる向きに働く。","tags":["正負"]},{"id":"m-work-005","field":"mechanics","topic":"work_power","type":"unit","importance":"high","front":"仕事と仕事率の単位を述べよ。","back":"仕事は J、仕事率は W。1 J = 1 N·m、1 W = 1 J/s。","tags":["単位"]},{"id":"m-work-006","field":"mechanics","topic":"work_power","type":"strategy","importance":"highest","front":"仕事の問題で最初に確認することは何か。","back":"どの力が変位方向に成分を持つか。垂直抗力のように仕事をしない力もある。","tags":["典型判断"]},{"id":"m-en-001","field":"mechanics","topic":"energy","type":"formula","importance":"highest","front":"運動エネルギーの式を述べよ。","back":"K = (1/2)mv^2。速さの2乗に比例する。","tags":["運動エネルギー"]},{"id":"m-en-002","field":"mechanics","topic":"energy","type":"formula","importance":"highest","front":"重力による位置エネルギーの式を述べよ。","back":"U = mgh。基準面をどこに取るかで値は変わるが差が重要。","tags":["位置エネルギー"]},{"id":"m-en-003","field":"mechanics","topic":"energy","type":"formula","importance":"high","front":"ばねの弾性エネルギーを述べよ。","back":"U = (1/2)kx^2。自然長からの伸び縮み x を使う。","tags":["弾性エネルギー"]},{"id":"m-en-004","field":"mechanics","topic":"energy","type":"condition","importance":"highest","front":"力学的エネルギー保存が使える条件を述べよ。","back":"非保存力の仕事が無視できる、または保存力だけが仕事をする場合。","tags":["保存条件"]},{"id":"m-en-005","field":"mechanics","topic":"energy","type":"meaning","importance":"high","front":"保存力と非保存力の違いを述べよ。","back":"保存力は仕事が経路によらない力。重力・弾性力など。摩擦は典型的な非保存力。","tags":["保存力"]},{"id":"m-en-006","field":"mechanics","topic":"energy","type":"conservation","importance":"highest","front":"力学的エネルギー保存則を述べよ。","back":"K + U = 一定。摩擦や外力の仕事があるときは仕事とエネルギーの関係を使う。","tags":["エネルギー保存"]},{"id":"m-en-007","field":"mechanics","topic":"energy","type":"conservation","importance":"high","front":"仕事と運動エネルギーの関係を述べよ。","back":"合力のした仕事 = 運動エネルギーの変化。W = ΔK。","tags":["仕事とエネルギー"]},{"id":"m-en-008","field":"mechanics","topic":"energy","type":"strategy","importance":"highest","front":"運動方程式よりエネルギーで解きやすい場面は。","back":"途中の時間や加速度が不要で、始点と終点の速さ・高さを結びたいとき。","tags":["典型判断"]},{"id":"m-en-009","field":"mechanics","topic":"energy","type":"strategy","importance":"high","front":"摩擦があるときのエネルギー式で注意することは。","back":"摩擦の仕事は負になり、力学的エネルギーは減少する。保存則ではなく仕事を含める。","tags":["摩擦","エネルギー"]},{"id":"m-mom-001","field":"mechanics","topic":"momentum","type":"formula","importance":"highest","front":"運動量の式を述べよ。","back":"p = mv。ベクトル量なので向き・符号に注意。","tags":["運動量"]},{"id":"m-mom-002","field":"mechanics","topic":"momentum","type":"formula","importance":"highest","front":"力積の式を述べよ。","back":"I = Ft。一般には力積 = 運動量の変化 Δp。","tags":["力積"]},{"id":"m-mom-003","field":"mechanics","topic":"momentum","type":"meaning","importance":"high","front":"運動量がベクトル量であることの意味は。","back":"向きが重要。衝突では正方向を決め、符号つきで保存式を立てる。","tags":["ベクトル"]},{"id":"m-mom-004","field":"mechanics","topic":"momentum","type":"condition","importance":"highest","front":"運動量保存則が使える条件は何か。","back":"外力の合力の力積が無視できる閉じた系。衝突・爆発で重要。","tags":["保存条件"]},{"id":"m-mom-005","field":"mechanics","topic":"momentum","type":"conservation","importance":"highest","front":"運動量保存則を述べよ。","back":"外力の力積が無視できるとき、系全体の運動量は保存する。Σp_before = Σp_after。","tags":["運動量保存"]},{"id":"m-mom-006","field":"mechanics","topic":"momentum","type":"strategy","importance":"highest","front":"衝突問題で最初に考える保存則は何か。","back":"まず運動量保存を疑う。次にエネルギー保存が成り立つかを判定する。","tags":["衝突"]},{"id":"m-mom-007","field":"mechanics","topic":"momentum","type":"condition","importance":"high","front":"内力だけが大きい短時間の衝突で何が近似的に保存されるか。","back":"外力の力積を無視できれば、系全体の運動量が保存される。","tags":["短時間衝突"]},{"id":"m-col-001","field":"mechanics","topic":"collision","type":"formula","importance":"highest","front":"反発係数の定義を述べよ。","back":"e = 衝突後の相対速度の大きさ / 衝突前の相対速度の大きさ。1次元では符号に注意して使う。","tags":["反発係数"]},{"id":"m-col-002","field":"mechanics","topic":"collision","type":"formula","importance":"high","front":"1次元衝突の反発係数の式を述べよ。","back":"e = -(v2'-v1')/(v2-v1)。接近速度と分離速度の比。","tags":["反発係数"]},{"id":"m-col-003","field":"mechanics","topic":"collision","type":"condition","importance":"high","front":"完全弾性衝突の特徴を述べよ。","back":"e=1。運動量と力学的エネルギーの両方が保存する。","tags":["完全弾性"]},{"id":"m-col-004","field":"mechanics","topic":"collision","type":"conservation","importance":"highest","front":"完全非弾性衝突で保存されるもの・されないものは。","back":"運動量は保存するが、力学的エネルギーは一般に保存しない。衝突後に一体化する。","tags":["完全非弾性"]},{"id":"m-col-005","field":"mechanics","topic":"collision","type":"strategy","importance":"highest","front":"衝突問題で反発係数を使うべき場面は。","back":"衝突前後の相対速度の関係が必要なとき。運動量保存だけで未知数が足りない場合。","tags":["典型判断"]},{"id":"m-col-006","field":"mechanics","topic":"collision","type":"strategy","importance":"high","front":"衝突でエネルギー保存を安易に使ってよいか。","back":"よくない。完全弾性衝突など条件があるときだけ。通常はまず運動量保存。","tags":["注意"]},{"id":"m-gra-001","field":"mechanics","topic":"graphs_strategy","type":"meaning","importance":"high","front":"x-t グラフの傾きは何を表すか。","back":"速度を表す。傾きが正なら正方向へ進み、傾きが急なほど速い。","tags":["x-tグラフ"]},{"id":"m-gra-002","field":"mechanics","topic":"graphs_strategy","type":"meaning","importance":"high","front":"v-t グラフの面積は何を表すか。","back":"変位を表す。速度が負の部分は負の変位として扱う。","tags":["v-tグラフ"]},{"id":"m-gra-003","field":"mechanics","topic":"graphs_strategy","type":"unit","importance":"standard","front":"グラフの傾き・面積を使うときの確認法は。","back":"次元を確認する。例えば v-t の面積は (m/s)×s = m。","tags":["次元"]},{"id":"m-gra-004","field":"mechanics","topic":"graphs_strategy","type":"strategy","importance":"highest","front":"力学の文章題で最初に描くべきものは何か。","back":"状況図と力の図。物体ごとに力を描くと、使う法則が見えやすい。","tags":["図示"]},{"id":"m-gra-005","field":"mechanics","topic":"graphs_strategy","type":"strategy","importance":"highest","front":"力学で「何の法則で入るか」を決める基準は。","back":"力と加速度が必要なら運動方程式、始点終点を結ぶならエネルギー、衝突なら運動量。","tags":["法則選択"]},{"id":"m-gra-006","field":"mechanics","topic":"graphs_strategy","type":"conservation","importance":"high","front":"保存則を使う前に確認することは何か。","back":"何が保存される条件かを確認する。エネルギー、運動量は成立条件が違う。","tags":["保存則"]},{"id":"em-cou-001","field":"electromagnetism","topic":"coulomb","type":"formula","importance":"highest","front":"クーロンの法則を述べよ。","back":"2つの点電荷間の力の大きさは F = k|q1 q2|/r^2。向きは2電荷を結ぶ直線上。","tags":["クーロン"]},{"id":"em-cou-002","field":"electromagnetism","topic":"coulomb","type":"formula","importance":"high","front":"クーロン定数 k と真空の誘電率 ε0 の関係を述べよ。","back":"k = 1/(4πε0)。問題によって k 表記と ε0 表記を使い分ける。","tags":["クーロン定数"]},{"id":"em-cou-003","field":"electromagnetism","topic":"coulomb","type":"condition","importance":"highest","front":"クーロンの法則で距離 r は何を表すか。","back":"点電荷間の距離。球対称の帯電体を点電荷として扱える条件にも注意。","tags":["距離"]},{"id":"em-cou-004","field":"electromagnetism","topic":"coulomb","type":"meaning","importance":"high","front":"同符号・異符号の電荷にはどの向きの力が働くか。","back":"同符号は斥力、異符号は引力。向きは電荷を結ぶ直線上。","tags":["向き"]},{"id":"em-cou-005","field":"electromagnetism","topic":"coulomb","type":"strategy","importance":"highest","front":"複数電荷があるときのクーロン力はどう考えるか。","back":"各電荷から受ける力をベクトルとして求め、重ね合わせる。成分分解が有効。","tags":["重ね合わせ"]},{"id":"em-cou-006","field":"electromagnetism","topic":"coulomb","type":"strategy","importance":"high","front":"クーロン力と万有引力の類似点は。","back":"どちらも距離の2乗に反比例する中心力。符号による引力・斥力の違いに注意。","tags":["類推"]},{"id":"em-ef-001","field":"electromagnetism","topic":"electric_field","type":"formula","importance":"highest","front":"電場の定義を述べよ。","back":"電場 E は、正の試験電荷 q が受ける力 F を用いて E=F/q。向きは正電荷が受ける力の向き。","tags":["電場"]},{"id":"em-ef-002","field":"electromagnetism","topic":"electric_field","type":"formula","importance":"highest","front":"点電荷 Q から距離 r の点の電場を述べよ。","back":"E = kQ/r^2。Q が正なら外向き、負なら内向き。大きさは k|Q|/r^2。","tags":["点電荷"]},{"id":"em-ef-003","field":"electromagnetism","topic":"electric_field","type":"condition","importance":"high","front":"一様電場とは何か。","back":"場所によらず電場の大きさと向きが一定の電場。平行板コンデンサー内部で近似的に扱う。","tags":["一様電場"]},{"id":"em-ef-004","field":"electromagnetism","topic":"electric_field","type":"meaning","importance":"highest","front":"電場の向きはどのように決めるか。","back":"正の電荷が受ける力の向き。負電荷が受ける力は電場と逆向き。","tags":["向き"]},{"id":"em-ef-005","field":"electromagnetism","topic":"electric_field","type":"meaning","importance":"high","front":"電場と電気力の関係を述べよ。","back":"電荷 q が電場 E から受ける力は F=qE。q が負なら力の向きは E と逆。","tags":["電気力"]},{"id":"em-ef-006","field":"electromagnetism","topic":"electric_field","type":"unit","importance":"highest","front":"電場の単位を述べよ。","back":"N/C または V/m。力との関係 F=qE、電位差との関係 E=V/d から分かる。","tags":["単位"]},{"id":"em-ef-007","field":"electromagnetism","topic":"electric_field","type":"strategy","importance":"highest","front":"複数の電場があるときの合成方法は。","back":"電場はベクトルなので、各電場を成分分解して重ね合わせる。","tags":["重ね合わせ"]},{"id":"em-ef-008","field":"electromagnetism","topic":"electric_field","type":"strategy","importance":"high","front":"電場問題でまず確認することは何か。","back":"電場を作る電荷と、力を受ける電荷を分けて考える。試験電荷の符号に注意。","tags":["典型判断"]},{"id":"em-pot-001","field":"electromagnetism","topic":"potential","type":"formula","importance":"highest","front":"電位と電気的位置エネルギーの関係を述べよ。","back":"電気的位置エネルギー U と電荷 q について U=qV。電位 V は単位電荷あたりの位置エネルギー。","tags":["電位"]},{"id":"em-pot-002","field":"electromagnetism","topic":"potential","type":"formula","importance":"highest","front":"電位差と仕事の関係を述べよ。","back":"電場が電荷 q にする仕事は W = q(V_A - V_B)。電位差がエネルギー差を決める。","tags":["電位差"]},{"id":"em-pot-003","field":"electromagnetism","topic":"potential","type":"condition","importance":"high","front":"電位を考えるとき基準は重要か。","back":"電位の絶対値は基準に依存するが、物理的に重要なのは電位差。","tags":["基準"]},{"id":"em-pot-004","field":"electromagnetism","topic":"potential","type":"meaning","importance":"highest","front":"電場と電位の違いを述べよ。","back":"電場はベクトル、電位はスカラー。電場は力の向き、電位はエネルギーの高さを表す。","tags":["混同注意"]},{"id":"em-pot-005","field":"electromagnetism","topic":"potential","type":"meaning","importance":"high","front":"正電荷は電位の高い方・低い方のどちらへ自然に動きやすいか。","back":"正電荷は電位の高い方から低い方へ動きやすい。負電荷は逆向きに注意。","tags":["向き"]},{"id":"em-pot-006","field":"electromagnetism","topic":"potential","type":"unit","importance":"highest","front":"電位・電位差の単位を述べよ。","back":"V（ボルト）。1 V = 1 J/C。単位電荷あたりのエネルギー。","tags":["単位"]},{"id":"em-pot-007","field":"electromagnetism","topic":"potential","type":"strategy","importance":"highest","front":"電位を使うと解きやすい場面は。","back":"力や加速度の途中経過より、始点終点のエネルギー差を結びたいとき。力学の位置エネルギーと似ている。","tags":["典型判断"]},{"id":"em-pot-008","field":"electromagnetism","topic":"potential","type":"strategy","importance":"high","front":"等電位面上を動くとき、電場のする仕事はどうなるか。","back":"電位差が0なので仕事は0。等電位面と電場は垂直に交わる。","tags":["等電位"]},{"id":"em-cap-001","field":"electromagnetism","topic":"capacitor","type":"formula","importance":"highest","front":"コンデンサーの基本式を述べよ。","back":"Q = CV。蓄えた電荷 Q、静電容量 C、電圧 V の関係。","tags":["コンデンサー"]},{"id":"em-cap-002","field":"electromagnetism","topic":"capacitor","type":"formula","importance":"highest","front":"平行板コンデンサーの静電容量を述べよ。","back":"C = εS/d。極板面積 S に比例し、極板間隔 d に反比例する。","tags":["平行板"]},{"id":"em-cap-003","field":"electromagnetism","topic":"capacitor","type":"formula","importance":"high","front":"コンデンサーに蓄えられるエネルギーを述べよ。","back":"U = (1/2)CV^2 = Q^2/(2C) = (1/2)QV。条件に合わせて使い分ける。","tags":["エネルギー"]},{"id":"em-cap-004","field":"electromagnetism","topic":"capacitor","type":"condition","importance":"highest","front":"コンデンサーを電池につないだままと切り離した後で何が違うか。","back":"電池につないだままなら V 一定。切り離した後なら Q 一定。典型問題の分岐点。","tags":["条件"]},{"id":"em-cap-005","field":"electromagnetism","topic":"capacitor","type":"condition","importance":"high","front":"平行板コンデンサー内部の電場を近似的にどう扱うか。","back":"端の効果を無視すれば一様電場として扱う。E=V/d。","tags":["一様電場"]},{"id":"em-cap-006","field":"electromagnetism","topic":"capacitor","type":"meaning","importance":"high","front":"静電容量 C の意味を述べよ。","back":"電圧1Vあたりどれだけ電荷を蓄えられるかを表す量。単位は F。","tags":["静電容量"]},{"id":"em-cap-007","field":"electromagnetism","topic":"capacitor","type":"unit","importance":"high","front":"静電容量の単位を述べよ。","back":"F（ファラド）。1 F = 1 C/V。","tags":["単位"]},{"id":"em-cap-008","field":"electromagnetism","topic":"capacitor","type":"strategy","importance":"highest","front":"コンデンサーの変化問題でまず確認することは何か。","back":"電池につながっているか、切り離されているか。V一定かQ一定かを最初に決める。","tags":["典型判断"]},{"id":"em-cap-009","field":"electromagnetism","topic":"capacitor","type":"strategy","importance":"high","front":"コンデンサーの直列接続で共通になる量は何か。","back":"各コンデンサーの電荷の大きさが等しい。電圧は分かれる。","tags":["直列"]},{"id":"em-cap-010","field":"electromagnetism","topic":"capacitor","type":"strategy","importance":"high","front":"コンデンサーの並列接続で共通になる量は何か。","back":"各コンデンサーの電圧が等しい。電荷は容量に応じて分かれる。","tags":["並列"]},{"id":"em-ohm-001","field":"electromagnetism","topic":"ohm","type":"formula","importance":"highest","front":"オームの法則を述べよ。","back":"V = IR。電圧、電流、抵抗の基本関係。","tags":["オームの法則"]},{"id":"em-ohm-002","field":"electromagnetism","topic":"ohm","type":"formula","importance":"high","front":"抵抗率を用いた抵抗の式を述べよ。","back":"R = ρL/S。長さ L に比例し、断面積 S に反比例する。","tags":["抵抗率"]},{"id":"em-ohm-003","field":"electromagnetism","topic":"ohm","type":"condition","importance":"high","front":"オームの法則がそのまま使える素子は何か。","back":"抵抗値が一定のオーム抵抗。非線形素子ではグラフや条件に注意。","tags":["条件"]},{"id":"em-ohm-004","field":"electromagnetism","topic":"ohm","type":"condition","importance":"high","front":"理想的な電流計・電圧計の接続を述べよ。","back":"電流計は直列で内部抵抗0、電圧計は並列で内部抵抗∞として扱う。","tags":["計器"]},{"id":"em-ohm-005","field":"electromagnetism","topic":"ohm","type":"meaning","importance":"high","front":"電流の向きと電子の移動方向の関係を述べよ。","back":"電流の向きは正電荷の移動方向。金属中の電子の移動方向は電流と逆。","tags":["電流"]},{"id":"em-ohm-006","field":"electromagnetism","topic":"ohm","type":"unit","importance":"highest","front":"電流・電圧・抵抗の単位を述べよ。","back":"電流 A、電圧 V、抵抗 Ω。V=IR から 1Ω=1V/A。","tags":["単位"]},{"id":"em-ohm-007","field":"electromagnetism","topic":"ohm","type":"strategy","importance":"highest","front":"回路問題で最初に確認することは何か。","back":"直列・並列の構造、どこで電流が同じか、どこで電圧が同じか。","tags":["典型判断"]},{"id":"em-ohm-008","field":"electromagnetism","topic":"ohm","type":"strategy","importance":"high","front":"抵抗の両端の電圧を求める基本方針は。","back":"その抵抗を流れる電流を求め、V=IR を使う。分圧・分流も利用する。","tags":["電圧降下"]},{"id":"em-kir-001","field":"electromagnetism","topic":"kirchhoff_resistance","type":"formula","importance":"highest","front":"抵抗の直列合成を述べよ。","back":"R = R1 + R2 + …。直列では電流が共通。","tags":["直列抵抗"]},{"id":"em-kir-002","field":"electromagnetism","topic":"kirchhoff_resistance","type":"formula","importance":"highest","front":"抵抗の並列合成を述べよ。","back":"1/R = 1/R1 + 1/R2 + …。並列では電圧が共通。","tags":["並列抵抗"]},{"id":"em-kir-003","field":"electromagnetism","topic":"kirchhoff_resistance","type":"formula","importance":"highest","front":"キルヒホッフの第1法則を述べよ。","back":"分岐点で流れ込む電流の和 = 流れ出る電流の和。電荷保存を表す。","tags":["キルヒホッフ"]},{"id":"em-kir-004","field":"electromagnetism","topic":"kirchhoff_resistance","type":"formula","importance":"highest","front":"キルヒホッフの第2法則を述べよ。","back":"閉回路1周で起電力と電圧降下の代数和が0。エネルギー保存に対応する。","tags":["キルヒホッフ"]},{"id":"em-kir-005","field":"electromagnetism","topic":"kirchhoff_resistance","type":"condition","importance":"high","front":"キルヒホッフ第2法則で符号を決めるコツは。","back":"一周する向きを決め、電池で電位が上がるか、抵抗で電圧降下するかを符号つきで追う。","tags":["符号"]},{"id":"em-kir-006","field":"electromagnetism","topic":"kirchhoff_resistance","type":"condition","importance":"high","front":"直列回路で共通な量、並列回路で共通な量を述べよ。","back":"直列は電流が共通。並列は電圧が共通。","tags":["直列並列"]},{"id":"em-kir-007","field":"electromagnetism","topic":"kirchhoff_resistance","type":"meaning","importance":"high","front":"キルヒホッフ第1法則の物理的意味は。","back":"電荷が分岐点にたまり続けないこと。電流の保存。","tags":["意味"]},{"id":"em-kir-008","field":"electromagnetism","topic":"kirchhoff_resistance","type":"strategy","importance":"highest","front":"複雑な回路で最初にすることは何か。","back":"電流の向きを仮定し、分岐点と閉回路を選ぶ。仮定と逆なら答えが負になるだけ。","tags":["立式"]},{"id":"em-kir-009","field":"electromagnetism","topic":"kirchhoff_resistance","type":"strategy","importance":"highest","front":"直並列で簡単化できる回路かどうかをどう見るか。","back":"同じ電流が流れるか、同じ2点間につながるかを見る。見かけに惑わされない。","tags":["合成抵抗"]},{"id":"em-kir-010","field":"electromagnetism","topic":"kirchhoff_resistance","type":"strategy","importance":"high","front":"ブリッジ回路で特に確認することは何か。","back":"中央の抵抗に電流が流れない条件があるか。対称性や電位差0に注目。","tags":["ブリッジ"]},{"id":"em-pow-001","field":"electromagnetism","topic":"power_emf","type":"formula","importance":"highest","front":"電力の式を述べよ。","back":"P = IV = I^2R = V^2/R。どの量が分かっているかで使い分ける。","tags":["電力"]},{"id":"em-pow-002","field":"electromagnetism","topic":"power_emf","type":"formula","importance":"highest","front":"ジュール熱の式を述べよ。","back":"Q = I^2Rt = IVt = (V^2/R)t。電力量として扱う。","tags":["ジュール熱"]},{"id":"em-pow-003","field":"electromagnetism","topic":"power_emf","type":"formula","importance":"high","front":"内部抵抗 r を持つ電池の端子電圧を述べよ。","back":"放電時は V = E - Ir。充電時などでは符号関係に注意。","tags":["内部抵抗"]},{"id":"em-pow-004","field":"electromagnetism","topic":"power_emf","type":"condition","importance":"high","front":"電池の起電力と端子電圧の違いを述べよ。","back":"起電力 E は電池内部で与えるエネルギー/電荷。端子電圧は外部に現れる電圧で、内部抵抗により下がる。","tags":["起電力"]},{"id":"em-pow-005","field":"electromagnetism","topic":"power_emf","type":"meaning","importance":"high","front":"電力 P の意味を述べよ。","back":"単位時間あたりに消費・供給されるエネルギー。単位は W。","tags":["意味"]},{"id":"em-pow-006","field":"electromagnetism","topic":"power_emf","type":"unit","importance":"high","front":"電力・電力量の単位を述べよ。","back":"電力は W、電力量は J または Wh。1 W = 1 J/s。","tags":["単位"]}];
-const FORMULA_DATA = [{"id":"fm-kin","field":"mechanics","topic":"kinematics","title":"等加速度運動","importance":"最重要","formulas":["v = v0 + at","x = x0 + v0t + 1/2 at^2","v^2 - v0^2 = 2a(x-x0)"],"conditions":["加速度が一定の区間で使う","正方向を先に決める"],"units":["v: m/s","a: m/s^2"],"pitfalls":["符号ミス","時間 t を不要にしたいのに t 入り公式を選ぶ"],"strategy":["正方向・初速度・加速度の符号を最初に固定する。"]},{"id":"fm-eq","field":"mechanics","topic":"equilibrium","title":"つり合い・力の分解","importance":"重要","formulas":["ΣF=0","ΣFx=0, ΣFy=0"],"conditions":["加速度0のとき","同じ物体にはたらく力だけを足す"],"units":["力: N"],"pitfalls":["作用反作用とつり合いの混同"],"strategy":["斜面では平行・垂直方向に分解する。"]},{"id":"fm-dyn","field":"mechanics","topic":"dynamics","title":"運動方程式","importance":"最重要","formulas":["ΣF = ma"],"conditions":["慣性系で、物体ごとに立てる","Fは合力"],"units":["N = kg·m/s^2"],"pitfalls":["個別の力をFにしてしまう","着目物体を混ぜる"],"strategy":["力の図を物体ごとに描き、軸を決めて成分で立てる。"]},{"id":"fm-fr","field":"mechanics","topic":"friction","title":"摩擦","importance":"重要","formulas":["最大静止摩擦力 f_max=μN","動摩擦力 f=μ'N"],"conditions":["静止中は必要な分だけ変化","動く直前は最大静止摩擦"],"units":["N"],"pitfalls":["静止摩擦力を常にμNにする"],"strategy":["すべるか、すべらないか、動く直前かを最初に判断する。"]},{"id":"fm-cir","field":"mechanics","topic":"circular","title":"円運動","importance":"最重要","formulas":["a=v^2/r=rω^2","F=mv^2/r=mrω^2","v=rω, ω=2π/T"],"conditions":["中心向きに運動方程式を立てる"],"units":["角速度: rad/s"],"pitfalls":["向心力を新しい力だと思う"],"strategy":["何が中心向き合力を担うかを見る。"]},{"id":"fm-shm","field":"mechanics","topic":"shm","title":"単振動","importance":"重要","formulas":["F=-kx","T=2π√(m/k)","ω=√(k/m)"],"conditions":["復元力が変位に比例し逆向き"],"units":["周期: s"],"pitfalls":["つり合い位置を間違える"],"strategy":["つり合い位置からの変位をxにする。"]},{"id":"fm-gr","field":"mechanics","topic":"gravitation","title":"万有引力","importance":"標準","formulas":["F=Gm1m2/r^2","g=GM/r^2"],"conditions":["距離rは中心間距離"],"units":["G: N·m^2/kg^2"],"pitfalls":["高さと中心間距離の混同"],"strategy":["衛星では万有引力=向心力。"]},{"id":"fm-work","field":"mechanics","topic":"work_power","title":"仕事・仕事率","importance":"重要","formulas":["W=Fs cosθ","P=W/t","P=Fv cosθ"],"conditions":["力が一定なら使いやすい","力と変位の角度に注意"],"units":["仕事: J","仕事率: W"],"pitfalls":["垂直抗力の仕事を入れてしまう"],"strategy":["どの力が変位方向の成分を持つか確認する。"]},{"id":"fm-energy","field":"mechanics","topic":"energy","title":"力学的エネルギー","importance":"最重要","formulas":["K=1/2mv^2","U=mgh","U=1/2kx^2","K+U=一定"],"conditions":["保存力だけなら保存","摩擦があれば仕事を入れる"],"units":["エネルギー: J"],"pitfalls":["摩擦ありで保存則だけ使う"],"strategy":["始点と終点をつなぐならエネルギーが強い。"]},{"id":"fm-mom","field":"mechanics","topic":"momentum","title":"運動量・力積","importance":"最重要","formulas":["p=mv","I=Ft=Δp","Σp_before=Σp_after"],"conditions":["外力の力積が無視できる系"],"units":["運動量: kg·m/s","力積: N·s"],"pitfalls":["ベクトル量なのに符号を落とす"],"strategy":["衝突・爆発ではまず運動量保存を疑う。"]},{"id":"fm-col","field":"mechanics","topic":"collision","title":"衝突・反発係数","importance":"重要","formulas":["e=分離速度/接近速度","1次元: e=-(v2'-v1')/(v2-v1)"],"conditions":["運動量保存と組み合わせる"],"units":["無次元"],"pitfalls":["普通の衝突でエネルギー保存を使う"],"strategy":["未知数が足りないとき反発係数を使う。"]},{"id":"fm-gra","field":"mechanics","topic":"graphs_strategy","title":"グラフ・総合判断","importance":"重要","formulas":["x-t傾き=速度","v-t傾き=加速度","v-t面積=変位"],"conditions":["グラフの傾き・面積を次元で確認"],"units":["各軸に依存"],"pitfalls":["面積の符号を忘れる"],"strategy":["図・力の図・保存則候補を先に出す。"]},{"id":"fe-cou","field":"electromagnetism","topic":"coulomb","title":"クーロンの法則","importance":"最重要","formulas":["F=k|q1q2|/r^2","k=1/(4πε0)"],"conditions":["点電荷間または球対称で点電荷近似"],"units":["力: N","電荷: C"],"pitfalls":["距離rの取り違え","符号と向きの混同"],"strategy":["力はベクトルとして重ね合わせる。"]},{"id":"fe-ef","field":"electromagnetism","topic":"electric_field","title":"電場","importance":"最重要","formulas":["E=F/q","点電荷: E=kQ/r^2","F=qE"],"conditions":["電場の向きは正電荷が受ける力の向き"],"units":["N/C","V/m"],"pitfalls":["負電荷の力の向きを逆にし忘れる"],"strategy":["電場を作る電荷と力を受ける電荷を分ける。"]},{"id":"fe-pot","field":"electromagnetism","topic":"potential","title":"電位・電位差","importance":"最重要","formulas":["U=qV","W=q(VA-VB)"],"conditions":["重要なのは電位差","基準は任意"],"units":["V=J/C"],"pitfalls":["電位をベクトルと思う","電場との混同"],"strategy":["始点終点のエネルギー差なら電位を使う。"]},{"id":"fe-cap","field":"electromagnetism","topic":"capacitor","title":"コンデンサー","importance":"重要","formulas":["Q=CV","C=εS/d","U=1/2CV^2=Q^2/(2C)=1/2QV"],"conditions":["電池接続中はV一定","切り離し後はQ一定"],"units":["C: F","Q: C","V: V"],"pitfalls":["V一定とQ一定の取り違え"],"strategy":["変化問題では電池につながっているか最初に見る。"]},{"id":"fe-ohm","field":"electromagnetism","topic":"ohm","title":"オームの法則","importance":"最重要","formulas":["V=IR","R=ρL/S"],"conditions":["オーム抵抗で使う","電流計は直列、電圧計は並列"],"units":["A","V","Ω"],"pitfalls":["電流と電子の向きを混同"],"strategy":["直列は電流共通、並列は電圧共通。"]},{"id":"fe-kir","field":"electromagnetism","topic":"kirchhoff_resistance","title":"合成抵抗・キルヒホッフ","importance":"最重要","formulas":["直列: R=R1+R2","並列: 1/R=1/R1+1/R2","節点: 流入=流出","閉回路: 電圧の代数和=0"],"conditions":["向きを仮定して符号つきで立式"],"units":["抵抗: Ω"],"pitfalls":["電圧降下の符号ミス"],"strategy":["複雑な回路は電流の向きを仮定して閉回路を選ぶ。"]},{"id":"fe-pow","field":"electromagnetism","topic":"power_emf","title":"電力・ジュール熱・起電力","importance":"重要","formulas":["P=IV=I^2R=V^2/R","Q=I^2Rt","端子電圧 V=E-Ir"],"conditions":["内部抵抗ありでは端子電圧が下がる"],"units":["W","J","Wh"],"pitfalls":["起電力と端子電圧の混同"],"strategy":["電池内部で落ちる Ir を意識する。"]}];
-const LABELS = {"fields":{"mechanics":"力学","electromagnetism":"電磁気"},"topics":{"kinematics":"等加速度運動","equilibrium":"つり合い・力の分解","dynamics":"運動方程式","friction":"摩擦","circular":"円運動","shm":"単振動","gravitation":"万有引力","work_power":"仕事・仕事率","energy":"力学的エネルギー","momentum":"運動量・力積","collision":"衝突・反発係数","graphs_strategy":"グラフ・総合判断","coulomb":"クーロンの法則","electric_field":"電場","potential":"電位・電位差","capacitor":"コンデンサー","ohm":"オームの法則","kirchhoff_resistance":"合成抵抗・キルヒホッフ","power_emf":"電力・ジュール熱・起電力"},"types":{"formula":"公式","condition":"条件","meaning":"意味","conservation":"保存則","unit":"単位","strategy":"典型判断"},"importance":{"highest":"最重要","high":"重要","standard":"標準"}};
+
+function frac(n,d){ return `<span class="frac"><span class="num">${n}</span><span class="den">${d}</span></span>`; }
+function fd(html){ return `<div class="formula-display">${html}</div>`; }
+function fi(html){ return `<span class="formula-inline">${html}</span>`; }
+const F = {
+  kinematics1: `v = v<sub>0</sub> + at`,
+  kinematics2: `x = x<sub>0</sub> + v<sub>0</sub>t + ${frac('1','2')}at<sup>2</sup>`,
+  kinematics3: `v<sup>2</sup> - v<sub>0</sub><sup>2</sup> = 2a(x-x<sub>0</sub>)`,
+  ma: `F = ma`,
+  sumF: `ΣF = 0`,
+  compx: `F<sub>x</sub> = F cosθ`,
+  compy: `F<sub>y</sub> = F sinθ`,
+  friction: `f ≤ μN`,
+  kineticfriction: `f = μN`,
+  circularA: `a = ${frac('v<sup>2</sup>','r')} = rω<sup>2</sup>`,
+  circularF: `F = m${frac('v<sup>2</sup>','r')}`,
+  omega: `v = rω`,
+  shmA: `a = -ω<sup>2</sup>x`,
+  shmSpring: `T = 2π${'√'}${frac('m','k')}`,
+  shmPendulum: `T = 2π${'√'}${frac('l','g')}`,
+  grav: `F = G${frac('Mm','r<sup>2</sup>')}`,
+  gravity: `g = G${frac('M','r<sup>2</sup>')}`,
+  gravU: `U = -G${frac('Mm','r')}`,
+  work: `W = Fs cosθ`,
+  power: `P = ${frac('W','t')} = Fv`,
+  kinetic: `K = ${frac('1','2')}mv<sup>2</sup>`,
+  gravPE: `U = mgh`,
+  springPE: `U = ${frac('1','2')}kx<sup>2</sup>`,
+  mechE: `K + U = 一定`,
+  momentum: `p = mv`,
+  impulse: `I = FΔt = Δp`,
+  momcons: `m<sub>1</sub>v<sub>1</sub> + m<sub>2</sub>v<sub>2</sub> = m<sub>1</sub>v'<sub>1</sub> + m<sub>2</sub>v'<sub>2</sub>`,
+  restitution: `e = -${frac('v'<sub>A</sub> - v'<sub>B</sub>','v<sub>A</sub> - v<sub>B</sub>')}`,
+  slope: `傾き = ${frac('縦軸の変化','横軸の変化')}`,
+  area: `面積 = 物理量の合計`,
+  coulomb: `F = k${frac('|q<sub>1</sub>q<sub>2</sub>|','r<sup>2</sup>')}`,
+  efield: `E = ${frac('F','q')}`,
+  epoint: `E = k${frac('Q','r<sup>2</sup>')}`,
+  potential: `V = ${frac('U','q')}`,
+  voltage: `V<sub>A</sub> - V<sub>B</sub> = ${frac('W<sub>AB</sub>','q')}`,
+  eV: `E = ${frac('V','d')}`,
+  cap: `Q = CV`,
+  capParallel: `C = ε${frac('S','d')}`,
+  capEnergy: `U = ${frac('1','2')}CV<sup>2</sup> = ${frac('1','2')}QV = ${frac('Q<sup>2</sup>','2C')}`,
+  ohm: `V = IR`,
+  resSeries: `R = R<sub>1</sub> + R<sub>2</sub> + …`,
+  resParallel: `${frac('1','R')} = ${frac('1','R<sub>1</sub>')} + ${frac('1','R<sub>2</sub>')} + …`,
+  kirI: `流入電流 = 流出電流`,
+  kirV: `起電力の和 = 電圧降下の和`,
+  powerE: `P = IV = I<sup>2</sup>R = ${frac('V<sup>2</sup>','R')}`,
+  joule: `Q = I<sup>2</sup>Rt`,
+  emf: `V = E - Ir`
+};
+
+const LABELS = {
+  fields:{mechanics:'力学', electromagnetism:'電磁気'},
+  topics:{
+    kinematics:'等加速度運動', equilibrium:'つり合い・力の分解', dynamics:'運動方程式', friction:'摩擦', circular:'円運動', shm:'単振動', gravitation:'万有引力', work_power:'仕事・仕事率', energy:'力学的エネルギー', momentum:'運動量・力積', collision:'衝突・反発係数', graphs_strategy:'グラフ・総合判断',
+    coulomb:'クーロンの法則', electric_field:'電場', potential:'電位・電位差', capacitor:'コンデンサー', ohm:'オームの法則', kirchhoff_resistance:'合成抵抗・キルヒホッフ', power_emf:'電力・ジュール熱・起電力'
+  },
+  types:{formula:'公式', condition:'条件', meaning:'意味', conservation:'保存則', unit:'単位', strategy:'典型判断'},
+  importance:{highest:'最重要', high:'重要', standard:'標準'}
+};
+
+const TOPIC_DATA = [
+  {field:'mechanics', topic:'kinematics', target:10, importance:'highest', title:'等加速度運動', formulas:[F.kinematics1,F.kinematics2,F.kinematics3], plain:['v=v0+at','x=x0+v0t+1/2at^2','v^2-v0^2=2aΔx'], condition:'加速度が一定とみなせる直線運動。向きを決め、符号を最後まで統一する。', meaning:'速度は傾き、変位は面積。時間が出ない問題では v² の式が効きやすい。', units:['v[m/s]','a[m/s²]','x[m]','t[s]'], pitfalls:['自由落下では上向きを正にすると a=-g','初速度ゼロを勝手に置かない','距離と変位を混同しない'], strategy:'「一定加速度」「落下」「斜面上を滑る」が見えたら、まず向きを決めて等加速度三式。'},
+  {field:'mechanics', topic:'equilibrium', target:6, importance:'highest', title:'つり合い・力の分解', formulas:[F.sumF,F.compx,F.compy], plain:['ΣF=0','Fx=Fcosθ','Fy=Fsinθ'], condition:'静止、または等速直線運動。各方向で合力が0。', meaning:'力をx方向・y方向に分け、各方向で足し合わせる。', units:['力[N]'], pitfalls:['作用反作用を同じ物体のつり合いに入れない','斜面では斜面方向・垂直方向に分ける'], strategy:'物体が動かないならまず力を全部描き、2方向に分解してΣF=0。'},
+  {field:'mechanics', topic:'dynamics', target:10, importance:'highest', title:'運動方程式', formulas:[F.ma], plain:['F=ma'], condition:'着目した1物体に働く外力の合力を使う。', meaning:'合力が加速度を決める。質量が大きいほど同じ力で加速度は小さい。', units:['F[N]','m[kg]','a[m/s²]'], pitfalls:['内力を混ぜない','力の向きと加速度の向きを合わせる','複数物体では物体ごとに式を立てる'], strategy:'「加速度」「張力」「摩擦」「斜面」が出たら、着目物体を決めてF=ma。'},
+  {field:'mechanics', topic:'friction', target:6, importance:'high', title:'摩擦力', formulas:[F.friction,F.kineticfriction], plain:['f≤μN','f=μN'], condition:'静止摩擦は必要なだけ変化し最大値まで。動摩擦は大きさが μN。', meaning:'摩擦は相対運動、または相対運動しそうな向きを妨げる。', units:['摩擦係数μは無次元','N[N]','f[N]'], pitfalls:['静止摩擦をいきなりμNとしない','垂直抗力Nをmgと決めつけない'], strategy:'すべる直前なら最大静止摩擦、すべっているなら動摩擦。'},
+  {field:'mechanics', topic:'circular', target:8, importance:'high', title:'円運動', formulas:[F.circularA,F.circularF,F.omega], plain:['a=v^2/r=rω^2','F=mv^2/r','v=rω'], condition:'速度の向きが変わり、中心向き加速度をもつ運動。', meaning:'速さ一定でも向きが変わるので加速度がある。合力は中心向き。', units:['r[m]','ω[rad/s]','a[m/s²]','F[N]'], pitfalls:['遠心力を慣性系の外力として入れない','中心向き成分だけが向心力'], strategy:'円軌道なら中心を探し、中心向きにF=mv²/r。'},
+  {field:'mechanics', topic:'shm', target:7, importance:'standard', title:'単振動', formulas:[F.shmA,F.shmSpring,F.shmPendulum], plain:['a=-ω^2x','T=2π√(m/k)','T=2π√(l/g)'], condition:'変位に比例し、逆向きの復元力が働く。', meaning:'中心へ戻そうとする力が強いほど周期は短い。', units:['ω[rad/s]','T[s]','k[N/m]'], pitfalls:['振幅は周期に入らない場合が多い','小振幅近似の単振り子を確認'], strategy:'つり合い位置からの変位xで、力が -kx 型になるか見る。'},
+  {field:'mechanics', topic:'gravitation', target:7, importance:'high', title:'万有引力', formulas:[F.grav,F.gravity,F.gravU], plain:['F=GMm/r^2','g=GM/r^2','U=-GMm/r'], condition:'2物体を質点、または球対称物体として扱える。距離rは中心間距離。', meaning:'重力は距離の2乗に反比例する。地表近くのmgは近似。', units:['G[N m²/kg²]','r[m]','F[N]'], pitfalls:['rを高さhにしない。中心からの距離R+hを使う','力は引力'], strategy:'惑星・衛星・高度が出たら、mgではなくGMm/r²を疑う。'},
+  {field:'mechanics', topic:'work_power', target:6, importance:'high', title:'仕事・仕事率', formulas:[F.work,F.power], plain:['W=Fs cosθ','P=W/t=Fv'], condition:'力と変位の向きのなす角に注意。', meaning:'仕事はエネルギーをどれだけ移したか。仕事率はその速さ。', units:['W[J]','P[W]','F[N]'], pitfalls:['力に垂直な移動では仕事0','Wは仕事と仕事率の単位記号で文脈注意'], strategy:'力が移動方向にどれだけ成分を持つかを見て仕事を計算。'},
+  {field:'mechanics', topic:'energy', target:10, importance:'highest', title:'力学的エネルギー', formulas:[F.kinetic,F.gravPE,F.springPE,F.mechE], plain:['K=1/2mv^2','U=mgh','U=1/2kx^2','K+U=一定'], condition:'保存力だけなら力学的エネルギー保存。非保存力の仕事があればエネルギー変化。', meaning:'速さ・高さ・ばねの伸びをエネルギーとして同じ土俵で比べる。', units:['K[J]','U[J]','m[kg]','v[m/s]'], pitfalls:['摩擦があれば保存しない','基準面を勝手に変えて混乱しない'], strategy:'速さと高さの変化が中心なら、まずエネルギー保存を検討。'},
+  {field:'mechanics', topic:'momentum', target:9, importance:'highest', title:'運動量・力積', formulas:[F.momentum,F.impulse,F.momcons], plain:['p=mv','I=FΔt=Δp','運動量保存'], condition:'外力の力積が無視できる短時間の相互作用では運動量保存。', meaning:'力積は運動量の変化。衝突・爆発では全体の運動量を追う。', units:['p[kg m/s]','I[N s]'], pitfalls:['エネルギー保存と運動量保存の条件は違う','ベクトル量なので向きが重要'], strategy:'衝突・分裂・合体はまず運動量保存。力の時間変化は面積。'},
+  {field:'mechanics', topic:'collision', target:7, importance:'high', title:'衝突・反発係数', formulas:[F.restitution,F.momcons], plain:['e=-(vA\'-vB\')/(vA-vB)','運動量保存'], condition:'一直線上の衝突で、衝突前後の相対速度を使う。', meaning:'eは跳ね返り具合。e=1なら弾性衝突、e=0なら一体化。', units:['eは無次元'], pitfalls:['相対速度の向きで符号ミスしやすい','運動エネルギー保存はe=1のときだけ'], strategy:'衝突は運動量保存＋反発係数の2本で未知数を決める。'},
+  {field:'mechanics', topic:'graphs_strategy', target:6, importance:'standard', title:'グラフ・総合判断', formulas:[F.slope,F.area], plain:['傾き=変化率','面積=積算量'], condition:'グラフの縦軸・横軸の単位を先に確認する。', meaning:'傾きは割り算、面積は掛け算。単位を見れば何を表すか分かる。', units:['傾きの単位=縦軸/横軸','面積の単位=縦軸×横軸'], pitfalls:['形だけで判断しない','v-tグラフの面積は距離ではなく変位の場合がある'], strategy:'グラフ問題は、傾き・面積・切片の単位を最初に読む。'},
+  {field:'electromagnetism', topic:'coulomb', target:7, importance:'highest', title:'クーロンの法則', formulas:[F.coulomb], plain:['F=k|q1q2|/r^2'], condition:'点電荷どうし、または大きさを無視できる電荷間。', meaning:'電荷が大きいほど力は大きく、距離が2倍なら力は1/4。', units:['q[C]','F[N]','r[m]'], pitfalls:['符号は引力・斥力の判断に使う','距離は電荷間距離'], strategy:'2つの電荷の間の力なら、まずクーロンの法則。'},
+  {field:'electromagnetism', topic:'electric_field', target:7, importance:'highest', title:'電場', formulas:[F.efield,F.epoint], plain:['E=F/q','E=kQ/r^2'], condition:'正の試験電荷が受ける力の向きで電場を定義。', meaning:'電場はその場所に置いた電荷が力を受ける場。', units:['E[N/C] または [V/m]'], pitfalls:['電場と力を混同しない。F=qE','負電荷の受ける力は電場と逆向き'], strategy:'「その点の電場」を聞かれたら、力ではなく単位電荷あたりで考える。'},
+  {field:'electromagnetism', topic:'potential', target:8, importance:'highest', title:'電位・電位差', formulas:[F.potential,F.voltage,F.eV], plain:['V=U/q','VA-VB=WAB/q','E=V/d'], condition:'電位差は単位電荷あたりの仕事・エネルギー差。', meaning:'電場は坂の傾き、電位は高さのように見るとつながる。', units:['V[V]','E[V/m]','U[J]'], pitfalls:['電位と電位差を混同しない','電場の向きは電位が下がる向き'], strategy:'仕事・エネルギーの話なら電位差、力の話なら電場。'},
+  {field:'electromagnetism', topic:'capacitor', target:9, importance:'highest', title:'コンデンサー', formulas:[F.cap,F.capParallel,F.capEnergy], plain:['Q=CV','C=εS/d','U=1/2CV^2=1/2QV=Q^2/2C'], condition:'極板間に電荷を蓄える。並行板では面積Sと距離dに注目。', meaning:'電気量Q、電圧V、容量Cの三角関係。', units:['Q[C]','C[F]','V[V]','U[J]'], pitfalls:['電池接続中はV一定、切り離すとQ一定','誘電体挿入時の一定量を確認'], strategy:'コンデンサーは「電池につながっているか」を最初に確認。'},
+  {field:'electromagnetism', topic:'ohm', target:6, importance:'highest', title:'オームの法則', formulas:[F.ohm], plain:['V=IR'], condition:'抵抗に流れる電流と電圧の比例関係。', meaning:'抵抗が大きいほど同じ電圧で電流は小さい。', units:['V[V]','I[A]','R[Ω]'], pitfalls:['電源の起電力Eと端子電圧Vを混同しない','回路全体か部品1個かを区別'], strategy:'抵抗1個の電圧・電流・抵抗ならV=IR。'},
+  {field:'electromagnetism', topic:'kirchhoff_resistance', target:10, importance:'highest', title:'合成抵抗・キルヒホッフ', formulas:[F.resSeries,F.resParallel,F.kirI,F.kirV], plain:['直列R=R1+R2','並列1/R=1/R1+1/R2','電流保存','電圧保存'], condition:'分岐点では電流保存、閉回路では電圧の和が0。', meaning:'直列は電流共通、並列は電圧共通。', units:['R[Ω]','I[A]','V[V]'], pitfalls:['並列合成は単純な足し算ではない','分岐前後の電流の向きを決める'], strategy:'複雑な回路は、直列・並列を簡約し、残りをキルヒホッフで解く。'},
+  {field:'electromagnetism', topic:'power_emf', target:9, importance:'high', title:'電力・ジュール熱・起電力', formulas:[F.powerE,F.joule,F.emf], plain:['P=IV=I^2R=V^2/R','Q=I^2Rt','V=E-Ir'], condition:'抵抗で消費される電力、内部抵抗をもつ電池の端子電圧。', meaning:'電流が大きいほど発熱は大きい。内部抵抗では電圧降下が起こる。', units:['P[W]','Q[J]','E[V]','r[Ω]'], pitfalls:['発熱Qと電荷qを混同しない','端子電圧は起電力そのものとは限らない'], strategy:'電力・熱はP式、電池内部抵抗が出たらV=E-Ir。'}
+];
+
+function choose(arr, i){ return arr[i % arr.length]; }
+function cardBack(topic, formula, extra){
+  return `${fd(formula)}<p>${escapeHtml(extra)}</p><p class="formula-help">条件：${escapeHtml(topic.condition)}</p>`;
+}
+function buildCards(){
+  const cards=[];
+  const templates=['formula','condition','meaning','unit','strategy','pitfall','formula2','condition2','meaning2','strategy2'];
+  TOPIC_DATA.forEach(topic=>{
+    for(let i=0; i<topic.target; i++){
+      const typeBase = templates[i % templates.length];
+      const formula = choose(topic.formulas, i);
+      const plain = choose(topic.plain, i);
+      let type = typeBase.replace(/2$/,'');
+      if(type==='pitfall') type='condition';
+      const id = `${topic.field}_${topic.topic}_${String(i+1).padStart(2,'0')}`;
+      let front='', backHtml='';
+      if(typeBase.startsWith('formula')){
+        front = `【${LABELS.topics[topic.topic]}】主要公式を答えよ。`;
+        backHtml = cardBack(topic, formula, `${LABELS.topics[topic.topic]}では「${plain}」を軸に、条件と向きを確認します。`);
+        type='formula';
+      } else if(typeBase.startsWith('condition')){
+        front = `【${LABELS.topics[topic.topic]}】この公式・考え方を使う条件は？`;
+        backHtml = `${fd(formula)}<p>${escapeHtml(topic.condition)}</p><p class="formula-help danger">混同注意：${escapeHtml(choose(topic.pitfalls, i))}</p>`;
+        type='condition';
+      } else if(typeBase.startsWith('meaning')){
+        front = `【${LABELS.topics[topic.topic]}】式の意味を一言で説明せよ。`;
+        backHtml = `${fd(formula)}<p>${escapeHtml(topic.meaning)}</p>`;
+        type='meaning';
+      } else if(typeBase==='unit'){
+        front = `【${LABELS.topics[topic.topic]}】単位・次元で確認すべきことは？`;
+        backHtml = `${fd(formula)}<ul class="note-list">${topic.units.map(u=>`<li>${escapeHtml(u)}</li>`).join('')}</ul>`;
+        type='unit';
+      } else if(typeBase.startsWith('strategy')){
+        front = `【典型判断】${LABELS.topics[topic.topic]}でまず見るポイントは？`;
+        backHtml = `${fd(formula)}<p><b>典型判断：</b>${escapeHtml(topic.strategy)}</p>`;
+        type='strategy';
+      } else {
+        front = `【混同注意】${LABELS.topics[topic.topic]}でよくあるミスは？`;
+        backHtml = `${fd(formula)}<ul class="note-list">${topic.pitfalls.map(p=>`<li>${escapeHtml(p)}</li>`).join('')}</ul>`;
+        type='condition';
+      }
+      // conservation-flavored cards for relevant topics
+      if(['energy','momentum','collision','kirchhoff_resistance'].includes(topic.topic) && i===topic.target-1){
+        type='conservation';
+        front = `【保存則】${LABELS.topics[topic.topic]}で保存・共通になるものは？`;
+        let answer = topic.topic==='energy' ? '保存力だけなら K+U が一定。摩擦など非保存力があれば、その仕事ぶんだけ変化。' :
+                     topic.topic==='momentum' ? '外力の力積が無視できるなら、系全体の運動量が保存。' :
+                     topic.topic==='collision' ? '衝突ではまず運動量保存。弾性衝突でない限り、運動エネルギー保存は使わない。' :
+                     '分岐点では電流保存、閉回路では電圧の和が保存的に釣り合う。';
+        backHtml = `${fd(formula)}<p>${answer}</p>`;
+      }
+      cards.push({id, field:topic.field, topic:topic.topic, type, importance:topic.importance, front, backHtml, plain});
+    }
+  });
+  return cards;
+}
+
+const CARD_DATA = buildCards();
+const FORMULA_DATA = TOPIC_DATA.map((t, idx)=>({
+  id:`f_${t.topic}`,
+  field:t.field,
+  topic:t.topic,
+  importance:t.importance,
+  title:t.title,
+  formulas:t.formulas,
+  plain:t.plain,
+  conditions:[t.condition],
+  units:t.units,
+  pitfalls:t.pitfalls,
+  strategy:t.strategy
+}));
+
 let state = loadState();
 let currentCard = null;
 let accessToken = null;
@@ -218,51 +341,28 @@ let backupTimer = null;
 function $(id){return document.getElementById(id)}
 function now(){return Date.now()}
 function todayKey(){const d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
-function loadState(){
-  try{ const raw=localStorage.getItem(STORAGE_KEY); if(raw) return normalizeState(JSON.parse(raw)); }catch(e){}
-  return normalizeState({version:APP_VERSION, cardProgress:{}, reviewLog:[], settings:{autoBackup:false, clientId:''}});
-}
-function normalizeState(s){
-  s.version=s.version||APP_VERSION; s.cardProgress=s.cardProgress||{}; s.reviewLog=s.reviewLog||[]; s.settings=s.settings||{};
-  if(!('autoBackup' in s.settings)) s.settings.autoBackup=false; if(!s.settings.clientId) s.settings.clientId='';
-  return s;
-}
+function escapeHtml(s){return String(s).replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));}
+function loadState(){ try{ const raw=localStorage.getItem(STORAGE_KEY); if(raw) return normalizeState(JSON.parse(raw)); }catch(e){} return normalizeState({version:APP_VERSION, cardProgress:{}, reviewLog:[], settings:{autoBackup:false, clientId:''}}); }
+function normalizeState(s){ s.version=s.version||APP_VERSION; s.cardProgress=s.cardProgress||{}; s.reviewLog=s.reviewLog||[]; s.settings=s.settings||{}; if(!('autoBackup' in s.settings)) s.settings.autoBackup=false; if(!s.settings.clientId) s.settings.clientId=''; return s; }
 function saveState(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
-function getProg(id){
-  if(!state.cardProgress[id]) state.cardProgress[id]={reps:0,lapses:0,interval:0,ease:2.3,due:0,lastGrade:null,lastReview:null};
-  return state.cardProgress[id];
-}
-function label(obj,key){ return (obj&&obj[key])||key; }
-function cardStatus(card){
-  const p=getProg(card.id);
-  if(!p.reps) return 'new';
-  if(p.lapses>=2 || p.lastGrade===0) return 'weak';
-  if(p.interval>=14 && p.lastGrade>=2) return 'stable';
-  if(p.due && p.due<=now()) return 'review';
-  return 'learning';
-}
+function getProg(id){ if(!state.cardProgress[id]) state.cardProgress[id]={reps:0,lapses:0,interval:0,ease:2.3,due:0,lastGrade:null,lastReview:null}; return state.cardProgress[id]; }
+function cardStatus(card){ const p=getProg(card.id); if(!p.reps) return 'new'; if(p.lapses>=2 || p.lastGrade===0) return 'weak'; if(p.interval>=14 && p.lastGrade>=2) return 'stable'; if(p.due && p.due<=now()) return 'review'; return 'learning'; }
 function setStatus(msg){ $('status').textContent=msg; }
 function setDriveStatus(msg){ $('driveStatus').textContent=msg; }
+function unique(arr){return [...new Set(arr)]}
 function switchTab(tab){
-  const target=$(tab);
-  if(!target){ setStatus('表示先が見つかりません: '+tab); return; }
+  const target=$(tab); if(!target){ setStatus('表示先が見つかりません: '+tab); return; }
   document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
   target.classList.add('active');
+  document.querySelectorAll('[data-tab]').forEach(b=>b.classList.toggle('active', b.dataset.tab===tab));
   if(tab==='progress') renderProgress();
   if(tab==='formulas') renderFormulas();
   setTimeout(()=>target.scrollIntoView({behavior:'smooth',block:'start'}),50);
 }
 function setupTabs(){
-  document.querySelectorAll('[data-tab]').forEach(b=>{
-    b.onclick=()=>switchTab(b.dataset.tab);
-  });
-  // 予備：ボタンの個別イベントが失敗した場合でもタブだけは動くようにする
-  document.addEventListener('click', e=>{
-    const b=e.target.closest && e.target.closest('[data-tab]');
-    if(b){ e.preventDefault(); switchTab(b.dataset.tab); }
-  });
+  document.querySelectorAll('[data-tab]').forEach(b=>{ b.addEventListener('click',()=>switchTab(b.dataset.tab)); });
+  document.addEventListener('click', e=>{ const b=e.target.closest && e.target.closest('[data-tab]'); if(b){ e.preventDefault(); switchTab(b.dataset.tab); } });
 }
-function unique(arr){return [...new Set(arr)]}
 function populateFilters(){
   const fieldSel=$('fieldFilter'), fField=$('formulaField');
   const fields=unique(CARD_DATA.map(c=>c.field));
@@ -274,8 +374,8 @@ function populateFilters(){
 }
 function updateTopicOptions(){
   const field=$('fieldFilter').value;
-  let pool=CARD_DATA.filter(c=>field==='all'||c.field===field);
-  let topics=unique(pool.map(c=>c.topic));
+  const pool=CARD_DATA.filter(c=>field==='all'||c.field===field);
+  const topics=unique(pool.map(c=>c.topic));
   $('topicFilter').innerHTML='<option value="all">全テーマ</option>'+topics.map(t=>`<option value="${t}">${LABELS.topics[t]}</option>`).join('');
 }
 function getFilteredCards(){
@@ -286,15 +386,8 @@ function getFilteredCards(){
 }
 function pickCard(){
   const list=getFilteredCards();
-  if(!list.length){
-    currentCard=null; $('cardMeta').innerHTML=''; $('front').textContent='該当するカードがありません。条件を変えてください。'; $('back').classList.add('hidden'); toggleGrades(false); return;
-  }
-  const sorted=[...list].sort((a,b)=>{
-    const pa=getProg(a.id), pb=getProg(b.id);
-    const wa=cardStatus(a)==='weak'?0:1, wb=cardStatus(b)==='weak'?0:1;
-    const da=pa.due||0, db=pb.due||0;
-    return wa-wb || da-db || Math.random()-0.5;
-  });
+  if(!list.length){ currentCard=null; $('cardMeta').innerHTML=''; $('front').textContent='該当するカードがありません。条件を変えてください。'; $('back').classList.add('hidden'); toggleGrades(false); return; }
+  const sorted=[...list].sort((a,b)=>{ const pa=getProg(a.id), pb=getProg(b.id); const wa=cardStatus(a)==='weak'?0:1, wb=cardStatus(b)==='weak'?0:1; const da=pa.due||0, db=pb.due||0; return wa-wb || da-db || Math.random()-0.5; });
   currentCard=sorted[0]; renderCurrentCard();
 }
 function renderCurrentCard(){
@@ -302,10 +395,10 @@ function renderCurrentCard(){
   const c=currentCard, p=getProg(c.id);
   $('cardMeta').innerHTML=`<span class="badge">${LABELS.fields[c.field]}</span><span class="badge">${LABELS.topics[c.topic]}</span><span class="badge">${LABELS.types[c.type]}</span><span class="badge">${LABELS.importance[c.importance]}</span><span class="badge">復習 ${p.reps||0}回</span>`;
   $('front').textContent=c.front;
-  $('back').textContent=c.back;
+  $('back').innerHTML=c.backHtml;
   $('back').classList.add('hidden');
   $('btnShow').classList.remove('hidden'); toggleGrades(false);
-  setStatus(`表示中: ${LABELS.topics[c.topic]} / 全${CARD_DATA.length}枚`);
+  setStatus(`表示中: ${LABELS.topics[c.topic]} / 全${CARD_DATA.length}枚（力学92・電磁気56）`);
 }
 function toggleGrades(show){ ['grade0','grade1','grade2','grade3'].forEach(id=>$(id).classList.toggle('hidden',!show)); }
 function showAnswer(){ if(!currentCard) return; $('back').classList.remove('hidden'); $('btnShow').classList.add('hidden'); toggleGrades(true); }
@@ -326,16 +419,16 @@ function rate(grade){
 function renderThemeList(){
   if(!currentCard) return;
   const same=CARD_DATA.filter(c=>c.topic===currentCard.topic && c.field===currentCard.field);
-  $('themeList').innerHTML='<h3>'+LABELS.topics[currentCard.topic]+' のカード一覧</h3>'+same.map(c=>`<div class="formula-item"><b>${LABELS.types[c.type]}</b>：${escapeHtml(c.front)}<br><span class="small">${escapeHtml(c.back)}</span></div>`).join('');
+  $('themeList').innerHTML='<h3>'+LABELS.topics[currentCard.topic]+' のカード一覧</h3>'+same.map(c=>`<div class="theme-list-card"><b>${LABELS.types[c.type]}</b>：${escapeHtml(c.front)}<br><span class="small">${c.backHtml}</span></div>`).join('');
   $('themeList').classList.toggle('hidden');
 }
-function escapeHtml(s){return String(s).replace(/[&<>]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[m]));}
 function jumpThemeFormula(){ if(!currentCard)return; switchTab('formulas'); $('formulaField').value=currentCard.field; $('formulaSearch').value=LABELS.topics[currentCard.topic]; renderFormulas(); }
+function renderFormulaList(items){ return `<ul class="formula-list">${items.map(x=>`<li>${fd(x).replace('formula-display','formula-display formula-mini')}</li>`).join('')}</ul>`; }
 function renderFormulas(){
   const field=$('formulaField').value; const q=($('formulaSearch').value||'').trim().toLowerCase();
   let list=FORMULA_DATA.filter(f=>(field==='all'||f.field===field));
-  if(q) list=list.filter(f=>[f.title,LABELS.fields[f.field],LABELS.topics[f.topic],...(f.formulas||[]),...(f.conditions||[]),...(f.pitfalls||[]),f.strategy].join(' ').toLowerCase().includes(q));
-  $('formulaList').innerHTML=list.map(f=>`<div class="formula-item" id="formula-${f.id}"><h3>🌸 ${f.title} <span class="badge">${LABELS.fields[f.field]}</span> <span class="badge">${f.importance}</span></h3><div class="formula-grid"><div><b>公式</b><ul>${f.formulas.map(x=>`<li>${escapeHtml(x)}</li>`).join('')}</ul></div><div><b>条件</b><ul>${f.conditions.map(x=>`<li>${escapeHtml(x)}</li>`).join('')}</ul></div><div><b>単位</b><ul>${f.units.map(x=>`<li>${escapeHtml(x)}</li>`).join('')}</ul></div><div><b>混同注意</b><ul>${f.pitfalls.map(x=>`<li>${escapeHtml(x)}</li>`).join('')}</ul></div></div><p><b>典型判断：</b>${escapeHtml(f.strategy)}</p><button class="soft" onclick="studyTheme('${f.field}','${f.topic}')">このテーマのカードを学習</button></div>`).join('') || '<p>該当する公式がありません。</p>';
+  if(q) list=list.filter(f=>[f.title,LABELS.fields[f.field],LABELS.topics[f.topic],...(f.plain||[]),...(f.conditions||[]),...(f.pitfalls||[]),f.strategy].join(' ').toLowerCase().includes(q));
+  $('formulaList').innerHTML=list.map(f=>`<div class="formula-item" id="formula-${f.id}"><h3>${escapeHtml(f.title)} <span class="badge">${LABELS.fields[f.field]}</span> <span class="badge">${LABELS.importance[f.importance]}</span></h3><div class="formula-grid"><div><b>公式</b>${renderFormulaList(f.formulas)}</div><div><b>条件</b><ul class="note-list">${f.conditions.map(x=>`<li>${escapeHtml(x)}</li>`).join('')}</ul></div><div><b>単位</b><ul class="note-list">${f.units.map(x=>`<li>${escapeHtml(x)}</li>`).join('')}</ul></div><div><b>混同注意</b><ul class="note-list">${f.pitfalls.map(x=>`<li>${escapeHtml(x)}</li>`).join('')}</ul></div></div><p><b>典型判断：</b>${escapeHtml(f.strategy)}</p><button class="soft" onclick="studyTheme('${f.field}','${f.topic}')">このテーマのカードを学習</button></div>`).join('') || '<p>該当する公式がありません。</p>';
 }
 function studyTheme(field, topic){ switchTab('study'); $('fieldFilter').value=field; updateTopicOptions(); $('topicFilter').value=topic; $('dueOnly').checked=false; pickCard(); }
 function renderProgress(){
@@ -350,59 +443,24 @@ function renderProgress(){
   const names={new:'新規',learning:'学習中',review:'復習中',stable:'安定',weak:'弱点'};
   $('legend').innerHTML=Object.keys(counts).map(k=>`<div><span class="dot" style="background:${colors[k]}"></span>${names[k]}：${counts[k]}</div>`).join('');
   const fields=unique(CARD_DATA.map(c=>c.field));
-  $('fieldBars').innerHTML=fields.map(f=>{
-    const list=CARD_DATA.filter(c=>c.field===f); let score=0; list.forEach(c=>{ const st=cardStatus(c); if(st==='stable') score+=1; else if(st==='review') score+=0.65; else if(st==='learning') score+=0.35; });
-    const pct=Math.round(score/list.length*100);
-    return `<div style="margin:10px 0"><div class="row" style="justify-content:space-between"><b>${LABELS.fields[f]}</b><span class="small">${pct}%</span></div><div class="bar"><div class="fill" style="width:${pct}%"></div></div></div>`;
-  }).join('');
+  $('fieldBars').innerHTML=fields.map(f=>{ const list=CARD_DATA.filter(c=>c.field===f); let score=0; list.forEach(c=>{ const st=cardStatus(c); if(st==='stable') score+=1; else if(st==='review') score+=0.65; else if(st==='learning') score+=0.35; }); const pct=Math.round(score/list.length*100); return `<div style="margin:10px 0"><div class="row" style="justify-content:space-between"><b>${LABELS.fields[f]}</b><span class="small">${pct}%</span></div><div class="bar"><div class="fill" style="width:${pct}%"></div></div></div>`; }).join('');
 }
-function exportProgress(){
-  const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'}); const a=document.createElement('a');
-  a.href=URL.createObjectURL(blob); a.download='physics-g-cards-v2-progress-'+todayKey()+'.json'; a.click(); URL.revokeObjectURL(a.href);
-}
-function importProgress(file){
-  const reader=new FileReader(); reader.onload=()=>{ try{ const imported=normalizeState(JSON.parse(reader.result)); const keepClient=state.settings.clientId; state=imported; state.settings.clientId=keepClient||state.settings.clientId; saveState(); initFromState(); renderProgress(); setStatus('進捗を読み込みました。'); }catch(e){ alert('読み込みに失敗しました: '+e.message); } }; reader.readAsText(file);
-}
+function exportProgress(){ const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='physics-g-cards-v2-progress-'+todayKey()+'.json'; a.click(); URL.revokeObjectURL(a.href); }
+function importProgress(file){ const reader=new FileReader(); reader.onload=()=>{ try{ const imported=normalizeState(JSON.parse(reader.result)); const keepClient=state.settings.clientId; state=imported; state.settings.clientId=keepClient||state.settings.clientId; saveState(); initFromState(); pickCard(); renderProgress(); setStatus('進捗を読み込みました。'); }catch(e){ alert('読み込みに失敗しました: '+e.message); } }; reader.readAsText(file); }
 function initFromState(){ $('clientId').value=state.settings.clientId||''; $('autoBackup').checked=!!state.settings.autoBackup; }
 function drivePayload(){ return {app:'physics-g-cards-v2',version:APP_VERSION,exportedAt:new Date().toISOString(),state}; }
 async function connectGoogle(){
   const cid=$('clientId').value.trim(); if(!cid){setDriveStatus('クライアントIDを入れてください。'); return;}
   state.settings.clientId=cid; saveState();
   if(!window.google || !google.accounts || !google.accounts.oauth2){ setDriveStatus('Google認証ライブラリを読み込み中です。数秒後に再試行してください。'); return; }
-  tokenClient=google.accounts.oauth2.initTokenClient({client_id:cid, scope:'https://www.googleapis.com/auth/drive.appdata', callback:async(resp)=>{
-    if(resp.error){ setDriveStatus('接続エラー: '+resp.error); return; } accessToken=resp.access_token; setDriveStatus('Googleに接続しました。'); await checkDriveBackup();
-  }});
+  tokenClient=google.accounts.oauth2.initTokenClient({client_id:cid, scope:'https://www.googleapis.com/auth/drive.appdata', callback:async(resp)=>{ if(resp.error){ setDriveStatus('接続エラー: '+resp.error); return; } accessToken=resp.access_token; setDriveStatus('Googleに接続しました。'); await checkDriveBackup(); }});
   tokenClient.requestAccessToken({prompt:'consent'});
 }
-async function driveFetch(url, options={}){
-  if(!accessToken) throw new Error('Google未接続です');
-  options.headers=Object.assign({Authorization:'Bearer '+accessToken}, options.headers||{});
-  const res=await fetch(url,options); if(!res.ok) throw new Error(await res.text()); return res;
-}
-async function findDriveFile(){
-  const q=encodeURIComponent(`name='${DRIVE_FILE_NAME}' and trashed=false`);
-  const url=`https://www.googleapis.com/drive/v3/files?spaces=appDataFolder&q=${q}&fields=files(id,name,modifiedTime)`;
-  const res=await driveFetch(url); const data=await res.json(); return data.files&&data.files[0];
-}
+async function driveFetch(url, options={}){ if(!accessToken) throw new Error('Google未接続です'); options.headers=Object.assign({Authorization:'Bearer '+accessToken}, options.headers||{}); const res=await fetch(url,options); if(!res.ok) throw new Error(await res.text()); return res; }
+async function findDriveFile(){ const q=encodeURIComponent(`name='${DRIVE_FILE_NAME}' and trashed=false`); const url=`https://www.googleapis.com/drive/v3/files?spaces=appDataFolder&q=${q}&fields=files(id,name,modifiedTime)`; const res=await driveFetch(url); const data=await res.json(); return data.files&&data.files[0]; }
 async function checkDriveBackup(){ try{ const f=await findDriveFile(); setDriveStatus(f?'Google接続済み。Driveバックアップがあります。':'Google接続済み。まだDriveバックアップはありません。'); }catch(e){setDriveStatus('Drive確認エラー: '+e.message)} }
-async function backupDrive(manual=true){
-  try{
-    if(!accessToken){ setDriveStatus('先にGoogleに接続してください。'); return; }
-    const existing=await findDriveFile();
-    const metadata= existing ? {name:DRIVE_FILE_NAME} : {name:DRIVE_FILE_NAME, parents:['appDataFolder']};
-    const boundary='-------physics-v2-'+Math.random().toString(36).slice(2);
-    const body='--'+boundary+'\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n'+JSON.stringify(metadata)+'\r\n--'+boundary+'\r\nContent-Type: application/json\r\n\r\n'+JSON.stringify(drivePayload())+'\r\n--'+boundary+'--';
-    const url=existing?`https://www.googleapis.com/upload/drive/v3/files/${existing.id}?uploadType=multipart&fields=id,modifiedTime`:'https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id,modifiedTime';
-    await driveFetch(url,{method:existing?'PATCH':'POST', headers:{'Content-Type':'multipart/related; boundary='+boundary}, body});
-    setDriveStatus('Driveへバックアップしました'+(manual?'。':'（自動）'));
-  }catch(e){ setDriveStatus('バックアップ失敗: '+e.message); }
-}
-async function restoreDrive(){
-  try{ if(!accessToken){ setDriveStatus('先にGoogleに接続してください。'); return; } const f=await findDriveFile(); if(!f){setDriveStatus('Driveバックアップがありません。');return;}
-    const res=await driveFetch(`https://www.googleapis.com/drive/v3/files/${f.id}?alt=media`); const data=await res.json();
-    if(!data.state) throw new Error('バックアップ形式が違います'); const keepClient=state.settings.clientId; state=normalizeState(data.state); state.settings.clientId=keepClient||state.settings.clientId; saveState(); initFromState(); pickCard(); renderProgress(); setDriveStatus('Driveから復元しました。');
-  }catch(e){ setDriveStatus('復元失敗: '+e.message); }
-}
+async function backupDrive(manual=true){ try{ if(!accessToken){ setDriveStatus('先にGoogleに接続してください。'); return; } const existing=await findDriveFile(); const metadata= existing ? {name:DRIVE_FILE_NAME} : {name:DRIVE_FILE_NAME, parents:['appDataFolder']}; const boundary='-------physics-v2-'+Math.random().toString(36).slice(2); const body='--'+boundary+'\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n'+JSON.stringify(metadata)+'\r\n--'+boundary+'\r\nContent-Type: application/json\r\n\r\n'+JSON.stringify(drivePayload())+'\r\n--'+boundary+'--'; const url=existing?`https://www.googleapis.com/upload/drive/v3/files/${existing.id}?uploadType=multipart&fields=id,modifiedTime`:'https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id,modifiedTime'; await driveFetch(url,{method:existing?'PATCH':'POST', headers:{'Content-Type':'multipart/related; boundary='+boundary}, body}); setDriveStatus('Driveへバックアップしました'+(manual?'。':'（自動）')); }catch(e){ setDriveStatus('バックアップ失敗: '+e.message); } }
+async function restoreDrive(){ try{ if(!accessToken){ setDriveStatus('先にGoogleに接続してください。'); return; } const f=await findDriveFile(); if(!f){setDriveStatus('Driveバックアップがありません。');return;} const res=await driveFetch(`https://www.googleapis.com/drive/v3/files/${f.id}?alt=media`); const data=await res.json(); if(!data.state) throw new Error('バックアップ形式が違います'); const keepClient=state.settings.clientId; state=normalizeState(data.state); state.settings.clientId=keepClient||state.settings.clientId; saveState(); initFromState(); pickCard(); renderProgress(); setDriveStatus('Driveから復元しました。'); }catch(e){ setDriveStatus('復元失敗: '+e.message); } }
 function scheduleBackup(){ clearTimeout(backupTimer); backupTimer=setTimeout(()=>backupDrive(false),4500); }
 function disconnectGoogle(){ accessToken=null; tokenClient=null; setDriveStatus('接続解除しました。'); }
 function on(id, ev, fn){ const el=$(id); if(el) el.addEventListener(ev, fn); else console.warn('missing element', id); }
@@ -417,12 +475,10 @@ function bind(){
   on('btnConnect','click',connectGoogle); on('btnBackup','click',()=>backupDrive(true)); on('btnRestore','click',restoreDrive); on('btnDisconnect','click',disconnectGoogle);
   on('autoBackup','change',()=>{state.settings.autoBackup=$('autoBackup').checked; saveState();}); on('clientId','change',()=>{state.settings.clientId=$('clientId').value.trim(); saveState();});
 }
-function registerSW(){ if('serviceWorker' in navigator) navigator.serviceWorker.register('/physics-g-cards/sw.js?v=2.0.1-kawaii-fixed').catch(()=>{}); }
-function boot(){
-  try{ bind(); renderFormulas(); pickCard(); renderProgress(); registerSW(); setStatus('準備完了 v2.0.1：力学92枚＋電磁気第1段階56枚'); }
-  catch(e){ setStatus('起動エラー: '+(e.message||e)); console.error(e); }
-}
+function registerSW(){ if('serviceWorker' in navigator) navigator.serviceWorker.register('/physics-g-cards/sw.js?v=2.1.0').catch(()=>{}); }
+function boot(){ try{ bind(); renderFormulas(); pickCard(); renderProgress(); registerSW(); setStatus('準備完了 v2.1.0：力学92枚＋電磁気第1段階56枚。公式は教科書風の横線分数で表示します。'); } catch(e){ setStatus('起動エラー: '+(e.message||e)); console.error(e); } }
 if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', boot); else boot();
+
 </script>
 </body>
 </html>
