@@ -24,3 +24,13 @@
 ### 注意
 
 - 旧Service Workerが残る場合は、古いホーム画面アイコンを削除し、Chromeのサイトデータから `foxwolf321.github.io` を削除してから開き直す。
+
+
+## v2.1.1 rescue
+
+- v2.1.0でボタンが動かない・背景が分かりにくい問題への対策。
+- 開発中はService Worker登録を停止。
+- 起動時に既存Service Workerとphysics-g-cards系キャッシュを削除。
+- 主要ボタンにinline onclickを追加し、イベント登録に失敗しても動きやすくした。
+- 背景画像パスを絶対パス + cache bustに変更。
+- 背景の白オーバーレイを少し薄め、見えるが文字を邪魔しにくい濃さに調整。

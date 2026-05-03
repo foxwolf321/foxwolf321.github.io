@@ -1,27 +1,14 @@
-# 物理受験カード v2.1.0 差し替え用ファイル
+# 物理受験カード v2.1.1 レスキュー版
 
-このフォルダ内のファイルを、GitHub の `physics-g-cards/` フォルダへ上書きアップロードしてください。
+## 目的
+ボタンが動かない・背景が反映されない問題を避けるため、開発中はService Workerを実質停止し、古いキャッシュを削除する版です。
 
-## 主な変更
+## 確認URL
+https://foxwolf321.github.io/physics-g-cards/?v=211
 
-- 薄いイラスト背景
-- 漫画風アイコン
+## 内容
+- 力学92枚 + 電磁気第1段階56枚
 - 教科書風の横線分数表示
-- タブ・プルダウン動作の整理
-- Service Workerキャッシュ更新
-
-## 上書きする主なファイル
-
-- `index.html`
-- `manifest.webmanifest`
-- `sw.js`
-- `icon-192.png`
-- `icon-512.png`
-- `bg-bike-physics.png`
-- `HANDOFF.md`
-- `CHANGELOG.md`
-- `TODO.md`
-
-## 注意
-
-古い表示が残る場合は、スマホのホーム画面アイコンを削除し、Chromeのサイトデータから `foxwolf321.github.io` を削除してから開き直してください。
+- 薄い背景画像 bg-bike-physics.png
+- 漫画風アイコン
+- Service Workerキャッシュ削除

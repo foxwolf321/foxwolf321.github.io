@@ -43,3 +43,23 @@
 - 大きな変更後は `CHANGELOG.md` と `TODO.md` を更新する
 - 動作確認では、まずChromeで直接URLを開き、タブ・プルダウン・公式集を確認する
 - 古いホーム画面アイコンは削除し、必要ならChromeのサイトデータも削除する
+
+
+## 2026-05-03 v2.1.1 rescue
+
+ユーザー確認で、v2.1.0表示後も「読み込み中...」のままで、背景が分かりにくく、ボタンが動かない状態が出た。
+
+対策として、v2.1.1では以下を行う。
+
+- 開発中はService Workerを登録しない
+- 起動時に既存Service Worker登録を解除
+- physics-g-cards系のキャッシュを削除
+- 主要ボタンにinline onclickを追加
+- 背景画像を絶対パス `/physics-g-cards/bg-bike-physics.png?v=211` に変更
+- 背景の白オーバーレイを少し薄くし、存在が分かる程度に調整
+
+確認時はホーム画面アイコンではなく、Chromeで以下を直接開く。
+
+```text
+https://foxwolf321.github.io/physics-g-cards/?v=211
+```

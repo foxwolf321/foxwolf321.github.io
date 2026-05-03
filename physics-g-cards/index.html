@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>物理受験カード v2.1.0｜力学＋電磁気</title>
+<title>物理受験カード v2.1.1｜力学＋電磁気</title>
 <link rel="manifest" href="/physics-g-cards/manifest.webmanifest">
 <meta name="theme-color" content="#f7a8c8">
 <link rel="icon" href="/physics-g-cards/icon-192.png">
@@ -17,14 +17,34 @@
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{margin:0;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--ink);background:linear-gradient(160deg,var(--bg),var(--bg2));min-height:100vh;}
-body::before{content:"";position:fixed;inset:0;z-index:-2;background:linear-gradient(180deg,rgba(255,250,253,.72),rgba(255,255,255,.86)),url('bg-bike-physics.png') center top/cover no-repeat;filter:saturate(.92);}
-body::after{content:"";position:fixed;inset:0;z-index:-1;background:radial-gradient(circle at 20% 10%,rgba(255,255,255,.75),transparent 35%),linear-gradient(180deg,rgba(255,255,255,.2),rgba(255,247,251,.45));pointer-events:none;}
+body::before{content:"";position:fixed;inset:0;z-index:-2;background:linear-gradient(180deg,rgba(255,250,253,.42),rgba(255,255,255,.68)),url('/physics-g-cards/bg-bike-physics.png?v=211') center top/cover no-repeat;filter:saturate(.90);opacity:.92;}
+body::after{content:"";position:fixed;inset:0;z-index:-1;background:radial-gradient(circle at 20% 10%,rgba(255,255,255,.45),transparent 35%),linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,247,251,.22));pointer-events:none;}
 header{position:sticky;top:0;z-index:5;backdrop-filter:blur(14px);background:rgba(255,247,251,.82);border-bottom:1px solid var(--line)}
 .wrap{max-width:980px;margin:0 auto;padding:14px}.hero{display:flex;gap:12px;align-items:center}.logo{width:58px;height:58px;border-radius:20px;background:#fff;box-shadow:var(--shadow);overflow:hidden;display:grid;place-items:center;flex:0 0 auto}.logo img{width:100%;height:100%;object-fit:cover}h1{font-size:20px;line-height:1.25;margin:0}.sub{font-size:12px;color:var(--muted);margin-top:4px}.nav{display:flex;gap:8px;overflow:auto;padding:12px 0 4px}.nav button{white-space:nowrap}
 button,.btn{border:0;border-radius:999px;padding:10px 14px;font-weight:800;background:#fff;color:var(--ink);box-shadow:0 4px 12px rgba(130,80,110,.10);border:1px solid var(--line);cursor:pointer}button.primary,.nav button.active{background:linear-gradient(135deg,var(--pink),var(--lav));color:#402436;border:0}button.soft{background:#fff8fc}button.good{background:#e6fff3}button.warn{background:#fff4cd}button.bad{background:#ffe5ed}button.easy{background:#eaf1ff}button:active{transform:translateY(1px)}button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid rgba(247,168,200,.45);outline-offset:2px}.grid{display:grid;gap:14px}.card{background:var(--card);border:1px solid rgba(239,215,229,.82);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow)}.view{display:none}.view.active{display:block}.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}select,input[type=text]{width:100%;border:1px solid var(--line);border-radius:16px;padding:12px;background:#fff;color:var(--ink);font-size:15px}label{font-size:13px;color:var(--muted);font-weight:800}.filters{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}@media(max-width:720px){.filters{grid-template-columns:1fr 1fr}h1{font-size:18px}.wrap{padding:10px}.card{padding:14px}}@media(max-width:430px){.filters{grid-template-columns:1fr}.row button{flex:1 1 auto}}
 .badge{display:inline-flex;align-items:center;gap:4px;border-radius:999px;padding:5px 10px;background:#fff0f7;border:1px solid var(--line);font-size:12px;color:#6d4359;font-weight:800}.bigq{font-size:22px;line-height:1.55;font-weight:900;margin:14px 0}.answer{line-height:1.75;background:linear-gradient(180deg,#fff,#fff8fd);border:1px dashed #efb6cf;border-radius:18px;padding:14px;margin-top:12px}.hidden{display:none!important}.small{font-size:12px;color:var(--muted)}hr{border:0;border-top:1px solid var(--line);margin:14px 0}.kpi{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.kpi .box{background:#fff;border:1px solid var(--line);border-radius:18px;padding:12px;text-align:center;box-shadow:0 4px 14px rgba(130,80,110,.08)}.kpi .num{font-size:24px;font-weight:900}@media(max-width:720px){.kpi{grid-template-columns:1fr 1fr}}.pie{width:190px;height:190px;border-radius:50%;margin:10px auto;border:10px solid #fff;box-shadow:var(--shadow)}.legend{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.dot{width:12px;height:12px;border-radius:50%;display:inline-block;margin-right:6px}.bar{height:18px;background:#fff;border:1px solid var(--line);border-radius:999px;overflow:hidden}.fill{height:100%;background:linear-gradient(90deg,var(--pink),var(--lav));border-radius:999px}.formula-item{border:1px solid var(--line);border-radius:22px;padding:14px;background:rgba(255,255,255,.96);margin:12px 0;box-shadow:0 4px 14px rgba(130,80,110,.08)}.formula-item h3{margin:0 0 8px;font-size:18px}.formula-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.formula-grid>div{background:#fff8fc;border-radius:16px;padding:12px;border:1px solid rgba(239,215,229,.55)}@media(max-width:720px){.formula-grid{grid-template-columns:1fr}}.notice{background:#fff6df;border:1px solid #f4d58a;border-radius:16px;padding:12px;color:#6b5530}.footer-space{height:40px}.formula-display{display:flex;align-items:center;justify-content:center;gap:.34em;flex-wrap:wrap;margin:10px 0 12px;padding:12px 10px;border-radius:18px;background:linear-gradient(180deg,#fff,#f8fbff);border:1px solid #d9e8f8;font-family:"Times New Roman","Cambria Math",serif;font-size:clamp(25px,6vw,38px);font-weight:700;line-height:1.2;color:#263447;overflow-x:auto}.formula-inline{display:inline-flex;align-items:center;gap:.18em;font-family:"Times New Roman","Cambria Math",serif;font-weight:700;font-size:1.12em}.frac{display:inline-flex;vertical-align:middle;flex-direction:column;align-items:center;justify-content:center;margin:0 .12em;line-height:1.05}.frac .num{display:block;border-bottom:2px solid currentColor;padding:0 .24em .06em}.frac .den{display:block;padding:.06em .24em 0}.formula-list{list-style:none;padding-left:0;margin:8px 0}.formula-list li{margin:10px 0}.formula-mini{font-size:clamp(20px,5vw,30px);justify-content:flex-start}.note-list{margin:8px 0;padding-left:1.25em}.note-list li{margin:5px 0}.formula-help{font-size:12px;color:#6c6070;margin-top:8px}.answer p{margin:8px 0}.danger{color:#8b2746}.formula-search-hit{background:#fffbef}.theme-list-card{margin:10px 0;padding:12px;border-radius:16px;background:#fff;border:1px solid var(--line)}
 
 </style>
+
+<script>
+(function(){
+  window.__PHYSICS_APP_BUILD = 'v2.1.1-rescue';
+  window.addEventListener('error', function(e){
+    try {
+      var s = document.getElementById('status');
+      if (s) s.textContent = '起動エラー: ' + (e.message || '不明なエラー');
+    } catch(_) {}
+  });
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.getRegistrations().then(function(regs){ regs.forEach(function(r){ r.unregister(); }); }).catch(function(){});
+  }
+  if (window.caches) {
+    caches.keys().then(function(keys){
+      return Promise.all(keys.filter(function(k){ return k.indexOf('physics-g-cards') >= 0; }).map(function(k){ return caches.delete(k); }));
+    }).catch(function(){});
+  }
+})();
+</script>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body>
@@ -33,25 +53,25 @@ button,.btn{border:0;border-radius:999px;padding:10px 14px;font-weight:800;backg
     <div class="hero">
       <div class="logo"><img src="icon-192.png" alt="物理カードアイコン"></div>
       <div>
-        <h1>物理受験カード v2.1.0 <span class="small">力学＋電磁気第1段階・教科書風数式版</span></h1>
+        <h1>物理受験カード v2.1.1 <span class="small">力学＋電磁気第1段階・教科書風数式版</span></h1>
         <div class="sub">公式・条件・典型判断を、横線分数の見やすい式で復習するカードアプリ</div>
       </div>
     </div>
     <div class="nav">
-      <button class="primary active" data-tab="study">カード学習</button>
-      <button class="soft" data-tab="formulas">公式集</button>
-      <button class="soft" data-tab="progress">進捗</button>
-      <button class="soft" data-tab="guide">説明書</button>
+      <button class="primary active" data-tab="study" onclick="switchTab('study')">カード学習</button>
+      <button class="soft" data-tab="formulas" onclick="switchTab('formulas')">公式集</button>
+      <button class="soft" data-tab="progress" onclick="switchTab('progress')">進捗</button>
+      <button class="soft" data-tab="guide" onclick="switchTab('guide')">説明書</button>
     </div>
   </div>
 </header>
 <main class="wrap grid">
   <section class="card">
     <div class="row">
-      <button id="btnStart" class="primary">カード学習を始める</button>
-      <button id="btnFormulaTop" class="soft">公式集を開く</button>
-      <button id="btnGuideTop" class="soft">説明書を読む</button>
-      <button id="btnProgressTop" class="soft">進捗を見る</button>
+      <button id="btnStart" class="primary" onclick="switchTab('study'); pickCard();">カード学習を始める</button>
+      <button id="btnFormulaTop" class="soft" onclick="switchTab('formulas')">公式集を開く</button>
+      <button id="btnGuideTop" class="soft" onclick="switchTab('guide')">説明書を読む</button>
+      <button id="btnProgressTop" class="soft" onclick="switchTab('progress')">進捗を見る</button>
     </div>
     <div class="small" id="status">読み込み中...</div>
   </section>
@@ -62,10 +82,10 @@ button,.btn{border:0;border-radius:999px;padding:10px 14px;font-weight:800;backg
     <div class="grid">
       <input id="clientId" type="text" placeholder="OAuth クライアントIDを貼り付け（...apps.googleusercontent.com）">
       <div class="row">
-        <button id="btnConnect" class="primary">Googleに接続</button>
-        <button id="btnBackup" class="soft">今すぐバックアップ</button>
-        <button id="btnRestore" class="soft">Driveから復元</button>
-        <button id="btnDisconnect" class="soft">接続解除</button>
+        <button id="btnConnect" class="primary" onclick="connectGoogle()">Googleに接続</button>
+        <button id="btnBackup" class="soft" onclick="backupDrive(true)">今すぐバックアップ</button>
+        <button id="btnRestore" class="soft" onclick="restoreDrive()">Driveから復元</button>
+        <button id="btnDisconnect" class="soft" onclick="disconnectGoogle()">接続解除</button>
       </div>
       <label><input id="autoBackup" type="checkbox"> 学習後に自動バックアップ</label>
       <div class="small" id="driveStatus">未接続</div>
@@ -89,15 +109,15 @@ button,.btn{border:0;border-radius:999px;padding:10px 14px;font-weight:800;backg
       <div class="bigq" id="front">カードを読み込み中...</div>
       <div id="back" class="answer hidden"></div>
       <div class="row" style="margin-top:12px">
-        <button id="btnShow" class="primary">答えを見る</button>
+        <button id="btnShow" class="primary" onclick="showAnswer()">答えを見る</button>
         <button id="grade0" class="bad hidden">忘れた</button>
         <button id="grade1" class="warn hidden">あやしい</button>
         <button id="grade2" class="good hidden">できた</button>
         <button id="grade3" class="easy hidden">余裕</button>
       </div>
       <div class="row" style="margin-top:10px">
-        <button id="btnThemeFormula" class="soft">このテーマの公式集</button>
-        <button id="btnListTheme" class="soft">このテーマのカード一覧</button>
+        <button id="btnThemeFormula" class="soft" onclick="jumpThemeFormula()">このテーマの公式集</button>
+        <button id="btnListTheme" class="soft" onclick="renderThemeList()">このテーマのカード一覧</button>
       </div>
     </div>
     <div class="card hidden" id="themeList"></div>
@@ -126,8 +146,8 @@ button,.btn{border:0;border-radius:999px;padding:10px 14px;font-weight:800;backg
       <div id="fieldBars"></div>
       <h3>バックアップ</h3>
       <div class="row">
-        <button id="btnExport" class="soft">進捗を書き出す</button>
-        <button id="btnImport" class="soft">進捗を読み込む</button>
+        <button id="btnExport" class="soft" onclick="exportProgress()">進捗を書き出す</button>
+        <button id="btnImport" class="soft" onclick="document.getElementById('importFile').click()">進捗を読み込む</button>
         <input id="importFile" type="file" accept="application/json" class="hidden">
       </div>
     </div>
@@ -155,7 +175,7 @@ button,.btn{border:0;border-radius:999px;padding:10px 14px;font-weight:800;backg
         <li><b>単位</b>：式の確認と混同防止。</li>
         <li><b>典型判断</b>：問題を見た瞬間に、どの道具で入るかを決める。</li>
       </ul>
-      <h3>v2.1.0の収録範囲</h3>
+      <h3>v2.1.1の収録範囲</h3>
       <p>力学92枚と、電磁気第1段階56枚を入れています。電磁気第1段階は、静電気・コンデンサー・直流回路までです。磁場・ローレンツ力・電磁誘導・波動・熱・原子は、今後このアプリに同じ構造で追加できます。</p>
       <h3>おすすめの使い方</h3>
       <ol>
@@ -171,7 +191,7 @@ button,.btn{border:0;border-radius:999px;padding:10px 14px;font-weight:800;backg
 </main>
 <script>
 
-const APP_VERSION = '2.1.0-textbook-formulas';
+const APP_VERSION = '2.1.1-rescue-textbook-formulas';
 window.addEventListener('error', e => { try { const s=document.getElementById('status'); if(s) s.textContent='起動エラー: '+(e.message||e.error||'不明'); } catch(_){} console.error(e.error||e.message); });
 const STORAGE_KEY = 'physics_g_cards_v2_kawaii_local';
 const DRIVE_FILE_NAME = 'physics-g-cards-v2-progress.json';
@@ -207,7 +227,7 @@ const F = {
   momentum: `p = mv`,
   impulse: `I = FΔt = Δp`,
   momcons: `m<sub>1</sub>v<sub>1</sub> + m<sub>2</sub>v<sub>2</sub> = m<sub>1</sub>v'<sub>1</sub> + m<sub>2</sub>v'<sub>2</sub>`,
-  restitution: `e = -${frac('v'<sub>A</sub> - v'<sub>B</sub>','v<sub>A</sub> - v<sub>B</sub>')}`,
+  restitution: `e = -${frac('v′<sub>A</sub> - v′<sub>B</sub>','v<sub>A</sub> - v<sub>B</sub>')}`,
   slope: `傾き = ${frac('縦軸の変化','横軸の変化')}`,
   area: `面積 = 物理量の合計`,
   coulomb: `F = k${frac('|q<sub>1</sub>q<sub>2</sub>|','r<sup>2</sup>')}`,
@@ -475,10 +495,13 @@ function bind(){
   on('btnConnect','click',connectGoogle); on('btnBackup','click',()=>backupDrive(true)); on('btnRestore','click',restoreDrive); on('btnDisconnect','click',disconnectGoogle);
   on('autoBackup','change',()=>{state.settings.autoBackup=$('autoBackup').checked; saveState();}); on('clientId','change',()=>{state.settings.clientId=$('clientId').value.trim(); saveState();});
 }
-function registerSW(){ if('serviceWorker' in navigator) navigator.serviceWorker.register('/physics-g-cards/sw.js?v=2.1.0').catch(()=>{}); }
-function boot(){ try{ bind(); renderFormulas(); pickCard(); renderProgress(); registerSW(); setStatus('準備完了 v2.1.0：力学92枚＋電磁気第1段階56枚。公式は教科書風の横線分数で表示します。'); } catch(e){ setStatus('起動エラー: '+(e.message||e)); console.error(e); } }
-if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', boot); else boot();
+function registerSW(){ /* v2.1.1: 開発中はService Workerを登録しない。古いキャッシュ事故を避ける。 */ }
+let __booted=false;
+function boot(){ if(__booted) return; __booted=true; try{ bind(); renderFormulas(); pickCard(); renderProgress(); registerSW(); setStatus('準備完了 v2.1.1：力学92枚＋電磁気第1段階56枚。公式は教科書風の横線分数で表示します。'); } catch(e){ setStatus('起動エラー: '+(e.message||e)); console.error(e); } }
+if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', boot, {once:true}); else boot();
+window.addEventListener('load', function(){ var s=document.getElementById('status'); if(s && s.textContent.indexOf('読み込み中')>=0){ __booted=false; boot(); } }, {once:true});
 
+try{ Object.assign(window,{switchTab,pickCard,showAnswer,rate,jumpThemeFormula,renderThemeList,connectGoogle,backupDrive,restoreDrive,disconnectGoogle,exportProgress}); }catch(_){}
 </script>
 </body>
 </html>
