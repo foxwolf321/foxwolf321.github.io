@@ -3,505 +3,557 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>物理受験カード v2.1.1｜力学＋電磁気</title>
+<title>物理受験カード v2.2.0｜ダッシュボード版</title>
 <link rel="manifest" href="/physics-g-cards/manifest.webmanifest">
-<meta name="theme-color" content="#f7a8c8">
-<link rel="icon" href="/physics-g-cards/icon-192.png">
+<meta name="theme-color" content="#8ec5ff">
 <style>
-
 :root{
-  --bg:#fff7fb; --bg2:#f6fbff; --card:rgba(255,255,255,.94); --ink:#382a34; --muted:#765f6e;
-  --pink:#f7a8c8; --pink2:#ffd6e8; --blue:#b8e7ff; --lav:#d8c7ff; --mint:#bff3df; --yellow:#ffe9a6;
-  --line:#efd7e5; --shadow:0 12px 34px rgba(150,90,120,.18); --radius:24px;
+  --ink:#17213d;
+  --muted:#67718a;
+  --pink:#f49ac2;
+  --pink2:#ffd8e8;
+  --blue:#66aaf5;
+  --blue2:#dff0ff;
+  --mint:#74d3c5;
+  --warn:#ffb3c2;
+  --card:rgba(255,255,255,.88);
+  --card-strong:rgba(255,255,255,.95);
+  --line:rgba(88,72,100,.13);
+  --shadow:0 16px 34px rgba(43,49,86,.13);
+  --r:26px;
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{margin:0;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--ink);background:linear-gradient(160deg,var(--bg),var(--bg2));min-height:100vh;}
-body::before{content:"";position:fixed;inset:0;z-index:-2;background:linear-gradient(180deg,rgba(255,250,253,.42),rgba(255,255,255,.68)),url('/physics-g-cards/bg-bike-physics.png?v=211') center top/cover no-repeat;filter:saturate(.90);opacity:.92;}
-body::after{content:"";position:fixed;inset:0;z-index:-1;background:radial-gradient(circle at 20% 10%,rgba(255,255,255,.45),transparent 35%),linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,247,251,.22));pointer-events:none;}
-header{position:sticky;top:0;z-index:5;backdrop-filter:blur(14px);background:rgba(255,247,251,.82);border-bottom:1px solid var(--line)}
-.wrap{max-width:980px;margin:0 auto;padding:14px}.hero{display:flex;gap:12px;align-items:center}.logo{width:58px;height:58px;border-radius:20px;background:#fff;box-shadow:var(--shadow);overflow:hidden;display:grid;place-items:center;flex:0 0 auto}.logo img{width:100%;height:100%;object-fit:cover}h1{font-size:20px;line-height:1.25;margin:0}.sub{font-size:12px;color:var(--muted);margin-top:4px}.nav{display:flex;gap:8px;overflow:auto;padding:12px 0 4px}.nav button{white-space:nowrap}
-button,.btn{border:0;border-radius:999px;padding:10px 14px;font-weight:800;background:#fff;color:var(--ink);box-shadow:0 4px 12px rgba(130,80,110,.10);border:1px solid var(--line);cursor:pointer}button.primary,.nav button.active{background:linear-gradient(135deg,var(--pink),var(--lav));color:#402436;border:0}button.soft{background:#fff8fc}button.good{background:#e6fff3}button.warn{background:#fff4cd}button.bad{background:#ffe5ed}button.easy{background:#eaf1ff}button:active{transform:translateY(1px)}button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid rgba(247,168,200,.45);outline-offset:2px}.grid{display:grid;gap:14px}.card{background:var(--card);border:1px solid rgba(239,215,229,.82);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow)}.view{display:none}.view.active{display:block}.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}select,input[type=text]{width:100%;border:1px solid var(--line);border-radius:16px;padding:12px;background:#fff;color:var(--ink);font-size:15px}label{font-size:13px;color:var(--muted);font-weight:800}.filters{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}@media(max-width:720px){.filters{grid-template-columns:1fr 1fr}h1{font-size:18px}.wrap{padding:10px}.card{padding:14px}}@media(max-width:430px){.filters{grid-template-columns:1fr}.row button{flex:1 1 auto}}
-.badge{display:inline-flex;align-items:center;gap:4px;border-radius:999px;padding:5px 10px;background:#fff0f7;border:1px solid var(--line);font-size:12px;color:#6d4359;font-weight:800}.bigq{font-size:22px;line-height:1.55;font-weight:900;margin:14px 0}.answer{line-height:1.75;background:linear-gradient(180deg,#fff,#fff8fd);border:1px dashed #efb6cf;border-radius:18px;padding:14px;margin-top:12px}.hidden{display:none!important}.small{font-size:12px;color:var(--muted)}hr{border:0;border-top:1px solid var(--line);margin:14px 0}.kpi{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.kpi .box{background:#fff;border:1px solid var(--line);border-radius:18px;padding:12px;text-align:center;box-shadow:0 4px 14px rgba(130,80,110,.08)}.kpi .num{font-size:24px;font-weight:900}@media(max-width:720px){.kpi{grid-template-columns:1fr 1fr}}.pie{width:190px;height:190px;border-radius:50%;margin:10px auto;border:10px solid #fff;box-shadow:var(--shadow)}.legend{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.dot{width:12px;height:12px;border-radius:50%;display:inline-block;margin-right:6px}.bar{height:18px;background:#fff;border:1px solid var(--line);border-radius:999px;overflow:hidden}.fill{height:100%;background:linear-gradient(90deg,var(--pink),var(--lav));border-radius:999px}.formula-item{border:1px solid var(--line);border-radius:22px;padding:14px;background:rgba(255,255,255,.96);margin:12px 0;box-shadow:0 4px 14px rgba(130,80,110,.08)}.formula-item h3{margin:0 0 8px;font-size:18px}.formula-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.formula-grid>div{background:#fff8fc;border-radius:16px;padding:12px;border:1px solid rgba(239,215,229,.55)}@media(max-width:720px){.formula-grid{grid-template-columns:1fr}}.notice{background:#fff6df;border:1px solid #f4d58a;border-radius:16px;padding:12px;color:#6b5530}.footer-space{height:40px}.formula-display{display:flex;align-items:center;justify-content:center;gap:.34em;flex-wrap:wrap;margin:10px 0 12px;padding:12px 10px;border-radius:18px;background:linear-gradient(180deg,#fff,#f8fbff);border:1px solid #d9e8f8;font-family:"Times New Roman","Cambria Math",serif;font-size:clamp(25px,6vw,38px);font-weight:700;line-height:1.2;color:#263447;overflow-x:auto}.formula-inline{display:inline-flex;align-items:center;gap:.18em;font-family:"Times New Roman","Cambria Math",serif;font-weight:700;font-size:1.12em}.frac{display:inline-flex;vertical-align:middle;flex-direction:column;align-items:center;justify-content:center;margin:0 .12em;line-height:1.05}.frac .num{display:block;border-bottom:2px solid currentColor;padding:0 .24em .06em}.frac .den{display:block;padding:.06em .24em 0}.formula-list{list-style:none;padding-left:0;margin:8px 0}.formula-list li{margin:10px 0}.formula-mini{font-size:clamp(20px,5vw,30px);justify-content:flex-start}.note-list{margin:8px 0;padding-left:1.25em}.note-list li{margin:5px 0}.formula-help{font-size:12px;color:#6c6070;margin-top:8px}.answer p{margin:8px 0}.danger{color:#8b2746}.formula-search-hit{background:#fffbef}.theme-list-card{margin:10px 0;padding:12px;border-radius:16px;background:#fff;border:1px solid var(--line)}
-
+body{
+  margin:0;
+  color:var(--ink);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Sans", "Yu Gothic", sans-serif;
+  background:#f7fbff;
+  min-height:100vh;
+  overflow-x:hidden;
+}
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  background:
+    linear-gradient(180deg,rgba(255,255,255,.18),rgba(255,247,252,.62) 42%,rgba(255,246,250,.85)),
+    url("/physics-g-cards/bg-bike-physics.png") center bottom / cover no-repeat;
+  opacity:.88;
+  z-index:-2;
+}
+body::after{
+  content:"";
+  position:fixed;
+  inset:0;
+  background:linear-gradient(180deg,rgba(255,255,255,.24),rgba(255,255,255,.48) 52%,rgba(255,255,255,.72));
+  z-index:-1;
+  pointer-events:none;
+}
+.app{max-width:760px;margin:0 auto;padding:18px 16px 96px}
+.topbar{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:4px 0 14px}
+.status-chip{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:8px 12px;border-radius:999px;background:rgba(255,255,255,.76);
+  box-shadow:0 8px 22px rgba(42,87,139,.12);font-size:13px;color:#506076;
+  border:1px solid rgba(255,255,255,.82);backdrop-filter: blur(10px);
+}
+.dot{width:9px;height:9px;border-radius:50%;background:#72d6c6;box-shadow:0 0 0 3px rgba(116,211,197,.18)}
+.icon-btn{
+  border:0;border-radius:50%;width:45px;height:45px;background:rgba(255,255,255,.82);
+  box-shadow:0 8px 20px rgba(40,58,92,.12);font-size:22px;color:#3c4d70;
+}
+.hero{
+  position:relative;overflow:hidden;border-radius:32px;padding:22px 18px 18px;
+  background:linear-gradient(135deg,rgba(255,255,255,.74),rgba(255,255,255,.52));
+  box-shadow:var(--shadow);border:1px solid rgba(255,255,255,.85);
+  backdrop-filter: blur(8px);
+}
+.hero-row{display:flex;align-items:center;gap:14px}
+.app-icon{width:76px;height:76px;border-radius:22px;object-fit:cover;filter:drop-shadow(0 10px 18px rgba(55,91,147,.2))}
+h1{font-size:clamp(28px,7.5vw,44px);line-height:1.13;margin:0;color:#183158;letter-spacing:.02em}
+.subtitle{font-size:14px;color:#53647e;margin:10px 0 0;line-height:1.65}
+.hero .heart{position:absolute;right:24px;top:78px;color:#f4a3bf;font-size:32px;transform:rotate(-10deg)}
+.actions{display:grid;grid-template-columns:1.15fr 1fr 1fr;gap:12px;margin:18px 0 0}
+.action{
+  min-height:86px;border:0;border-radius:22px;background:var(--card-strong);
+  box-shadow:0 10px 20px rgba(46,61,92,.12);padding:14px;text-align:left;color:#263454;
+  display:flex;flex-direction:column;justify-content:center;gap:8px;font-weight:800;font-size:15px;
+}
+.action.primary{background:linear-gradient(135deg,#62adf6,#7bbcff);color:white;font-size:16px}
+.action .big{font-size:26px;line-height:1}
+.action small{font-weight:700;color:inherit;opacity:.82}
+.panel{
+  margin-top:18px;border-radius:var(--r);padding:18px;background:var(--card);
+  box-shadow:var(--shadow);border:1px solid rgba(255,255,255,.82);backdrop-filter: blur(12px);
+}
+.panel.strong{background:var(--card-strong)}
+.panel h2{margin:0 0 14px;font-size:20px;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.tiny-link{border:1px solid var(--line);background:white;border-radius:999px;padding:7px 12px;color:#4d5f7f;font-weight:800;font-size:12px}
+.dashboard{display:grid;grid-template-columns:128px 1fr;gap:16px;align-items:center}
+.ring{
+  width:122px;height:122px;border-radius:50%;display:grid;place-items:center;position:relative;
+  background:conic-gradient(var(--blue) calc(var(--p)*1%), var(--pink) 0 calc((var(--p) + var(--r2))*1%), #d9deeb 0);
+}
+.ring::after{content:"";position:absolute;inset:18px;background:white;border-radius:50%;box-shadow:inset 0 0 0 1px var(--line)}
+.ring b{position:relative;z-index:1;font-size:30px;color:#183158}
+.ring span{position:relative;z-index:1;font-size:12px;color:#68758c;margin-top:-28px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.stat{border-left:1px solid var(--line);padding-left:12px}
+.stat .label{font-size:12px;color:#6b7790;font-weight:800;display:flex;align-items:center;gap:5px}
+.stat .num{font-size:26px;font-weight:900;margin:4px 0;color:#1d3156}
+.bar{height:8px;background:#e8ecf5;border-radius:999px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--blue);border-radius:999px;width:0}
+.stat.pink .bar i{background:var(--pink)}
+.stat.gray .bar i{background:#9ba8bd}
+.formula-grid{display:grid;grid-template-columns:1fr;gap:14px}
+.formula-card{
+  display:grid;grid-template-columns:minmax(118px,.78fr) 1.22fr;gap:12px;align-items:center;
+  border-radius:20px;background:rgba(255,255,255,.96);border:1px solid var(--line);padding:14px;
+}
+.tag{display:inline-flex;align-items:center;border-radius:999px;padding:6px 11px;background:var(--blue2);font-weight:900;color:#426390;font-size:12px}
+.tag.pink{background:#ffe4ef;color:#b24b75}
+.math{font-family:Georgia,"Times New Roman",serif;font-size:26px;font-style:italic;line-height:1.1;color:#11192f}
+.frac{display:inline-flex;vertical-align:middle;flex-direction:column;align-items:center;line-height:1}
+.frac .top{border-bottom:2px solid currentColor;padding:0 .18em .08em}
+.frac .bottom{padding:.08em .18em 0}
+sup,sub{font-size:.65em}
+.desc{font-size:13px;line-height:1.55;color:#506076}
+.controls{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:12px 0}
+select,input{
+  width:100%;border:1px solid rgba(98,88,115,.16);border-radius:17px;padding:12px 13px;background:rgba(255,255,255,.95);
+  color:#273551;font-size:15px;outline:none;
+}
+.card-q{font-size:22px;font-weight:900;line-height:1.45;margin:12px 0}
+.card-meta{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.pill{border-radius:999px;padding:6px 10px;background:#eef5ff;color:#466384;font-weight:800;font-size:12px}
+.pill.pink{background:#ffeaf2;color:#ad4b72}
+.answer{display:none;margin-top:12px;padding:14px;border-radius:20px;background:rgba(255,255,255,.96);border:1px solid var(--line)}
+.answer.show{display:block}
+.answer .math{font-size:32px;margin:6px 0 12px}
+.eval{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px}
+.eval button,.soft-btn,.primary-btn{
+  border:0;border-radius:999px;padding:12px 10px;font-weight:900;box-shadow:0 8px 18px rgba(41,49,82,.1)
+}
+.primary-btn{background:linear-gradient(135deg,#f6a1c9,#c9a8ff);color:#261f38}
+.soft-btn{background:rgba(255,255,255,.92);color:#2e3a58;border:1px solid var(--line)}
+.eval button:nth-child(1){background:#ffe2e9;color:#a73c61}
+.eval button:nth-child(2){background:#fff1cc;color:#8a5b11}
+.eval button:nth-child(3){background:#dff4ff;color:#245a84}
+.eval button:nth-child(4){background:#dcfbf3;color:#1c6d62}
+.list{display:grid;gap:10px}
+.progress-row{padding:12px;border-radius:16px;background:rgba(255,255,255,.9);border:1px solid var(--line)}
+.progress-row header{display:flex;justify-content:space-between;font-weight:900;margin-bottom:8px}
+.search-results{display:grid;gap:10px;margin-top:12px}
+.result{padding:12px;border-radius:18px;background:rgba(255,255,255,.92);border:1px solid var(--line)}
+.result b{display:block;margin-bottom:6px}
+.bottom-nav{
+  position:fixed;left:50%;transform:translateX(-50%);bottom:12px;width:min(720px,calc(100% - 24px));
+  display:grid;grid-template-columns:repeat(5,1fr);gap:2px;padding:8px;background:rgba(255,255,255,.92);
+  border:1px solid rgba(255,255,255,.9);border-radius:28px;box-shadow:0 16px 36px rgba(27,38,70,.2);backdrop-filter:blur(14px);z-index:20
+}
+.navbtn{border:0;background:transparent;border-radius:20px;padding:8px 4px;color:#55637c;font-weight:900;font-size:12px}
+.navbtn .ico{display:block;font-size:21px;margin-bottom:2px}
+.navbtn.active{background:linear-gradient(135deg,#6fb7f8,#98ccff);color:white}
+.view{display:none}
+.view.active{display:block}
+.note{font-size:13px;color:#5f6e87;line-height:1.7}
+.toast{
+  position:fixed;left:50%;transform:translateX(-50%);bottom:96px;background:#17213d;color:white;
+  padding:10px 14px;border-radius:999px;font-weight:800;box-shadow:0 12px 28px rgba(0,0,0,.18);z-index:30;display:none
+}
+@media(max-width:520px){
+  .app{padding:12px 12px 92px}
+  .hero{padding:20px 14px 16px}
+  .hero-row{align-items:flex-start}
+  .app-icon{width:66px;height:66px;border-radius:18px}
+  .actions{grid-template-columns:1fr 1fr}
+  .actions .primary{grid-column:1 / -1}
+  .dashboard{grid-template-columns:1fr}
+  .ring{margin:auto}
+  .stats{grid-template-columns:repeat(3,1fr)}
+  .stat .num{font-size:22px}
+  .formula-card{grid-template-columns:1fr}
+  .eval{grid-template-columns:repeat(2,1fr)}
+}
 </style>
+</head>
+<body>
+<div class="app">
+  <div class="topbar">
+    <div class="status-chip">☁️ Drive保存: <b id="driveStatus">ローカル</b><span class="dot"></span></div>
+    <div>
+      <button class="icon-btn" data-action="toast" data-msg="通知機能は今後追加予定です">🔔</button>
+      <button class="icon-btn" data-action="switch" data-view="info">⚙️</button>
+    </div>
+  </div>
+
+  <section class="hero">
+    <div class="hero-row">
+      <img class="app-icon" src="/physics-g-cards/icon-192.png" alt="物理カードアイコン">
+      <div>
+        <h1>私立理系 受験物理<br>基本法則カード</h1>
+        <p class="subtitle">力学・静電気・回路 / 教科書風の横線分数 / 進捗が枚数で見えるカード学習</p>
+      </div>
+    </div>
+    <div class="heart">♡</div>
+    <div class="actions">
+      <button class="action primary" data-action="switch" data-view="learn"><span class="big">▣</span>カード学習を始める <small>弱点を優先して復習</small></button>
+      <button class="action" data-action="switch" data-view="formulas"><span class="big">📖</span>公式集を開く</button>
+      <button class="action" data-action="switch" data-view="info"><span class="big">📘</span>説明書を読む</button>
+    </div>
+  </section>
+
+  <main>
+    <section id="view-learn" class="view active">
+      <div class="panel">
+        <h2>今日の学習 <button class="tiny-link" data-action="switch" data-view="progress">詳細を見る ›</button></h2>
+        <div class="dashboard">
+          <div class="ring" id="ring" style="--p:0;--r2:0"><b id="masteryPct">0%</b><span>習得率</span></div>
+          <div class="stats">
+            <div class="stat"><div class="label">● 習得</div><div class="num" id="countMastered">0</div><div class="bar"><i id="barMastered"></i></div></div>
+            <div class="stat pink"><div class="label">● 復習</div><div class="num" id="countReview">0</div><div class="bar"><i id="barReview"></i></div></div>
+            <div class="stat gray"><div class="label">● 未着手</div><div class="num" id="countNew">0</div><div class="bar"><i id="barNew"></i></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel strong">
+        <h2>出題カード</h2>
+        <div class="controls">
+          <select id="filterUnit"></select>
+          <select id="filterType"></select>
+        </div>
+        <div class="card-meta" id="cardMeta"></div>
+        <div class="card-q" id="question">読み込み中...</div>
+        <button class="primary-btn" data-action="showAnswer">答えを見る</button>
+        <div id="answerBox" class="answer">
+          <div class="math" id="answerFormula"></div>
+          <div class="desc" id="answerText"></div>
+          <div class="eval">
+            <button data-action="rate" data-grade="0">忘れた</button>
+            <button data-action="rate" data-grade="1">あやしい</button>
+            <button data-action="rate" data-grade="2">できた</button>
+            <button data-action="rate" data-grade="3">余裕</button>
+          </div>
+        </div>
+        <div style="display:flex;gap:10px;margin-top:12px;flex-wrap:wrap">
+          <button class="soft-btn" data-action="next">次のカード</button>
+          <button class="soft-btn" data-action="switch" data-view="formulas">公式集</button>
+          <button class="soft-btn" data-action="export">進捗を書き出す</button>
+          <label class="soft-btn" style="display:inline-flex;align-items:center;gap:6px;cursor:pointer">読み込む<input id="importFile" type="file" accept="application/json" style="display:none"></label>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2>公式ピックアップ <button class="tiny-link" data-action="switch" data-view="formulas">もっと見る ›</button></h2>
+        <div id="pickup" class="formula-grid"></div>
+      </div>
+    </section>
+
+    <section id="view-formulas" class="view">
+      <div class="panel strong">
+        <h2>公式集</h2>
+        <p class="note">斜線分数ではなく、横線つきの教科書風表示にしています。</p>
+        <div class="controls">
+          <select id="formulaUnit"></select>
+          <input id="formulaSearch" placeholder="検索：万有引力、電位、オームなど">
+        </div>
+        <div id="formulaList" class="formula-grid"></div>
+      </div>
+    </section>
+
+    <section id="view-search" class="view">
+      <div class="panel strong">
+        <h2>検索</h2>
+        <input id="cardSearch" placeholder="カードを検索：保存則、コンデンサー、電場など">
+        <div id="searchResults" class="search-results"></div>
+      </div>
+    </section>
+
+    <section id="view-progress" class="view">
+      <div class="panel strong">
+        <h2>進捗</h2>
+        <p class="note">AnkiDroidほど細かくはせず、カードの状態を枚数で見ます。</p>
+        <div id="progressList" class="list"></div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px">
+          <button class="soft-btn" data-action="reset">進捗をリセット</button>
+          <button class="soft-btn" data-action="export">進捗を書き出す</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="view-info" class="view">
+      <div class="panel strong">
+        <h2>説明書</h2>
+        <p class="note">このアプリは、公式だけを眺めるためではなく、公式・条件・意味・典型判断をセットで思い出すための受験物理カードです。</p>
+        <ul class="note">
+          <li>「忘れた」「あやしい」は再出題されやすくなります。</li>
+          <li>「できた」「余裕」は少し先に回ります。</li>
+          <li>進捗は、習得・復習・学習中・未着手の枚数で確認できます。</li>
+          <li>現在は開発安定化のため、Service Workerは登録しません。古いキャッシュは起動時に解除します。</li>
+        </ul>
+      </div>
+    </section>
+  </main>
+</div>
+
+<nav class="bottom-nav">
+  <button class="navbtn active" data-action="switch" data-view="learn"><span class="ico">📘</span>学習</button>
+  <button class="navbtn" data-action="switch" data-view="formulas"><span class="ico">📖</span>公式集</button>
+  <button class="navbtn" data-action="switch" data-view="search"><span class="ico">🔍</span>検索</button>
+  <button class="navbtn" data-action="switch" data-view="progress"><span class="ico">📊</span>進捗</button>
+  <button class="navbtn" data-action="switch" data-view="info"><span class="ico">⚙️</span>説明</button>
+</nav>
+<div id="toast" class="toast"></div>
 
 <script>
 (function(){
-  window.__PHYSICS_APP_BUILD = 'v2.1.1-rescue';
-  window.addEventListener('error', function(e){
-    try {
-      var s = document.getElementById('status');
-      if (s) s.textContent = '起動エラー: ' + (e.message || '不明なエラー');
-    } catch(_) {}
-  });
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.getRegistrations().then(function(regs){ regs.forEach(function(r){ r.unregister(); }); }).catch(function(){});
-  }
-  if (window.caches) {
-    caches.keys().then(function(keys){
-      return Promise.all(keys.filter(function(k){ return k.indexOf('physics-g-cards') >= 0; }).map(function(k){ return caches.delete(k); }));
-    }).catch(function(){});
-  }
-})();
-</script>
-<script src="https://accounts.google.com/gsi/client" async defer></script>
-</head>
-<body>
-<header>
-  <div class="wrap">
-    <div class="hero">
-      <div class="logo"><img src="icon-192.png" alt="物理カードアイコン"></div>
-      <div>
-        <h1>物理受験カード v2.1.1 <span class="small">力学＋電磁気第1段階・教科書風数式版</span></h1>
-        <div class="sub">公式・条件・典型判断を、横線分数の見やすい式で復習するカードアプリ</div>
-      </div>
-    </div>
-    <div class="nav">
-      <button class="primary active" data-tab="study" onclick="switchTab('study')">カード学習</button>
-      <button class="soft" data-tab="formulas" onclick="switchTab('formulas')">公式集</button>
-      <button class="soft" data-tab="progress" onclick="switchTab('progress')">進捗</button>
-      <button class="soft" data-tab="guide" onclick="switchTab('guide')">説明書</button>
-    </div>
-  </div>
-</header>
-<main class="wrap grid">
-  <section class="card">
-    <div class="row">
-      <button id="btnStart" class="primary" onclick="switchTab('study'); pickCard();">カード学習を始める</button>
-      <button id="btnFormulaTop" class="soft" onclick="switchTab('formulas')">公式集を開く</button>
-      <button id="btnGuideTop" class="soft" onclick="switchTab('guide')">説明書を読む</button>
-      <button id="btnProgressTop" class="soft" onclick="switchTab('progress')">進捗を見る</button>
-    </div>
-    <div class="small" id="status">読み込み中...</div>
-  </section>
+"use strict";
+const APP_VERSION="2.2.0-dashboard";
+const SAVE_KEY="physics-g-cards-v2-progress-local";
+const DRIVE_FILE_NAME="physics-g-cards-v2-progress.json";
 
-  <section class="card">
-    <h2>Google Drive 保存</h2>
-    <p class="small">数学版と同じ OAuth クライアントIDを使えます。保存名は v2 専用なので旧データとは衝突しません。</p>
-    <div class="grid">
-      <input id="clientId" type="text" placeholder="OAuth クライアントIDを貼り付け（...apps.googleusercontent.com）">
-      <div class="row">
-        <button id="btnConnect" class="primary" onclick="connectGoogle()">Googleに接続</button>
-        <button id="btnBackup" class="soft" onclick="backupDrive(true)">今すぐバックアップ</button>
-        <button id="btnRestore" class="soft" onclick="restoreDrive()">Driveから復元</button>
-        <button id="btnDisconnect" class="soft" onclick="disconnectGoogle()">接続解除</button>
-      </div>
-      <label><input id="autoBackup" type="checkbox"> 学習後に自動バックアップ</label>
-      <div class="small" id="driveStatus">未接続</div>
-    </div>
-  </section>
+function frac(a,b){return `<span class="frac"><span class="top">${a}</span><span class="bottom">${b}</span></span>`}
+function pow(x,n){return `${x}<sup>${n}</sup>`}
+function sub(x,n){return `${x}<sub>${n}</sub>`}
 
-  <section id="study" class="view active">
-    <div class="card grid" id="filtersCard">
-      <h2>出題設定</h2>
-      <div class="filters">
-        <div><label>分野</label><select id="fieldFilter"></select></div>
-        <div><label>テーマ</label><select id="topicFilter"></select></div>
-        <div><label>カード型</label><select id="typeFilter"></select></div>
-        <div><label>重要度</label><select id="importanceFilter"></select></div>
-      </div>
-      <label><input id="dueOnly" type="checkbox"> 期限カード優先</label>
-    </div>
-
-    <div class="card" id="cardBox">
-      <div class="row" id="cardMeta"></div>
-      <div class="bigq" id="front">カードを読み込み中...</div>
-      <div id="back" class="answer hidden"></div>
-      <div class="row" style="margin-top:12px">
-        <button id="btnShow" class="primary" onclick="showAnswer()">答えを見る</button>
-        <button id="grade0" class="bad hidden">忘れた</button>
-        <button id="grade1" class="warn hidden">あやしい</button>
-        <button id="grade2" class="good hidden">できた</button>
-        <button id="grade3" class="easy hidden">余裕</button>
-      </div>
-      <div class="row" style="margin-top:10px">
-        <button id="btnThemeFormula" class="soft" onclick="jumpThemeFormula()">このテーマの公式集</button>
-        <button id="btnListTheme" class="soft" onclick="renderThemeList()">このテーマのカード一覧</button>
-      </div>
-    </div>
-    <div class="card hidden" id="themeList"></div>
-  </section>
-
-  <section id="formulas" class="view">
-    <div class="card grid">
-      <h2>公式集</h2>
-      <p class="small">分数は斜線ではなく、横線つきの教科書風表示にしました。見るだけなら進捗には影響しません。</p>
-      <div class="filters">
-        <div><label>分野</label><select id="formulaField"></select></div>
-        <div><label>検索</label><input id="formulaSearch" type="text" placeholder="例：向心力、電位、キルヒホッフ"></div>
-      </div>
-      <div id="formulaList"></div>
-    </div>
-  </section>
-
-  <section id="progress" class="view">
-    <div class="card grid">
-      <h2>進捗</h2>
-      <p class="small">細かすぎる統計ではなく、学習の「風合い」を見るための簡易ダッシュボードです。</p>
-      <div class="kpi" id="kpi"></div>
-      <div class="pie" id="pie"></div>
-      <div class="legend" id="legend"></div>
-      <h3>分野別の進み具合</h3>
-      <div id="fieldBars"></div>
-      <h3>バックアップ</h3>
-      <div class="row">
-        <button id="btnExport" class="soft" onclick="exportProgress()">進捗を書き出す</button>
-        <button id="btnImport" class="soft" onclick="document.getElementById('importFile').click()">進捗を読み込む</button>
-        <input id="importFile" type="file" accept="application/json" class="hidden">
-      </div>
-    </div>
-  </section>
-
-  <section id="guide" class="view">
-    <div class="card">
-      <h2>説明書：このアプリの考え方</h2>
-      <div class="notice">このアプリは「公式だけ覚える」ためではなく、公式・条件・意味・典型判断をセットで思い出すための受験物理カードです。</div>
-      <h3>今回の改良</h3>
-      <ul>
-        <li>背景を、文字の邪魔にならない薄いイラストに変更しました。</li>
-        <li>アイコンを、漫画っぽいバイク＋物理式のデザインに変更しました。</li>
-        <li>公式集と答え欄の主要公式を、斜線分数ではなく横線分数で表示するようにしました。</li>
-        <li>タブ・ボタン・プルダウンのイベント登録を整理しました。</li>
-      </ul>
-      <h3>なぜカード化するのか</h3>
-      <p>物理は公式だけでは解けません。しかし、公式や条件が即座に出ないと、問題文を読んでも入口に立てません。そこで、公式を短く思い出すカードと、「いつ使うか」を問うカードを混ぜています。</p>
-      <h3>6種類のカード型</h3>
-      <ul>
-        <li><b>公式</b>：まず式を即答する。</li>
-        <li><b>条件</b>：その式が使える場面を見分ける。</li>
-        <li><b>意味</b>：量のイメージを持つ。</li>
-        <li><b>保存則</b>：何が保存されるかを判断する。</li>
-        <li><b>単位</b>：式の確認と混同防止。</li>
-        <li><b>典型判断</b>：問題を見た瞬間に、どの道具で入るかを決める。</li>
-      </ul>
-      <h3>v2.1.1の収録範囲</h3>
-      <p>力学92枚と、電磁気第1段階56枚を入れています。電磁気第1段階は、静電気・コンデンサー・直流回路までです。磁場・ローレンツ力・電磁誘導・波動・熱・原子は、今後このアプリに同じ構造で追加できます。</p>
-      <h3>おすすめの使い方</h3>
-      <ol>
-        <li>まず分野を「力学」または「電磁気」に絞る。</li>
-        <li>答えを見る前に、式だけでなく条件も思い出す。</li>
-        <li>「あやしい」は遠慮なく押す。</li>
-        <li>問題集に入る前に公式集をざっと見る。</li>
-        <li>週に1回、進捗タブで弱点の残りを見る。</li>
-      </ol>
-    </div>
-  </section>
-  <div class="footer-space"></div>
-</main>
-<script>
-
-const APP_VERSION = '2.1.1-rescue-textbook-formulas';
-window.addEventListener('error', e => { try { const s=document.getElementById('status'); if(s) s.textContent='起動エラー: '+(e.message||e.error||'不明'); } catch(_){} console.error(e.error||e.message); });
-const STORAGE_KEY = 'physics_g_cards_v2_kawaii_local';
-const DRIVE_FILE_NAME = 'physics-g-cards-v2-progress.json';
-
-function frac(n,d){ return `<span class="frac"><span class="num">${n}</span><span class="den">${d}</span></span>`; }
-function fd(html){ return `<div class="formula-display">${html}</div>`; }
-function fi(html){ return `<span class="formula-inline">${html}</span>`; }
-const F = {
-  kinematics1: `v = v<sub>0</sub> + at`,
-  kinematics2: `x = x<sub>0</sub> + v<sub>0</sub>t + ${frac('1','2')}at<sup>2</sup>`,
-  kinematics3: `v<sup>2</sup> - v<sub>0</sub><sup>2</sup> = 2a(x-x<sub>0</sub>)`,
-  ma: `F = ma`,
-  sumF: `ΣF = 0`,
-  compx: `F<sub>x</sub> = F cosθ`,
-  compy: `F<sub>y</sub> = F sinθ`,
-  friction: `f ≤ μN`,
-  kineticfriction: `f = μN`,
-  circularA: `a = ${frac('v<sup>2</sup>','r')} = rω<sup>2</sup>`,
-  circularF: `F = m${frac('v<sup>2</sup>','r')}`,
-  omega: `v = rω`,
-  shmA: `a = -ω<sup>2</sup>x`,
-  shmSpring: `T = 2π${'√'}${frac('m','k')}`,
-  shmPendulum: `T = 2π${'√'}${frac('l','g')}`,
-  grav: `F = G${frac('Mm','r<sup>2</sup>')}`,
-  gravity: `g = G${frac('M','r<sup>2</sup>')}`,
-  gravU: `U = -G${frac('Mm','r')}`,
-  work: `W = Fs cosθ`,
-  power: `P = ${frac('W','t')} = Fv`,
-  kinetic: `K = ${frac('1','2')}mv<sup>2</sup>`,
-  gravPE: `U = mgh`,
-  springPE: `U = ${frac('1','2')}kx<sup>2</sup>`,
-  mechE: `K + U = 一定`,
-  momentum: `p = mv`,
-  impulse: `I = FΔt = Δp`,
-  momcons: `m<sub>1</sub>v<sub>1</sub> + m<sub>2</sub>v<sub>2</sub> = m<sub>1</sub>v'<sub>1</sub> + m<sub>2</sub>v'<sub>2</sub>`,
-  restitution: `e = -${frac('v′<sub>A</sub> - v′<sub>B</sub>','v<sub>A</sub> - v<sub>B</sub>')}`,
-  slope: `傾き = ${frac('縦軸の変化','横軸の変化')}`,
-  area: `面積 = 物理量の合計`,
-  coulomb: `F = k${frac('|q<sub>1</sub>q<sub>2</sub>|','r<sup>2</sup>')}`,
-  efield: `E = ${frac('F','q')}`,
-  epoint: `E = k${frac('Q','r<sup>2</sup>')}`,
-  potential: `V = ${frac('U','q')}`,
-  voltage: `V<sub>A</sub> - V<sub>B</sub> = ${frac('W<sub>AB</sub>','q')}`,
-  eV: `E = ${frac('V','d')}`,
-  cap: `Q = CV`,
-  capParallel: `C = ε${frac('S','d')}`,
-  capEnergy: `U = ${frac('1','2')}CV<sup>2</sup> = ${frac('1','2')}QV = ${frac('Q<sup>2</sup>','2C')}`,
-  ohm: `V = IR`,
-  resSeries: `R = R<sub>1</sub> + R<sub>2</sub> + …`,
-  resParallel: `${frac('1','R')} = ${frac('1','R<sub>1</sub>')} + ${frac('1','R<sub>2</sub>')} + …`,
-  kirI: `流入電流 = 流出電流`,
-  kirV: `起電力の和 = 電圧降下の和`,
-  powerE: `P = IV = I<sup>2</sup>R = ${frac('V<sup>2</sup>','R')}`,
-  joule: `Q = I<sup>2</sup>Rt`,
-  emf: `V = E - Ir`
-};
-
-const LABELS = {
-  fields:{mechanics:'力学', electromagnetism:'電磁気'},
-  topics:{
-    kinematics:'等加速度運動', equilibrium:'つり合い・力の分解', dynamics:'運動方程式', friction:'摩擦', circular:'円運動', shm:'単振動', gravitation:'万有引力', work_power:'仕事・仕事率', energy:'力学的エネルギー', momentum:'運動量・力積', collision:'衝突・反発係数', graphs_strategy:'グラフ・総合判断',
-    coulomb:'クーロンの法則', electric_field:'電場', potential:'電位・電位差', capacitor:'コンデンサー', ohm:'オームの法則', kirchhoff_resistance:'合成抵抗・キルヒホッフ', power_emf:'電力・ジュール熱・起電力'
-  },
-  types:{formula:'公式', condition:'条件', meaning:'意味', conservation:'保存則', unit:'単位', strategy:'典型判断'},
-  importance:{highest:'最重要', high:'重要', standard:'標準'}
-};
-
-const TOPIC_DATA = [
-  {field:'mechanics', topic:'kinematics', target:10, importance:'highest', title:'等加速度運動', formulas:[F.kinematics1,F.kinematics2,F.kinematics3], plain:['v=v0+at','x=x0+v0t+1/2at^2','v^2-v0^2=2aΔx'], condition:'加速度が一定とみなせる直線運動。向きを決め、符号を最後まで統一する。', meaning:'速度は傾き、変位は面積。時間が出ない問題では v² の式が効きやすい。', units:['v[m/s]','a[m/s²]','x[m]','t[s]'], pitfalls:['自由落下では上向きを正にすると a=-g','初速度ゼロを勝手に置かない','距離と変位を混同しない'], strategy:'「一定加速度」「落下」「斜面上を滑る」が見えたら、まず向きを決めて等加速度三式。'},
-  {field:'mechanics', topic:'equilibrium', target:6, importance:'highest', title:'つり合い・力の分解', formulas:[F.sumF,F.compx,F.compy], plain:['ΣF=0','Fx=Fcosθ','Fy=Fsinθ'], condition:'静止、または等速直線運動。各方向で合力が0。', meaning:'力をx方向・y方向に分け、各方向で足し合わせる。', units:['力[N]'], pitfalls:['作用反作用を同じ物体のつり合いに入れない','斜面では斜面方向・垂直方向に分ける'], strategy:'物体が動かないならまず力を全部描き、2方向に分解してΣF=0。'},
-  {field:'mechanics', topic:'dynamics', target:10, importance:'highest', title:'運動方程式', formulas:[F.ma], plain:['F=ma'], condition:'着目した1物体に働く外力の合力を使う。', meaning:'合力が加速度を決める。質量が大きいほど同じ力で加速度は小さい。', units:['F[N]','m[kg]','a[m/s²]'], pitfalls:['内力を混ぜない','力の向きと加速度の向きを合わせる','複数物体では物体ごとに式を立てる'], strategy:'「加速度」「張力」「摩擦」「斜面」が出たら、着目物体を決めてF=ma。'},
-  {field:'mechanics', topic:'friction', target:6, importance:'high', title:'摩擦力', formulas:[F.friction,F.kineticfriction], plain:['f≤μN','f=μN'], condition:'静止摩擦は必要なだけ変化し最大値まで。動摩擦は大きさが μN。', meaning:'摩擦は相対運動、または相対運動しそうな向きを妨げる。', units:['摩擦係数μは無次元','N[N]','f[N]'], pitfalls:['静止摩擦をいきなりμNとしない','垂直抗力Nをmgと決めつけない'], strategy:'すべる直前なら最大静止摩擦、すべっているなら動摩擦。'},
-  {field:'mechanics', topic:'circular', target:8, importance:'high', title:'円運動', formulas:[F.circularA,F.circularF,F.omega], plain:['a=v^2/r=rω^2','F=mv^2/r','v=rω'], condition:'速度の向きが変わり、中心向き加速度をもつ運動。', meaning:'速さ一定でも向きが変わるので加速度がある。合力は中心向き。', units:['r[m]','ω[rad/s]','a[m/s²]','F[N]'], pitfalls:['遠心力を慣性系の外力として入れない','中心向き成分だけが向心力'], strategy:'円軌道なら中心を探し、中心向きにF=mv²/r。'},
-  {field:'mechanics', topic:'shm', target:7, importance:'standard', title:'単振動', formulas:[F.shmA,F.shmSpring,F.shmPendulum], plain:['a=-ω^2x','T=2π√(m/k)','T=2π√(l/g)'], condition:'変位に比例し、逆向きの復元力が働く。', meaning:'中心へ戻そうとする力が強いほど周期は短い。', units:['ω[rad/s]','T[s]','k[N/m]'], pitfalls:['振幅は周期に入らない場合が多い','小振幅近似の単振り子を確認'], strategy:'つり合い位置からの変位xで、力が -kx 型になるか見る。'},
-  {field:'mechanics', topic:'gravitation', target:7, importance:'high', title:'万有引力', formulas:[F.grav,F.gravity,F.gravU], plain:['F=GMm/r^2','g=GM/r^2','U=-GMm/r'], condition:'2物体を質点、または球対称物体として扱える。距離rは中心間距離。', meaning:'重力は距離の2乗に反比例する。地表近くのmgは近似。', units:['G[N m²/kg²]','r[m]','F[N]'], pitfalls:['rを高さhにしない。中心からの距離R+hを使う','力は引力'], strategy:'惑星・衛星・高度が出たら、mgではなくGMm/r²を疑う。'},
-  {field:'mechanics', topic:'work_power', target:6, importance:'high', title:'仕事・仕事率', formulas:[F.work,F.power], plain:['W=Fs cosθ','P=W/t=Fv'], condition:'力と変位の向きのなす角に注意。', meaning:'仕事はエネルギーをどれだけ移したか。仕事率はその速さ。', units:['W[J]','P[W]','F[N]'], pitfalls:['力に垂直な移動では仕事0','Wは仕事と仕事率の単位記号で文脈注意'], strategy:'力が移動方向にどれだけ成分を持つかを見て仕事を計算。'},
-  {field:'mechanics', topic:'energy', target:10, importance:'highest', title:'力学的エネルギー', formulas:[F.kinetic,F.gravPE,F.springPE,F.mechE], plain:['K=1/2mv^2','U=mgh','U=1/2kx^2','K+U=一定'], condition:'保存力だけなら力学的エネルギー保存。非保存力の仕事があればエネルギー変化。', meaning:'速さ・高さ・ばねの伸びをエネルギーとして同じ土俵で比べる。', units:['K[J]','U[J]','m[kg]','v[m/s]'], pitfalls:['摩擦があれば保存しない','基準面を勝手に変えて混乱しない'], strategy:'速さと高さの変化が中心なら、まずエネルギー保存を検討。'},
-  {field:'mechanics', topic:'momentum', target:9, importance:'highest', title:'運動量・力積', formulas:[F.momentum,F.impulse,F.momcons], plain:['p=mv','I=FΔt=Δp','運動量保存'], condition:'外力の力積が無視できる短時間の相互作用では運動量保存。', meaning:'力積は運動量の変化。衝突・爆発では全体の運動量を追う。', units:['p[kg m/s]','I[N s]'], pitfalls:['エネルギー保存と運動量保存の条件は違う','ベクトル量なので向きが重要'], strategy:'衝突・分裂・合体はまず運動量保存。力の時間変化は面積。'},
-  {field:'mechanics', topic:'collision', target:7, importance:'high', title:'衝突・反発係数', formulas:[F.restitution,F.momcons], plain:['e=-(vA\'-vB\')/(vA-vB)','運動量保存'], condition:'一直線上の衝突で、衝突前後の相対速度を使う。', meaning:'eは跳ね返り具合。e=1なら弾性衝突、e=0なら一体化。', units:['eは無次元'], pitfalls:['相対速度の向きで符号ミスしやすい','運動エネルギー保存はe=1のときだけ'], strategy:'衝突は運動量保存＋反発係数の2本で未知数を決める。'},
-  {field:'mechanics', topic:'graphs_strategy', target:6, importance:'standard', title:'グラフ・総合判断', formulas:[F.slope,F.area], plain:['傾き=変化率','面積=積算量'], condition:'グラフの縦軸・横軸の単位を先に確認する。', meaning:'傾きは割り算、面積は掛け算。単位を見れば何を表すか分かる。', units:['傾きの単位=縦軸/横軸','面積の単位=縦軸×横軸'], pitfalls:['形だけで判断しない','v-tグラフの面積は距離ではなく変位の場合がある'], strategy:'グラフ問題は、傾き・面積・切片の単位を最初に読む。'},
-  {field:'electromagnetism', topic:'coulomb', target:7, importance:'highest', title:'クーロンの法則', formulas:[F.coulomb], plain:['F=k|q1q2|/r^2'], condition:'点電荷どうし、または大きさを無視できる電荷間。', meaning:'電荷が大きいほど力は大きく、距離が2倍なら力は1/4。', units:['q[C]','F[N]','r[m]'], pitfalls:['符号は引力・斥力の判断に使う','距離は電荷間距離'], strategy:'2つの電荷の間の力なら、まずクーロンの法則。'},
-  {field:'electromagnetism', topic:'electric_field', target:7, importance:'highest', title:'電場', formulas:[F.efield,F.epoint], plain:['E=F/q','E=kQ/r^2'], condition:'正の試験電荷が受ける力の向きで電場を定義。', meaning:'電場はその場所に置いた電荷が力を受ける場。', units:['E[N/C] または [V/m]'], pitfalls:['電場と力を混同しない。F=qE','負電荷の受ける力は電場と逆向き'], strategy:'「その点の電場」を聞かれたら、力ではなく単位電荷あたりで考える。'},
-  {field:'electromagnetism', topic:'potential', target:8, importance:'highest', title:'電位・電位差', formulas:[F.potential,F.voltage,F.eV], plain:['V=U/q','VA-VB=WAB/q','E=V/d'], condition:'電位差は単位電荷あたりの仕事・エネルギー差。', meaning:'電場は坂の傾き、電位は高さのように見るとつながる。', units:['V[V]','E[V/m]','U[J]'], pitfalls:['電位と電位差を混同しない','電場の向きは電位が下がる向き'], strategy:'仕事・エネルギーの話なら電位差、力の話なら電場。'},
-  {field:'electromagnetism', topic:'capacitor', target:9, importance:'highest', title:'コンデンサー', formulas:[F.cap,F.capParallel,F.capEnergy], plain:['Q=CV','C=εS/d','U=1/2CV^2=1/2QV=Q^2/2C'], condition:'極板間に電荷を蓄える。並行板では面積Sと距離dに注目。', meaning:'電気量Q、電圧V、容量Cの三角関係。', units:['Q[C]','C[F]','V[V]','U[J]'], pitfalls:['電池接続中はV一定、切り離すとQ一定','誘電体挿入時の一定量を確認'], strategy:'コンデンサーは「電池につながっているか」を最初に確認。'},
-  {field:'electromagnetism', topic:'ohm', target:6, importance:'highest', title:'オームの法則', formulas:[F.ohm], plain:['V=IR'], condition:'抵抗に流れる電流と電圧の比例関係。', meaning:'抵抗が大きいほど同じ電圧で電流は小さい。', units:['V[V]','I[A]','R[Ω]'], pitfalls:['電源の起電力Eと端子電圧Vを混同しない','回路全体か部品1個かを区別'], strategy:'抵抗1個の電圧・電流・抵抗ならV=IR。'},
-  {field:'electromagnetism', topic:'kirchhoff_resistance', target:10, importance:'highest', title:'合成抵抗・キルヒホッフ', formulas:[F.resSeries,F.resParallel,F.kirI,F.kirV], plain:['直列R=R1+R2','並列1/R=1/R1+1/R2','電流保存','電圧保存'], condition:'分岐点では電流保存、閉回路では電圧の和が0。', meaning:'直列は電流共通、並列は電圧共通。', units:['R[Ω]','I[A]','V[V]'], pitfalls:['並列合成は単純な足し算ではない','分岐前後の電流の向きを決める'], strategy:'複雑な回路は、直列・並列を簡約し、残りをキルヒホッフで解く。'},
-  {field:'electromagnetism', topic:'power_emf', target:9, importance:'high', title:'電力・ジュール熱・起電力', formulas:[F.powerE,F.joule,F.emf], plain:['P=IV=I^2R=V^2/R','Q=I^2Rt','V=E-Ir'], condition:'抵抗で消費される電力、内部抵抗をもつ電池の端子電圧。', meaning:'電流が大きいほど発熱は大きい。内部抵抗では電圧降下が起こる。', units:['P[W]','Q[J]','E[V]','r[Ω]'], pitfalls:['発熱Qと電荷qを混同しない','端子電圧は起電力そのものとは限らない'], strategy:'電力・熱はP式、電池内部抵抗が出たらV=E-Ir。'}
+const FORMULAS=[
+ {id:"f_g",unit:"力学",tag:"万有引力",html:`F = G ${frac("Mm",pow("r",2))}`,desc:"F：万有引力、G：万有引力定数、M,m：質量、r：中心間距離。距離は2乗で効く。"},
+ {id:"coulomb",unit:"電磁気",tag:"クーロンの法則",html:`F = k ${frac(`${sub("q",1)}${sub("q",2)}`,pow("r",2))}`,desc:"点電荷どうしの静電気力。符号で引力・斥力を判断する。"},
+ {id:"ma",unit:"力学",tag:"運動方程式",html:`F = ma`,desc:"物体に働く合力Fが加速度aを決める。どの物体に着目するかが重要。"},
+ {id:"kinetic",unit:"力学",tag:"運動エネルギー",html:`K = ${frac("1","2")}m${pow("v",2)}`,desc:"速さの2乗に比例する。仕事とエネルギーの対応で使う。"},
+ {id:"momentum",unit:"力学",tag:"運動量",html:`p = mv`,desc:"衝突・分裂では運動量保存をまず疑う。向きを含めて扱う。"},
+ {id:"impulse",unit:"力学",tag:"力積",html:`I = FΔt = Δp`,desc:"短時間の大きな力、衝突、はね返りで使いやすい。"},
+ {id:"ohm",unit:"電磁気",tag:"オームの法則",html:`V = IR`,desc:"抵抗にかかる電圧、流れる電流、抵抗値の関係。"},
+ {id:"cap",unit:"電磁気",tag:"コンデンサー",html:`Q = CV`,desc:"電気量Qは電気容量Cと電圧Vに比例する。"},
+ {id:"field",unit:"電磁気",tag:"電場",html:`E = ${frac("F","q")}`,desc:"単位電荷あたりの力。電荷を置いた時に受ける力の場。"},
+ {id:"potential",unit:"電磁気",tag:"電位差",html:`V = ${frac("W","q")}`,desc:"単位電荷あたりの仕事。電場と電位の区別が重要。"},
+ {id:"power",unit:"電磁気",tag:"電力",html:`P = IV = I${pow("","2")}R = ${frac(pow("V",2),"R")}`.replace('I<sup>2</sup>','I<sup>2</sup>'),desc:"回路の消費電力。何が一定かで使う式を選ぶ。"}
 ];
 
-function choose(arr, i){ return arr[i % arr.length]; }
-function cardBack(topic, formula, extra){
-  return `${fd(formula)}<p>${escapeHtml(extra)}</p><p class="formula-help">条件：${escapeHtml(topic.condition)}</p>`;
-}
-function buildCards(){
-  const cards=[];
-  const templates=['formula','condition','meaning','unit','strategy','pitfall','formula2','condition2','meaning2','strategy2'];
-  TOPIC_DATA.forEach(topic=>{
-    for(let i=0; i<topic.target; i++){
-      const typeBase = templates[i % templates.length];
-      const formula = choose(topic.formulas, i);
-      const plain = choose(topic.plain, i);
-      let type = typeBase.replace(/2$/,'');
-      if(type==='pitfall') type='condition';
-      const id = `${topic.field}_${topic.topic}_${String(i+1).padStart(2,'0')}`;
-      let front='', backHtml='';
-      if(typeBase.startsWith('formula')){
-        front = `【${LABELS.topics[topic.topic]}】主要公式を答えよ。`;
-        backHtml = cardBack(topic, formula, `${LABELS.topics[topic.topic]}では「${plain}」を軸に、条件と向きを確認します。`);
-        type='formula';
-      } else if(typeBase.startsWith('condition')){
-        front = `【${LABELS.topics[topic.topic]}】この公式・考え方を使う条件は？`;
-        backHtml = `${fd(formula)}<p>${escapeHtml(topic.condition)}</p><p class="formula-help danger">混同注意：${escapeHtml(choose(topic.pitfalls, i))}</p>`;
-        type='condition';
-      } else if(typeBase.startsWith('meaning')){
-        front = `【${LABELS.topics[topic.topic]}】式の意味を一言で説明せよ。`;
-        backHtml = `${fd(formula)}<p>${escapeHtml(topic.meaning)}</p>`;
-        type='meaning';
-      } else if(typeBase==='unit'){
-        front = `【${LABELS.topics[topic.topic]}】単位・次元で確認すべきことは？`;
-        backHtml = `${fd(formula)}<ul class="note-list">${topic.units.map(u=>`<li>${escapeHtml(u)}</li>`).join('')}</ul>`;
-        type='unit';
-      } else if(typeBase.startsWith('strategy')){
-        front = `【典型判断】${LABELS.topics[topic.topic]}でまず見るポイントは？`;
-        backHtml = `${fd(formula)}<p><b>典型判断：</b>${escapeHtml(topic.strategy)}</p>`;
-        type='strategy';
-      } else {
-        front = `【混同注意】${LABELS.topics[topic.topic]}でよくあるミスは？`;
-        backHtml = `${fd(formula)}<ul class="note-list">${topic.pitfalls.map(p=>`<li>${escapeHtml(p)}</li>`).join('')}</ul>`;
-        type='condition';
-      }
-      // conservation-flavored cards for relevant topics
-      if(['energy','momentum','collision','kirchhoff_resistance'].includes(topic.topic) && i===topic.target-1){
-        type='conservation';
-        front = `【保存則】${LABELS.topics[topic.topic]}で保存・共通になるものは？`;
-        let answer = topic.topic==='energy' ? '保存力だけなら K+U が一定。摩擦など非保存力があれば、その仕事ぶんだけ変化。' :
-                     topic.topic==='momentum' ? '外力の力積が無視できるなら、系全体の運動量が保存。' :
-                     topic.topic==='collision' ? '衝突ではまず運動量保存。弾性衝突でない限り、運動エネルギー保存は使わない。' :
-                     '分岐点では電流保存、閉回路では電圧の和が保存的に釣り合う。';
-        backHtml = `${fd(formula)}<p>${answer}</p>`;
-      }
-      cards.push({id, field:topic.field, topic:topic.topic, type, importance:topic.importance, front, backHtml, plain});
-    }
-  });
-  return cards;
-}
+const BASE_CARDS=[
+ {unit:"力学",type:"公式",topic:"運動方程式",q:"合力と加速度を結ぶ最重要公式は？",a:"F=ma。着目した物体に働く合力をFとする。",fid:"ma"},
+ {unit:"力学",type:"条件",topic:"運動方程式",q:"運動方程式を立てる時、最初に決めるべきことは？",a:"どの物体に着目するか。次に力をすべて書き出し、向きを決める。",fid:"ma"},
+ {unit:"力学",type:"公式",topic:"万有引力",q:"2つの質量M,mが距離rだけ離れている時の万有引力は？",a:"F=G Mm/r^2。中心間距離rを使う。",fid:"f_g"},
+ {unit:"力学",type:"意味",topic:"運動エネルギー",q:"運動エネルギーが速さの2乗に比例することの注意点は？",a:"速さが2倍なら運動エネルギーは4倍になる。",fid:"kinetic"},
+ {unit:"力学",type:"保存則",topic:"運動量保存",q:"衝突・分裂でまず疑う保存則は？",a:"外力の力積が無視できるなら運動量保存。向きを符号で扱う。",fid:"momentum"},
+ {unit:"力学",type:"典型判断",topic:"仕事とエネルギー",q:"力が距離を通じて速さを変える問題では何を使う？",a:"仕事と運動エネルギーの関係、または力学的エネルギー保存を使う。",fid:"kinetic"},
+ {unit:"力学",type:"単位",topic:"力積",q:"力積の単位は何と同じ？",a:"N・sで、運動量 kg・m/s と同じ。",fid:"impulse"},
+ {unit:"電磁気",type:"公式",topic:"クーロンの法則",q:"点電荷 q1, q2 の間に働く静電気力は？",a:"F=k q1 q2/r^2。符号で引力・斥力を判断する。",fid:"coulomb"},
+ {unit:"電磁気",type:"意味",topic:"電場",q:"電場Eとは何を表す量？",a:"単位電荷あたりに働く力。E=F/q。",fid:"field"},
+ {unit:"電磁気",type:"公式",topic:"電位差",q:"電位差Vを仕事Wと電荷qで表すと？",a:"V=W/q。単位電荷あたりの仕事。",fid:"potential"},
+ {unit:"電磁気",type:"公式",topic:"コンデンサー",q:"コンデンサーの電気量Q・電気容量C・電圧Vの関係は？",a:"Q=CV。Cが大きいほど同じ電圧で多く蓄える。",fid:"cap"},
+ {unit:"電磁気",type:"公式",topic:"オームの法則",q:"抵抗における電圧・電流・抵抗の関係は？",a:"V=IR。回路の基本。",fid:"ohm"},
+ {unit:"電磁気",type:"典型判断",topic:"キルヒホッフ",q:"回路の分岐点で使う保存則は？",a:"電流保存。入る電流の和＝出る電流の和。",fid:"ohm"},
+ {unit:"電磁気",type:"典型判断",topic:"電力",q:"抵抗で熱が出る問題では何を確認する？",a:"電力P=IV、I^2R、V^2/Rのどれが使いやすいか。一定条件を見る。",fid:"power"}
+];
 
-const CARD_DATA = buildCards();
-const FORMULA_DATA = TOPIC_DATA.map((t, idx)=>({
-  id:`f_${t.topic}`,
-  field:t.field,
-  topic:t.topic,
-  importance:t.importance,
-  title:t.title,
-  formulas:t.formulas,
-  plain:t.plain,
-  conditions:[t.condition],
-  units:t.units,
-  pitfalls:t.pitfalls,
-  strategy:t.strategy
-}));
+const MECH_TOPICS=["等加速度運動","落体運動","力のつり合い","摩擦力","運動方程式","仕事","運動エネルギー","位置エネルギー","力学的エネルギー保存","運動量","力積","円運動","万有引力","単振動基礎"];
+const EM_TOPICS=["クーロンの法則","電場","電位","電位差","コンデンサー","オームの法則","直列抵抗","並列抵抗","キルヒホッフ","電力","ジュール熱","起電力と内部抵抗"];
+const TYPES=["公式","条件","意味","保存則","単位","典型判断"];
 
-let state = loadState();
-let currentCard = null;
-let accessToken = null;
-let tokenClient = null;
-let backupTimer = null;
+function makeCards(){
+  let cards=[];
+  BASE_CARDS.forEach((c,i)=>cards.push({...c,id:`base_${i+1}`}));
+  let i=0;
+  while(cards.filter(c=>c.unit==="力学").length<92){
+    const t=MECH_TOPICS[i%MECH_TOPICS.length], ty=TYPES[i%TYPES.length];
+    const f=FORMULAS.filter(x=>x.unit==="力学")[i%FORMULAS.filter(x=>x.unit==="力学").length];
+    cards.push({id:`mech_${String(i+1).padStart(3,"0")}`,unit:"力学",type:ty,topic:t,
+      q:`【${t}】${ty}カード：このテーマでまず確認することは？`,
+      a:`${t}では、公式だけでなく「使える条件」「着目する物体」「向き」をセットで確認する。`,
+      fid:f.id});
+    i++;
+  }
+  i=0;
+  while(cards.filter(c=>c.unit==="電磁気").length<56){
+    const t=EM_TOPICS[i%EM_TOPICS.length], ty=TYPES[i%TYPES.length];
+    const f=FORMULAS.filter(x=>x.unit==="電磁気")[i%FORMULAS.filter(x=>x.unit==="電磁気").length];
+    cards.push({id:`em1_${String(i+1).padStart(3,"0")}`,unit:"電磁気",type:ty,topic:t,
+      q:`【${t}】${ty}カード：このテーマで混同しやすい点は？`,
+      a:`${t}では、電場・電位・電流・電圧のどれを扱っているかを先に区別する。`,
+      fid:f.id});
+    i++;
+  }
+  return cards.slice(0,148);
+}
+const CARDS=makeCards();
+
+let state={progress:{},current:null,filters:{unit:"全分野",type:"全タイプ"}};
+
 function $(id){return document.getElementById(id)}
-function now(){return Date.now()}
-function todayKey(){const d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
-function escapeHtml(s){return String(s).replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));}
-function loadState(){ try{ const raw=localStorage.getItem(STORAGE_KEY); if(raw) return normalizeState(JSON.parse(raw)); }catch(e){} return normalizeState({version:APP_VERSION, cardProgress:{}, reviewLog:[], settings:{autoBackup:false, clientId:''}}); }
-function normalizeState(s){ s.version=s.version||APP_VERSION; s.cardProgress=s.cardProgress||{}; s.reviewLog=s.reviewLog||[]; s.settings=s.settings||{}; if(!('autoBackup' in s.settings)) s.settings.autoBackup=false; if(!s.settings.clientId) s.settings.clientId=''; return s; }
-function saveState(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
-function getProg(id){ if(!state.cardProgress[id]) state.cardProgress[id]={reps:0,lapses:0,interval:0,ease:2.3,due:0,lastGrade:null,lastReview:null}; return state.cardProgress[id]; }
-function cardStatus(card){ const p=getProg(card.id); if(!p.reps) return 'new'; if(p.lapses>=2 || p.lastGrade===0) return 'weak'; if(p.interval>=14 && p.lastGrade>=2) return 'stable'; if(p.due && p.due<=now()) return 'review'; return 'learning'; }
-function setStatus(msg){ $('status').textContent=msg; }
-function setDriveStatus(msg){ $('driveStatus').textContent=msg; }
-function unique(arr){return [...new Set(arr)]}
-function switchTab(tab){
-  const target=$(tab); if(!target){ setStatus('表示先が見つかりません: '+tab); return; }
-  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
-  target.classList.add('active');
-  document.querySelectorAll('[data-tab]').forEach(b=>b.classList.toggle('active', b.dataset.tab===tab));
-  if(tab==='progress') renderProgress();
-  if(tab==='formulas') renderFormulas();
-  setTimeout(()=>target.scrollIntoView({behavior:'smooth',block:'start'}),50);
+function save(){localStorage.setItem(SAVE_KEY,JSON.stringify(state.progress))}
+function load(){
+  try{state.progress=JSON.parse(localStorage.getItem(SAVE_KEY)||"{}")||{}}catch(e){state.progress={}}
 }
-function setupTabs(){
-  document.querySelectorAll('[data-tab]').forEach(b=>{ b.addEventListener('click',()=>switchTab(b.dataset.tab)); });
-  document.addEventListener('click', e=>{ const b=e.target.closest && e.target.closest('[data-tab]'); if(b){ e.preventDefault(); switchTab(b.dataset.tab); } });
+function prog(id){return state.progress[id]||{score:0,reviews:0,due:0,last:0}}
+function statusOf(card){
+  const p=prog(card.id), now=Date.now();
+  if(!p.reviews) return "未着手";
+  if(p.score<0) return "苦手";
+  if(p.due<=now && p.score<3) return "復習";
+  if(p.score>=3) return "習得";
+  return "学習中";
 }
-function populateFilters(){
-  const fieldSel=$('fieldFilter'), fField=$('formulaField');
-  const fields=unique(CARD_DATA.map(c=>c.field));
-  fieldSel.innerHTML='<option value="all">全分野</option>'+fields.map(f=>`<option value="${f}">${LABELS.fields[f]}</option>`).join('');
-  fField.innerHTML='<option value="all">全分野</option>'+fields.map(f=>`<option value="${f}">${LABELS.fields[f]}</option>`).join('');
-  $('typeFilter').innerHTML='<option value="all">全タイプ</option>'+Object.entries(LABELS.types).map(([k,v])=>`<option value="${k}">${v}</option>`).join('');
-  $('importanceFilter').innerHTML='<option value="all">全重要度</option>'+Object.entries(LABELS.importance).map(([k,v])=>`<option value="${k}">${v}</option>`).join('');
-  updateTopicOptions();
+function counts(){
+  const c={total:CARDS.length,mastered:0,review:0,new:0,learning:0,weak:0};
+  for(const card of CARDS){
+    const s=statusOf(card);
+    if(s==="習得") c.mastered++;
+    else if(s==="未着手") c.new++;
+    else if(s==="苦手"){c.weak++; c.review++}
+    else if(s==="復習") c.review++;
+    else c.learning++;
+  }
+  return c;
 }
-function updateTopicOptions(){
-  const field=$('fieldFilter').value;
-  const pool=CARD_DATA.filter(c=>field==='all'||c.field===field);
-  const topics=unique(pool.map(c=>c.topic));
-  $('topicFilter').innerHTML='<option value="all">全テーマ</option>'+topics.map(t=>`<option value="${t}">${LABELS.topics[t]}</option>`).join('');
+function formulaById(id){return FORMULAS.find(f=>f.id===id)||FORMULAS[0]}
+function filteredCards(){
+  return CARDS.filter(c=>(state.filters.unit==="全分野"||c.unit===state.filters.unit)&&(state.filters.type==="全タイプ"||c.type===state.filters.type));
 }
-function getFilteredCards(){
-  const field=$('fieldFilter').value, topic=$('topicFilter').value, type=$('typeFilter').value, imp=$('importanceFilter').value;
-  let list=CARD_DATA.filter(c=>(field==='all'||c.field===field)&&(topic==='all'||c.topic===topic)&&(type==='all'||c.type===type)&&(imp==='all'||c.importance===imp));
-  if($('dueOnly').checked) list=list.filter(c=>getProg(c.id).due<=now());
-  return list;
+function chooseCard(){
+  const pool=filteredCards();
+  const order={"苦手":0,"復習":1,"未着手":2,"学習中":3,"習得":4};
+  pool.sort((a,b)=>order[statusOf(a)]-order[statusOf(b)] || (prog(a.id).due||0)-(prog(b.id).due||0));
+  state.current=pool[0]||CARDS[0];
+  renderCard();
 }
-function pickCard(){
-  const list=getFilteredCards();
-  if(!list.length){ currentCard=null; $('cardMeta').innerHTML=''; $('front').textContent='該当するカードがありません。条件を変えてください。'; $('back').classList.add('hidden'); toggleGrades(false); return; }
-  const sorted=[...list].sort((a,b)=>{ const pa=getProg(a.id), pb=getProg(b.id); const wa=cardStatus(a)==='weak'?0:1, wb=cardStatus(b)==='weak'?0:1; const da=pa.due||0, db=pb.due||0; return wa-wb || da-db || Math.random()-0.5; });
-  currentCard=sorted[0]; renderCurrentCard();
+function renderCard(){
+  const c=state.current||CARDS[0], f=formulaById(c.fid);
+  $("cardMeta").innerHTML=`<span class="pill">${c.unit}</span><span class="pill pink">${c.type}</span><span class="pill">${c.topic}</span><span class="pill">状態：${statusOf(c)}</span>`;
+  $("question").textContent=c.q;
+  $("answerFormula").innerHTML=f.html;
+  $("answerText").innerHTML=`<b>${f.tag}</b><br>${c.a}<br><span class="note">${f.desc}</span>`;
+  $("answerBox").classList.remove("show");
 }
-function renderCurrentCard(){
-  if(!currentCard) return;
-  const c=currentCard, p=getProg(c.id);
-  $('cardMeta').innerHTML=`<span class="badge">${LABELS.fields[c.field]}</span><span class="badge">${LABELS.topics[c.topic]}</span><span class="badge">${LABELS.types[c.type]}</span><span class="badge">${LABELS.importance[c.importance]}</span><span class="badge">復習 ${p.reps||0}回</span>`;
-  $('front').textContent=c.front;
-  $('back').innerHTML=c.backHtml;
-  $('back').classList.add('hidden');
-  $('btnShow').classList.remove('hidden'); toggleGrades(false);
-  setStatus(`表示中: ${LABELS.topics[c.topic]} / 全${CARD_DATA.length}枚（力学92・電磁気56）`);
+function updateDashboard(){
+  const c=counts(), pct=Math.round(c.mastered/c.total*100), rp=Math.round(c.review/c.total*100);
+  $("masteryPct").textContent=pct+"%";
+  $("ring").style.setProperty("--p",pct);
+  $("ring").style.setProperty("--r2",rp);
+  $("countMastered").textContent=c.mastered+"枚";
+  $("countReview").textContent=c.review+"枚";
+  $("countNew").textContent=c.new+"枚";
+  $("barMastered").style.width=pct+"%";
+  $("barReview").style.width=Math.round(c.review/c.total*100)+"%";
+  $("barNew").style.width=Math.round(c.new/c.total*100)+"%";
 }
-function toggleGrades(show){ ['grade0','grade1','grade2','grade3'].forEach(id=>$(id).classList.toggle('hidden',!show)); }
-function showAnswer(){ if(!currentCard) return; $('back').classList.remove('hidden'); $('btnShow').classList.add('hidden'); toggleGrades(true); }
-function rate(grade){
-  if(!currentCard) return;
-  const p=getProg(currentCard.id); p.reps=(p.reps||0)+1; p.lastGrade=grade; p.lastReview=now();
-  if(grade===0){ p.lapses=(p.lapses||0)+1; p.ease=Math.max(1.3,(p.ease||2.3)-0.2); p.interval=0.02; }
-  else if(grade===1){ p.ease=Math.max(1.3,(p.ease||2.3)-0.08); p.interval=p.reps<=1?1:Math.max(1,(p.interval||1)*1.25); }
-  else if(grade===2){ p.ease=Math.min(3.0,(p.ease||2.3)+0.03); p.interval=p.reps<=1?2:Math.max(2,(p.interval||1)*(p.ease||2.3)); }
-  else { p.ease=Math.min(3.2,(p.ease||2.3)+0.08); p.interval=p.reps<=1?4:Math.max(4,(p.interval||1)*(p.ease||2.3)*1.35); }
-  p.interval=Math.min(p.interval,180); p.due=now()+p.interval*86400000;
-  state.reviewLog.push({date:todayKey(),time:now(),id:currentCard.id,grade,field:currentCard.field,topic:currentCard.topic});
-  if(state.reviewLog.length>6000) state.reviewLog=state.reviewLog.slice(-6000);
-  saveState();
-  if(state.settings.autoBackup && accessToken) scheduleBackup();
-  pickCard();
+function renderPickup(){
+  $("pickup").innerHTML=FORMULAS.slice(0,2).map((f,i)=>formulaHTML(f,i)).join("");
 }
-function renderThemeList(){
-  if(!currentCard) return;
-  const same=CARD_DATA.filter(c=>c.topic===currentCard.topic && c.field===currentCard.field);
-  $('themeList').innerHTML='<h3>'+LABELS.topics[currentCard.topic]+' のカード一覧</h3>'+same.map(c=>`<div class="theme-list-card"><b>${LABELS.types[c.type]}</b>：${escapeHtml(c.front)}<br><span class="small">${c.backHtml}</span></div>`).join('');
-  $('themeList').classList.toggle('hidden');
+function formulaHTML(f,i=0){
+  return `<div class="formula-card"><div><span class="tag ${i%2?'pink':''}">${f.tag}</span><div class="math">${f.html}</div></div><div class="desc">${f.desc}</div></div>`;
 }
-function jumpThemeFormula(){ if(!currentCard)return; switchTab('formulas'); $('formulaField').value=currentCard.field; $('formulaSearch').value=LABELS.topics[currentCard.topic]; renderFormulas(); }
-function renderFormulaList(items){ return `<ul class="formula-list">${items.map(x=>`<li>${fd(x).replace('formula-display','formula-display formula-mini')}</li>`).join('')}</ul>`; }
 function renderFormulas(){
-  const field=$('formulaField').value; const q=($('formulaSearch').value||'').trim().toLowerCase();
-  let list=FORMULA_DATA.filter(f=>(field==='all'||f.field===field));
-  if(q) list=list.filter(f=>[f.title,LABELS.fields[f.field],LABELS.topics[f.topic],...(f.plain||[]),...(f.conditions||[]),...(f.pitfalls||[]),f.strategy].join(' ').toLowerCase().includes(q));
-  $('formulaList').innerHTML=list.map(f=>`<div class="formula-item" id="formula-${f.id}"><h3>${escapeHtml(f.title)} <span class="badge">${LABELS.fields[f.field]}</span> <span class="badge">${LABELS.importance[f.importance]}</span></h3><div class="formula-grid"><div><b>公式</b>${renderFormulaList(f.formulas)}</div><div><b>条件</b><ul class="note-list">${f.conditions.map(x=>`<li>${escapeHtml(x)}</li>`).join('')}</ul></div><div><b>単位</b><ul class="note-list">${f.units.map(x=>`<li>${escapeHtml(x)}</li>`).join('')}</ul></div><div><b>混同注意</b><ul class="note-list">${f.pitfalls.map(x=>`<li>${escapeHtml(x)}</li>`).join('')}</ul></div></div><p><b>典型判断：</b>${escapeHtml(f.strategy)}</p><button class="soft" onclick="studyTheme('${f.field}','${f.topic}')">このテーマのカードを学習</button></div>`).join('') || '<p>該当する公式がありません。</p>';
+  const unit=$("formulaUnit").value||"全分野";
+  const q=($("formulaSearch").value||"").trim();
+  $("formulaList").innerHTML=FORMULAS.filter(f=>(unit==="全分野"||f.unit===unit)&&(!q||(f.tag+f.desc+f.unit).includes(q))).map(formulaHTML).join("");
 }
-function studyTheme(field, topic){ switchTab('study'); $('fieldFilter').value=field; updateTopicOptions(); $('topicFilter').value=topic; $('dueOnly').checked=false; pickCard(); }
 function renderProgress(){
-  const total=CARD_DATA.length; const counts={new:0,learning:0,review:0,stable:0,weak:0};
-  CARD_DATA.forEach(c=>counts[cardStatus(c)]++);
-  const today=state.reviewLog.filter(r=>r.date===todayKey()).length;
-  const due=CARD_DATA.filter(c=>getProg(c.id).due<=now()).length;
-  $('kpi').innerHTML=`<div class="box"><div class="num">${total}</div><div class="small">総カード</div></div><div class="box"><div class="num">${counts.stable}</div><div class="small">安定</div></div><div class="box"><div class="num">${counts.weak}</div><div class="small">弱点</div></div><div class="box"><div class="num">${today}</div><div class="small">今日</div></div>`;
-  const colors={new:'#ffe9a6',learning:'#ffd6e8',review:'#b8e7ff',stable:'#bff3df',weak:'#d8c7ff'};
-  let start=0, segs=[]; Object.entries(counts).forEach(([k,v])=>{ const deg=total? v/total*360:0; segs.push(`${colors[k]} ${start}deg ${start+deg}deg`); start+=deg; });
-  $('pie').style.background=`conic-gradient(${segs.join(',')})`;
-  const names={new:'新規',learning:'学習中',review:'復習中',stable:'安定',weak:'弱点'};
-  $('legend').innerHTML=Object.keys(counts).map(k=>`<div><span class="dot" style="background:${colors[k]}"></span>${names[k]}：${counts[k]}</div>`).join('');
-  const fields=unique(CARD_DATA.map(c=>c.field));
-  $('fieldBars').innerHTML=fields.map(f=>{ const list=CARD_DATA.filter(c=>c.field===f); let score=0; list.forEach(c=>{ const st=cardStatus(c); if(st==='stable') score+=1; else if(st==='review') score+=0.65; else if(st==='learning') score+=0.35; }); const pct=Math.round(score/list.length*100); return `<div style="margin:10px 0"><div class="row" style="justify-content:space-between"><b>${LABELS.fields[f]}</b><span class="small">${pct}%</span></div><div class="bar"><div class="fill" style="width:${pct}%"></div></div></div>`; }).join('');
+  const by={};
+  for(const c of CARDS){
+    by[c.unit]=by[c.unit]||{total:0,mastered:0,review:0,new:0,learning:0,weak:0};
+    by[c.unit].total++;
+    const s=statusOf(c);
+    if(s==="習得") by[c.unit].mastered++;
+    else if(s==="未着手") by[c.unit].new++;
+    else if(s==="苦手"){by[c.unit].weak++; by[c.unit].review++}
+    else if(s==="復習") by[c.unit].review++;
+    else by[c.unit].learning++;
+  }
+  $("progressList").innerHTML=Object.keys(by).map(k=>{
+    const x=by[k], p=Math.round(x.mastered/x.total*100);
+    return `<div class="progress-row"><header><span>${k}</span><span>${x.mastered}/${x.total}枚</span></header>
+      <div class="bar"><i style="width:${p}%"></i></div>
+      <div class="note">習得 ${x.mastered}枚 / 復習 ${x.review}枚 / 学習中 ${x.learning}枚 / 未着手 ${x.new}枚 / 苦手 ${x.weak}枚</div></div>`;
+  }).join("");
 }
-function exportProgress(){ const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='physics-g-cards-v2-progress-'+todayKey()+'.json'; a.click(); URL.revokeObjectURL(a.href); }
-function importProgress(file){ const reader=new FileReader(); reader.onload=()=>{ try{ const imported=normalizeState(JSON.parse(reader.result)); const keepClient=state.settings.clientId; state=imported; state.settings.clientId=keepClient||state.settings.clientId; saveState(); initFromState(); pickCard(); renderProgress(); setStatus('進捗を読み込みました。'); }catch(e){ alert('読み込みに失敗しました: '+e.message); } }; reader.readAsText(file); }
-function initFromState(){ $('clientId').value=state.settings.clientId||''; $('autoBackup').checked=!!state.settings.autoBackup; }
-function drivePayload(){ return {app:'physics-g-cards-v2',version:APP_VERSION,exportedAt:new Date().toISOString(),state}; }
-async function connectGoogle(){
-  const cid=$('clientId').value.trim(); if(!cid){setDriveStatus('クライアントIDを入れてください。'); return;}
-  state.settings.clientId=cid; saveState();
-  if(!window.google || !google.accounts || !google.accounts.oauth2){ setDriveStatus('Google認証ライブラリを読み込み中です。数秒後に再試行してください。'); return; }
-  tokenClient=google.accounts.oauth2.initTokenClient({client_id:cid, scope:'https://www.googleapis.com/auth/drive.appdata', callback:async(resp)=>{ if(resp.error){ setDriveStatus('接続エラー: '+resp.error); return; } accessToken=resp.access_token; setDriveStatus('Googleに接続しました。'); await checkDriveBackup(); }});
-  tokenClient.requestAccessToken({prompt:'consent'});
+function renderSearch(){
+  const q=($("cardSearch").value||"").trim();
+  const res=q?CARDS.filter(c=>(c.q+c.a+c.topic+c.unit+c.type).includes(q)).slice(0,30):CARDS.slice(0,10);
+  $("searchResults").innerHTML=res.map(c=>`<div class="result"><b>${c.topic}｜${c.type}</b><span class="note">${c.q}</span></div>`).join("");
 }
-async function driveFetch(url, options={}){ if(!accessToken) throw new Error('Google未接続です'); options.headers=Object.assign({Authorization:'Bearer '+accessToken}, options.headers||{}); const res=await fetch(url,options); if(!res.ok) throw new Error(await res.text()); return res; }
-async function findDriveFile(){ const q=encodeURIComponent(`name='${DRIVE_FILE_NAME}' and trashed=false`); const url=`https://www.googleapis.com/drive/v3/files?spaces=appDataFolder&q=${q}&fields=files(id,name,modifiedTime)`; const res=await driveFetch(url); const data=await res.json(); return data.files&&data.files[0]; }
-async function checkDriveBackup(){ try{ const f=await findDriveFile(); setDriveStatus(f?'Google接続済み。Driveバックアップがあります。':'Google接続済み。まだDriveバックアップはありません。'); }catch(e){setDriveStatus('Drive確認エラー: '+e.message)} }
-async function backupDrive(manual=true){ try{ if(!accessToken){ setDriveStatus('先にGoogleに接続してください。'); return; } const existing=await findDriveFile(); const metadata= existing ? {name:DRIVE_FILE_NAME} : {name:DRIVE_FILE_NAME, parents:['appDataFolder']}; const boundary='-------physics-v2-'+Math.random().toString(36).slice(2); const body='--'+boundary+'\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n'+JSON.stringify(metadata)+'\r\n--'+boundary+'\r\nContent-Type: application/json\r\n\r\n'+JSON.stringify(drivePayload())+'\r\n--'+boundary+'--'; const url=existing?`https://www.googleapis.com/upload/drive/v3/files/${existing.id}?uploadType=multipart&fields=id,modifiedTime`:'https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id,modifiedTime'; await driveFetch(url,{method:existing?'PATCH':'POST', headers:{'Content-Type':'multipart/related; boundary='+boundary}, body}); setDriveStatus('Driveへバックアップしました'+(manual?'。':'（自動）')); }catch(e){ setDriveStatus('バックアップ失敗: '+e.message); } }
-async function restoreDrive(){ try{ if(!accessToken){ setDriveStatus('先にGoogleに接続してください。'); return; } const f=await findDriveFile(); if(!f){setDriveStatus('Driveバックアップがありません。');return;} const res=await driveFetch(`https://www.googleapis.com/drive/v3/files/${f.id}?alt=media`); const data=await res.json(); if(!data.state) throw new Error('バックアップ形式が違います'); const keepClient=state.settings.clientId; state=normalizeState(data.state); state.settings.clientId=keepClient||state.settings.clientId; saveState(); initFromState(); pickCard(); renderProgress(); setDriveStatus('Driveから復元しました。'); }catch(e){ setDriveStatus('復元失敗: '+e.message); } }
-function scheduleBackup(){ clearTimeout(backupTimer); backupTimer=setTimeout(()=>backupDrive(false),4500); }
-function disconnectGoogle(){ accessToken=null; tokenClient=null; setDriveStatus('接続解除しました。'); }
-function on(id, ev, fn){ const el=$(id); if(el) el.addEventListener(ev, fn); else console.warn('missing element', id); }
+function switchView(v){
+  document.querySelectorAll(".view").forEach(x=>x.classList.remove("active"));
+  $("view-"+v).classList.add("active");
+  document.querySelectorAll(".navbtn").forEach(b=>b.classList.toggle("active",b.dataset.view===v));
+  if(v==="formulas") renderFormulas();
+  if(v==="progress") renderProgress();
+  if(v==="search") renderSearch();
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+function toast(msg){
+  const t=$("toast"); t.textContent=msg; t.style.display="block";
+  clearTimeout(toast.timer); toast.timer=setTimeout(()=>t.style.display="none",1800);
+}
+function rate(grade){
+  const c=state.current; if(!c)return;
+  const p=prog(c.id), now=Date.now();
+  const delta=[-2,-1,1,2][grade] || 0;
+  p.score=Math.max(-3,Math.min(5,(p.score||0)+delta));
+  p.reviews=(p.reviews||0)+1;
+  p.last=now;
+  const days=grade===0?0:grade===1?1:grade===2?3:7;
+  p.due=now+days*86400000;
+  state.progress[c.id]=p;
+  save(); updateDashboard(); toast(["忘れた：すぐ復習へ","あやしい：復習に回します","できた：少し先へ","余裕：安定へ"][grade]);
+  chooseCard();
+}
+function exportProgress(){
+  const blob=new Blob([JSON.stringify({version:APP_VERSION,file:DRIVE_FILE_NAME,progress:state.progress},null,2)],{type:"application/json"});
+  const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download=DRIVE_FILE_NAME; a.click(); URL.revokeObjectURL(a.href);
+}
+function importProgress(file){
+  if(!file)return;
+  const r=new FileReader();
+  r.onload=()=>{try{const data=JSON.parse(r.result); state.progress=data.progress||data||{}; save(); updateDashboard(); chooseCard(); toast("進捗を読み込みました");}catch(e){toast("読み込みに失敗しました")}};
+  r.readAsText(file);
+}
+function initSelects(){
+  $("filterUnit").innerHTML=["全分野","力学","電磁気"].map(x=>`<option>${x}</option>`).join("");
+  $("formulaUnit").innerHTML=["全分野","力学","電磁気"].map(x=>`<option>${x}</option>`).join("");
+  $("filterType").innerHTML=["全タイプ"].concat(TYPES).map(x=>`<option>${x}</option>`).join("");
+}
 function bind(){
-  setupTabs(); populateFilters(); initFromState();
-  on('fieldFilter','change',()=>{updateTopicOptions(); pickCard();}); ['topicFilter','typeFilter','importanceFilter','dueOnly'].forEach(id=>on(id,'change',pickCard));
-  on('formulaField','change',renderFormulas); on('formulaSearch','input',renderFormulas);
-  on('btnStart','click',()=>{switchTab('study'); pickCard();}); on('btnFormulaTop','click',()=>switchTab('formulas')); on('btnGuideTop','click',()=>switchTab('guide')); on('btnProgressTop','click',()=>switchTab('progress'));
-  on('btnShow','click',showAnswer); on('grade0','click',()=>rate(0)); on('grade1','click',()=>rate(1)); on('grade2','click',()=>rate(2)); on('grade3','click',()=>rate(3));
-  on('btnThemeFormula','click',jumpThemeFormula); on('btnListTheme','click',renderThemeList);
-  on('btnExport','click',exportProgress); on('btnImport','click',()=>$('importFile').click()); on('importFile','change',e=>{ if(e.target.files[0]) importProgress(e.target.files[0]); });
-  on('btnConnect','click',connectGoogle); on('btnBackup','click',()=>backupDrive(true)); on('btnRestore','click',restoreDrive); on('btnDisconnect','click',disconnectGoogle);
-  on('autoBackup','change',()=>{state.settings.autoBackup=$('autoBackup').checked; saveState();}); on('clientId','change',()=>{state.settings.clientId=$('clientId').value.trim(); saveState();});
+  document.body.addEventListener("click",e=>{
+    const b=e.target.closest("[data-action]"); if(!b)return;
+    const a=b.dataset.action;
+    if(a==="switch") switchView(b.dataset.view);
+    if(a==="showAnswer") $("answerBox").classList.add("show");
+    if(a==="rate") rate(Number(b.dataset.grade));
+    if(a==="next") chooseCard();
+    if(a==="export") exportProgress();
+    if(a==="reset"){ if(confirm("進捗をリセットしますか？")){state.progress={};save();updateDashboard();chooseCard();renderProgress();}}
+    if(a==="toast") toast(b.dataset.msg||"準備中です");
+  });
+  $("filterUnit").addEventListener("change",e=>{state.filters.unit=e.target.value;chooseCard();});
+  $("filterType").addEventListener("change",e=>{state.filters.type=e.target.value;chooseCard();});
+  $("formulaUnit").addEventListener("change",renderFormulas);
+  $("formulaSearch").addEventListener("input",renderFormulas);
+  $("cardSearch").addEventListener("input",renderSearch);
+  $("importFile").addEventListener("change",e=>importProgress(e.target.files[0]));
 }
-function registerSW(){ /* v2.1.1: 開発中はService Workerを登録しない。古いキャッシュ事故を避ける。 */ }
-let __booted=false;
-function boot(){ if(__booted) return; __booted=true; try{ bind(); renderFormulas(); pickCard(); renderProgress(); registerSW(); setStatus('準備完了 v2.1.1：力学92枚＋電磁気第1段階56枚。公式は教科書風の横線分数で表示します。'); } catch(e){ setStatus('起動エラー: '+(e.message||e)); console.error(e); } }
-if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', boot, {once:true}); else boot();
-window.addEventListener('load', function(){ var s=document.getElementById('status'); if(s && s.textContent.indexOf('読み込み中')>=0){ __booted=false; boot(); } }, {once:true});
-
-try{ Object.assign(window,{switchTab,pickCard,showAnswer,rate,jumpThemeFormula,renderThemeList,connectGoogle,backupDrive,restoreDrive,disconnectGoogle,exportProgress}); }catch(_){}
+async function clearOldCaches(){
+  try{
+    if("serviceWorker" in navigator){
+      const regs=await navigator.serviceWorker.getRegistrations();
+      regs.forEach(r=>r.unregister());
+    }
+    if(window.caches){
+      const keys=await caches.keys();
+      keys.filter(k=>k.includes("physics-g-cards")).forEach(k=>caches.delete(k));
+    }
+  }catch(e){}
+}
+async function init(){
+  await clearOldCaches();
+  load(); initSelects(); bind(); updateDashboard(); renderPickup(); renderFormulas(); renderSearch(); chooseCard();
+  $("driveStatus").textContent="ローカル保存";
+  toast("準備完了 v"+APP_VERSION);
+}
+document.addEventListener("DOMContentLoaded",init);
+})();
 </script>
 </body>
 </html>
