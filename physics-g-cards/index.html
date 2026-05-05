@@ -3,123 +3,316 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>物理受験カード v3.0.1｜年間固定版</title>
-<meta name="theme-color" content="#8ec5ff">
+<title>物理受験カード v3.0.4｜年間固定版</title>
 <link rel="manifest" href="/physics-g-cards/manifest.webmanifest">
+<meta name="theme-color" content="#8ec5ff">
+<script src="https://accounts.google.com/gsi/client" async defer></script>
 <style>
-:root{--ink:#15264b;--blue:#68b7ff;--pink:#f6a6c9;--mint:#72d6c6;--line:rgba(63,60,90,.14);--shadow:0 18px 42px rgba(35,50,88,.15)}
-*{box-sizing:border-box}body{margin:0;min-height:100vh;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI","Hiragino Sans","Yu Gothic",sans-serif;color:var(--ink);background:#f7fbff;display:grid;place-items:center;padding:18px;overflow:hidden}body::before{content:"";position:fixed;inset:0;background:url("/physics-g-cards/bg-bike-physics.png") center center/cover no-repeat;opacity:.52;z-index:-2}body::after{content:"";position:fixed;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.70),rgba(255,255,255,.55) 40%,rgba(255,247,252,.66) 75%,rgba(255,255,255,.84));z-index:-1}.loader{width:min(620px,100%);border-radius:28px;background:rgba(255,255,255,.88);box-shadow:var(--shadow);border:1px solid rgba(255,255,255,.92);backdrop-filter:blur(10px);padding:22px}.loader h1{font-size:clamp(24px,6vw,38px);line-height:1.2;margin:0 0 10px}.loader p{line-height:1.75;color:#52627d}.pill{display:inline-flex;gap:8px;align-items:center;border-radius:999px;background:rgba(255,255,255,.9);padding:8px 12px;font-weight:850;color:#53637e;box-shadow:0 8px 20px rgba(40,65,105,.12)}.dot{width:9px;height:9px;border-radius:50%;background:var(--mint);box-shadow:0 0 0 3px rgba(114,214,198,.18)}.err{display:none;background:#fff2f5;border:1px solid #ffd2df;color:#96385a;border-radius:18px;padding:12px;margin-top:12px;white-space:pre-wrap}button{border:0;border-radius:999px;background:linear-gradient(135deg,#5fb1f7,#82c5ff);color:white;font-weight:900;padding:12px 16px;box-shadow:0 8px 18px rgba(41,49,82,.1)}
+:root{--ink:#15264b;--muted:#64728c;--blue:#68b7ff;--pink:#f6a6c9;--mint:#72d6c6;--card:rgba(255,255,255,.62);--strong:rgba(255,255,255,.72);--line:rgba(63,60,90,.14);--shadow:0 18px 42px rgba(35,50,88,.15);--r:28px}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;color:var(--ink);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI","Hiragino Sans","Yu Gothic",sans-serif;background:#f7fbff;min-height:100vh;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0;background:url("/physics-g-cards/bg-bike-physics.png") center center/cover no-repeat;opacity:.88;z-index:-3;pointer-events:none}
+body::after{content:"";position:fixed;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.16) 0%,rgba(255,255,255,.10) 28%,rgba(255,247,252,.13) 68%,rgba(255,255,255,.22));z-index:-2;pointer-events:none}
+button{font-family:inherit;cursor:pointer}
+.app{max-width:780px;margin:0 auto;padding:8px 16px 100px}
+.topbar{display:flex;justify-content:space-between;align-items:center;margin:0 0 7px}
+.topbar>div:last-child{display:flex;gap:8px;align-items:center}
+.chip{display:inline-flex;gap:8px;align-items:center;padding:8px 12px;border-radius:999px;background:rgba(255,255,255,.78);box-shadow:0 8px 20px rgba(40,65,105,.12);font-weight:800;color:#51617b}
+.dot{width:9px;height:9px;border-radius:50%;background:var(--mint);box-shadow:0 0 0 3px rgba(114,214,198,.18)}
+.iconbtn{border:0;border-radius:50%;width:42px;height:42px;background:rgba(255,255,255,.86);box-shadow:0 8px 18px rgba(40,58,92,.12);font-size:20px;display:grid;place-items:center}
+.hero{position:relative;border-radius:32px;padding:18px;background:rgba(255,255,255,.46);box-shadow:var(--shadow);border:1px solid rgba(255,255,255,.55);backdrop-filter:blur(8px);overflow:hidden}
+.hero::after{content:"♡";position:absolute;right:22px;top:84px;font-size:34px;color:#ef9fbe;transform:rotate(-8deg);opacity:.72}
+.hero-row{display:flex;gap:14px;align-items:center}
+.appicon{width:70px;height:70px;border-radius:20px;object-fit:cover;filter:drop-shadow(0 8px 15px rgba(55,91,147,.22))}
+h1{font-size:clamp(27px,7vw,42px);line-height:1.12;margin:0;color:#183158;letter-spacing:.02em;text-shadow:0 1px 0 rgba(255,255,255,.55)}
+.sub{font-size:14px;color:#3f5575;line-height:1.6;margin:8px 0 0}
+.actions{display:grid;grid-template-columns:1.12fr 1fr 1fr;gap:10px;margin-top:14px}
+.act{border:0;border-radius:21px;min-height:76px;padding:13px;background:rgba(255,255,255,.72);box-shadow:0 10px 22px rgba(40,55,88,.12);font-weight:900;font-size:15px;text-align:left;color:#23375c;display:flex;flex-direction:column;gap:7px;justify-content:center}
+.act.primary{background:linear-gradient(135deg,#5fb1f7,#82c5ff);color:white;font-size:16px}
+.act span{font-size:28px}
+.panel{margin-top:18px;border-radius:var(--r);padding:18px;background:var(--card);box-shadow:var(--shadow);border:1px solid rgba(255,255,255,.86);backdrop-filter:blur(12px)}
+.panel.strong{background:var(--strong)}
+h2{font-size:21px;margin:0 0 14px;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.note{font-size:13px;line-height:1.75;color:#5d6c86}
+.small{font-size:12px;color:#6a7890}
+.dash{display:grid;grid-template-columns:128px 1fr;gap:16px;align-items:center}
+.ring{width:122px;height:122px;border-radius:50%;display:grid;place-items:center;position:relative;background:conic-gradient(#67b7ff calc(var(--p)*1%),#f5a2c7 0 calc((var(--p) + var(--r))*1%),#d9deeb 0)}
+.ring::after{content:"";position:absolute;inset:18px;border-radius:50%;background:white;box-shadow:inset 0 0 0 1px var(--line)}
+.ring b{z-index:1;font-size:29px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.stat{border-left:1px solid var(--line);padding-left:11px}
+.stat b{font-size:25px;display:block;margin:4px 0}
+.bar{height:8px;border-radius:999px;background:#e8ecf5;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:#67b7ff;border-radius:999px}
+.pink i{background:#f5a2c7}
+.gray i{background:#99a6bc}
+.controls{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:12px 0}
+select,input{width:100%;border:1px solid var(--line);border-radius:18px;background:rgba(255,255,255,.78);padding:12px 13px;font-size:15px;color:#273551;outline:none}
+.fgrid{display:grid;gap:13px}
+.fcard{display:grid;grid-template-columns:minmax(132px,.78fr) 1.22fr;gap:13px;align-items:center;background:rgba(255,255,255,.82);border:1px solid var(--line);border-radius:21px;padding:14px}
+.tag{display:inline-flex;border-radius:999px;padding:6px 11px;background:#e4f2ff;color:#41658e;font-weight:900;font-size:12px;margin-bottom:9px}
+.tag.p{background:#ffe3ef;color:#a84670}
+.math{font-family:Georgia,"Times New Roman",serif;font-style:italic;font-size:26px;line-height:1.15;color:#11192f;word-break:normal}
+.math.big{font-size:32px}
+.frac{display:inline-flex;vertical-align:middle;flex-direction:column;align-items:center;line-height:1}
+.frac .top{border-bottom:2px solid currentColor;padding:0 .18em .08em}
+.frac .bottom{padding:.08em .18em 0}
+.radicand{border-top:1.6px solid currentColor;padding-left:2px}
+sup,sub{font-size:.65em}
+.meta{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.pill{border-radius:999px;padding:6px 10px;background:#eef5ff;color:#436283;font-weight:850;font-size:12px}
+.pill.p{background:#ffeaf2;color:#ad4b72}
+.q{font-size:22px;font-weight:900;line-height:1.45;margin:12px 0}
+.answer{display:none;margin-top:12px;padding:14px;border-radius:21px;background:rgba(255,255,255,.82);border:1px solid var(--line)}
+.answer.show{display:block}
+.btn,.soft,.eval button{border:0;border-radius:999px;padding:12px 13px;font-weight:900;box-shadow:0 8px 18px rgba(41,49,82,.1)}
+.btn{background:linear-gradient(135deg,#f6a1c9,#c9a8ff);color:#261f38}
+.soft{background:white;color:#2e3a58;border:1px solid var(--line)}
+.eval{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px}
+.eval button:nth-child(1){background:#ffe2e9;color:#a73c61}
+.eval button:nth-child(2){background:#fff1cc;color:#8a5b11}
+.eval button:nth-child(3){background:#dff4ff;color:#245a84}
+.eval button:nth-child(4){background:#dcfbf3;color:#1c6d62}
+.rows{display:grid;gap:10px}
+.row{padding:12px;border-radius:17px;background:rgba(255,255,255,.76);border:1px solid var(--line)}
+.row header{display:flex;justify-content:space-between;font-weight:900;margin-bottom:8px}
+.bottom{position:fixed;left:50%;transform:translateX(-50%);bottom:12px;width:min(720px,calc(100% - 24px));display:grid;grid-template-columns:repeat(5,1fr);padding:8px;background:rgba(255,255,255,.92);border-radius:28px;box-shadow:0 16px 36px rgba(27,38,70,.2);z-index:20;backdrop-filter:blur(14px)}
+.nav{border:0;background:transparent;border-radius:20px;padding:8px 4px;color:#55637c;font-weight:900;font-size:12px}
+.nav i{display:block;font-style:normal;font-size:21px}
+.nav.active{background:linear-gradient(135deg,#6fb7f8,#98ccff);color:white}
+.view{display:none}
+.view.active{display:block}
+.toast{display:none;position:fixed;left:50%;transform:translateX(-50%);bottom:96px;background:#17213d;color:white;padding:10px 14px;border-radius:999px;font-weight:850;z-index:40}
+.gdrive-box{display:grid;gap:10px;margin-top:12px}
+.gdrive-grid{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center}
+.gdrive-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+.gdrive-actions button,.gdrive-grid label{display:inline-flex;align-items:center;justify-content:center}
+.gdrive-grid input[type="checkbox"]{width:auto!important}
+.gdrive-note{background:#fff8d8;border:1px solid #f1d66f;color:#6f5515;border-radius:16px;padding:10px 12px;margin-top:8px;font-size:12px;line-height:1.6}
+.gdrive-links a{color:#2d65b7;font-weight:850;text-decoration:none}
+.gdrive-links a:hover{text-decoration:underline}
+@media(max-width:520px){
+  .app{padding:8px 12px 94px}
+  .topbar{margin-bottom:7px}
+  .chip{padding:7px 10px;font-size:12px}
+  .iconbtn{width:40px;height:40px}
+  .hero{padding:16px 13px 14px}
+  .hero-row{align-items:flex-start;gap:11px}
+  .appicon{width:58px;height:58px;border-radius:16px}
+  h1{font-size:clamp(25px,7vw,38px)}
+  .sub{font-size:13px;line-height:1.55;margin-top:7px}
+  .actions{grid-template-columns:1fr 1fr;gap:9px;margin-top:12px}
+  .actions .primary{grid-column:1/-1}
+  .act{min-height:70px;padding:12px}
+  .dash{grid-template-columns:1fr}
+  .ring{margin:auto}
+  .stat b{font-size:22px}
+  .fcard{grid-template-columns:1fr}
+  .eval{grid-template-columns:repeat(2,1fr)}
+  .gdrive-grid{grid-template-columns:1fr}
+  .gdrive-actions{display:grid;grid-template-columns:1fr 1fr}
+}
 </style>
 </head>
 <body>
-<div class="loader">
-  <div class="pill">☁️ 保存: <b>ローカル / Google Drive対応版</b><span class="dot"></span></div>
-  <h1>物理受験カード<br>v3.0.1 を読み込み中</h1>
-  <p>年間固定版 v3.0.0 を基準に、Google Drive保存欄・背景・上部余白だけを復旧します。</p>
-  <p id="status">準備中...</p>
-  <div id="err" class="err"></div>
-  <button id="retry" style="display:none">再読み込み</button>
+<div class="app">
+  <div class="topbar">
+    <div class="chip">☁️ 保存: <b id="drive">ローカル</b><span class="dot"></span></div>
+    <div>
+      <button class="iconbtn" data-action="toast" data-msg="年間固定版です。今後は誤字・エラー補修中心にします。">🔔</button>
+      <button class="iconbtn" data-action="switch" data-view="info">⚙️</button>
+    </div>
+  </div>
+  <section class="hero">
+    <div class="hero-row">
+      <img class="appicon" src="/physics-g-cards/icon-192.png" alt="">
+      <div>
+        <h1>私立理系 受験物理<br>年間固定カード</h1>
+        <p class="sub">公式・条件・典型判断を全範囲で反復。三角記号Δはなるべく使わず、教科書に近い表記へ整理。</p>
+      </div>
+    </div>
+    <div class="actions">
+      <button class="act primary" data-action="switch" data-view="learn"><span>▣</span>カード学習を始める<small>弱点を優先して復習</small></button>
+      <button class="act" data-action="switch" data-view="formulas"><span>📖</span>公式集を開く</button>
+      <button class="act" data-action="switch" data-view="progress"><span>📊</span>進捗を見る</button>
+    </div>
+  </section>
+
+  <section id="view-learn" class="view active">
+    <div class="panel">
+      <h2>今日の学習 <button class="soft" data-action="switch" data-view="progress">詳細 ›</button></h2>
+      <div class="dash">
+        <div class="ring" id="ring" style="--p:0;--r:0"><b id="pct">0%</b></div>
+        <div class="stats">
+          <div class="stat"><span class="small">● 習得</span><b id="cM">0</b><div class="bar"><i id="bM"></i></div></div>
+          <div class="stat pink"><span class="small">● 復習</span><b id="cR">0</b><div class="bar"><i id="bR"></i></div></div>
+          <div class="stat gray"><span class="small">● 未着手</span><b id="cN">0</b><div class="bar"><i id="bN"></i></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="panel strong">
+      <h2>出題カード</h2>
+      <div class="controls"><select id="unit"></select><select id="type"></select></div>
+      <div id="meta" class="meta"></div>
+      <div id="q" class="q">読み込み中...</div>
+      <button class="btn" data-action="show">答えを見る</button>
+      <div id="ans" class="answer">
+        <div id="aFormula" class="math big"></div>
+        <div id="aText" class="note"></div>
+        <div class="eval">
+          <button data-action="rate" data-grade="0">忘れた</button>
+          <button data-action="rate" data-grade="1">あやしい</button>
+          <button data-action="rate" data-grade="2">できた</button>
+          <button data-action="rate" data-grade="3">余裕</button>
+        </div>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px">
+        <button class="soft" data-action="next">次へ</button>
+        <button class="soft" data-action="export">進捗書き出し</button>
+        <button class="soft" data-action="gbackup">Drive保存</button>
+        <button class="soft" data-action="grestore">Drive読込</button>
+        <button class="soft" data-action="switch" data-view="info">Google設定</button>
+        <label class="soft">読み込み<input id="importFile" type="file" accept="application/json" style="display:none"></label>
+      </div>
+    </div>
+    <div class="panel"><h2>公式ピックアップ <button class="soft" data-action="switch" data-view="formulas">全部見る ›</button></h2><div id="pickup" class="fgrid"></div></div>
+  </section>
+
+  <section id="view-formulas" class="view">
+    <div class="panel strong">
+      <h2>受験公式集 <span class="small" id="fcount"></span></h2>
+      <p class="note">年間を通して回す前提の固定版です。公式そのものだけでなく、「条件」「典型場面」「注意」を一緒に確認してください。</p>
+      <div class="controls"><select id="funit"></select><input id="fsearch" placeholder="検索：単振動、電磁誘導、熱機関など"></div>
+      <div id="flist" class="fgrid"></div>
+    </div>
+  </section>
+
+  <section id="view-search" class="view">
+    <div class="panel strong"><h2>カード検索</h2><input id="search" placeholder="検索：保存則、電位、ヤングなど"><div id="results" class="rows" style="margin-top:12px"></div></div>
+  </section>
+
+  <section id="view-progress" class="view">
+    <div class="panel strong">
+      <h2>進捗</h2>
+      <p class="note">AnkiDroidほど複雑ではなく、カード状態を枚数で見ます。</p>
+      <div id="progress" class="rows"></div>
+      <div style="display:flex;gap:10px;margin-top:12px;flex-wrap:wrap">
+        <button class="soft" data-action="reset">進捗リセット</button>
+        <button class="soft" data-action="export">書き出し</button>
+        <button class="soft" data-action="gbackup">Drive保存</button>
+        <button class="soft" data-action="grestore">Drive読込</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="view-info" class="view">
+    <div class="panel strong">
+      <h2>説明書</h2>
+      <p class="note">これは基本的に最終版として年間運用する前提です。今後は誤字・表示・エラーの補修を中心にします。</p>
+      <p class="note">Δは変化量を表す便利な記号ですが、最初の学習では見慣れない場合があるため、このアプリではなるべく「v - v₀」「x₂ - x₁」のように書きます。</p>
+    </div>
+    <div class="panel strong" id="gdrivePanel">
+      <h2>Google Drive保存 <span class="small">v3専用</span></h2>
+      <p class="note">Google Cloudで作成済みの <b>OAuth クライアントID（Webアプリ）</b> を入れると、進捗をGoogle DriveのappDataFolderへ保存・復元できます。Cloud側の作り直しは不要です。</p>
+      <div class="gdrive-box">
+        <div class="gdrive-grid">
+          <input id="gClientIdInput" type="text" placeholder="OAuth クライアントIDを貼り付け">
+          <label class="soft"><input id="gAutoBackup" type="checkbox"> 自動バックアップ</label>
+        </div>
+        <div class="gdrive-actions">
+          <button class="soft" data-action="gclient">ID保存</button>
+          <button class="soft" data-action="gconnect">Google接続</button>
+          <button class="soft" data-action="gbackup">Drive保存</button>
+          <button class="soft" data-action="grestore">Drive読込</button>
+          <button class="soft" data-action="gdisconnect">解除</button>
+        </div>
+        <p id="gSyncStatus" class="note">未接続です。進捗は端末内に保存されています。</p>
+        <p class="note gdrive-links">Google Cloud:
+          <a href="https://console.cloud.google.com/apis/credentials" target="_blank" rel="noopener">認証情報</a> ／
+          <a href="https://console.cloud.google.com/apis/library/drive.googleapis.com" target="_blank" rel="noopener">Drive API</a>
+        </p>
+        <div class="gdrive-note">
+          承認済み JavaScript 生成元: <b>https://foxwolf321.github.io</b><br>
+          必要スコープ: <b>https://www.googleapis.com/auth/drive.appdata</b><br>
+          Drive保存ファイル名: <b>physics-g-cards-v3-annual-progress.json</b>
+        </div>
+      </div>
+    </div>
+  </section>
 </div>
+
+<nav class="bottom">
+  <button class="nav active" data-action="switch" data-view="learn"><i>📘</i>学習</button>
+  <button class="nav" data-action="switch" data-view="formulas"><i>📖</i>公式集</button>
+  <button class="nav" data-action="switch" data-view="search"><i>🔍</i>検索</button>
+  <button class="nav" data-action="switch" data-view="progress"><i>📊</i>進捗</button>
+  <button class="nav" data-action="switch" data-view="info"><i>⚙️</i>説明</button>
+</nav>
+<div id="toast" class="toast"></div>
+
 <script>
 (function(){
-'use strict';
-const BASE_URLS=[
-  'https://raw.githubusercontent.com/foxwolf321/foxwolf321.github.io/a9e38cbfee45266dc65d66941eec94492b667ea2/physics-g-cards/index.html',
-  'https://raw.githubusercontent.com/foxwolf321/foxwolf321.github.io/d434eb68b5daa7f23b2ec137a256c3ffbbed6594/physics-g-cards/index.html'
-];
-const statusEl=document.getElementById('status');
-const errEl=document.getElementById('err');
-const retry=document.getElementById('retry');
-retry.addEventListener('click',()=>location.reload());
-function setStatus(s){statusEl.textContent=s;}
-function fail(e){errEl.style.display='block';retry.style.display='inline-block';errEl.textContent='読み込みに失敗しました。\n\n'+(e&&e.message?e.message:String(e))+'\n\nGitHubに index.html と bg-bike-physics.png が physics-g-cards フォルダ直下へ入っているか確認してください。';}
-async function fetchBase(){
-  let last;
-  for(const url of BASE_URLS){
-    try{
-      setStatus('v3.0.0本体を取得中...');
-      const res=await fetch(url,{cache:'no-store'});
-      if(!res.ok) throw new Error(url+' : HTTP '+res.status);
-      const txt=await res.text();
-      if(txt.includes('const FORMULAS=')&&txt.includes('physics-g-cards-v3-annual-progress.json')) return txt;
-      throw new Error(url+' : v3本体ではない内容です');
-    }catch(e){last=e;}
-  }
-  throw last||new Error('基準HTMLを取得できませんでした');
-}
-function beforeEndStyle(){return `
-/* v3.0.1 release UI hotfix */
-body::before{background:url("/physics-g-cards/bg-bike-physics.png") center center/cover no-repeat!important;opacity:.54!important;filter:none!important}
-body::after{background:linear-gradient(180deg,rgba(255,255,255,.60) 0%,rgba(255,255,255,.48) 30%,rgba(255,247,252,.58) 68%,rgba(255,255,255,.78))!important}
-.app{padding-top:7px!important}
-.topbar{margin-top:0!important;margin-bottom:6px!important}
-.topbar>div:last-child{display:flex!important;gap:8px!important;align-items:center!important}
-.iconbtn{display:grid!important;place-items:center!important}
-.hero{padding-top:16px!important;padding-bottom:17px!important;background:rgba(255,255,255,.88)!important;border-radius:32px!important}
-.hero::after{opacity:.72!important}
-.actions{margin-top:12px!important;gap:9px!important}.act{min-height:70px!important}.panel{margin-top:16px!important}
-.drive-grid{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center}.drive-grid input[type=text]{min-width:0}.drive-toggle{display:flex;align-items:center;gap:8px;justify-content:center}.drive-toggle input{width:auto!important}.drive-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}.drive-actions .soft{display:inline-flex;align-items:center;justify-content:center}.drive-warn{background:#fff8d8;border:1px solid #f1d66f;color:#6f5515;border-radius:16px;padding:10px 12px;margin-top:10px;font-size:12px;line-height:1.6}
-@media(max-width:520px){.app{padding-top:7px!important}.topbar{margin-bottom:6px!important}.hero{padding:15px 13px 14px!important}.appicon{width:58px!important;height:58px!important}.actions{grid-template-columns:1fr 1fr!important}.actions .primary{grid-column:1/-1!important}.drive-grid{grid-template-columns:1fr!important}}
-`;}
-const DRIVE_PANEL=`<div class="panel strong" id="drivePanel"><h2>Google Drive保存 <span class="small">v3専用</span></h2>
-<p class="note">以前Google Cloudで作ったOAuthクライアントIDを入れると、進捗をGoogle DriveのappDataFolderへ保存・復元できます。Cloud側を作り直す必要はありません。クライアントシークレットは不要です。</p>
-<div class="drive-grid"><input id="clientIdInput" type="text" placeholder="OAuth クライアントID"><label class="soft drive-toggle"><input id="autoBackupCheck" type="checkbox">自動バックアップ</label></div>
-<div class="drive-actions"><button class="soft" id="connectDriveBtn" type="button">Googleに接続</button><button class="soft" id="backupDriveBtn" type="button">Driveへ保存</button><button class="soft" id="restoreDriveBtn" type="button">Driveから復元</button><button class="soft" id="disconnectDriveBtn" type="button">接続解除</button></div>
-<p id="syncStatus" class="note">未接続です。進捗は端末内に保存されています。</p><div class="drive-warn">保存ファイル名: <b>physics-g-cards-v3-annual-progress.json</b><br>v2以前の進捗とは混ざらないようにしています。</div></div>`;
-const DRIVE_CODE=`
-const DRIVE_SCOPE="https://www.googleapis.com/auth/drive.appdata";
+"use strict";
+const APP_VERSION="3.0.4-direct-fix";
+const SAVE_KEY="physics-g-cards-v3-annual-progress-local";
+const EXPORT_NAME="physics-g-cards-v3-annual-progress.json";
+const CLIENT_KEY="physics-g-cards-v3-google-client-id";
+const AUTO_KEY="physics-g-cards-v3-google-auto";
 const DRIVE_FILE_NAME="physics-g-cards-v3-annual-progress.json";
-const DRIVE_CLIENT_KEY="physics-g-cards-v3-drive-client-id";
-const DRIVE_AUTO_KEY="physics-g-cards-v3-drive-auto";
-let tokenClient=null,driveToken="",driveTokenExpiresAt=0,driveSyncTimer=null,driveSyncBusy=false;
-function driveEl(id){return document.getElementById(id)}
-function setDriveStatus(msg){const el=driveEl("syncStatus");if(el)el.textContent=msg;const d=$("drive");if(d)d.textContent=(driveToken&&Date.now()<driveTokenExpiresAt)?"Google Drive":"ローカル"}
-function ensureGisReady(){return new Promise((resolve,reject)=>{if(window.google&&google.accounts&&google.accounts.oauth2){resolve();return}if(!document.querySelector("script[data-gis-client]")){const s=document.createElement("script");s.src="https://accounts.google.com/gsi/client";s.async=true;s.defer=true;s.dataset.gisClient="1";document.head.appendChild(s)}let n=0;const timer=setInterval(()=>{if(window.google&&google.accounts&&google.accounts.oauth2){clearInterval(timer);resolve();return}if(++n>120){clearInterval(timer);reject(new Error("Google認証ライブラリの読み込みに失敗しました"))}},100)})}
-function storedClientId(){const input=driveEl("clientIdInput");return ((input&&input.value)||localStorage.getItem(DRIVE_CLIENT_KEY)||"").trim()}
-function storeDriveSettings(){const input=driveEl("clientIdInput"),auto=driveEl("autoBackupCheck");if(input)localStorage.setItem(DRIVE_CLIENT_KEY,input.value.trim());if(auto)localStorage.setItem(DRIVE_AUTO_KEY,auto.checked?"1":"0")}
-async function requestDriveToken(interactive){storeDriveSettings();const cid=storedClientId();if(!cid)throw new Error("OAuthクライアントIDを入力してください");await ensureGisReady();return new Promise((resolve,reject)=>{tokenClient=google.accounts.oauth2.initTokenClient({client_id:cid,scope:DRIVE_SCOPE,callback:(resp)=>{if(!resp||resp.error){reject(new Error((resp&&(resp.error_description||resp.error))||"Google認証に失敗しました"));return}driveToken=resp.access_token;driveTokenExpiresAt=Date.now()+Math.max(60,Number(resp.expires_in||3600)-60)*1000;setDriveStatus("Googleに接続しました。");resolve(resp)}});tokenClient.requestAccessToken({prompt:interactive?"consent":""})})}
-function authHeaders(){if(!driveToken||Date.now()>=driveTokenExpiresAt)throw new Error("Google認証の有効期限が切れました。もう一度接続してください");return {Authorization:"Bearer "+driveToken}}
+const DRIVE_SCOPE="https://www.googleapis.com/auth/drive.appdata";
+const FORMULAS=[{"id":"m_avg_speed","unit":"力学","section":"速度・加速度","tag":"平均の速さ","formula":"平均の速さ = <span class=\"frac\"><span class=\"top\">道のり</span><span class=\"bottom\">時間</span></span>","desc":"移動した道のりを時間で割る。","condition":"向きは考えない。変位とは区別。","typical":"速さの平均を問う小問。","unitnote":"m/s","caution":"速度ベクトルの平均とは別物。"},{"id":"m_avg_velocity","unit":"力学","section":"速度・加速度","tag":"平均速度","formula":"v = <span class=\"frac\"><span class=\"top\">x<sub>2</sub> - x<sub>1</sub></span><span class=\"bottom\">t<sub>2</sub> - t<sub>1</sub></span></span>","desc":"変位を時間で割る。","condition":"向きつきの量。直線運動では符号を持つ。","typical":"x-tグラフの傾き。","unitnote":"m/s","caution":"道のりではなく変位。"},{"id":"m_acceleration","unit":"力学","section":"速度・加速度","tag":"加速度","formula":"a = <span class=\"frac\"><span class=\"top\">v - v<sub>0</sub></span><span class=\"bottom\">t</span></span>","desc":"速度変化を時間で割る。","condition":"等加速度運動ではaが一定。","typical":"v-tグラフの傾き。","unitnote":"m/s²","caution":"三角記号を避け、v-v₀で書く。"},{"id":"m_v","unit":"力学","section":"等加速度運動","tag":"速度の式","formula":"v = v<sub>0</sub> + at","desc":"等加速度運動の速度。","condition":"加速度aが一定。","typical":"t秒後の速度を求める。","unitnote":"m/s","caution":"符号の向きを先に決める。"},{"id":"m_x","unit":"力学","section":"等加速度運動","tag":"変位の式","formula":"x = v<sub>0</sub>t + <span class=\"frac\"><span class=\"top\">1</span><span class=\"bottom\">2</span></span>at<sup>2</sup>","desc":"等加速度運動の変位。","condition":"初期位置を0に取った形。","typical":"何秒後にどこにいるか。","unitnote":"m","caution":"初期位置があるならx-x₀で扱う。"},{"id":"m_x_avgv","unit":"力学","section":"等加速度運動","tag":"平均速度型","formula":"x = <span class=\"frac\"><span class=\"top\">v<sub>0</sub> + v</span><span class=\"bottom\">2</span></span>t","desc":"等加速度運動で平均速度を使う形。","condition":"加速度一定。","typical":"初速と終速が分かる問題。","unitnote":"m","caution":"等加速度でないと使えない。"},{"id":"m_v2","unit":"力学","section":"等加速度運動","tag":"時間を含まない式","formula":"v<sup>2</sup> - v<sub>0</sub><sup>2</sup> = 2ax","desc":"時間を消去した等加速度運動の式。","condition":"加速度一定。","typical":"距離と速度だけで解く。","unitnote":"m²/s²","caution":"xは変位。"},{"id":"m_free_v","unit":"力学","section":"落体運動","tag":"自由落下の速度","formula":"v = gt","desc":"静かに落とした物体の速度。","condition":"空気抵抗なし、初速0。","typical":"落下時間から速度。","unitnote":"m/s","caution":"下向きを正にすることが多い。"},{"id":"m_free_y","unit":"力学","section":"落体運動","tag":"自由落下の距離","formula":"y = <span class=\"frac\"><span class=\"top\">1</span><span class=\"bottom\">2</span></span>gt<sup>2</sup>","desc":"静かに落とした物体の落下距離。","condition":"空気抵抗なし、初速0。","typical":"高さと落下時間。","unitnote":"m","caution":"符号の向きに注意。"},{"id":"m_vertical","unit":"力学","section":"落体運動","tag":"鉛直投げ上げ","formula":"y = v<sub>0</sub>t - <span class=\"frac\"><span class=\"top\">1</span><span class=\"bottom\">2</span></span>gt<sup>2</sup>","desc":"上向きを正にした鉛直運動。","condition":"空気抵抗なし。加速度は-g。","typical":"最高点、到達時刻。","unitnote":"m","caution":"最高点ではv=0。"},{"id":"m_project_x","unit":"力学","section":"投射運動","tag":"斜方投射の水平成分","formula":"x = v<sub>0</sub>cosθ・t","desc":"水平方向は等速運動。","condition":"空気抵抗なし。","typical":"射程、到達位置。","unitnote":"m","caution":"水平と鉛直を分ける。"},{"id":"m_project_y","unit":"力学","section":"投射運動","tag":"斜方投射の鉛直成分","formula":"y = v<sub>0</sub>sinθ・t - <span class=\"frac\"><span class=\"top\">1</span><span class=\"bottom\">2</span></span>gt<sup>2</sup>","desc":"鉛直方向は等加速度運動。","condition":"空気抵抗なし。","typical":"最高点、滞空時間。","unitnote":"m","caution":"鉛直だけ重力加速度。"},{"id":"m_project_h","unit":"力学","section":"投射運動","tag":"斜方投射の最高点","formula":"H = <span class=\"frac\"><span class=\"top\">v<sub>0</sub><sup>2</sup>sinθ<sup>2</sup></span><span class=\"bottom\">2g</span></span>","desc":"斜方投射の最高到達点。","condition":"同じ高さから投げて空気抵抗なし。","typical":"最高点を直接出す。","unitnote":"m","caution":"公式丸暗記より鉛直成分から導ける。"},{"id":"m_project_range","unit":"力学","section":"投射運動","tag":"斜方投射の射程","formula":"R = <span class=\"frac\"><span class=\"top\">v<sub>0</sub><sup>2</sup>sin2θ</span><span class=\"bottom\">g</span></span>","desc":"同じ高さに戻る時の水平到達距離。","condition":"発射点と着地点の高さが同じ。","typical":"射程最大、角度問題。","unitnote":"m","caution":"高さが違う時は使えない。"},{"id":"m_relative","unit":"力学","section":"相対運動","tag":"相対速度","formula":"v<sub>AB</sub> = v<sub>A</sub> - v<sub>B</sub>","desc":"Aから見たBではなく、記号の定義に注意。","condition":"同一直線上なら符号で扱う。","typical":"追いつき、すれ違い。","unitnote":"m/s","caution":"どちらから見た速度かを確認。"},{"id":"m_newton","unit":"力学","section":"運動方程式","tag":"運動方程式","formula":"F = ma","desc":"合力が加速度を決める。","condition":"着目する物体を決め、働く力をすべて書く。","typical":"力学全般の入口。","unitnote":"N","caution":"Fは1つの力ではなく合力。"},{"id":"m_weight","unit":"力学","section":"力","tag":"重力","formula":"W = mg","desc":"質量mの物体に働く重力。","condition":"地表付近でgを一定とする。","typical":"斜面、つり合い。","unitnote":"N","caution":"質量kgと重さNを混同しない。"},{"id":"m_hooke","unit":"力学","section":"弾性力","tag":"フックの法則","formula":"F = kx","desc":"ばねの弾性力の大きさ。","condition":"xは自然長からの伸び縮み。","typical":"ばね、単振動。","unitnote":"N","caution":"向きは自然長へ戻る向き。"},{"id":"m_friction_static","unit":"力学","section":"摩擦","tag":"最大静止摩擦力","formula":"f<sub>0</sub> = μN","desc":"静止摩擦力の最大値。","condition":"実際の静止摩擦力は必要な分だけ。","typical":"動き出す直前。","unitnote":"N","caution":"いつもμNではない。"},{"id":"m_friction_kinetic","unit":"力学","section":"摩擦","tag":"動摩擦力","formula":"f = μ'N","desc":"滑っている時の摩擦力。","condition":"運動方向と逆向き。","typical":"粗い面での運動。","unitnote":"N","caution":"静止摩擦と係数が違うことがある。"},{"id":"m_pressure","unit":"力学","section":"圧力","tag":"圧力","formula":"P = <span class=\"frac\"><span class=\"top\">F</span><span class=\"bottom\">S</span></span>","desc":"単位面積あたりの力。","condition":"面に垂直な力を使う。","typical":"流体圧、接地圧。","unitnote":"Pa","caution":"Pは電力にも使うので文脈注意。"},{"id":"m_water_pressure","unit":"力学","section":"圧力","tag":"水圧","formula":"P = ρgh","desc":"深さhでの水圧。","condition":"静止流体、密度ρ一定。","typical":"水中の圧力。","unitnote":"Pa","caution":"大気圧を足すかは問題文次第。"},{"id":"m_buoyancy","unit":"力学","section":"浮力","tag":"浮力","formula":"F = ρgV","desc":"押しのけた流体の重さ。","condition":"Vは沈んでいる部分の体積。","typical":"浮沈、比重。","unitnote":"N","caution":"物体全体の体積とは限らない。"},{"id":"m_moment","unit":"力学","section":"剛体","tag":"力のモーメント","formula":"M = Fl","desc":"回転させる働き。","condition":"lは支点から作用線までの垂直距離。","typical":"てこ、剛体のつり合い。","unitnote":"N・m","caution":"力までの距離ではなく作用線まで。"},{"id":"m_rigid_eq","unit":"力学","section":"剛体","tag":"剛体のつり合い","formula":"力の和 = 0,  モーメントの和 = 0","desc":"並進も回転もしない条件。","condition":"任意の点まわりでモーメントを取れる。","typical":"棒、はしご、てこ。","unitnote":"","caution":"力のつり合いだけでは足りない。"},{"id":"m_work","unit":"力学","section":"仕事","tag":"仕事","formula":"W = Fx cosθ","desc":"力の進行方向成分×距離。","condition":"力が一定。","typical":"仕事とエネルギー。","unitnote":"J","caution":"角度は力と変位のなす角。"},{"id":"m_power","unit":"力学","section":"仕事率","tag":"仕事率","formula":"P = <span class=\"frac\"><span class=\"top\">W</span><span class=\"bottom\">t</span></span>","desc":"単位時間あたりの仕事。","condition":"平均仕事率。","typical":"出力、モーター。","unitnote":"W","caution":"ワットWと仕事Wを区別。"},{"id":"m_power_fv","unit":"力学","section":"仕事率","tag":"瞬間の仕事率","formula":"P = Fv","desc":"力と速度が同方向の時。","condition":"向きが違えば成分を使う。","typical":"一定速度で引く。","unitnote":"W","caution":"ベクトルの向きに注意。"},{"id":"m_ke","unit":"力学","section":"エネルギー","tag":"運動エネルギー","formula":"K = <span class=\"frac\"><span class=\"top\">1</span><span class=\"bottom\">2</span></span>mv<sup>2</sup>","desc":"運動している物体のエネルギー。","condition":"速さの2乗に比例。","typical":"仕事で速さが変わる問題。","unitnote":"J","caution":"速度ではなく速さ。"},{"id":"m_gpe","unit":"力学","section":"エネルギー","tag":"重力による位置エネルギー","formula":"U = mgh","desc":"高さhにある物体のエネルギー。","condition":"基準面を決める。","typical":"落下、斜面。","unitnote":"J","caution":"hの基準を自分で決める。"},{"id":"m_spe","unit":"力学","section":"エネルギー","tag":"ばねの弾性エネルギー","formula":"U = <span class=\"frac\"><span class=\"top\">1</span><span class=\"bottom\">2</span></span>kx<sup>2</sup>","desc":"ばねに蓄えられるエネルギー。","condition":"xは自然長からの伸び縮み。","typical":"ばねと保存則。","unitnote":"J","caution":"xの符号ではなく2乗。"},{"id":"m_work_energy","unit":"力学","section":"エネルギー","tag":"仕事と運動エネルギー","formula":"W = K - K<sub>0</sub>","desc":"合力の仕事が運動エネルギーを変える。","condition":"力学的エネルギー保存が使いにくい時。","typical":"力が仕事をする問題。","unitnote":"J","caution":"摩擦の仕事も入れる。"},{"id":"m_mech_cons","unit":"力学","section":"保存則","tag":"力学的エネルギー保存","formula":"K + U = 一定","desc":"保存力だけなら力学的エネルギーが保存。","condition":"摩擦など非保存力の仕事がない。","typical":"落下、斜面、ばね。","unitnote":"J","caution":"保存できる条件を確認。"},{"id":"m_noncons","unit":"力学","section":"保存則","tag":"非保存力がある時","formula":"E<sub>2</sub> - E<sub>1</sub> = 非保存力の仕事","desc":"摩擦などがあると機械的エネルギーが変化。","condition":"非保存力の仕事を入れる。","typical":"摩擦ありのエネルギー問題。","unitnote":"J","caution":"保存則を無理に使わない。"},{"id":"m_momentum","unit":"力学","section":"運動量","tag":"運動量","formula":"p = mv","desc":"質量×速度。向きがある。","condition":"1次元では符号で扱う。","typical":"衝突、分裂。","unitnote":"kg・m/s","caution":"速さではなく速度。"},{"id":"m_impulse","unit":"力学","section":"力積","tag":"力積","formula":"Ft = mv - mv<sub>0</sub>","desc":"力積は運動量の変化。","condition":"F一定でない時は平均力。","typical":"衝突、壁との反射。","unitnote":"N・s","caution":"向き込みで計算。"},{"id":"m_mom_cons","unit":"力学","section":"保存則","tag":"運動量保存","formula":"m<sub>1</sub>v<sub>1</sub> + m<sub>2</sub>v<sub>2</sub> = m<sub>1</sub>v<sub>1</sub>′ + m<sub>2</sub>v<sub>2</sub>′","desc":"外力の力積が無視できる時の保存。","condition":"系を決める。","typical":"衝突、合体、分裂。","unitnote":"kg・m/s","caution":"エネルギー保存とは別。"},{"id":"m_restitution","unit":"力学","section":"衝突","tag":"反発係数","formula":"e = - <span class=\"frac\"><span class=\"top\">v<sub>1</sub>′ - v<sub>2</sub>′</span><span class=\"bottom\">v<sub>1</sub> - v<sub>2</sub></span></span>","desc":"遠ざかる速さ/近づく速さ。","condition":"1次元衝突で使う。","typical":"衝突後の速度。","unitnote":"","caution":"符号を含めた式で扱う。"},{"id":"m_v_rw","unit":"力学","section":"円運動","tag":"角速度と速さ","formula":"v = rω","desc":"半径rの円運動の速さ。","condition":"ωは角速度。","typical":"円運動の基本。","unitnote":"m/s","caution":"ωの単位はrad/s。"},{"id":"m_cent_acc","unit":"力学","section":"円運動","tag":"向心加速度","formula":"a = <span class=\"frac\"><span class=\"top\">v<sup>2</sup></span><span class=\"bottom\">r</span></span> = rω<sup>2</sup>","desc":"中心向きの加速度。","condition":"速さ一定でも向きが変わる。","typical":"円運動の運動方程式。","unitnote":"m/s²","caution":"中心向きが正とは限らない。"},{"id":"m_cent_force","unit":"力学","section":"円運動","tag":"向心力","formula":"F = m<span class=\"frac\"><span class=\"top\">v<sup>2</sup></span><span class=\"bottom\">r</span></span> = mrω<sup>2</sup>","desc":"中心向きの合力。","condition":"特別な力ではない。","typical":"円錐振り子、鉛直円運動。","unitnote":"N","caution":"張力や重力の中心向き成分が向心力。"},{"id":"m_omega","unit":"力学","section":"円運動","tag":"角速度と周期","formula":"ω = <span class=\"frac\"><span class=\"top\">2π</span><span class=\"bottom\">T</span></span> = 2πf","desc":"1周期で2π rad進む。","condition":"等速円運動。","typical":"周期がある問題。","unitnote":"rad/s","caution":"fは振動数。"},{"id":"m_gravity","unit":"力学","section":"万有引力","tag":"万有引力","formula":"F = G<span class=\"frac\"><span class=\"top\">Mm</span><span class=\"bottom\">r<sup>2</sup></span></span>","desc":"質量どうしの引力。","condition":"rは中心間距離。","typical":"天体、人工衛星。","unitnote":"N","caution":"距離の2乗に反比例。"},{"id":"m_satellite_v","unit":"力学","section":"万有引力","tag":"人工衛星の速さ","formula":"v = √<span class=\"radicand\"><span class=\"frac\"><span class=\"top\">GM</span><span class=\"bottom\">r</span></span></span>","desc":"円軌道の人工衛星の速さ。","condition":"万有引力が向心力。","typical":"衛星の速度。","unitnote":"m/s","caution":"rは地球中心からの距離。"},{"id":"m_satellite_T","unit":"力学","section":"万有引力","tag":"人工衛星の周期","formula":"T<sup>2</sup> = <span class=\"frac\"><span class=\"top\">4π<sup>2</sup>r<sup>3</sup></span><span class=\"bottom\">GM</span></span>","desc":"円軌道の周期。","condition":"万有引力が向心力。","typical":"ケプラー第3法則。","unitnote":"s²","caution":"半径の3乗に比例。"},{"id":"m_escape","unit":"力学","section":"万有引力","tag":"脱出速度","formula":"v = √<span class=\"radicand\"><span class=\"frac\"><span class=\"top\">2GM</span><span class=\"bottom\">r</span></span></span>","desc":"脱出速度。","condition":"力学的エネルギーが0以上。","typical":"発展・私立上位。","unitnote":"m/s","caution":"円軌道速度の√2倍。"},{"id":"m_shm_a","unit":"力学","section":"単振動","tag":"単振動の加速度","formula":"a = -ω<sup>2</sup>x","desc":"単振動の判定式。","condition":"加速度が変位と逆向きで比例。","typical":"単振動を見抜く。","unitnote":"m/s²","caution":"マイナスは復元方向。"},{"id":"m_shm_x","unit":"力学","section":"単振動","tag":"単振動の変位","formula":"x = A sin(ωt + φ)","desc":"単振動の変位。","condition":"初期条件で位相φが決まる。","typical":"単振動のグラフ。","unitnote":"m","caution":"cos型でもよい。"},{"id":"m_shm_vmax","unit":"力学","section":"単振動","tag":"単振動の最大速さ","formula":"vmax = Aω","desc":"単振動の最大速さ。","condition":"中心で最大。","typical":"速度最大を求める。","unitnote":"m/s","caution":"端では速度0。"},{"id":"m_shm_energy","unit":"力学","section":"単振動","tag":"単振動のエネルギー","formula":"E = <span class=\"frac\"><span class=\"top\">1</span><span class=\"bottom\">2</span></span>kA<sup>2</sup>","desc":"ばね単振動の全エネルギー。","condition":"Aは振幅。","typical":"単振動のエネルギー。","unitnote":"J","caution":"位置でKとUが入れ替わる。"},{"id":"m_spring_T","unit":"力学","section":"単振動","tag":"ばね振り子の周期","formula":"T = 2π√<span class=\"radicand\"><span class=\"frac\"><span class=\"top\">m</span><span class=\"bottom\">k</span></span></span>","desc":"ばね振り子の周期。","condition":"理想ばね、小振動。","typical":"ばね単振動。","unitnote":"s","caution":"振幅によらない。"},{"id":"m_pendulum_T","unit":"力学","section":"単振動","tag":"単振り子の周期","formula":"T = 2π√<span class=\"radicand\"><span class=\"frac\"><span class=\"top\">l</span><span class=\"bottom\">g</span></span></span>","desc":"単振り子の周期。","condition":"小角近似。","typical":"振り子、重力加速度。","unitnote":"s","caution":"大振幅ではずれる。"},{"id":"t_heat","unit":"熱","section":"熱量","tag":"熱量","formula":"Q = mc(T<sub>2</sub> - T<sub>1</sub>)","desc":"温度変化に必要な熱量。","condition":"相変化なし。","typical":"比熱、熱量計。","unitnote":"J","caution":"温度差は℃でもKでも同じ。"},{"id":"t_latent","unit":"熱","section":"熱量","tag":"潜熱","formula":"Q = mL","desc":"相変化に必要な熱量。","condition":"温度が変わらない相変化。","typical":"融解、蒸発。","unitnote":"J","caution":"比熱の式と混同しない。"},{"id":"t_state","unit":"熱","section":"気体","tag":"状態方程式","formula":"PV = nRT","desc":"理想気体の状態方程式。","condition":"温度は絶対温度K。","typical":"気体計算の基本。","unitnote":"","caution":"℃を使わない。"},{"id":"t_boyle","unit":"熱","section":"気体","tag":"ボイルの法則","formula":"PV = 一定","desc":"温度一定の気体。","condition":"等温変化。","typical":"P-V関係。","unitnote":"","caution":"T一定が条件。"},{"id":"t_charles","unit":"熱","section":"気体","tag":"シャルルの法則","formula":"<span class=\"frac\"><span class=\"top\">V</span><span class=\"bottom\">T</span></span> = 一定","desc":"圧力一定の気体。","condition":"等圧変化。","typical":"体積と温度。","unitnote":"","caution":"TはK。"},{"id":"t_gay","unit":"熱","section":"気体","tag":"ゲーリュサックの法則","formula":"<span class=\"frac\"><span class=\"top\">P</span><span class=\"bottom\">T</span></span> = 一定","desc":"体積一定の気体。","condition":"定積変化。","typical":"圧力と温度。","unitnote":"","caution":"TはK。"},{"id":"t_internal_mono","unit":"熱","section":"内部エネルギー","tag":"単原子分子理想気体の内部エネルギー","formula":"U = <span class=\"frac\"><span class=\"top\">3</span><span class=\"bottom\">2</span></span>nRT","desc":"単原子分子理想気体の内部エネルギー。","condition":"単原子分子、理想気体。","typical":"熱力学第一法則。","unitnote":"J","caution":"温度だけで決まる。"},{"id":"t_internal_di","unit":"熱","section":"内部エネルギー","tag":"二原子分子理想気体の内部エネルギー","formula":"U = <span class=\"frac\"><span class=\"top\">5</span><span class=\"bottom\">2</span></span>nRT","desc":"二原子分子理想気体の内部エネルギー。","condition":"高校では発展扱いの場合あり。","typical":"私立上位の熱。","unitnote":"J","caution":"問題文の指定に従う。"},{"id":"t_first","unit":"熱","section":"熱力学","tag":"熱力学第一法則","formula":"Q = (U<sub>2</sub> - U<sub>1</sub>) + W","desc":"熱力学第一法則。","condition":"Wは気体が外部にした仕事。","typical":"P-Vグラフ、熱機関。","unitnote":"J","caution":"符号約束を確認。"},{"id":"t_work","unit":"熱","section":"熱力学","tag":"気体のした仕事","formula":"W = P(V<sub>2</sub> - V<sub>1</sub>)","desc":"圧力一定で気体がする仕事。","condition":"等圧変化。","typical":"P-Vグラフの面積。","unitnote":"J","caution":"一般には面積。"},{"id":"t_molar_cp","unit":"熱","section":"モル比熱","tag":"マイヤーの関係","formula":"C<sub>P</sub> - C<sub>V</sub> = R","desc":"理想気体のモル比熱の関係。","condition":"理想気体。","typical":"定圧・定積変化。","unitnote":"J/(mol・K)","caution":"発展寄り。"},{"id":"t_adiabatic","unit":"熱","section":"断熱変化","tag":"断熱変化","formula":"PV<sup>γ</sup> = 一定","desc":"断熱変化の式。","condition":"熱の出入りなし。","typical":"私立上位、P-V曲線。","unitnote":"","caution":"γは比熱比。"},{"id":"t_eff","unit":"熱","section":"熱機関","tag":"熱効率","formula":"e = <span class=\"frac\"><span class=\"top\">W</span><span class=\"bottom\">Q<sub>1</sub></span></span> = 1 - <span class=\"frac\"><span class=\"top\">Q<sub>2</sub></span><span class=\"bottom\">Q<sub>1</sub></span></span>","desc":"熱効率。","condition":"Q₁は吸収熱、Q₂は放出熱。","typical":"熱機関。","unitnote":"","caution":"0〜1の値。"},{"id":"t_carnot","unit":"熱","section":"熱機関","tag":"カルノー効率","formula":"e = 1 - <span class=\"frac\"><span class=\"top\">T<sub>2</sub></span><span class=\"bottom\">T<sub>1</sub></span></span>","desc":"カルノー効率。","condition":"理想的な可逆機関。","typical":"発展・私立上位。","unitnote":"","caution":"Tは絶対温度K。"},{"id":"w_v","unit":"波動","section":"波の基本","tag":"波の速さ","formula":"v = fλ","desc":"波の速さ。","condition":"媒質が決まると波速が決まる。","typical":"波全般。","unitnote":"m/s","caution":"fはHz。"},{"id":"w_f","unit":"波動","section":"波の基本","tag":"周期と振動数","formula":"f = <span class=\"frac\"><span class=\"top\">1</span><span class=\"bottom\">T</span></span>","desc":"振動数と周期。","condition":"周期Tの逆数。","typical":"波、単振動、交流。","unitnote":"Hz","caution":"Tは秒。"},{"id":"w_wave","unit":"波動","section":"波の式","tag":"波の式","formula":"y = A sin 2π(<span class=\"frac\"><span class=\"top\">t</span><span class=\"bottom\">T</span></span> - <span class=\"frac\"><span class=\"top\">x</span><span class=\"bottom\">λ</span></span>)","desc":"右向きに進む正弦波の一例。","condition":"符号で進行方向が変わる。","typical":"波のグラフ。","unitnote":"m","caution":"式の形より位相を見る。"},{"id":"w_phase","unit":"波動","section":"干渉","tag":"強め合い条件","formula":"経路差 = mλ","desc":"同位相で強め合う条件。","condition":"位相反転がない場合。","typical":"干渉の明線。","unitnote":"m","caution":"反射で位相が変わる場合は注意。"},{"id":"w_destructive","unit":"波動","section":"干渉","tag":"弱め合い条件","formula":"経路差 = (m + <span class=\"frac\"><span class=\"top\">1</span><span class=\"bottom\">2</span></span>)λ","desc":"弱め合う条件。","condition":"同位相出発で位相反転なし。","typical":"干渉の暗線。","unitnote":"m","caution":"mは整数。"},{"id":"w_string_lambda","unit":"波動","section":"弦","tag":"弦の波長","formula":"λ = <span class=\"frac\"><span class=\"top\">2L</span><span class=\"bottom\">n</span></span>","desc":"両端固定の弦。","condition":"n=1,2,3...。","typical":"弦の定常波。","unitnote":"m","caution":"nは腹の数。"},{"id":"w_string_f","unit":"波動","section":"弦","tag":"弦の固有振動数","formula":"f = <span class=\"frac\"><span class=\"top\">nv</span><span class=\"bottom\">2L</span></span>","desc":"弦の固有振動数。","condition":"両端固定。","typical":"弦の共鳴。","unitnote":"Hz","caution":"n=1が基本振動。"},{"id":"w_string_speed","unit":"波動","section":"弦","tag":"弦を伝わる波の速さ","formula":"v = √<span class=\"radicand\"><span class=\"frac\"><span class=\"top\">S</span><span class=\"bottom\">ρ</span></span></span>","desc":"張力S、線密度ρの弦の波速。","condition":"弦の波。","typical":"弦の速さ。","unitnote":"m/s","caution":"ρは線密度。"},{"id":"w_open","unit":"波動","section":"気柱","tag":"開管","formula":"λ = <span class=\"frac\"><span class=\"top\">2L</span><span class=\"bottom\">n</span></span>","desc":"両端が腹。","condition":"開管補正は指示に従う。","typical":"気柱共鳴。","unitnote":"m","caution":"両端開管。"},{"id":"w_closed","unit":"波動","section":"気柱","tag":"閉管","formula":"λ = <span class=\"frac\"><span class=\"top\">4L</span><span class=\"bottom\">2n - 1</span></span>","desc":"一端閉管の波長。","condition":"閉端が節、開端が腹。","typical":"閉管共鳴。","unitnote":"m","caution":"奇数倍だけ。"},{"id":"w_beat","unit":"波動","section":"音","tag":"うなり","formula":"f<sub>beat</sub> = |f<sub>1</sub> - f<sub>2</sub>|","desc":"近い振動数の音のうなり。","condition":"振動数が近い。","typical":"音叉の問題。","unitnote":"Hz","caution":"差を取る。"},{"id":"w_doppler","unit":"波動","section":"音","tag":"ドップラー効果","formula":"f' = f <span class=\"frac\"><span class=\"top\">V - v観</span><span class=\"bottom\">V - v源</span></span>","desc":"ドップラー効果。","condition":"符号は作図で確認。","typical":"音源接近・遠ざかり。","unitnote":"Hz","caution":"公式暗記より状況判断。"},{"id":"w_index","unit":"波動","section":"光","tag":"屈折率","formula":"n = <span class=\"frac\"><span class=\"top\">c</span><span class=\"bottom\">v</span></span>","desc":"屈折率。","condition":"真空中の光速c。","typical":"光の速さ。","unitnote":"","caution":"nが大きいほど遅い。"},{"id":"w_snell","unit":"波動","section":"光","tag":"屈折の法則","formula":"n<sub>1</sub>sinθ<sub>1</sub> = n<sub>2</sub>sinθ<sub>2</sub>","desc":"屈折の法則。","condition":"角度は法線から測る。","typical":"屈折、全反射。","unitnote":"","caution":"面からの角度ではない。"},{"id":"w_critical","unit":"波動","section":"光","tag":"臨界角","formula":"sinθ<sub>c</sub> = <span class=\"frac\"><span class=\"top\">n<sub>2</sub></span><span class=\"bottom\">n<sub>1</sub></span></span>","desc":"臨界角。","condition":"n₁>n₂で全反射。","typical":"全反射。","unitnote":"","caution":"大きい屈折率から小さい屈折率へ。"},{"id":"w_lens","unit":"波動","section":"レンズ","tag":"レンズの公式","formula":"<span class=\"frac\"><span class=\"top\">1</span><span class=\"bottom\">a</span></span> + <span class=\"frac\"><span class=\"top\">1</span><span class=\"bottom\">b</span></span> = <span class=\"frac\"><span class=\"top\">1</span><span class=\"bottom\">f</span></span>","desc":"薄いレンズの公式。","condition":"符号規則は問題集に合わせる。","typical":"凸レンズ、凹レンズ。","unitnote":"","caution":"a,b,fの正負に注意。"},{"id":"w_magnification","unit":"波動","section":"レンズ","tag":"倍率","formula":"m = <span class=\"frac\"><span class=\"top\">b</span><span class=\"bottom\">a</span></span>","desc":"倍率。","condition":"像の大きさ/物体の大きさ。","typical":"レンズ作図。","unitnote":"","caution":"倒立正立は符号で扱うことも。"},{"id":"w_young","unit":"波動","section":"干渉","tag":"ヤングの実験","formula":"x = <span class=\"frac\"><span class=\"top\">mλL</span><span class=\"bottom\">d</span></span>","desc":"ヤングの実験の明線位置。","condition":"Lが十分大きい近似。","typical":"二重スリット。","unitnote":"m","caution":"dはスリット間隔。"},{"id":"w_grating","unit":"波動","section":"回折格子","tag":"回折格子","formula":"d sinθ = mλ","desc":"回折格子の明線条件。","condition":"dは格子間隔。","typical":"スペクトル。","unitnote":"","caution":"mは次数。"},{"id":"w_thin","unit":"波動","section":"薄膜干渉","tag":"薄膜干渉","formula":"2nd = (m + <span class=\"frac\"><span class=\"top\">1</span><span class=\"bottom\">2</span></span>)λ","desc":"薄膜の反射光で強め合う代表形。","condition":"反射時の位相変化によって条件が変わる。","typical":"薄膜干渉。","unitnote":"m","caution":"問題文の位相反転を確認。"},{"id":"w_wedge","unit":"波動","section":"くさび形空気層","tag":"くさび形空気層","formula":"2d = mλ","desc":"くさび形空気層の暗線条件の代表形。","condition":"反射での位相反転ありの場合。","typical":"くさび、ニュートンリング。","unitnote":"m","caution":"明暗条件は状況で逆になる。"},{"id":"e_coulomb","unit":"電磁気","section":"静電気","tag":"クーロンの法則","formula":"F = k<span class=\"frac\"><span class=\"top\">q<sub>1</sub>q<sub>2</sub></span><span class=\"bottom\">r<sup>2</sup></span></span>","desc":"点電荷間の静電気力。","condition":"rは電荷間距離。","typical":"電荷間の力。","unitnote":"N","caution":"符号で引力・斥力。"},{"id":"e_k","unit":"電磁気","section":"静電気","tag":"クーロン定数","formula":"k = <span class=\"frac\"><span class=\"top\">1</span><span class=\"bottom\">4πε₀</span></span>","desc":"クーロン定数。","condition":"真空中。","typical":"誘電率が出る問題。","unitnote":"","caution":"kで与えられることも多い。"},{"id":"e_field_def","unit":"電磁気","section":"電場","tag":"電場の定義","formula":"E = <span class=\"frac\"><span class=\"top\">F</span><span class=\"bottom\">q</span></span>","desc":"電場の定義。","condition":"正の試験電荷で考える。","typical":"電場の大きさ。","unitnote":"N/C","caution":"電位と混同しない。"},{"id":"e_field_point","unit":"電磁気","section":"電場","tag":"点電荷の電場","formula":"E = k<span class=\"frac\"><span class=\"top\">Q</span><span class=\"bottom\">r<sup>2</sup></span></span>","desc":"点電荷が作る電場。","condition":"点電荷Qから距離r。","typical":"点電荷周辺。","unitnote":"N/C","caution":"向きはQの符号。"},{"id":"e_potential_def","unit":"電磁気","section":"電位","tag":"電位の定義","formula":"V = <span class=\"frac\"><span class=\"top\">W</span><span class=\"bottom\">q</span></span>","desc":"単位電荷あたりの仕事。","condition":"基準点を決める。","typical":"電位差。","unitnote":"V","caution":"電場はベクトル、電位はスカラー。"},{"id":"e_potential_point","unit":"電磁気","section":"電位","tag":"点電荷の電位","formula":"V = k<span class=\"frac\"><span class=\"top\">Q</span><span class=\"bottom\">r</span></span>","desc":"点電荷が作る電位。","condition":"無限遠を0にする。","typical":"電位の重ね合わせ。","unitnote":"V","caution":"電位は符号つきで足せる。"},{"id":"e_VEd","unit":"電磁気","section":"電場と電位","tag":"一様電場と電位差","formula":"V = Ed","desc":"一様電場中の電位差。","condition":"電場方向に距離d。","typical":"平行板間。","unitnote":"V","caution":"電場方向に電位は下がる。"},{"id":"e_energy_qv","unit":"電磁気","section":"電気エネルギー","tag":"電場中のエネルギー","formula":"U = qV","desc":"電荷qが電位差Vで得るエネルギー。","condition":"電場中の加速。","typical":"電子の加速。","unitnote":"J","caution":"電子ならq=eを使う。"},{"id":"e_cap_q","unit":"電磁気","section":"コンデンサー","tag":"コンデンサーの電気量","formula":"Q = CV","desc":"コンデンサーの基本式。","condition":"C一定。","typical":"蓄える電気量。","unitnote":"C","caution":"電気量Qと熱量Qの文脈注意。"},{"id":"e_cap_plate","unit":"電磁気","section":"コンデンサー","tag":"平行板コンデンサー","formula":"C = ε<span class=\"frac\"><span class=\"top\">S</span><span class=\"bottom\">d</span></span>","desc":"平行板コンデンサーの容量。","condition":"面積S、間隔d。","typical":"誘電体、平行板。","unitnote":"F","caution":"dが小さいほど大きい。"},{"id":"e_cap_energy","unit":"電磁気","section":"コンデンサー","tag":"コンデンサーのエネルギー","formula":"U = <span class=\"frac\"><span class=\"top\">1</span><span class=\"bottom\">2</span></span>CV<sup>2</sup> = <span class=\"frac\"><span class=\"top\">1</span><span class=\"bottom\">2</span></span>QV = <span class=\"frac\"><span class=\"top\">Q<sup>2</sup></span><span class=\"bottom\">2C</span></span>","desc":"静電エネルギー。","condition":"充電されたコンデンサー。","typical":"スイッチ切替、エネルギー。","unitnote":"J","caution":"電池接続/切断で一定量が違う。"},{"id":"e_cap_series","unit":"電磁気","section":"コンデンサー","tag":"コンデンサー直列","formula":"<span class=\"frac\"><span class=\"top\">1</span><span class=\"bottom\">C</span></span> = <span class=\"frac\"><span class=\"top\">1</span><span class=\"bottom\">C<sub>1</sub></span></span> + <span class=\"frac\"><span class=\"top\">1</span><span class=\"bottom\">C<sub>2</sub></span></span>","desc":"コンデンサー直列合成。","condition":"直列では電気量が同じ。","typical":"合成容量。","unitnote":"F","caution":"抵抗の並列に似る。"},{"id":"e_cap_parallel","unit":"電磁気","section":"コンデンサー","tag":"コンデンサー並列","formula":"C = C<sub>1</sub> + C<sub>2</sub>","desc":"コンデンサー並列合成。","condition":"並列では電圧が同じ。","typical":"合成容量。","unitnote":"F","caution":"抵抗の直列に似る。"},{"id":"e_current","unit":"電磁気","section":"直流回路","tag":"電流","formula":"I = <span class=\"frac\"><span class=\"top\">q</span><span class=\"bottom\">t</span></span>","desc":"電流の定義。","condition":"単位時間あたりの電気量。","typical":"電流の基本。","unitnote":"A","caution":"電流の向きは正電荷の流れ。"},{"id":"e_ohm","unit":"電磁気","section":"直流回路","tag":"オームの法則","formula":"V = IR","desc":"オームの法則。","condition":"抵抗が一定。","typical":"回路の基本。","unitnote":"V","caution":"IとVの対応する抵抗を確認。"},{"id":"e_resistivity","unit":"電磁気","section":"直流回路","tag":"抵抗率","formula":"R = ρ<span class=\"frac\"><span class=\"top\">l</span><span class=\"bottom\">S</span></span>","desc":"導体の抵抗。","condition":"長さl、断面積S。","typical":"抵抗率。","unitnote":"Ω","caution":"長いほど大、太いほど小。"},{"id":"e_res_series","unit":"電磁気","section":"直流回路","tag":"抵抗の直列","formula":"R = R<sub>1</sub> + R<sub>2</sub>","desc":"抵抗の直列合成。","condition":"直列では電流が同じ。","typical":"合成抵抗。","unitnote":"Ω","caution":"電圧は分かれる。"},{"id":"e_res_parallel","unit":"電磁気","section":"直流回路","tag":"抵抗の並列","formula":"<span class=\"frac\"><span class=\"top\">1</span><span class=\"bottom\">R</span></span> = <span class=\"frac\"><span class=\"top\">1</span><span class=\"bottom\">R<sub>1</sub></span></span> + <span class=\"frac\"><span class=\"top\">1</span><span class=\"bottom\">R<sub>2</sub></span></span>","desc":"抵抗の並列合成。","condition":"並列では電圧が同じ。","typical":"合成抵抗。","unitnote":"Ω","caution":"電流は分かれる。"},{"id":"e_kir1","unit":"電磁気","section":"直流回路","tag":"キルヒホッフ第1法則","formula":"入る電流の和 = 出る電流の和","desc":"キルヒホッフ第1法則。","condition":"分岐点、電荷保存。","typical":"複雑な回路。","unitnote":"","caution":"向きを仮定して符号をつける。"},{"id":"e_kir2","unit":"電磁気","section":"直流回路","tag":"キルヒホッフ第2法則","formula":"起電力の和 = 電圧降下の和","desc":"キルヒホッフ第2法則。","condition":"閉回路、エネルギー保存。","typical":"複雑な回路。","unitnote":"","caution":"一周方向を決める。"},{"id":"e_power","unit":"電磁気","section":"直流回路","tag":"電力","formula":"P = IV = I<sup>2</sup>R = <span class=\"frac\"><span class=\"top\">V<sup>2</sup></span><span class=\"bottom\">R</span></span>","desc":"電力。","condition":"抵抗での消費電力。","typical":"電球、発熱。","unitnote":"W","caution":"一定なのがIかVか確認。"},{"id":"e_joule","unit":"電磁気","section":"直流回路","tag":"ジュール熱","formula":"Q = I<sup>2</sup>Rt","desc":"ジュール熱。","condition":"抵抗に電流が流れる。","typical":"発熱量。","unitnote":"J","caution":"熱量Qと電気量Qを区別。"},{"id":"e_terminal","unit":"電磁気","section":"電池","tag":"端子電圧","formula":"V = E - rI","desc":"端子電圧。","condition":"内部抵抗rを持つ電池の放電時。","typical":"電池回路。","unitnote":"V","caution":"充電時は符号が変わる。"},{"id":"e_bridge","unit":"電磁気","section":"直流回路","tag":"ホイートストンブリッジ","formula":"<span class=\"frac\"><span class=\"top\">R<sub>1</sub></span><span class=\"bottom\">R<sub>2</sub></span></span> = <span class=\"frac\"><span class=\"top\">R<sub>3</sub></span><span class=\"bottom\">R<sub>4</sub></span></span>","desc":"ホイートストンブリッジの平衡条件。","condition":"検流計に電流が流れない。","typical":"抵抗測定。","unitnote":"","caution":"対角の組に注意。"},{"id":"e_rc_charge","unit":"電磁気","section":"RC回路","tag":"RC充電","formula":"Q = CE(1 - e<sup>-t/RC</sup>)","desc":"充電時の電気量。","condition":"RC回路、発展。","typical":"コンデンサー充電。","unitnote":"C","caution":"時定数RC。"},{"id":"e_rc_discharge","unit":"電磁気","section":"RC回路","tag":"RC放電","formula":"Q = Q<sub>0</sub>e<sup>-t/RC</sup>","desc":"放電時の電気量。","condition":"RC回路、発展。","typical":"コンデンサー放電。","unitnote":"C","caution":"時定数RC。"},{"id":"mag_wire","unit":"電磁気","section":"磁場","tag":"直線電流の磁場","formula":"B = μ₀<span class=\"frac\"><span class=\"top\">I</span><span class=\"bottom\">2πr</span></span>","desc":"長い直線電流の磁場。","condition":"距離r。","typical":"電流が作る磁場。","unitnote":"T","caution":"右ねじの向き。"},{"id":"mag_loop","unit":"電磁気","section":"磁場","tag":"円形電流の磁場","formula":"B = μ₀<span class=\"frac\"><span class=\"top\">I</span><span class=\"bottom\">2r</span></span>","desc":"円形電流中心の磁場。","condition":"半径r。巻数NならN倍。","typical":"円形コイル。","unitnote":"T","caution":"向きは右ねじ。"},{"id":"mag_solenoid","unit":"電磁気","section":"磁場","tag":"ソレノイドの磁場","formula":"B = μ₀nI","desc":"ソレノイド内部の磁場。","condition":"十分長いソレノイド。","typical":"コイル。","unitnote":"T","caution":"nは単位長さあたり巻数。"},{"id":"mag_force_current","unit":"電磁気","section":"磁場中の力","tag":"電流が磁場から受ける力","formula":"F = IBl sinθ","desc":"電流が磁場から受ける力。","condition":"導線長l、磁場との角θ。","typical":"モーター、導線。","unitnote":"N","caution":"フレミング左手。"},{"id":"mag_lorentz","unit":"電磁気","section":"ローレンツ力","tag":"ローレンツ力","formula":"F = qvB sinθ","desc":"運動する電荷が磁場から受ける力。","condition":"vとBの角θ。","typical":"荷電粒子。","unitnote":"N","caution":"負電荷は向きが逆。"},{"id":"mag_radius","unit":"電磁気","section":"ローレンツ力","tag":"磁場中の円運動半径","formula":"r = <span class=\"frac\"><span class=\"top\">mv</span><span class=\"bottom\">qB</span></span>","desc":"磁場中の円運動半径。","condition":"vとBが垂直。","typical":"質量分析器。","unitnote":"m","caution":"qは大きさで使う。"},{"id":"mag_period","unit":"電磁気","section":"ローレンツ力","tag":"磁場中の円運動周期","formula":"T = <span class=\"frac\"><span class=\"top\">2πm</span><span class=\"bottom\">qB</span></span>","desc":"磁場中の円運動周期。","condition":"vとBが垂直。","typical":"サイクロトロン。","unitnote":"s","caution":"速さによらない。"},{"id":"mag_flux","unit":"電磁気","section":"電磁誘導","tag":"磁束","formula":"Φ = BS cosθ","desc":"磁束。","condition":"θは面の法線と磁場の角。","typical":"誘導起電力。","unitnote":"Wb","caution":"面そのものとの角ではない。"},{"id":"mag_faraday","unit":"電磁気","section":"電磁誘導","tag":"ファラデーの法則","formula":"V = -N<span class=\"frac\"><span class=\"top\">Φ<sub>2</sub> - Φ<sub>1</sub></span><span class=\"bottom\">t</span></span>","desc":"電磁誘導の法則。","condition":"磁束が変化する。","typical":"誘導起電力。","unitnote":"V","caution":"マイナスはレンツの法則。"},{"id":"mag_motional","unit":"電磁気","section":"電磁誘導","tag":"動く導体棒の起電力","formula":"V = Blv","desc":"動く導体棒の起電力。","condition":"B,l,vが垂直。","typical":"レール上の導体棒。","unitnote":"V","caution":"向きはローレンツ力で判断。"},{"id":"mag_self","unit":"電磁気","section":"自己誘導","tag":"自己誘導起電力","formula":"V = -L<span class=\"frac\"><span class=\"top\">I<sub>2</sub> - I<sub>1</sub></span><span class=\"bottom\">t</span></span>","desc":"自己誘導起電力。","condition":"電流変化を妨げる。","typical":"コイル、スイッチ。","unitnote":"V","caution":"電流を急に変えにくい。"},{"id":"mag_energy","unit":"電磁気","section":"自己誘導","tag":"コイルのエネルギー","formula":"U = <span class=\"frac\"><span class=\"top\">1</span><span class=\"bottom\">2</span></span>LI<sup>2</sup>","desc":"コイルの磁場エネルギー。","condition":"電流Iが流れるコイル。","typical":"LR回路。","unitnote":"J","caution":"コンデンサーの式と対応。"},{"id":"ac_rms","unit":"電磁気","section":"交流","tag":"交流の実効値","formula":"V<sub>e</sub> = <span class=\"frac\"><span class=\"top\">V<sub>0</sub></span><span class=\"bottom\">√2</span></span>,  I<sub>e</sub> = <span class=\"frac\"><span class=\"top\">I<sub>0</sub></span><span class=\"bottom\">√2</span></span>","desc":"正弦波交流の実効値。","condition":"電力計算に使う。","typical":"交流基礎。","unitnote":"","caution":"最大値と区別。"},{"id":"ac_omega","unit":"電磁気","section":"交流","tag":"角周波数","formula":"ω = 2πf","desc":"角周波数。","condition":"正弦波交流。","typical":"交流、単振動。","unitnote":"rad/s","caution":"fはHz。"},{"id":"ac_xc","unit":"電磁気","section":"交流","tag":"容量リアクタンス","formula":"X<sub>C</sub> = <span class=\"frac\"><span class=\"top\">1</span><span class=\"bottom\">ωC</span></span>","desc":"コンデンサーのリアクタンス。","condition":"交流回路。","typical":"RC/RLC交流。","unitnote":"Ω","caution":"周波数が高いほど小さい。"},{"id":"ac_xl","unit":"電磁気","section":"交流","tag":"誘導リアクタンス","formula":"X<sub>L</sub> = ωL","desc":"コイルのリアクタンス。","condition":"交流回路。","typical":"RL/RLC交流。","unitnote":"Ω","caution":"周波数が高いほど大きい。"},{"id":"ac_impedance","unit":"電磁気","section":"交流","tag":"インピーダンス","formula":"Z = √<span class=\"radicand\">R<sup>2</sup> + (X<sub>L</sub> - X<sub>C</sub>)<sup>2</sup></span>","desc":"RLC直列回路のインピーダンス。","condition":"交流の発展。","typical":"私立上位の交流。","unitnote":"Ω","caution":"位相差も絡む。"},{"id":"ac_resonance","unit":"電磁気","section":"交流","tag":"共振角周波数","formula":"ω = <span class=\"frac\"><span class=\"top\">1</span><span class=\"bottom\">√<span class=\"radicand\">LC</span></span></span>","desc":"RLC回路の共振角周波数。","condition":"XL=XC。","typical":"交流共振。","unitnote":"rad/s","caution":"電流が最大。"},{"id":"ac_transformer","unit":"電磁気","section":"交流","tag":"理想変圧器","formula":"<span class=\"frac\"><span class=\"top\">V<sub>1</sub></span><span class=\"bottom\">V<sub>2</sub></span></span> = <span class=\"frac\"><span class=\"top\">N<sub>1</sub></span><span class=\"bottom\">N<sub>2</sub></span></span>","desc":"理想変圧器。","condition":"交流、損失なし。","typical":"変圧器。","unitnote":"","caution":"電力保存も使う。"},{"id":"a_photon","unit":"原子","section":"光子","tag":"光子のエネルギー","formula":"E = hf","desc":"光子1個のエネルギー。","condition":"hはプランク定数。","typical":"光電効果。","unitnote":"J","caution":"fが大きいほど高エネルギー。"},{"id":"a_light","unit":"原子","section":"光子","tag":"光の速さ","formula":"c = fλ","desc":"光の速さ・振動数・波長。","condition":"真空中。","typical":"光子と波動。","unitnote":"m/s","caution":"媒質中では速さが変わる。"},{"id":"a_photo","unit":"原子","section":"光電効果","tag":"光電効果","formula":"K<sub>max</sub> = hf - W","desc":"光電子の最大運動エネルギー。","condition":"振動数がしきい値以上。","typical":"光電効果。","unitnote":"J","caution":"強度ではなく振動数が効く。"},{"id":"a_stop","unit":"原子","section":"光電効果","tag":"停止電圧","formula":"eV<sub>0</sub> = K<sub>max</sub>","desc":"停止電圧と最大運動エネルギー。","condition":"光電効果。","typical":"停止電圧。","unitnote":"J","caution":"eV単位にも注意。"},{"id":"a_debroglie","unit":"原子","section":"物質波","tag":"ド・ブロイ波長","formula":"λ = <span class=\"frac\"><span class=\"top\">h</span><span class=\"bottom\">p</span></span>","desc":"ド・ブロイ波長。","condition":"pは運動量。","typical":"電子線回折。","unitnote":"m","caution":"粒子にも波の性質。"},{"id":"a_ev","unit":"原子","section":"電子","tag":"電子ボルト","formula":"eV = エネルギー","desc":"電子が電位差Vで得るエネルギー。","condition":"電子の加速。","typical":"電子線、X線。","unitnote":"J","caution":"1eV = 1.60×10⁻¹⁹J。"},{"id":"a_bragg","unit":"原子","section":"X線","tag":"ブラッグ反射","formula":"2d sinθ = mλ","desc":"ブラッグ反射。","condition":"結晶面間隔d。","typical":"X線回折。","unitnote":"","caution":"θの取り方に注意。"},{"id":"a_bohr_momentum","unit":"原子","section":"水素原子","tag":"ボーアの量子条件","formula":"mvr = n h / 2π","desc":"ボーアの量子条件。","condition":"水素原子模型。","typical":"電子軌道。","unitnote":"","caution":"発展寄り。"},{"id":"a_bohr_energy","unit":"原子","section":"水素原子","tag":"水素原子のエネルギー準位","formula":"E<sub>n</sub> = -<span class=\"frac\"><span class=\"top\">13.6</span><span class=\"bottom\">n<sup>2</sup></span></span> eV","desc":"水素原子のエネルギー準位。","condition":"n=1,2,3...。","typical":"線スペクトル。","unitnote":"eV","caution":"負の値。"},{"id":"a_spectrum","unit":"原子","section":"水素原子","tag":"光の放出・吸収","formula":"hf = E<sub>2</sub> - E<sub>1</sub>","desc":"準位差が光子のエネルギー。","condition":"吸収・放出で向きが違う。","typical":"スペクトル。","unitnote":"J","caution":"エネルギー差は正で扱う。"},{"id":"a_mass_energy","unit":"原子","section":"原子核","tag":"質量とエネルギー","formula":"E = mc²","desc":"質量とエネルギーの関係。","condition":"核反応、質量欠損。","typical":"原子核。","unitnote":"J","caution":"質量の単位換算。"},{"id":"a_binding","unit":"原子","section":"原子核","tag":"結合エネルギー","formula":"結合エネルギー = 質量欠損 × c²","desc":"原子核の安定性を表す。","condition":"核子の質量和との差。","typical":"核反応。","unitnote":"J","caution":"MeV単位も多い。"},{"id":"a_halflife","unit":"原子","section":"放射性崩壊","tag":"半減期","formula":"N = N<sub>0</sub>(<span class=\"frac\"><span class=\"top\">1</span><span class=\"bottom\">2</span></span>)<sup>t/T</sup>","desc":"半減期による個数の減少。","condition":"半減期T。","typical":"放射性同位体。","unitnote":"","caution":"指数減少。"},{"id":"a_activity","unit":"原子","section":"放射性崩壊","tag":"放射能","formula":"A = λN","desc":"放射能。","condition":"崩壊定数λ。","typical":"放射線量。","unitnote":"Bq","caution":"Nに比例。"}];
+const TYPES=["公式","条件","典型判断","単位","混同注意"];
+
+function $(id){return document.getElementById(id)}
+function toast(m){const t=$("toast");t.textContent=m;t.style.display="block";clearTimeout(toast.t);toast.t=setTimeout(()=>t.style.display="none",1800)}
+let state={progress:{},current:null,filters:{unit:"全分野",type:"全タイプ"}};
+let tokenClient=null,accessToken="",tokenExpiresAt=0,syncTimer=null,driveBusy=false;
+
+function load(){try{state.progress=JSON.parse(localStorage.getItem(SAVE_KEY)||"{}")||{}}catch(e){state.progress={}}}
+function save(){localStorage.setItem(SAVE_KEY,JSON.stringify(state.progress));scheduleDriveBackup()}
+function formulaHTML(f,i=0){return `<div class="fcard"><div><span class="tag ${i%2?'p':''}">${f.tag}</span><div class="math">${f.formula}</div></div><div class="note"><b>条件：</b>${f.condition}<br><b>典型：</b>${f.typical}<br>${f.desc}${f.unitnote?`<br><b>単位：</b>${f.unitnote}`:''}${f.caution?`<br><b>注意：</b>${f.caution}`:''}</div></div>`}
+function makeCards(){let cards=[];FORMULAS.forEach(f=>{cards.push({id:f.id+"_f",unit:f.unit,type:"公式",topic:f.tag,q:`【${f.tag}】公式は？`,a:f.desc,fid:f.id});cards.push({id:f.id+"_c",unit:f.unit,type:"条件",topic:f.tag,q:`【${f.tag}】この公式を使う条件は？`,a:f.condition,fid:f.id});cards.push({id:f.id+"_t",unit:f.unit,type:"典型判断",topic:f.tag,q:`【${f.tag}】どんな問題で使う？`,a:f.typical,fid:f.id});cards.push({id:f.id+"_u",unit:f.unit,type:"単位",topic:f.tag,q:`【${f.tag}】単位・量の意味で注意することは？`,a:f.unitnote||"問題文中の量と単位を確認する。",fid:f.id});cards.push({id:f.id+"_m",unit:f.unit,type:"混同注意",topic:f.tag,q:`【${f.tag}】混同しやすい点は？`,a:f.caution||"似た公式との条件の違いを確認する。",fid:f.id})});return cards}
+const CARDS=makeCards();
+function fById(id){return FORMULAS.find(f=>f.id===id)||FORMULAS[0]}
+function prog(id){return state.progress[id]||{score:0,reviews:0,due:0,last:0}}
+function status(c){const p=prog(c.id),now=Date.now();if(!p.reviews)return"未着手";if(p.score<0)return"苦手";if(p.due<=now&&p.score<3)return"復習";if(p.score>=3)return"習得";return"学習中"}
+function counts(){const c={total:CARDS.length,mastered:0,review:0,new:0,learning:0,weak:0};CARDS.forEach(card=>{const s=status(card);if(s==="習得")c.mastered++;else if(s==="未着手")c.new++;else if(s==="苦手"){c.weak++;c.review++}else if(s==="復習")c.review++;else c.learning++});return c}
+function updateDash(){const c=counts(),p=Math.round(c.mastered/c.total*100),r=Math.round(c.review/c.total*100);$("pct").textContent=p+"%";$("ring").style.setProperty("--p",p);$("ring").style.setProperty("--r",r);$("cM").textContent=c.mastered+"枚";$("cR").textContent=c.review+"枚";$("cN").textContent=c.new+"枚";$("bM").style.width=p+"%";$("bR").style.width=r+"%";$("bN").style.width=Math.round(c.new/c.total*100)+"%"}
+function filteredCards(){return CARDS.filter(c=>(state.filters.unit==="全分野"||c.unit===state.filters.unit)&&(state.filters.type==="全タイプ"||c.type===state.filters.type))}
+function choose(){let pool=filteredCards();const order={"苦手":0,"復習":1,"未着手":2,"学習中":3,"習得":4};pool.sort((a,b)=>order[status(a)]-order[status(b)]||(prog(a.id).due||0)-(prog(b.id).due||0));state.current=pool[0]||CARDS[0];renderCard()}
+function renderCard(){const c=state.current,f=fById(c.fid);$("meta").innerHTML=`<span class="pill">${c.unit}</span><span class="pill p">${c.type}</span><span class="pill">${f.section}</span><span class="pill">状態：${status(c)}</span>`;$("q").textContent=c.q;$("aFormula").innerHTML=f.formula;$("aText").innerHTML=`<b>${f.tag}</b><br>${c.a}<br><span class="small">${f.desc}</span>`;$("ans").classList.remove("show")}
+function renderFormulas(){const u=$("funit").value||"全分野",q=($("fsearch").value||"").trim();const list=FORMULAS.filter(f=>(u==="全分野"||f.unit===u)&&(!q||(f.unit+f.section+f.tag+f.desc+f.condition+f.typical+f.caution).includes(q)));$("fcount").textContent=list.length+"公式";$("flist").innerHTML=list.map(formulaHTML).join("")}
+function renderPickup(){$("pickup").innerHTML=FORMULAS.filter(f=>["運動方程式","力学的エネルギー保存","クーロンの法則","熱力学第一法則","屈折の法則"].includes(f.tag)).slice(0,5).map(formulaHTML).join("")}
+function renderSearch(){const q=($("search").value||"").trim();const list=(q?CARDS.filter(c=>(c.q+c.a+c.topic+c.unit+c.type).includes(q)):CARDS.slice(0,16)).slice(0,60);$("results").innerHTML=list.map(c=>`<div class="row"><b>${c.unit}｜${c.topic}｜${c.type}</b><div class="note">${c.q}</div></div>`).join("")}
+function renderProgress(){const by={};CARDS.forEach(c=>{by[c.unit]=by[c.unit]||{total:0,mastered:0,review:0,new:0,learning:0,weak:0};const x=by[c.unit];x.total++;const s=status(c);if(s==="習得")x.mastered++;else if(s==="未着手")x.new++;else if(s==="苦手"){x.weak++;x.review++}else if(s==="復習")x.review++;else x.learning++});$("progress").innerHTML=Object.keys(by).map(k=>{const x=by[k],p=Math.round(x.mastered/x.total*100);return `<div class="row"><header><span>${k}</span><span>${x.mastered}/${x.total}枚</span></header><div class="bar"><i style="width:${p}%"></i></div><div class="note">習得 ${x.mastered} / 復習 ${x.review} / 学習中 ${x.learning} / 未着手 ${x.new} / 苦手 ${x.weak}</div></div>`}).join("")}
+function switchView(v){document.querySelectorAll(".view").forEach(x=>x.classList.remove("active"));$("view-"+v).classList.add("active");document.querySelectorAll(".nav").forEach(b=>b.classList.toggle("active",b.dataset.view===v));if(v==="formulas")renderFormulas();if(v==="search")renderSearch();if(v==="progress")renderProgress();window.scrollTo({top:0,behavior:"smooth"})}
+function rate(g){const c=state.current,p=prog(c.id),now=Date.now(),delta=[-2,-1,1,2][g]||0;p.score=Math.max(-3,Math.min(5,(p.score||0)+delta));p.reviews=(p.reviews||0)+1;p.last=now;p.due=now+[0,1,3,7][g]*86400000;state.progress[c.id]=p;save();updateDash();choose();toast(["忘れた：すぐ復習","あやしい：復習へ","できた：少し先へ","余裕：安定へ"][g])}
+function exportProgress(){const blob=new Blob([JSON.stringify({version:APP_VERSION,file:EXPORT_NAME,progress:state.progress},null,2)],{type:"application/json"});const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=EXPORT_NAME;a.click();URL.revokeObjectURL(a.href)}
+function importProgress(file){if(!file)return;const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result);state.progress=d.progress||d||{};save();updateDash();choose();toast("進捗を読み込みました")}catch(e){toast("読み込みに失敗しました")}};r.readAsText(file)}
+function initSelects(){const units=["全分野"].concat([...new Set(FORMULAS.map(f=>f.unit))]);$("unit").innerHTML=units.map(x=>`<option>${x}</option>`).join("");$("funit").innerHTML=units.map(x=>`<option>${x}</option>`).join("");$("type").innerHTML=["全タイプ"].concat(TYPES).map(x=>`<option>${x}</option>`).join("")}
+async function clearOld(){try{if("serviceWorker" in navigator){const regs=await navigator.serviceWorker.getRegistrations();regs.forEach(r=>r.unregister())}if(window.caches){const keys=await caches.keys();keys.filter(k=>k.includes("physics-g-cards")).forEach(k=>caches.delete(k))}}catch(e){}}
+
+function driveSetStatus(msg){const s=$("gSyncStatus");if(s)s.textContent=msg;const d=$("drive");if(d)d.textContent=(accessToken&&Date.now()<tokenExpiresAt)?"Google Drive":"ローカル"}
+function driveLoadSettings(){const input=$("gClientIdInput"),auto=$("gAutoBackup");if(input)input.value=localStorage.getItem(CLIENT_KEY)||"";if(auto)auto.checked=localStorage.getItem(AUTO_KEY)==="1"}
+function driveSaveSettings(){const input=$("gClientIdInput"),auto=$("gAutoBackup");if(input)localStorage.setItem(CLIENT_KEY,input.value.trim());if(auto)localStorage.setItem(AUTO_KEY,auto.checked?"1":"0")}
+function driveClientId(){const input=$("gClientIdInput");return ((input&&input.value)||localStorage.getItem(CLIENT_KEY)||"").trim()}
+function ensureGis(){return new Promise((resolve,reject)=>{if(window.google&&google.accounts&&google.accounts.oauth2){resolve();return}if(!document.querySelector("script[data-gis-client]")){const s=document.createElement("script");s.src="https://accounts.google.com/gsi/client";s.async=true;s.defer=true;s.dataset.gisClient="1";document.head.appendChild(s)}let n=0;const timer=setInterval(()=>{if(window.google&&google.accounts&&google.accounts.oauth2){clearInterval(timer);resolve();return}if(++n>120){clearInterval(timer);reject(new Error("Google認証ライブラリを読み込めませんでした"))}},100)})}
+async function requestToken(interactive){driveSaveSettings();const clientId=driveClientId();if(!clientId)throw new Error("OAuthクライアントIDを入力してください。");await ensureGis();return new Promise((resolve,reject)=>{tokenClient=google.accounts.oauth2.initTokenClient({client_id:clientId,scope:DRIVE_SCOPE,callback:(resp)=>{if(!resp||resp.error){reject(new Error((resp&&(resp.error_description||resp.error))||"Google認証に失敗しました"));return}accessToken=resp.access_token;tokenExpiresAt=Date.now()+Math.max(60,Number(resp.expires_in||3600)-60)*1000;driveSetStatus("Googleに接続しました。");resolve(resp)}});tokenClient.requestAccessToken({prompt:interactive?"consent":""})})}
+function authHeaders(){if(!accessToken||Date.now()>=tokenExpiresAt)throw new Error("Google認証の有効期限が切れています。もう一度接続してください。");return {Authorization:"Bearer "+accessToken}}
 async function driveJson(url,options={}){options.headers=Object.assign({},options.headers||{},authHeaders());const res=await fetch(url,options);if(!res.ok)throw new Error("Drive API "+res.status+" "+(await res.text()).slice(0,180));return res.status===204?{}:await res.json()}
-function escapeDriveName(s){return String(s||"").replace(/\\/g,"\\\\").replace(/'/g,"\\'")}
-async function findDriveFile(){const q="name='"+escapeDriveName(DRIVE_FILE_NAME)+"' and trashed=false";const url="https://www.googleapis.com/drive/v3/files?spaces=appDataFolder&pageSize=10&fields=files(id,name,modifiedTime)&q="+encodeURIComponent(q);const data=await driveJson(url);return data.files&&data.files.length?data.files[0]:null}
+function escQueryName(name){return String(name||"").replace(/\\/g,"\\\\").replace(/'/g,"\\'")}
+async function findDriveFile(){const q="name='"+escQueryName(DRIVE_FILE_NAME)+"' and trashed=false";const url="https://www.googleapis.com/drive/v3/files?spaces=appDataFolder&pageSize=10&fields=files(id,name,modifiedTime)&q="+encodeURIComponent(q);const data=await driveJson(url);return data.files&&data.files.length?data.files[0]:null}
 function drivePayload(){return {app:"physics-g-cards-v3-annual",version:APP_VERSION,exportedAt:new Date().toISOString(),file:DRIVE_FILE_NAME,formulaCount:FORMULAS.length,cardCount:CARDS.length,progress:state.progress}}
-async function writeDriveBackup(label="手動"){if(driveSyncBusy)return;driveSyncBusy=true;try{if(!driveToken||Date.now()>=driveTokenExpiresAt)await requestDriveToken(true);setDriveStatus("Driveへ保存中…");const existing=await findDriveFile();const boundary="-------physicsv3"+Date.now();const metadata=existing?{name:DRIVE_FILE_NAME,mimeType:"application/json"}:{name:DRIVE_FILE_NAME,parents:["appDataFolder"],mimeType:"application/json"};const body="--"+boundary+"\\r\\nContent-Type: application/json; charset=UTF-8\\r\\n\\r\\n"+JSON.stringify(metadata)+"\\r\\n--"+boundary+"\\r\\nContent-Type: application/json; charset=UTF-8\\r\\n\\r\\n"+JSON.stringify(drivePayload())+"\\r\\n--"+boundary+"--";const url=existing?("https://www.googleapis.com/upload/drive/v3/files/"+encodeURIComponent(existing.id)+"?uploadType=multipart&fields=id,name,modifiedTime"):"https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id,name,modifiedTime";const res=await fetch(url,{method:existing?"PATCH":"POST",headers:Object.assign({"Content-Type":"multipart/related; boundary="+boundary},authHeaders()),body});if(!res.ok)throw new Error("Drive保存失敗 "+res.status+" "+(await res.text()).slice(0,160));const data=await res.json();setDriveStatus("Driveへ保存しました。"+(data.modifiedTime?" 最終更新: "+new Date(data.modifiedTime).toLocaleString():""))}catch(e){setDriveStatus("Drive保存エラー: "+(e&&e.message?e.message:e))}finally{driveSyncBusy=false}}
-function scheduleDriveBackup(reason){try{if(localStorage.getItem(DRIVE_AUTO_KEY)!=="1")return;if(!driveToken||Date.now()>=driveTokenExpiresAt)return;clearTimeout(driveSyncTimer);driveSyncTimer=setTimeout(()=>writeDriveBackup(reason||"自動"),2500)}catch(e){}}
-async function restoreDriveBackup(){try{if(!driveToken||Date.now()>=driveTokenExpiresAt)await requestDriveToken(true);setDriveStatus("Driveから復元を確認中…");const file=await findDriveFile();if(!file){setDriveStatus("Driveにv3バックアップが見つかりません。");return}if(!confirm("Drive上の進捗で、この端末の進捗を上書きしますか？")){setDriveStatus("復元を中止しました。");return}const res=await fetch("https://www.googleapis.com/drive/v3/files/"+encodeURIComponent(file.id)+"?alt=media",{headers:authHeaders()});if(!res.ok)throw new Error("Drive読込失敗 "+res.status+" "+(await res.text()).slice(0,160));const payload=await res.json();const next=payload.progress||(payload.state&&payload.state.progress);if(!next||typeof next!=="object")throw new Error("バックアップ形式が不正です");state.progress=next;save();updateDash();choose();renderProgress();setDriveStatus("Driveから復元しました。") }catch(e){setDriveStatus("Drive復元エラー: "+(e&&e.message?e.message:e))}}
-async function connectDrive(){try{await requestDriveToken(true);const f=await findDriveFile();setDriveStatus(f?"Googleに接続しました。v3バックアップがあります。":"Googleに接続しました。まだv3バックアップはありません。") }catch(e){setDriveStatus("接続エラー: "+(e&&e.message?e.message:e))}}
-function disconnectDrive(){try{if(window.google&&google.accounts&&google.accounts.oauth2&&driveToken)google.accounts.oauth2.revoke(driveToken,()=>{})}catch(e){}driveToken="";driveTokenExpiresAt=0;setDriveStatus("Google接続を解除しました。端末内保存に戻ります。")}
-function initDriveUi(){const input=driveEl("clientIdInput"),auto=driveEl("autoBackupCheck");if(input)input.value=localStorage.getItem(DRIVE_CLIENT_KEY)||"";if(auto)auto.checked=localStorage.getItem(DRIVE_AUTO_KEY)==="1";if(input)input.addEventListener("change",storeDriveSettings);if(auto)auto.addEventListener("change",storeDriveSettings);const c=driveEl("connectDriveBtn"),b=driveEl("backupDriveBtn"),r=driveEl("restoreDriveBtn"),d=driveEl("disconnectDriveBtn");if(c)c.addEventListener("click",connectDrive);if(b)b.addEventListener("click",()=>writeDriveBackup("手動"));if(r)r.addEventListener("click",restoreDriveBackup);if(d)d.addEventListener("click",disconnectDrive);setDriveStatus("未接続です。進捗は端末内に保存されています。")}
-`;
-function patchBase(html){
-  setStatus('v3.0.1差し込み中...');
-  html=html.replace('<title>物理受験カード v3.0｜年間固定版</title>','<title>物理受験カード v3.0.1｜年間固定版</title>');
-  html=html.replace('const APP_VERSION="3.0.0-annual-fixed";','const APP_VERSION="3.0.1-drive-ui-release";');
-  html=html.replace('</style>',beforeEndStyle()+'</style>');
-  html=html.replace('<button class="iconbtn" data-action="toast" data-msg="年間固定版です。今後は誤字・エラー補修中心にします。"></button>','<button class="iconbtn" data-action="toast" data-msg="年間固定版です。今後は誤字・エラー補修中心にします。">🔔</button>');
-  html=html.replace('<button class="act" data-action="switch" data-view="formulas"><span></span>公式集を開く</button>','<button class="act" data-action="switch" data-view="formulas"><span>📖</span>公式集を開く</button>');
-  html=html.replace('<button class="act" data-action="switch" data-view="progress"><span></span>進捗を見る</button>','<button class="act" data-action="switch" data-view="progress"><span>📊</span>進捗を見る</button>');
-  html=html.replace('<button class="nav active" data-action="switch" data-view="learn"><i></i>学習</button>','<button class="nav active" data-action="switch" data-view="learn"><i>📘</i>学習</button>');
-  html=html.replace('<button class="nav" data-action="switch" data-view="formulas"><i></i>公式集</button>','<button class="nav" data-action="switch" data-view="formulas"><i>📖</i>公式集</button>');
-  html=html.replace('<button class="nav" data-action="switch" data-view="search"><i></i>検索</button>','<button class="nav" data-action="switch" data-view="search"><i>🔍</i>検索</button>');
-  html=html.replace('<button class="nav" data-action="switch" data-view="progress"><i></i>進捗</button>','<button class="nav" data-action="switch" data-view="progress"><i>📊</i>進捗</button>');
-  html=html.replace('function save(){localStorage.setItem(SAVE_KEY,JSON.stringify(state.progress))}','function save(){localStorage.setItem(SAVE_KEY,JSON.stringify(state.progress));scheduleDriveBackup("auto")}');
-  html=html.replace('function save(){localStorage.setItem(SAVE_KEY,JSON.stringify(state.progress));scheduleDriveBackup("auto")};','function save(){localStorage.setItem(SAVE_KEY,JSON.stringify(state.progress));scheduleDriveBackup("auto")}');
-  html=html.replace('<p class="note">Δは変化量を表す便利な記号ですが、最初の学習では見慣れない場合があるため、このアプリではなるべく「v - v₀」「x₂ - x₁」のように書きます。</p></div></section></div><nav','<p class="note">Δは変化量を表す便利な記号ですが、最初の学習では見慣れない場合があるため、このアプリではなるべく「v - v₀」「x₂ - x₁」のように書きます。</p></div>'+DRIVE_PANEL+'</section></div><nav');
-  html=html.replace('document.addEventListener("DOMContentLoaded",async()=>{',DRIVE_CODE+'document.addEventListener("DOMContentLoaded",async()=>{');
-  html=html.replace('load();initSelects();bind();renderPickup();','load();initSelects();bind();initDriveUi();renderPickup();');
-  if(!html.includes('initDriveUi()')) throw new Error('Drive UIの差し込みに失敗しました');
-  return html;
-}
-(async()=>{
-  try{
-    const base=await fetchBase();
-    const patched=patchBase(base);
-    setStatus('起動します...');
-    document.open();
-    document.write(patched);
-    document.close();
-  }catch(e){fail(e)}
-})();
+async function connectDrive(){try{await requestToken(true);const f=await findDriveFile();driveSetStatus(f?"Googleに接続しました。v3バックアップがあります。":"Googleに接続しました。まだv3バックアップはありません。")}catch(e){driveSetStatus("接続エラー: "+(e&&e.message?e.message:e))}}
+async function backupDrive(){if(driveBusy)return;driveBusy=true;try{if(!accessToken||Date.now()>=tokenExpiresAt)await requestToken(true);driveSetStatus("Driveへ保存中…");const existing=await findDriveFile();const boundary="physicsv3_"+Date.now();const metadata=existing?{name:DRIVE_FILE_NAME,mimeType:"application/json"}:{name:DRIVE_FILE_NAME,parents:["appDataFolder"],mimeType:"application/json"};const body="--"+boundary+"\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n"+JSON.stringify(metadata)+"\r\n--"+boundary+"\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n"+JSON.stringify(drivePayload())+"\r\n--"+boundary+"--";const url=existing?"https://www.googleapis.com/upload/drive/v3/files/"+encodeURIComponent(existing.id)+"?uploadType=multipart&fields=id,name,modifiedTime":"https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id,name,modifiedTime";const res=await fetch(url,{method:existing?"PATCH":"POST",headers:Object.assign({"Content-Type":"multipart/related; boundary="+boundary},authHeaders()),body});if(!res.ok)throw new Error("Drive保存失敗 "+res.status+" "+(await res.text()).slice(0,180));const data=await res.json();driveSetStatus("Driveへ保存しました。"+(data.modifiedTime?" 最終更新: "+new Date(data.modifiedTime).toLocaleString():""))}catch(e){driveSetStatus("Drive保存エラー: "+(e&&e.message?e.message:e))}finally{driveBusy=false}}
+async function restoreDrive(){try{if(!accessToken||Date.now()>=tokenExpiresAt)await requestToken(true);driveSetStatus("Driveから復元を確認中…");const file=await findDriveFile();if(!file){driveSetStatus("Driveにv3バックアップが見つかりません。");return}if(!confirm("Drive上のv3進捗で、この端末の進捗を上書きしますか？")){driveSetStatus("復元を中止しました。");return}const res=await fetch("https://www.googleapis.com/drive/v3/files/"+encodeURIComponent(file.id)+"?alt=media",{headers:authHeaders()});if(!res.ok)throw new Error("Drive読込失敗 "+res.status+" "+(await res.text()).slice(0,180));const payload=await res.json();const next=payload.progress||(payload.state&&payload.state.progress);if(!next||typeof next!=="object")throw new Error("バックアップ形式が不正です。");state.progress=next;localStorage.setItem(SAVE_KEY,JSON.stringify(state.progress));updateDash();choose();renderProgress();driveSetStatus("Driveから復元しました。")}catch(e){driveSetStatus("Drive復元エラー: "+(e&&e.message?e.message:e))}}
+function disconnectDrive(){try{if(window.google&&google.accounts&&google.accounts.oauth2&&accessToken)google.accounts.oauth2.revoke(accessToken,()=>{})}catch(e){}accessToken="";tokenExpiresAt=0;driveSetStatus("Google接続を解除しました。端末内保存に戻ります。")}
+function scheduleDriveBackup(){try{if(localStorage.getItem(AUTO_KEY)!=="1")return;if(!accessToken||Date.now()>=tokenExpiresAt)return;clearTimeout(syncTimer);syncTimer=setTimeout(backupDrive,2500)}catch(e){}}
+
+function bind(){document.body.addEventListener("click",e=>{const b=e.target.closest("[data-action]");if(!b)return;const a=b.dataset.action;if(a==="switch")switchView(b.dataset.view);if(a==="show")$("ans").classList.add("show");if(a==="rate")rate(Number(b.dataset.grade));if(a==="next")choose();if(a==="export")exportProgress();if(a==="reset"&&confirm("進捗をリセットしますか？")){state.progress={};save();updateDash();choose();renderProgress()}if(a==="toast")toast(b.dataset.msg||"準備中です");if(a==="gclient"){driveSaveSettings();driveSetStatus("OAuthクライアントIDを保存しました。")}if(a==="gconnect")connectDrive();if(a==="gbackup")backupDrive();if(a==="grestore")restoreDrive();if(a==="gdisconnect")disconnectDrive()});$("unit").addEventListener("change",e=>{state.filters.unit=e.target.value;choose()});$("type").addEventListener("change",e=>{state.filters.type=e.target.value;choose()});$("funit").addEventListener("change",renderFormulas);$("fsearch").addEventListener("input",renderFormulas);$("search").addEventListener("input",renderSearch);$("importFile").addEventListener("change",e=>importProgress(e.target.files[0]));$("gClientIdInput").addEventListener("change",driveSaveSettings);$("gAutoBackup").addEventListener("change",driveSaveSettings)}
+
+document.addEventListener("DOMContentLoaded",()=>{try{load();driveLoadSettings();initSelects();bind();renderPickup();renderFormulas();renderSearch();updateDash();choose();driveSetStatus("未接続です。進捗は端末内に保存されています。");toast("準備完了 v"+APP_VERSION);clearOld().catch(()=>{});}catch(e){console.error(e);toast("初期化エラー: "+(e&&e.message?e.message:e));const q=$("q");if(q)q.textContent="初期化エラー: "+(e&&e.message?e.message:e);}});
 })();
 </script>
 </body>
