@@ -1,1 +1,13 @@
-{"name": "物理受験カード v3 年間固定版", "short_name": "物理カード", "id": "/physics-g-cards/", "start_url": "/physics-g-cards/?v=300", "scope": "/physics-g-cards/", "display": "standalone", "background_color": "#f7fbff", "theme_color": "#8ec5ff", "icons": [{"src": "/physics-g-cards/icon-192.png", "sizes": "192x192", "type": "image/png"}, {"src": "/physics-g-cards/icon-512.png", "sizes": "512x512", "type": "image/png"}]}
+{
+  "name": "物理受験カード v3",
+  "short_name": "物理カード",
+  "start_url": "/physics-g-cards/?v=301",
+  "scope": "/physics-g-cards/",
+  "display": "standalone",
+  "background_color": "#f7fbff",
+  "theme_color": "#8ec5ff",
+  "icons": [
+    {"src":"/physics-g-cards/icon-192.png","sizes":"192x192","type":"image/png"},
+    {"src":"/physics-g-cards/icon-512.png","sizes":"512x512","type":"image/png"}
+  ]
+}

@@ -1,0 +1,10 @@
+GitHubの physics-g-cards/HANDOFF.md を正本として読んでください。
+過去スレッドは参照不要です。
+
+現在は v3.0.1 Drive/UI復旧リリースを入れたところです。
+確認URLは：
+https://foxwolf321.github.io/physics-g-cards/?v=301
+
+v3.0.0年間固定版を基本最終版とし、v3.0.1ではGoogle Drive保存欄復旧、背景画像、上部余白、空アイコンだけ補修しています。
+今後は誤字・表示崩れ・Google Drive保存エラーの補修だけにしてください。
+巨大HTML全文はチャットに貼らず、必要な場合は差し替えZIPで返してください。

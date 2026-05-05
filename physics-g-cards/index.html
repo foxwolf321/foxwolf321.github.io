@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>物理受験カード v3.0.1｜年間固定版</title>
+<meta name="theme-color" content="#8ec5ff">
+<link rel="manifest" href="/physics-g-cards/manifest.webmanifest">
+<style>
+:root{--ink:#15264b;--blue:#68b7ff;--pink:#f6a6c9;--mint:#72d6c6;--line:rgba(63,60,90,.14);--shadow:0 18px 42px rgba(35,50,88,.15)}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI","Hiragino Sans","Yu Gothic",sans-serif;color:var(--ink);background:#f7fbff;display:grid;place-items:center;padding:18px;overflow:hidden}body::before{content:"";position:fixed;inset:0;background:url("/physics-g-cards/bg-bike-physics.png") center center/cover no-repeat;opacity:.52;z-index:-2}body::after{content:"";position:fixed;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.70),rgba(255,255,255,.55) 40%,rgba(255,247,252,.66) 75%,rgba(255,255,255,.84));z-index:-1}.loader{width:min(620px,100%);border-radius:28px;background:rgba(255,255,255,.88);box-shadow:var(--shadow);border:1px solid rgba(255,255,255,.92);backdrop-filter:blur(10px);padding:22px}.loader h1{font-size:clamp(24px,6vw,38px);line-height:1.2;margin:0 0 10px}.loader p{line-height:1.75;color:#52627d}.pill{display:inline-flex;gap:8px;align-items:center;border-radius:999px;background:rgba(255,255,255,.9);padding:8px 12px;font-weight:850;color:#53637e;box-shadow:0 8px 20px rgba(40,65,105,.12)}.dot{width:9px;height:9px;border-radius:50%;background:var(--mint);box-shadow:0 0 0 3px rgba(114,214,198,.18)}.err{display:none;background:#fff2f5;border:1px solid #ffd2df;color:#96385a;border-radius:18px;padding:12px;margin-top:12px;white-space:pre-wrap}button{border:0;border-radius:999px;background:linear-gradient(135deg,#5fb1f7,#82c5ff);color:white;font-weight:900;padding:12px 16px;box-shadow:0 8px 18px rgba(41,49,82,.1)}
+</style>
+</head>
+<body>
+<div class="loader">
+  <div class="pill">☁️ 保存: <b>ローカル / Google Drive対応版</b><span class="dot"></span></div>
+  <h1>物理受験カード<br>v3.0.1 を読み込み中</h1>
+  <p>年間固定版 v3.0.0 を基準に、Google Drive保存欄・背景・上部余白だけを復旧します。</p>
+  <p id="status">準備中...</p>
+  <div id="err" class="err"></div>
+  <button id="retry" style="display:none">再読み込み</button>
+</div>
+<script>
+(function(){
+'use strict';
+const BASE_URLS=[
+  'https://raw.githubusercontent.com/foxwolf321/foxwolf321.github.io/a9e38cbfee45266dc65d66941eec94492b667ea2/physics-g-cards/index.html',
+  'https://raw.githubusercontent.com/foxwolf321/foxwolf321.github.io/d434eb68b5daa7f23b2ec137a256c3ffbbed6594/physics-g-cards/index.html'
+];
+const statusEl=document.getElementById('status');
+const errEl=document.getElementById('err');
+const retry=document.getElementById('retry');
+retry.addEventListener('click',()=>location.reload());
+function setStatus(s){statusEl.textContent=s;}
+function fail(e){errEl.style.display='block';retry.style.display='inline-block';errEl.textContent='読み込みに失敗しました。\n\n'+(e&&e.message?e.message:String(e))+'\n\nGitHubに index.html と bg-bike-physics.png が physics-g-cards フォルダ直下へ入っているか確認してください。';}
+async function fetchBase(){
+  let last;
+  for(const url of BASE_URLS){
+    try{
+      setStatus('v3.0.0本体を取得中...');
+      const res=await fetch(url,{cache:'no-store'});
+      if(!res.ok) throw new Error(url+' : HTTP '+res.status);
+      const txt=await res.text();
+      if(txt.includes('const FORMULAS=')&&txt.includes('physics-g-cards-v3-annual-progress.json')) return txt;
+      throw new Error(url+' : v3本体ではない内容です');
+    }catch(e){last=e;}
+  }
+  throw last||new Error('基準HTMLを取得できませんでした');
+}
+function beforeEndStyle(){return `
+/* v3.0.1 release UI hotfix */
+body::before{background:url("/physics-g-cards/bg-bike-physics.png") center center/cover no-repeat!important;opacity:.54!important;filter:none!important}
+body::after{background:linear-gradient(180deg,rgba(255,255,255,.60) 0%,rgba(255,255,255,.48) 30%,rgba(255,247,252,.58) 68%,rgba(255,255,255,.78))!important}
+.app{padding-top:7px!important}
+.topbar{margin-top:0!important;margin-bottom:6px!important}
+.topbar>div:last-child{display:flex!important;gap:8px!important;align-items:center!important}
+.iconbtn{display:grid!important;place-items:center!important}
+.hero{padding-top:16px!important;padding-bottom:17px!important;background:rgba(255,255,255,.88)!important;border-radius:32px!important}
+.hero::after{opacity:.72!important}
+.actions{margin-top:12px!important;gap:9px!important}.act{min-height:70px!important}.panel{margin-top:16px!important}
+.drive-grid{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center}.drive-grid input[type=text]{min-width:0}.drive-toggle{display:flex;align-items:center;gap:8px;justify-content:center}.drive-toggle input{width:auto!important}.drive-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}.drive-actions .soft{display:inline-flex;align-items:center;justify-content:center}.drive-warn{background:#fff8d8;border:1px solid #f1d66f;color:#6f5515;border-radius:16px;padding:10px 12px;margin-top:10px;font-size:12px;line-height:1.6}
+@media(max-width:520px){.app{padding-top:7px!important}.topbar{margin-bottom:6px!important}.hero{padding:15px 13px 14px!important}.appicon{width:58px!important;height:58px!important}.actions{grid-template-columns:1fr 1fr!important}.actions .primary{grid-column:1/-1!important}.drive-grid{grid-template-columns:1fr!important}}
+`;}
+const DRIVE_PANEL=`<div class="panel strong" id="drivePanel"><h2>Google Drive保存 <span class="small">v3専用</span></h2>
+<p class="note">以前Google Cloudで作ったOAuthクライアントIDを入れると、進捗をGoogle DriveのappDataFolderへ保存・復元できます。Cloud側を作り直す必要はありません。クライアントシークレットは不要です。</p>
+<div class="drive-grid"><input id="clientIdInput" type="text" placeholder="OAuth クライアントID"><label class="soft drive-toggle"><input id="autoBackupCheck" type="checkbox">自動バックアップ</label></div>
+<div class="drive-actions"><button class="soft" id="connectDriveBtn" type="button">Googleに接続</button><button class="soft" id="backupDriveBtn" type="button">Driveへ保存</button><button class="soft" id="restoreDriveBtn" type="button">Driveから復元</button><button class="soft" id="disconnectDriveBtn" type="button">接続解除</button></div>
+<p id="syncStatus" class="note">未接続です。進捗は端末内に保存されています。</p><div class="drive-warn">保存ファイル名: <b>physics-g-cards-v3-annual-progress.json</b><br>v2以前の進捗とは混ざらないようにしています。</div></div>`;
+const DRIVE_CODE=`
+const DRIVE_SCOPE="https://www.googleapis.com/auth/drive.appdata";
+const DRIVE_FILE_NAME="physics-g-cards-v3-annual-progress.json";
+const DRIVE_CLIENT_KEY="physics-g-cards-v3-drive-client-id";
+const DRIVE_AUTO_KEY="physics-g-cards-v3-drive-auto";
+let tokenClient=null,driveToken="",driveTokenExpiresAt=0,driveSyncTimer=null,driveSyncBusy=false;
+function driveEl(id){return document.getElementById(id)}
+function setDriveStatus(msg){const el=driveEl("syncStatus");if(el)el.textContent=msg;const d=$("drive");if(d)d.textContent=(driveToken&&Date.now()<driveTokenExpiresAt)?"Google Drive":"ローカル"}
+function ensureGisReady(){return new Promise((resolve,reject)=>{if(window.google&&google.accounts&&google.accounts.oauth2){resolve();return}if(!document.querySelector("script[data-gis-client]")){const s=document.createElement("script");s.src="https://accounts.google.com/gsi/client";s.async=true;s.defer=true;s.dataset.gisClient="1";document.head.appendChild(s)}let n=0;const timer=setInterval(()=>{if(window.google&&google.accounts&&google.accounts.oauth2){clearInterval(timer);resolve();return}if(++n>120){clearInterval(timer);reject(new Error("Google認証ライブラリの読み込みに失敗しました"))}},100)})}
+function storedClientId(){const input=driveEl("clientIdInput");return ((input&&input.value)||localStorage.getItem(DRIVE_CLIENT_KEY)||"").trim()}
+function storeDriveSettings(){const input=driveEl("clientIdInput"),auto=driveEl("autoBackupCheck");if(input)localStorage.setItem(DRIVE_CLIENT_KEY,input.value.trim());if(auto)localStorage.setItem(DRIVE_AUTO_KEY,auto.checked?"1":"0")}
+async function requestDriveToken(interactive){storeDriveSettings();const cid=storedClientId();if(!cid)throw new Error("OAuthクライアントIDを入力してください");await ensureGisReady();return new Promise((resolve,reject)=>{tokenClient=google.accounts.oauth2.initTokenClient({client_id:cid,scope:DRIVE_SCOPE,callback:(resp)=>{if(!resp||resp.error){reject(new Error((resp&&(resp.error_description||resp.error))||"Google認証に失敗しました"));return}driveToken=resp.access_token;driveTokenExpiresAt=Date.now()+Math.max(60,Number(resp.expires_in||3600)-60)*1000;setDriveStatus("Googleに接続しました。");resolve(resp)}});tokenClient.requestAccessToken({prompt:interactive?"consent":""})})}
+function authHeaders(){if(!driveToken||Date.now()>=driveTokenExpiresAt)throw new Error("Google認証の有効期限が切れました。もう一度接続してください");return {Authorization:"Bearer "+driveToken}}
+async function driveJson(url,options={}){options.headers=Object.assign({},options.headers||{},authHeaders());const res=await fetch(url,options);if(!res.ok)throw new Error("Drive API "+res.status+" "+(await res.text()).slice(0,180));return res.status===204?{}:await res.json()}
+function escapeDriveName(s){return String(s||"").replace(/\\/g,"\\\\").replace(/'/g,"\\'")}
+async function findDriveFile(){const q="name='"+escapeDriveName(DRIVE_FILE_NAME)+"' and trashed=false";const url="https://www.googleapis.com/drive/v3/files?spaces=appDataFolder&pageSize=10&fields=files(id,name,modifiedTime)&q="+encodeURIComponent(q);const data=await driveJson(url);return data.files&&data.files.length?data.files[0]:null}
+function drivePayload(){return {app:"physics-g-cards-v3-annual",version:APP_VERSION,exportedAt:new Date().toISOString(),file:DRIVE_FILE_NAME,formulaCount:FORMULAS.length,cardCount:CARDS.length,progress:state.progress}}
+async function writeDriveBackup(label="手動"){if(driveSyncBusy)return;driveSyncBusy=true;try{if(!driveToken||Date.now()>=driveTokenExpiresAt)await requestDriveToken(true);setDriveStatus("Driveへ保存中…");const existing=await findDriveFile();const boundary="-------physicsv3"+Date.now();const metadata=existing?{name:DRIVE_FILE_NAME,mimeType:"application/json"}:{name:DRIVE_FILE_NAME,parents:["appDataFolder"],mimeType:"application/json"};const body="--"+boundary+"\\r\\nContent-Type: application/json; charset=UTF-8\\r\\n\\r\\n"+JSON.stringify(metadata)+"\\r\\n--"+boundary+"\\r\\nContent-Type: application/json; charset=UTF-8\\r\\n\\r\\n"+JSON.stringify(drivePayload())+"\\r\\n--"+boundary+"--";const url=existing?("https://www.googleapis.com/upload/drive/v3/files/"+encodeURIComponent(existing.id)+"?uploadType=multipart&fields=id,name,modifiedTime"):"https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id,name,modifiedTime";const res=await fetch(url,{method:existing?"PATCH":"POST",headers:Object.assign({"Content-Type":"multipart/related; boundary="+boundary},authHeaders()),body});if(!res.ok)throw new Error("Drive保存失敗 "+res.status+" "+(await res.text()).slice(0,160));const data=await res.json();setDriveStatus("Driveへ保存しました。"+(data.modifiedTime?" 最終更新: "+new Date(data.modifiedTime).toLocaleString():""))}catch(e){setDriveStatus("Drive保存エラー: "+(e&&e.message?e.message:e))}finally{driveSyncBusy=false}}
+function scheduleDriveBackup(reason){try{if(localStorage.getItem(DRIVE_AUTO_KEY)!=="1")return;if(!driveToken||Date.now()>=driveTokenExpiresAt)return;clearTimeout(driveSyncTimer);driveSyncTimer=setTimeout(()=>writeDriveBackup(reason||"自動"),2500)}catch(e){}}
+async function restoreDriveBackup(){try{if(!driveToken||Date.now()>=driveTokenExpiresAt)await requestDriveToken(true);setDriveStatus("Driveから復元を確認中…");const file=await findDriveFile();if(!file){setDriveStatus("Driveにv3バックアップが見つかりません。");return}if(!confirm("Drive上の進捗で、この端末の進捗を上書きしますか？")){setDriveStatus("復元を中止しました。");return}const res=await fetch("https://www.googleapis.com/drive/v3/files/"+encodeURIComponent(file.id)+"?alt=media",{headers:authHeaders()});if(!res.ok)throw new Error("Drive読込失敗 "+res.status+" "+(await res.text()).slice(0,160));const payload=await res.json();const next=payload.progress||(payload.state&&payload.state.progress);if(!next||typeof next!=="object")throw new Error("バックアップ形式が不正です");state.progress=next;save();updateDash();choose();renderProgress();setDriveStatus("Driveから復元しました。") }catch(e){setDriveStatus("Drive復元エラー: "+(e&&e.message?e.message:e))}}
+async function connectDrive(){try{await requestDriveToken(true);const f=await findDriveFile();setDriveStatus(f?"Googleに接続しました。v3バックアップがあります。":"Googleに接続しました。まだv3バックアップはありません。") }catch(e){setDriveStatus("接続エラー: "+(e&&e.message?e.message:e))}}
+function disconnectDrive(){try{if(window.google&&google.accounts&&google.accounts.oauth2&&driveToken)google.accounts.oauth2.revoke(driveToken,()=>{})}catch(e){}driveToken="";driveTokenExpiresAt=0;setDriveStatus("Google接続を解除しました。端末内保存に戻ります。")}
+function initDriveUi(){const input=driveEl("clientIdInput"),auto=driveEl("autoBackupCheck");if(input)input.value=localStorage.getItem(DRIVE_CLIENT_KEY)||"";if(auto)auto.checked=localStorage.getItem(DRIVE_AUTO_KEY)==="1";if(input)input.addEventListener("change",storeDriveSettings);if(auto)auto.addEventListener("change",storeDriveSettings);const c=driveEl("connectDriveBtn"),b=driveEl("backupDriveBtn"),r=driveEl("restoreDriveBtn"),d=driveEl("disconnectDriveBtn");if(c)c.addEventListener("click",connectDrive);if(b)b.addEventListener("click",()=>writeDriveBackup("手動"));if(r)r.addEventListener("click",restoreDriveBackup);if(d)d.addEventListener("click",disconnectDrive);setDriveStatus("未接続です。進捗は端末内に保存されています。")}
+`;
+function patchBase(html){
+  setStatus('v3.0.1差し込み中...');
+  html=html.replace('<title>物理受験カード v3.0｜年間固定版</title>','<title>物理受験カード v3.0.1｜年間固定版</title>');
+  html=html.replace('const APP_VERSION="3.0.0-annual-fixed";','const APP_VERSION="3.0.1-drive-ui-release";');
+  html=html.replace('</style>',beforeEndStyle()+'</style>');
+  html=html.replace('<button class="iconbtn" data-action="toast" data-msg="年間固定版です。今後は誤字・エラー補修中心にします。"></button>','<button class="iconbtn" data-action="toast" data-msg="年間固定版です。今後は誤字・エラー補修中心にします。">🔔</button>');
+  html=html.replace('<button class="act" data-action="switch" data-view="formulas"><span></span>公式集を開く</button>','<button class="act" data-action="switch" data-view="formulas"><span>📖</span>公式集を開く</button>');
+  html=html.replace('<button class="act" data-action="switch" data-view="progress"><span></span>進捗を見る</button>','<button class="act" data-action="switch" data-view="progress"><span>📊</span>進捗を見る</button>');
+  html=html.replace('<button class="nav active" data-action="switch" data-view="learn"><i></i>学習</button>','<button class="nav active" data-action="switch" data-view="learn"><i>📘</i>学習</button>');
+  html=html.replace('<button class="nav" data-action="switch" data-view="formulas"><i></i>公式集</button>','<button class="nav" data-action="switch" data-view="formulas"><i>📖</i>公式集</button>');
+  html=html.replace('<button class="nav" data-action="switch" data-view="search"><i></i>検索</button>','<button class="nav" data-action="switch" data-view="search"><i>🔍</i>検索</button>');
+  html=html.replace('<button class="nav" data-action="switch" data-view="progress"><i></i>進捗</button>','<button class="nav" data-action="switch" data-view="progress"><i>📊</i>進捗</button>');
+  html=html.replace('function save(){localStorage.setItem(SAVE_KEY,JSON.stringify(state.progress))}','function save(){localStorage.setItem(SAVE_KEY,JSON.stringify(state.progress));scheduleDriveBackup("auto")}');
+  html=html.replace('function save(){localStorage.setItem(SAVE_KEY,JSON.stringify(state.progress));scheduleDriveBackup("auto")};','function save(){localStorage.setItem(SAVE_KEY,JSON.stringify(state.progress));scheduleDriveBackup("auto")}');
+  html=html.replace('<p class="note">Δは変化量を表す便利な記号ですが、最初の学習では見慣れない場合があるため、このアプリではなるべく「v - v₀」「x₂ - x₁」のように書きます。</p></div></section></div><nav','<p class="note">Δは変化量を表す便利な記号ですが、最初の学習では見慣れない場合があるため、このアプリではなるべく「v - v₀」「x₂ - x₁」のように書きます。</p></div>'+DRIVE_PANEL+'</section></div><nav');
+  html=html.replace('document.addEventListener("DOMContentLoaded",async()=>{',DRIVE_CODE+'document.addEventListener("DOMContentLoaded",async()=>{');
+  html=html.replace('load();initSelects();bind();renderPickup();','load();initSelects();bind();initDriveUi();renderPickup();');
+  if(!html.includes('initDriveUi()')) throw new Error('Drive UIの差し込みに失敗しました');
+  return html;
+}
+(async()=>{
+  try{
+    const base=await fetchBase();
+    const patched=patchBase(base);
+    setStatus('起動します...');
+    document.open();
+    document.write(patched);
+    document.close();
+  }catch(e){fail(e)}
+})();
+})();
+</script>
+</body>
+</html>
