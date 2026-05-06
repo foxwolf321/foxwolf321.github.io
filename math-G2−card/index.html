@@ -1,1 +1,2797 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>関西私大理工系 数学公式カード</title>
+  <meta name="description" content="大工大・立命館・関大・近大を中心にした理系数学公式確認とカード演習アプリ">
+  <script>
+    window.MathJax = {
+      startup: { typeset: false },
+      options: { enableMenu: false },
+      chtml: { displayAlign: "left", displayIndent: "0" }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/mml-chtml.js"></script>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #1f2933;
+      --muted: #607086;
+      --line: #d8e0ea;
+      --paper: #fbfcfe;
+      --panel: #ffffff;
+      --wash: #f1f6fb;
+      --nav: #103f5e;
+      --nav-2: #0f6b75;
+      --accent: #b64632;
+      --accent-2: #2f7d4f;
+      --warn: #a15d00;
+      --shadow: 0 12px 26px rgba(24, 45, 72, .10);
+      --radius: 8px;
+    }
 
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: "Yu Gothic UI", "Yu Gothic", "Hiragino Kaku Gothic ProN", Meiryo, system-ui, sans-serif;
+      line-height: 1.7;
+      letter-spacing: 0;
+    }
+
+    button,
+    input,
+    select {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    a {
+      color: #0d5f8c;
+    }
+
+    .app-shell {
+      min-height: 100vh;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+    }
+
+    header {
+      background: #ffffff;
+      border-bottom: 1px solid var(--line);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .topbar {
+      width: min(1240px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 14px 0 10px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .brand-row {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(1.18rem, 2.2vw, 1.75rem);
+      line-height: 1.3;
+      letter-spacing: 0;
+    }
+
+    .subtitle {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: .92rem;
+    }
+
+    .status-stack {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      justify-content: flex-end;
+    }
+
+    .status-pill,
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      min-height: 28px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 2px 10px;
+      background: #ffffff;
+      color: #344256;
+      font-size: .82rem;
+      white-space: nowrap;
+    }
+
+    .badge.hot {
+      border-color: #e3b5a8;
+      background: #fff4ef;
+      color: #8b3325;
+    }
+
+    .badge.green {
+      border-color: #b9dbc8;
+      background: #effaf3;
+      color: #225c3b;
+    }
+
+    .badge.blue {
+      border-color: #b8d4e5;
+      background: #eef7fc;
+      color: #155070;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding-bottom: 2px;
+    }
+
+    .tab-button {
+      border: 1px solid transparent;
+      border-radius: var(--radius);
+      background: transparent;
+      color: var(--muted);
+      padding: 8px 12px;
+      min-width: max-content;
+    }
+
+    .tab-button[aria-selected="true"] {
+      background: var(--nav);
+      border-color: var(--nav);
+      color: #ffffff;
+    }
+
+    main {
+      width: min(1240px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 22px 0 34px;
+    }
+
+    .tab-panel {
+      display: none;
+    }
+
+    .tab-panel.active {
+      display: block;
+    }
+
+    .grid-two {
+      display: grid;
+      grid-template-columns: minmax(280px, 385px) minmax(0, 1fr);
+      gap: 16px;
+      align-items: start;
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .panel-head {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .panel-title {
+      margin: 0;
+      font-size: 1rem;
+      line-height: 1.4;
+    }
+
+    .panel-body {
+      padding: 16px;
+    }
+
+    .filters {
+      display: grid;
+      gap: 12px;
+    }
+
+    .field {
+      display: grid;
+      gap: 5px;
+    }
+
+    .field label {
+      color: #445268;
+      font-size: .84rem;
+      font-weight: 700;
+    }
+
+    select,
+    input[type="search"] {
+      width: 100%;
+      min-height: 42px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #ffffff;
+      color: var(--ink);
+      padding: 8px 10px;
+    }
+
+    .chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+    }
+
+    .chip {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #ffffff;
+      color: #3c4a5d;
+      padding: 6px 10px;
+      min-height: 34px;
+      font-size: .86rem;
+    }
+
+    .chip.active {
+      border-color: var(--nav-2);
+      background: #eaf7f7;
+      color: #0e5a62;
+      font-weight: 700;
+    }
+
+    .chip.danger {
+      border-color: #e0b2a8;
+      background: #fff1ee;
+      color: #933426;
+    }
+
+    .formula-list,
+    .card-list,
+    .weak-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .formula-item,
+    .practice-card,
+    .weak-item {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #ffffff;
+      padding: 12px;
+      display: grid;
+      gap: 8px;
+      text-align: left;
+    }
+
+    .formula-item {
+      width: 100%;
+    }
+
+    .formula-item.active {
+      border-color: var(--nav-2);
+      box-shadow: inset 4px 0 0 var(--nav-2);
+    }
+
+    .item-title {
+      font-weight: 800;
+      line-height: 1.45;
+    }
+
+    .item-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      color: var(--muted);
+      font-size: .82rem;
+    }
+
+    .formula-detail {
+      display: grid;
+      gap: 14px;
+    }
+
+    .detail-title-row {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .detail-title-row h2,
+    .card-detail h2 {
+      margin: 0;
+      font-size: clamp(1.22rem, 2.4vw, 1.75rem);
+      line-height: 1.35;
+      letter-spacing: 0;
+    }
+
+    .formula-box,
+    .math-box {
+      background: var(--wash);
+      border: 1px solid #cbd9e5;
+      border-radius: var(--radius);
+      padding: 14px;
+      overflow-x: auto;
+    }
+
+    math {
+      max-width: 100%;
+      font-family: "Cambria Math", "STIX Two Math", "Times New Roman", serif;
+      font-size: 1.18rem;
+      line-height: 1.6;
+    }
+
+    .formula-box math,
+    .math-box math {
+      min-width: max-content;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .info-block {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 12px;
+      background: #ffffff;
+    }
+
+    .info-block h3 {
+      margin: 0 0 6px;
+      font-size: .9rem;
+      color: #344256;
+    }
+
+    .info-block p,
+    .info-block ul,
+    .source-note p {
+      margin: 0;
+    }
+
+    ul.clean {
+      list-style: none;
+      padding: 0;
+      display: grid;
+      gap: 5px;
+    }
+
+    ul.clean li::before {
+      content: "・";
+      color: var(--nav-2);
+      font-weight: 800;
+      margin-right: 2px;
+    }
+
+    .related-area {
+      display: grid;
+      gap: 8px;
+    }
+
+    .action-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .primary-button,
+    .secondary-button,
+    .plain-button {
+      border-radius: var(--radius);
+      min-height: 40px;
+      padding: 8px 12px;
+      border: 1px solid var(--line);
+      background: #ffffff;
+      color: #26364a;
+    }
+
+    .primary-button {
+      background: var(--nav);
+      border-color: var(--nav);
+      color: #ffffff;
+      font-weight: 800;
+    }
+
+    .secondary-button {
+      background: #eef7fc;
+      border-color: #b9d5e7;
+      color: #154f70;
+    }
+
+    .plain-button {
+      background: #ffffff;
+    }
+
+    .practice-layout {
+      display: grid;
+      grid-template-columns: minmax(280px, 420px) minmax(0, 1fr);
+      gap: 16px;
+      align-items: start;
+    }
+
+    .practice-card.active {
+      border-color: var(--accent);
+      box-shadow: inset 4px 0 0 var(--accent);
+    }
+
+    .card-detail {
+      display: grid;
+      gap: 14px;
+    }
+
+    .reveal-block {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #ffffff;
+      overflow: hidden;
+    }
+
+    .reveal-block h3 {
+      margin: 0;
+      padding: 10px 12px;
+      background: #f7f9fc;
+      border-bottom: 1px solid var(--line);
+      font-size: .95rem;
+    }
+
+    .reveal-content {
+      padding: 12px;
+      display: grid;
+      gap: 8px;
+    }
+
+    .reveal-content[hidden] {
+      display: none;
+    }
+
+    ol.steps {
+      margin: 0;
+      padding-left: 1.35rem;
+      display: grid;
+      gap: 6px;
+    }
+
+    .source-note {
+      background: #ffffff;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: .84rem;
+      padding: 14px 0 22px;
+    }
+
+    .source-note .inner {
+      width: min(1240px, calc(100% - 32px));
+      margin: 0 auto;
+      display: grid;
+      gap: 6px;
+    }
+
+    .empty {
+      border: 1px dashed #b9c6d4;
+      border-radius: var(--radius);
+      padding: 16px;
+      color: var(--muted);
+      background: #ffffff;
+    }
+
+    .mini-stats {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .stat {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #ffffff;
+      padding: 12px;
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 1.45rem;
+      line-height: 1.2;
+    }
+
+    .stat span {
+      color: var(--muted);
+      font-size: .82rem;
+    }
+
+    .toast {
+      position: fixed;
+      right: 16px;
+      bottom: 16px;
+      background: #183247;
+      color: #ffffff;
+      border-radius: var(--radius);
+      padding: 10px 12px;
+      box-shadow: var(--shadow);
+      opacity: 0;
+      transform: translateY(8px);
+      pointer-events: none;
+      transition: .18s ease;
+      z-index: 20;
+      max-width: min(360px, calc(100vw - 32px));
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 860px) {
+      .brand-row,
+      .detail-title-row {
+        display: grid;
+      }
+
+      .status-stack {
+        justify-content: flex-start;
+      }
+
+      .grid-two,
+      .practice-layout,
+      .info-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .mini-stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 560px) {
+      .topbar,
+      main,
+      .source-note .inner {
+        width: min(100% - 20px, 1240px);
+      }
+
+      .panel-body,
+      .panel-head {
+        padding-left: 12px;
+        padding-right: 12px;
+      }
+
+      math {
+        font-size: 1.04rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <header>
+      <div class="topbar">
+        <div class="brand-row">
+          <div>
+            <h1>関西私大理工系 数学公式カード</h1>
+            <p class="subtitle">大工大・立命館・関大・近大を中心に、公式の確認と入試風カード演習をつなげます。</p>
+          </div>
+          <div class="status-stack" aria-label="データ状態">
+            <span class="status-pill" id="formulaCount">公式 0</span>
+            <span class="status-pill" id="cardCount">演習 0</span>
+            <span class="status-pill" id="checkStatus">確認中</span>
+          </div>
+        </div>
+        <nav class="tabs" aria-label="メインメニュー">
+          <button class="tab-button" type="button" data-tab="formulas" aria-selected="true">公式確認</button>
+          <button class="tab-button" type="button" data-tab="practice" aria-selected="false">大学別演習</button>
+          <button class="tab-button" type="button" data-tab="review" aria-selected="false">カード復習</button>
+          <button class="tab-button" type="button" data-tab="weakness" aria-selected="false">弱点リスト</button>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="tab-panel active" id="tab-formulas" aria-labelledby="公式確認">
+        <div class="grid-two">
+          <aside class="panel">
+            <div class="panel-head">
+              <h2 class="panel-title">公式を探す</h2>
+            </div>
+            <div class="panel-body filters">
+              <div class="field">
+                <label for="formulaSearch">キーワード</label>
+                <input id="formulaSearch" type="search" placeholder="例: 極限、判別式、ベクトル">
+              </div>
+              <div class="field">
+                <label for="subjectSelect">科目</label>
+                <select id="subjectSelect"></select>
+              </div>
+              <div class="field">
+                <label for="unitSelect">単元</label>
+                <select id="unitSelect"></select>
+              </div>
+              <div class="field">
+                <label for="formulaSelect">公式</label>
+                <select id="formulaSelect"></select>
+              </div>
+              <div class="field">
+                <label>大学タグ</label>
+                <div class="chip-row" id="formulaUniversityChips"></div>
+              </div>
+              <div class="formula-list" id="formulaList"></div>
+            </div>
+          </aside>
+          <section class="panel">
+            <div class="panel-body">
+              <div class="formula-detail" id="formulaDetail"></div>
+            </div>
+          </section>
+        </div>
+      </section>
+
+      <section class="tab-panel" id="tab-practice" aria-labelledby="大学別演習">
+        <div class="practice-layout">
+          <aside class="panel">
+            <div class="panel-head">
+              <h2 class="panel-title">入試風カード</h2>
+            </div>
+            <div class="panel-body filters">
+              <div class="field">
+                <label>大学タグ</label>
+                <div class="chip-row" id="practiceUniversityChips"></div>
+              </div>
+              <div class="field">
+                <label for="practiceSubject">科目</label>
+                <select id="practiceSubject"></select>
+              </div>
+              <div class="field">
+                <label for="practiceSearch">キーワード</label>
+                <input id="practiceSearch" type="search" placeholder="例: 面積、漸化式、複素数">
+              </div>
+              <div class="card-list" id="practiceList"></div>
+            </div>
+          </aside>
+          <section class="panel">
+            <div class="panel-body">
+              <div class="card-detail" id="cardDetail"></div>
+            </div>
+          </section>
+        </div>
+      </section>
+
+      <section class="tab-panel" id="tab-review" aria-labelledby="カード復習">
+        <div class="panel">
+          <div class="panel-head">
+            <h2 class="panel-title">要復習カード</h2>
+            <div class="action-row">
+              <button class="secondary-button" type="button" id="randomReviewBtn">ランダム表示</button>
+              <button class="plain-button" type="button" id="clearReviewBtn">全解除</button>
+            </div>
+          </div>
+          <div class="panel-body">
+            <div class="mini-stats" id="reviewStats"></div>
+            <div class="card-list" id="reviewList" style="margin-top: 14px;"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="tab-panel" id="tab-weakness" aria-labelledby="弱点リスト">
+        <div class="panel">
+          <div class="panel-head">
+            <h2 class="panel-title">単元別の弱点</h2>
+            <button class="plain-button" type="button" id="resetProgressBtn">学習記録をリセット</button>
+          </div>
+          <div class="panel-body">
+            <div class="mini-stats" id="weakStats"></div>
+            <div class="weak-list" id="weakList" style="margin-top: 14px;"></div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="source-note">
+      <div class="inner">
+        <p>入試範囲タグは2026年度公開情報を基準にした学習用整理です。最新の出願時条件は各大学の公式要項で確認してください。</p>
+        <p>参照: <a href="https://www.oit.ac.jp/admission/exam/admission_guide.html">大阪工業大学</a>、<a href="https://ritsnet.ritsumei.jp/admission/general/method.html">立命館大学</a>、<a href="https://www.nyusi.kansai-u.ac.jp/admission/general/">関西大学</a>、<a href="https://kindai.jp/exam/system/general1_a/subject/">近畿大学</a></p>
+      </div>
+    </footer>
+  </div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    const universities = ["全大学", "共通頻出", "大工大", "立命館", "関大", "近大"];
+    const allTargetUniversities = ["共通頻出", "大工大", "立命館", "関大", "近大"];
+    const subjects = ["全科目", "数学I", "数学A", "数学II", "数学B", "数学C", "数学III"];
+
+    const esc = (value) => String(value).replace(/[&<>"']/g, (char) => ({
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#039;"
+    }[char]));
+    const mi = (value) => `<mi>${esc(value)}</mi>`;
+    const mn = (value) => `<mn>${esc(value)}</mn>`;
+    const mo = (value) => `<mo>${esc(value)}</mo>`;
+    const mt = (value) => `<mtext>${esc(value)}</mtext>`;
+    const row = (...items) => `<mrow>${items.join("")}</mrow>`;
+    const math = (...items) => `<math xmlns="http://www.w3.org/1998/Math/MathML" display="block">${row(...items)}</math>`;
+    const frac = (top, bottom) => `<mfrac><mrow>${top}</mrow><mrow>${bottom}</mrow></mfrac>`;
+    const sup = (base, power) => `<msup><mrow>${base}</mrow><mrow>${power}</mrow></msup>`;
+    const sub = (base, lower) => `<msub><mrow>${base}</mrow><mrow>${lower}</mrow></msub>`;
+    const subsup = (base, lower, upper) => `<msubsup><mrow>${base}</mrow><mrow>${lower}</mrow><mrow>${upper}</mrow></msubsup>`;
+    const sqrt = (value) => `<msqrt><mrow>${value}</mrow></msqrt>`;
+    const abs = (value) => row(mo("|"), value, mo("|"));
+    const vec = (value) => `<mover>${mi(value)}<mo>→</mo></mover>`;
+    const lim = (lower, value) => row(`<munder>${mo("lim")}<mrow>${lower}</mrow></munder>`, value);
+    const sum = (lower, upper, value) => row(subsup(mo("Σ"), lower, upper), value);
+    const integ = (lower, upper, value, variable = "x") => row(subsup(mo("∫"), lower, upper), value, row(mi("d"), mi(variable)));
+    const inline = (...items) => `<span class="math-inline">${math(...items)}</span>`;
+
+    const F = (entry) => ({
+      reading: "",
+      conditions: "高校数学の標準範囲で用いる。",
+      example: "関連カードで入試風の使い方を確認する。",
+      relatedIds: [],
+      tags: [],
+      universities: allTargetUniversities,
+      priority: "標準",
+      difficulty: "標準",
+      ...entry
+    });
+
+    const C = (entry) => ({
+      tags: [],
+      universities: allTargetUniversities,
+      difficulty: "標準",
+      pattern: "標準処理",
+      ...entry
+    });
+
+    const formulaData = [
+      F({
+        id: "i-factor-diff-square",
+        subject: "数学I",
+        unit: "数と式",
+        title: "平方差と展開公式",
+        formula: math(row(mo("("), mi("a"), mo("+"), mi("b"), mo(")"), row(mo("("), mi("a"), mo("-"), mi("b"), mo(")")), mo("="), sup(mi("a"), mn("2")), mo("-"), sup(mi("b"), mn("2")))),
+        whenToUse: "二次式を素早く因数分解し、方程式・不等式・極限の前処理を軽くする。",
+        signals: ["二乗の差が見える", "分母の有理化", "式を簡単にしてから代入したい"],
+        pitfalls: "符号の取り違えで中間項を残さない。和と差が対になっているか確認する。",
+        tags: ["因数分解", "計算整理"]
+      }),
+      F({
+        id: "i-quadratic-formula",
+        subject: "数学I",
+        unit: "数と式",
+        title: "二次方程式の解の公式",
+        formula: math(mi("x"), mo("="), frac(row(mo("-"), mi("b"), mo("±"), sqrt(row(sup(mi("b"), mn("2")), mo("-"), mn("4"), mi("a"), mi("c")))), row(mn("2"), mi("a")))),
+        conditions: math(mi("a"), mo("≠"), mn("0")),
+        whenToUse: "因数分解しにくい二次方程式の根、接線条件、判別式の確認で使う。",
+        signals: ["二次式が因数分解しにくい", "根を具体的に求める", "パラメータ入りの交点"],
+        pitfalls: "判別式の中身を先に整理し、分母の 2a を最後まで落とさない。",
+        tags: ["二次方程式", "根"]
+      }),
+      F({
+        id: "i-discriminant",
+        subject: "数学I",
+        unit: "二次関数",
+        title: "判別式",
+        formula: math(mi("D"), mo("="), sup(mi("b"), mn("2")), mo("-"), mn("4"), mi("a"), mi("c")),
+        whenToUse: "交点の個数、実数解の個数、接する条件を調べる。",
+        signals: ["接する", "共有点の個数", "すべての実数で正", "実数解をもつ"],
+        pitfalls: "二次方程式の形に移項してから D を作る。接するなら D=0。",
+        tags: ["判別式", "交点", "接線"],
+        universities: ["共通頻出", "大工大", "関大", "近大"]
+      }),
+      F({
+        id: "i-absolute-interval",
+        subject: "数学I",
+        unit: "数と式",
+        title: "絶対値不等式",
+        formula: math(abs(row(mi("x"), mo("-"), mi("a"))), mo("<"), mi("r"), mo("⇔"), mi("a"), mo("-"), mi("r"), mo("<"), mi("x"), mo("<"), mi("a"), mo("+"), mi("r")),
+        conditions: math(mi("r"), mo(">"), mn("0")),
+        whenToUse: "距離として絶対値を読み替え、範囲を数直線で決める。",
+        signals: ["距離が r 未満", "絶対値つきの範囲", "場合分けを減らしたい"],
+        pitfalls: "r が負なら解なし。大なり型は外側の範囲になる。",
+        tags: ["絶対値", "不等式"]
+      }),
+      F({
+        id: "i-contrapositive",
+        subject: "数学I",
+        unit: "集合と命題",
+        title: "対偶",
+        formula: math(row(mi("P"), mo("⇒"), mi("Q")), mo("⇔"), row(mo("not"), mi("Q"), mo("⇒"), mo("not"), mi("P"))),
+        whenToUse: "直接証明が難しい命題を、否定から示す。",
+        signals: ["ならばを証明", "逆・裏・対偶", "整数や不等式の証明"],
+        pitfalls: "逆は一般に同値ではない。正しいのは命題と対偶の同値。",
+        tags: ["命題", "証明"]
+      }),
+      F({
+        id: "i-quadratic-vertex",
+        subject: "数学I",
+        unit: "二次関数",
+        title: "平方完成と頂点",
+        formula: math(mi("y"), mo("="), mi("a"), sup(row(mo("("), mi("x"), mo("-"), mi("p"), mo(")")), mn("2")), mo("+"), mi("q")),
+        conditions: "頂点は (p, q)、軸は x=p。",
+        whenToUse: "最大・最小、グラフ移動、範囲つき二次関数で最初に使う。",
+        signals: ["最大値・最小値", "頂点", "軸", "範囲つき"],
+        pitfalls: "a の符号で上に凸・下に凸が変わる。定義域の端点も必ず見る。",
+        tags: ["平方完成", "最大最小"]
+      }),
+      F({
+        id: "i-sine-law",
+        subject: "数学I",
+        unit: "図形と計量",
+        title: "正弦定理",
+        formula: math(frac(mi("a"), row(mi("sin"), mi("A"))), mo("="), frac(mi("b"), row(mi("sin"), mi("B"))), mo("="), frac(mi("c"), row(mi("sin"), mi("C"))), mo("="), mn("2"), mi("R")),
+        whenToUse: "外接円半径、辺と向かい合う角の対応を使う。",
+        signals: ["外接円", "辺と向かいの角", "角が一つ足りない"],
+        pitfalls: "辺 a は角 A の向かい。対応をずらさない。",
+        tags: ["三角比", "正弦定理"]
+      }),
+      F({
+        id: "i-cosine-law",
+        subject: "数学I",
+        unit: "図形と計量",
+        title: "余弦定理",
+        formula: math(sup(mi("a"), mn("2")), mo("="), sup(mi("b"), mn("2")), mo("+"), sup(mi("c"), mn("2")), mo("-"), mn("2"), mi("b"), mi("c"), row(mi("cos"), mi("A"))),
+        whenToUse: "二辺とその間の角、または三辺から角を求める。",
+        signals: ["三辺がある", "はさむ角", "三角形の長さ決定"],
+        pitfalls: "角 A の向かいが a。マイナスの項は 2bc cosA。",
+        tags: ["三角比", "余弦定理"]
+      }),
+      F({
+        id: "i-triangle-area",
+        subject: "数学I",
+        unit: "図形と計量",
+        title: "三角形の面積",
+        formula: math(mi("S"), mo("="), frac(row(mn("1")), row(mn("2"))), mi("b"), mi("c"), row(mi("sin"), mi("A"))),
+        whenToUse: "二辺とはさむ角から面積を出す。座標・ベクトルの面積にもつながる。",
+        signals: ["面積", "二辺と角", "正弦定理や余弦定理の後"],
+        pitfalls: "はさむ角を使う。高さを作るより速い場面が多い。",
+        tags: ["面積", "三角比"],
+        universities: ["共通頻出", "大工大", "近大"]
+      }),
+      F({
+        id: "i-variance",
+        subject: "数学I",
+        unit: "データの分析",
+        title: "分散",
+        formula: math(sup(mi("s"), mn("2")), mo("="), frac(row(mn("1")), mi("n")), sum(row(mi("i"), mo("="), mn("1")), mi("n"), sup(row(mo("("), sub(mi("x"), mi("i")), mo("-"), moverText("x"), mo(")")), mn("2")))),
+        whenToUse: "データの散らばり、標準偏差、変換後の分散を調べる。",
+        signals: ["散らばり", "標準偏差", "平均との差"],
+        pitfalls: "平均との差を二乗して平均する。標準偏差は分散の平方根。",
+        tags: ["統計", "分散"]
+      }),
+      F({
+        id: "i-correlation",
+        subject: "数学I",
+        unit: "データの分析",
+        title: "相関係数",
+        formula: math(mi("r"), mo("="), frac(sub(mi("s"), row(mi("x"), mi("y"))), row(sub(mi("s"), mi("x")), sub(mi("s"), mi("y"))))),
+        conditions: math(mo("-"), mn("1"), mo("≦"), mi("r"), mo("≦"), mn("1")),
+        whenToUse: "二つのデータの直線的な関係の強さを判断する。",
+        signals: ["相関", "散布図", "共分散"],
+        pitfalls: "相関は因果を意味しない。標準偏差が 0 のときは定義できない。",
+        tags: ["統計", "相関"]
+      }),
+
+      F({
+        id: "a-permutation",
+        subject: "数学A",
+        unit: "場合の数",
+        title: "順列",
+        formula: math(sub(mi("P"), row(mi("n"), mi("r"))), mo("="), frac(row(mi("n"), mo("!")), row(mo("("), mi("n"), mo("-"), mi("r"), mo(")"), mo("!")))),
+        conditions: "順番を区別して r 個を並べる。",
+        whenToUse: "並べ方、役割が違う席や順番を数える。",
+        signals: ["順番が違えば別", "並べる", "役職を決める"],
+        pitfalls: "選ぶだけなら組合せ。順番の有無を最初に判定する。",
+        tags: ["順列", "場合の数"]
+      }),
+      F({
+        id: "a-combination",
+        subject: "数学A",
+        unit: "場合の数",
+        title: "組合せ",
+        formula: math(sub(mi("C"), row(mi("n"), mi("r"))), mo("="), frac(row(mi("n"), mo("!")), row(mi("r"), mo("!"), row(mo("("), mi("n"), mo("-"), mi("r"), mo(")"), mo("!"))))),
+        conditions: "順番を区別せずに r 個を選ぶ。",
+        whenToUse: "メンバー選び、確率の分子分母、係数の計算。",
+        signals: ["選ぶ", "同時に取り出す", "順番は問わない"],
+        pitfalls: "選んだ後に並べる操作があるなら順列を掛ける。",
+        tags: ["組合せ", "場合の数"],
+        universities: ["共通頻出", "大工大", "近大"]
+      }),
+      F({
+        id: "a-circular-permutation",
+        subject: "数学A",
+        unit: "場合の数",
+        title: "円順列",
+        formula: math(row(mo("("), mi("n"), mo("-"), mn("1"), mo(")")), mo("!")),
+        conditions: "回転して一致する並びは同じとみなす。",
+        whenToUse: "円卓、輪に並べる問題。",
+        signals: ["円形に並べる", "回転を同一視"],
+        pitfalls: "裏返しも同じならさらに 2 で割る場合がある。",
+        tags: ["円順列"]
+      }),
+      F({
+        id: "a-repeated-combination",
+        subject: "数学A",
+        unit: "場合の数",
+        title: "重複組合せ",
+        formula: math(sub(mi("H"), row(mi("n"), mi("r"))), mo("="), sub(mi("C"), row(mi("n"), mo("+"), mi("r"), mo("-"), mn("1"), mi("r")))),
+        conditions: "n 種類から重複を許して r 個選ぶ。",
+        whenToUse: "同じものを複数選べる分配問題。",
+        signals: ["重複を許す", "区別しない箱への分配", "非負整数解"],
+        pitfalls: "各箱に最低1個などの条件は先に調整する。",
+        tags: ["重複組合せ", "整数解"]
+      }),
+      F({
+        id: "a-binomial",
+        subject: "数学A",
+        unit: "場合の数",
+        title: "二項定理",
+        formula: math(sup(row(mo("("), mi("a"), mo("+"), mi("b"), mo(")")), mi("n")), mo("="), sum(row(mi("r"), mo("="), mn("0")), mi("n"), row(sub(mi("C"), row(mi("n"), mi("r"))), sup(mi("a"), row(mi("n"), mo("-"), mi("r"))), sup(mi("b"), mi("r"))))),
+        whenToUse: "展開係数、指定された項、確率分布の係数を求める。",
+        signals: ["係数", "展開式の第 r 項", "二項分布"],
+        pitfalls: "a と b の指数の和は n。r の取り方と項番号を混同しない。",
+        tags: ["二項定理", "係数"]
+      }),
+      F({
+        id: "a-probability-classical",
+        subject: "数学A",
+        unit: "確率",
+        title: "同様に確からしい確率",
+        formula: math(mi("P"), row(mo("("), mi("A"), mo(")")), mo("="), frac(row(mt("A が起こる場合の数")), row(mt("全体の場合の数")))),
+        conditions: "すべての根元事象が同様に確からしい。",
+        whenToUse: "さいころ、カード、選び方などの標準確率。",
+        signals: ["無作為", "同様に確からしい", "場合の数で数える"],
+        pitfalls: "分母と分子を同じ数え方でそろえる。",
+        tags: ["確率", "場合の数"]
+      }),
+      F({
+        id: "a-probability-addition",
+        subject: "数学A",
+        unit: "確率",
+        title: "加法定理",
+        formula: math(mi("P"), row(mo("("), mi("A"), mo("∪"), mi("B"), mo(")")), mo("="), mi("P"), row(mo("("), mi("A"), mo(")")), mo("+"), mi("P"), row(mo("("), mi("B"), mo(")")), mo("-"), mi("P"), row(mo("("), mi("A"), mo("∩"), mi("B"), mo(")"))),
+        whenToUse: "A または B の確率を重複に注意して求める。",
+        signals: ["または", "少なくとも一方", "重なりがある"],
+        pitfalls: "互いに排反なら交わりの項は 0。",
+        tags: ["確率", "和事象"]
+      }),
+      F({
+        id: "a-conditional",
+        subject: "数学A",
+        unit: "確率",
+        title: "条件付き確率",
+        formula: math(mi("P"), row(mo("("), mi("A"), mo("|"), mi("B"), mo(")")), mo("="), frac(row(mi("P"), row(mo("("), mi("A"), mo("∩"), mi("B"), mo(")"))), row(mi("P"), row(mo("("), mi("B"), mo(")"))))),
+        conditions: math(mi("P"), row(mo("("), mi("B"), mo(")")), mo(">"), mn("0")),
+        whenToUse: "B が起こったとわかった後の A の確率。",
+        signals: ["ただし", "とわかったとき", "条件のもとで"],
+        pitfalls: "分母は条件側の確率。全体を B の中に取り直す。",
+        tags: ["条件付き確率"],
+        universities: ["共通頻出", "近大", "大工大"]
+      }),
+      F({
+        id: "a-expected-value",
+        subject: "数学A",
+        unit: "確率",
+        title: "期待値",
+        formula: math(mi("E"), row(mo("("), mi("X"), mo(")")), mo("="), sum(row(mi("i")), row(), row(sub(mi("x"), mi("i")), mi("P"), row(mo("("), mi("X"), mo("="), sub(mi("x"), mi("i")), mo(")"))))),
+        whenToUse: "得点、賞金、回数の平均的な値を求める。",
+        signals: ["期待値", "平均得点", "損得"],
+        pitfalls: "値と確率を対応させる表を作るとミスが減る。",
+        tags: ["期待値"]
+      }),
+      F({
+        id: "a-gcd-lcm",
+        subject: "数学A",
+        unit: "整数の性質",
+        title: "最大公約数と最小公倍数",
+        formula: math(mi("a"), mi("b"), mo("="), row(mi("gcd"), row(mo("("), mi("a"), mo(","), mi("b"), mo(")"))), row(mi("lcm"), row(mo("("), mi("a"), mo(","), mi("b"), mo(")")))),
+        conditions: "a, b は正の整数。",
+        whenToUse: "約数・倍数、周期、整数条件の整理。",
+        signals: ["最大公約数", "最小公倍数", "互いに素"],
+        pitfalls: "互いに素のとき gcd は 1。素因数分解で確認する。",
+        tags: ["整数", "公約数"]
+      }),
+      F({
+        id: "a-divisor-count",
+        subject: "数学A",
+        unit: "整数の性質",
+        title: "約数の個数",
+        formula: math(mi("N"), mo("="), sup(sub(mi("p"), mn("1")), sub(mi("a"), mn("1"))), sup(sub(mi("p"), mn("2")), sub(mi("a"), mn("2"))), mo("⋯"), mo("⇒"), mt("約数の個数"), mo("="), row(mo("("), sub(mi("a"), mn("1")), mo("+"), mn("1"), mo(")")), row(mo("("), sub(mi("a"), mn("2")), mo("+"), mn("1"), mo(")")), mo("⋯")),
+        whenToUse: "約数の個数、平方数条件、整数の分類。",
+        signals: ["約数はいくつ", "正の約数", "素因数分解"],
+        pitfalls: "指数に 1 を足して掛ける。素因数が抜けると全体が崩れる。",
+        tags: ["約数", "素因数分解"]
+      }),
+      F({
+        id: "a-congruence",
+        subject: "数学A",
+        unit: "整数の性質",
+        title: "合同式",
+        formula: math(mi("a"), mo("≡"), mi("b"), row(mo("("), mo("mod"), mi("m"), mo(")")), mo("⇔"), mi("m"), mo("|"), row(mo("("), mi("a"), mo("-"), mi("b"), mo(")"))),
+        whenToUse: "余り、周期、整数解の候補を絞る。",
+        signals: ["余り", "割ると", "下二桁", "周期性"],
+        pitfalls: "両辺を割るときは割る数と法が互いに素か確認する。",
+        tags: ["合同式", "整数"],
+        universities: ["共通頻出", "大工大", "近大"]
+      }),
+      F({
+        id: "a-ceva",
+        subject: "数学A",
+        unit: "図形の性質",
+        title: "チェバの定理",
+        formula: math(frac(mi("BD"), mi("DC")), mo("・"), frac(mi("CE"), mi("EA")), mo("・"), frac(mi("AF"), mi("FB")), mo("="), mn("1")),
+        conditions: "三角形 ABC で AD, BE, CF が一点で交わる。",
+        whenToUse: "三角形内の線分比と共点条件。",
+        signals: ["一点で交わる", "線分比", "三角形の内部"],
+        pitfalls: "対応する辺の順番を一周でそろえる。",
+        tags: ["平面図形", "線分比"]
+      }),
+      F({
+        id: "a-menelaus",
+        subject: "数学A",
+        unit: "図形の性質",
+        title: "メネラウスの定理",
+        formula: math(frac(mi("BD"), mi("DC")), mo("・"), frac(mi("CE"), mi("EA")), mo("・"), frac(mi("AF"), mi("FB")), mo("="), mo("-"), mn("1")),
+        conditions: "三角形 ABC の辺または延長上の点 D, E, F が一直線上にある。",
+        whenToUse: "一直線条件と線分比を処理する。",
+        signals: ["一直線上", "延長線", "線分比"],
+        pitfalls: "有向線分で考える。高校入試的な長さ比だけで無理に処理しない。",
+        tags: ["平面図形", "線分比"]
+      }),
+      F({
+        id: "a-power-point",
+        subject: "数学A",
+        unit: "図形の性質",
+        title: "方べきの定理",
+        formula: math(mi("PA"), mo("・"), mi("PB"), mo("="), mi("PC"), mo("・"), mi("PD")),
+        conditions: "点 P から円へ引いた二直線が円と A, B, C, D で交わる。",
+        whenToUse: "円と線分の積、接線長、図形の長さを求める。",
+        signals: ["円と二直線", "接線", "積が等しい"],
+        pitfalls: "接線なら接点までの長さの二乗になる。",
+        tags: ["円", "方べき"]
+      }),
+
+      F({
+        id: "ii-remainder",
+        subject: "数学II",
+        unit: "式と証明",
+        title: "剰余の定理",
+        formula: math(mi("P"), row(mo("("), mi("x"), mo(")")), mt("を"), row(mo("("), mi("x"), mo("-"), mi("a"), mo(")")), mt("で割った余り"), mo("="), mi("P"), row(mo("("), mi("a"), mo(")"))),
+        whenToUse: "多項式の余り、係数決定、因数判定。",
+        signals: ["割った余り", "P(a)", "係数を定める"],
+        pitfalls: "割る式が一次式でない場合は余りの次数に注意する。",
+        tags: ["多項式", "剰余"]
+      }),
+      F({
+        id: "ii-factor-theorem",
+        subject: "数学II",
+        unit: "式と証明",
+        title: "因数定理",
+        formula: math(mi("P"), row(mo("("), mi("a"), mo(")")), mo("="), mn("0"), mo("⇔"), row(mo("("), mi("x"), mo("-"), mi("a"), mo(")")), mt("は"), mi("P"), row(mo("("), mi("x"), mo(")")), mt("の因数")),
+        whenToUse: "高次方程式の因数分解、整数根の候補探し。",
+        signals: ["因数をもつ", "P(a)=0", "高次方程式"],
+        pitfalls: "候補は定数項の約数から試すと速い。",
+        tags: ["多項式", "因数定理"]
+      }),
+      F({
+        id: "ii-amgm",
+        subject: "数学II",
+        unit: "式と証明",
+        title: "相加平均・相乗平均",
+        formula: math(frac(row(mi("a"), mo("+"), mi("b")), mn("2")), mo("≧"), sqrt(row(mi("a"), mi("b")))),
+        conditions: math(mi("a"), mo("≧"), mn("0"), mo(","), mi("b"), mo("≧"), mn("0")),
+        whenToUse: "積や和が一定の最大最小、不等式証明。",
+        signals: ["正の数", "和が一定", "積が一定", "最小値"],
+        pitfalls: "等号成立条件 a=b を必ず確認する。",
+        tags: ["不等式", "最大最小"],
+        universities: ["共通頻出", "関大", "立命館"]
+      }),
+      F({
+        id: "ii-root-relations",
+        subject: "数学II",
+        unit: "複素数と方程式",
+        title: "解と係数の関係",
+        formula: math(mi("α"), mo("+"), mi("β"), mo("="), mo("-"), frac(mi("b"), mi("a")), mo(","), mi("α"), mi("β"), mo("="), frac(mi("c"), mi("a"))),
+        conditions: math(mi("a"), sup(mi("x"), mn("2")), mo("+"), mi("b"), mi("x"), mo("+"), mi("c"), mo("="), mn("0")),
+        whenToUse: "二つの解の和・積、対称式、パラメータ条件。",
+        signals: ["解の和", "解の積", "二次方程式の解を直接出したくない"],
+        pitfalls: "係数 a で割る。符号は和が -b/a、積が c/a。",
+        tags: ["解と係数"]
+      }),
+      F({
+        id: "ii-distance",
+        subject: "数学II",
+        unit: "図形と方程式",
+        title: "二点間の距離",
+        formula: math(mi("AB"), mo("="), sqrt(row(sup(row(sub(mi("x"), mn("2")), mo("-"), sub(mi("x"), mn("1"))), mn("2")), mo("+"), sup(row(sub(mi("y"), mn("2")), mo("-"), sub(mi("y"), mn("1"))), mn("2"))))),
+        whenToUse: "座標上の長さ、円、軌跡、ベクトルへの橋渡し。",
+        signals: ["距離", "円の半径", "座標上の長さ"],
+        pitfalls: "差の順番は二乗で消えるが、x と y を混ぜない。",
+        tags: ["座標", "距離"]
+      }),
+      F({
+        id: "ii-line",
+        subject: "数学II",
+        unit: "図形と方程式",
+        title: "直線の方程式",
+        formula: math(mi("y"), mo("-"), sub(mi("y"), mn("1")), mo("="), mi("m"), row(mo("("), mi("x"), mo("-"), sub(mi("x"), mn("1")), mo(")"))),
+        whenToUse: "一点と傾きから直線を作る。接線にも直結する。",
+        signals: ["傾き", "通る点", "接線の方程式"],
+        pitfalls: "垂直な直線の傾きは積が -1。ただし垂直線は別扱い。",
+        tags: ["直線", "座標"]
+      }),
+      F({
+        id: "ii-circle",
+        subject: "数学II",
+        unit: "図形と方程式",
+        title: "円の方程式",
+        formula: math(sup(row(mo("("), mi("x"), mo("-"), mi("a"), mo(")")), mn("2")), mo("+"), sup(row(mo("("), mi("y"), mo("-"), mi("b"), mo(")")), mn("2")), mo("="), sup(mi("r"), mn("2"))),
+        conditions: "中心は (a, b)、半径は r。",
+        whenToUse: "中心・半径、円と直線の共有点、接線条件。",
+        signals: ["中心", "半径", "円と直線", "接する"],
+        pitfalls: "一般形は平方完成して中心を読む。",
+        tags: ["円", "座標"],
+        universities: ["共通頻出", "大工大", "関大", "近大"]
+      }),
+      F({
+        id: "ii-point-line-distance",
+        subject: "数学II",
+        unit: "図形と方程式",
+        title: "点と直線の距離",
+        formula: math(mi("d"), mo("="), frac(abs(row(mi("a"), sub(mi("x"), mn("0")), mo("+"), mi("b"), sub(mi("y"), mn("0")), mo("+"), mi("c"))), sqrt(row(sup(mi("a"), mn("2")), mo("+"), sup(mi("b"), mn("2")))))),
+        conditions: math(mi("a"), mi("x"), mo("+"), mi("b"), mi("y"), mo("+"), mi("c"), mo("="), mn("0")),
+        whenToUse: "接線、円と直線の距離、三角形の高さ。",
+        signals: ["点から直線まで", "接する", "高さ"],
+        pitfalls: "直線を ax+by+c=0 の形にしてから代入する。",
+        tags: ["距離", "接線"]
+      }),
+      F({
+        id: "ii-coordinate-area",
+        subject: "数学II",
+        unit: "図形と方程式",
+        title: "座標での三角形面積",
+        formula: math(mi("S"), mo("="), frac(mn("1"), mn("2")), abs(row(mi("x1"), row(mo("("), mi("y2"), mo("-"), mi("y3"), mo(")")), mo("+"), mi("x2"), row(mo("("), mi("y3"), mo("-"), mi("y1"), mo(")")), mo("+"), mi("x3"), row(mo("("), mi("y1"), mo("-"), mi("y2"), mo(")"))))),
+        whenToUse: "座標平面上の三角形面積、ベクトル面積の確認。",
+        signals: ["座標が三点", "面積", "一直線条件"],
+        pitfalls: "面積は絶対値。0 なら三点が一直線上。",
+        tags: ["座標", "面積"]
+      }),
+      F({
+        id: "ii-trig-identity",
+        subject: "数学II",
+        unit: "三角関数",
+        title: "三角関数の基本関係",
+        formula: math(sup(row(mi("sin"), mi("θ")), mn("2")), mo("+"), sup(row(mi("cos"), mi("θ")), mn("2")), mo("="), mn("1"), mo(","), row(mi("tan"), mi("θ")), mo("="), frac(row(mi("sin"), mi("θ")), row(mi("cos"), mi("θ")))),
+        whenToUse: "三角方程式、最大最小、変形の土台。",
+        signals: ["sin と cos が混在", "tan に直す", "二乗の和"],
+        pitfalls: "tan は cosθ=0 で定義されない。",
+        tags: ["三角関数"]
+      }),
+      F({
+        id: "ii-trig-addition",
+        subject: "数学II",
+        unit: "三角関数",
+        title: "加法定理",
+        formula: math(row(mi("sin"), row(mo("("), mi("α"), mo("+"), mi("β"), mo(")"))), mo("="), row(mi("sin"), mi("α"), mi("cos"), mi("β")), mo("+"), row(mi("cos"), mi("α"), mi("sin"), mi("β"))),
+        whenToUse: "合成、二倍角、三角方程式、複素数平面の回転。",
+        signals: ["α+β", "三角関数の合成", "角を分ける"],
+        pitfalls: "cos の加法定理は符号が逆になる。",
+        tags: ["三角関数", "加法定理"],
+        universities: ["共通頻出", "大工大", "立命館", "関大", "近大"]
+      }),
+      F({
+        id: "ii-trig-double",
+        subject: "数学II",
+        unit: "三角関数",
+        title: "二倍角",
+        formula: math(row(mi("sin"), mn("2"), mi("θ")), mo("="), mn("2"), row(mi("sin"), mi("θ"), mi("cos"), mi("θ")), mo(","), row(mi("cos"), mn("2"), mi("θ")), mo("="), sup(row(mi("cos"), mi("θ")), mn("2")), mo("-"), sup(row(mi("sin"), mi("θ")), mn("2"))),
+        whenToUse: "角をそろえる、積分で次数を下げる、方程式を解く。",
+        signals: ["2θ", "sinθ cosθ", "次数下げ"],
+        pitfalls: "cos2θ は 1-2sin²θ や 2cos²θ-1 にも変形できる。",
+        tags: ["三角関数", "二倍角"]
+      }),
+      F({
+        id: "ii-trig-product-sum",
+        subject: "数学II",
+        unit: "三角関数",
+        title: "積和公式",
+        formula: math(row(mi("sin"), mi("α"), mi("cos"), mi("β")), mo("="), frac(mn("1"), mn("2")), row(mo("{"), row(mi("sin"), row(mo("("), mi("α"), mo("+"), mi("β"), mo(")"))), mo("+"), row(mi("sin"), row(mo("("), mi("α"), mo("-"), mi("β"), mo(")"))), mo("}"))),
+        whenToUse: "積の形を和に直し、方程式や積分を処理する。",
+        signals: ["三角関数の積", "積分", "和に直す"],
+        pitfalls: "符号と係数 1/2 を落とさない。",
+        tags: ["三角関数", "積和"]
+      }),
+      F({
+        id: "ii-log-laws",
+        subject: "数学II",
+        unit: "指数・対数",
+        title: "対数法則",
+        formula: math(sub(mi("log"), mi("a")), row(mi("M"), mi("N")), mo("="), sub(mi("log"), mi("a")), mi("M"), mo("+"), sub(mi("log"), mi("a")), mi("N")),
+        conditions: math(mi("a"), mo(">"), mn("0"), mo(","), mi("a"), mo("≠"), mn("1"), mo(","), mi("M"), mo(">"), mn("0"), mo(","), mi("N"), mo(">"), mn("0")),
+        whenToUse: "積・商・累乗を和差に直して方程式や不等式を解く。",
+        signals: ["log の和", "底をそろえる", "真数条件"],
+        pitfalls: "真数条件を最後に必ず確認する。",
+        tags: ["対数", "方程式"]
+      }),
+      F({
+        id: "ii-change-base",
+        subject: "数学II",
+        unit: "指数・対数",
+        title: "底の変換公式",
+        formula: math(sub(mi("log"), mi("a")), mi("b"), mo("="), frac(row(sub(mi("log"), mi("c")), mi("b")), row(sub(mi("log"), mi("c")), mi("a")))),
+        conditions: math(mi("a"), mo(">"), mn("0"), mo(","), mi("a"), mo("≠"), mn("1"), mo(","), mi("c"), mo(">"), mn("0"), mo(","), mi("c"), mo("≠"), mn("1")),
+        whenToUse: "底がばらばらの対数を比較・整理する。",
+        signals: ["底が違う", "log の比", "常用対数"],
+        pitfalls: "底と真数を逆にしない。",
+        tags: ["対数"]
+      }),
+      F({
+        id: "ii-polynomial-derivative",
+        subject: "数学II",
+        unit: "微分積分",
+        title: "整式の微分",
+        formula: math(row(mfracText("d", "dx")), sup(mi("x"), mi("n")), mo("="), mi("n"), sup(mi("x"), row(mi("n"), mo("-"), mn("1")))),
+        whenToUse: "接線、増減、最大最小を調べる最初の一手。",
+        signals: ["接線", "極値", "増減", "最大最小"],
+        pitfalls: "定数項の微分は 0。",
+        tags: ["微分", "接線"]
+      }),
+      F({
+        id: "ii-tangent-line",
+        subject: "数学II",
+        unit: "微分積分",
+        title: "接線の方程式",
+        formula: math(mi("y"), mo("-"), mi("f"), row(mo("("), mi("a"), mo(")")), mo("="), mi("f"), mo("'"), row(mo("("), mi("a"), mo(")")), row(mo("("), mi("x"), mo("-"), mi("a"), mo(")"))),
+        whenToUse: "曲線上の点での接線、接線条件、共有点条件。",
+        signals: ["接線", "曲線上の点", "傾き"],
+        pitfalls: "接点の x 座標を a と置く。通る点と接点は別の場合がある。",
+        tags: ["微分", "接線"],
+        universities: ["共通頻出", "大工大", "関大", "近大"]
+      }),
+      F({
+        id: "ii-monotonic-extreme",
+        subject: "数学II",
+        unit: "微分積分",
+        title: "増減と極値",
+        formula: math(mi("f"), mo("'"), row(mo("("), mi("x"), mo(")")), mo(">"), mn("0"), mo("⇒"), mt("増加"), mo(","), mi("f"), mo("'"), row(mo("("), mi("x"), mo(")")), mo("<"), mn("0"), mo("⇒"), mt("減少")),
+        whenToUse: "関数の増減表、最大最小、グラフの概形。",
+        signals: ["増減", "極大・極小", "最大最小"],
+        pitfalls: "f'(x)=0 の点だけでなく定義域の端も見る。",
+        tags: ["微分", "増減"]
+      }),
+      F({
+        id: "ii-power-integral",
+        subject: "数学II",
+        unit: "微分積分",
+        title: "整式の積分",
+        formula: math(row(mo("∫"), sup(mi("x"), mi("n")), row(mi("d"), mi("x"))), mo("="), frac(sup(mi("x"), row(mi("n"), mo("+"), mn("1"))), row(mi("n"), mo("+"), mn("1"))), mo("+"), mi("C")),
+        conditions: math(mi("n"), mo("≠"), mo("-"), mn("1")),
+        whenToUse: "面積、原始関数、定積分の計算。",
+        signals: ["面積", "定積分", "原始関数"],
+        pitfalls: "不定積分では積分定数 C を忘れない。",
+        tags: ["積分", "面積"]
+      }),
+      F({
+        id: "ii-area-between",
+        subject: "数学II",
+        unit: "微分積分",
+        title: "二曲線間の面積",
+        formula: math(mi("S"), mo("="), integ(mi("α"), mi("β"), row(mo("{"), mi("f"), row(mo("("), mi("x"), mo(")")), mo("-"), mi("g"), row(mo("("), mi("x"), mo(")")), mo("}")))),
+        conditions: "区間 [α, β] で f(x) が g(x) 以上。",
+        whenToUse: "放物線と直線、二曲線で囲まれる面積。",
+        signals: ["囲まれる面積", "上下関係", "交点"],
+        pitfalls: "先に交点を求め、上の関数から下の関数を引く。",
+        tags: ["積分", "面積"],
+        universities: ["共通頻出", "大工大", "関大", "近大"]
+      }),
+
+      F({
+        id: "b-arithmetic-sequence",
+        subject: "数学B",
+        unit: "数列",
+        title: "等差数列",
+        formula: math(sub(mi("a"), mi("n")), mo("="), mi("a"), mo("+"), row(mo("("), mi("n"), mo("-"), mn("1"), mo(")")), mi("d")),
+        whenToUse: "一定の差で増減する数列の一般項。",
+        signals: ["差が一定", "等差", "階差が定数"],
+        pitfalls: "初項を第1項として数える。",
+        tags: ["数列", "等差"]
+      }),
+      F({
+        id: "b-geometric-sequence",
+        subject: "数学B",
+        unit: "数列",
+        title: "等比数列",
+        formula: math(sub(mi("a"), mi("n")), mo("="), mi("a"), sup(mi("r"), row(mi("n"), mo("-"), mn("1")))),
+        whenToUse: "一定の比で変化する数列、指数型の増減。",
+        signals: ["比が一定", "等比", "倍率"],
+        pitfalls: "公比 r が負や分数のとき符号・収束に注意する。",
+        tags: ["数列", "等比"]
+      }),
+      F({
+        id: "b-arithmetic-sum",
+        subject: "数学B",
+        unit: "数列",
+        title: "等差数列の和",
+        formula: math(sub(mi("S"), mi("n")), mo("="), frac(mi("n"), mn("2")), row(mo("{"), mn("2"), mi("a"), mo("+"), row(mo("("), mi("n"), mo("-"), mn("1"), mo(")")), mi("d"), mo("}"))),
+        whenToUse: "連続する一次式の和、等差数列の合計。",
+        signals: ["等差数列の和", "初項と末項", "合計"],
+        pitfalls: "項数 n を数え間違えない。",
+        tags: ["数列", "和"]
+      }),
+      F({
+        id: "b-geometric-sum",
+        subject: "数学B",
+        unit: "数列",
+        title: "等比数列の和",
+        formula: math(sub(mi("S"), mi("n")), mo("="), frac(row(mi("a"), row(mo("("), mn("1"), mo("-"), sup(mi("r"), mi("n")), mo(")"))), row(mn("1"), mo("-"), mi("r")))),
+        conditions: math(mi("r"), mo("≠"), mn("1")),
+        whenToUse: "等比型の和、漸化式の変形、確率の反復。",
+        signals: ["等比数列の和", "指数の和", "公比"],
+        pitfalls: "r=1 のときは na。式を使い分ける。",
+        tags: ["数列", "和"]
+      }),
+      F({
+        id: "b-sigma-basic",
+        subject: "数学B",
+        unit: "数列",
+        title: "シグマ公式",
+        formula: math(sum(row(mi("k"), mo("="), mn("1")), mi("n"), mi("k")), mo("="), frac(row(mi("n"), row(mo("("), mi("n"), mo("+"), mn("1"), mo(")"))), mn("2")), mo(","), sum(row(mi("k"), mo("="), mn("1")), mi("n"), sup(mi("k"), mn("2"))), mo("="), frac(row(mi("n"), row(mo("("), mi("n"), mo("+"), mn("1"), mo(")")), row(mo("("), mn("2"), mi("n"), mo("+"), mn("1"), mo(")"))), mn("6"))),
+        whenToUse: "和を閉じた形で計算し、極限や面積近似にもつなげる。",
+        signals: ["Σ", "k の和", "二乗の和"],
+        pitfalls: "下端が 0 や途中から始まるときは差を取る。",
+        tags: ["シグマ", "数列"],
+        universities: ["共通頻出", "大工大", "立命館", "関大", "近大"]
+      }),
+      F({
+        id: "b-linear-recurrence",
+        subject: "数学B",
+        unit: "数列",
+        title: "一次漸化式",
+        formula: math(sub(mi("a"), row(mi("n"), mo("+"), mn("1"))), mo("="), mi("p"), sub(mi("a"), mi("n")), mo("+"), mi("q"), mo("⇒"), sub(mi("a"), mi("n")), mo("-"), mi("α"), mo("="), sup(mi("p"), row(mi("n"), mo("-"), mn("1"))), row(mo("("), sub(mi("a"), mn("1")), mo("-"), mi("α"), mo(")"))),
+        conditions: math(mi("α"), mo("="), mi("p"), mi("α"), mo("+"), mi("q")),
+        whenToUse: "定数項つき漸化式を等比型へ直す。",
+        signals: ["a_{n+1}=p a_n+q", "特性方程式", "等比に直す"],
+        pitfalls: "固定点 α を先に求めてから両辺を引く。",
+        tags: ["漸化式", "数列"],
+        universities: ["共通頻出", "立命館", "関大", "近大"]
+      }),
+      F({
+        id: "b-telescoping",
+        subject: "数学B",
+        unit: "数列",
+        title: "階差と望遠和",
+        formula: math(sub(mi("a"), mi("n")), mo("="), sub(mi("a"), mn("1")), mo("+"), sum(row(mi("k"), mo("="), mn("1")), row(mi("n"), mo("-"), mn("1")), row(sub(mi("b"), mi("k"))))),
+        conditions: math(sub(mi("b"), mi("k")), mo("="), sub(mi("a"), row(mi("k"), mo("+"), mn("1"))), mo("-"), sub(mi("a"), mi("k"))),
+        whenToUse: "階差数列から一般項、部分分数型の和を求める。",
+        signals: ["階差", "隣り合う差", "消える和"],
+        pitfalls: "n=1 の確認を忘れない。",
+        tags: ["階差", "数列"]
+      }),
+      F({
+        id: "b-induction",
+        subject: "数学B",
+        unit: "数列",
+        title: "数学的帰納法",
+        formula: math(row(mt("1で成立")), mo("∧"), row(mt("kで成立⇒k+1で成立")), mo("⇒"), row(mt("すべての自然数で成立"))),
+        whenToUse: "n に関する等式・不等式・整除性を証明する。",
+        signals: ["すべての自然数 n", "証明せよ", "n による式"],
+        pitfalls: "初期値の確認と、仮定を使った箇所を答案に書く。",
+        tags: ["証明", "帰納法"]
+      }),
+      F({
+        id: "b-binomial-distribution",
+        subject: "数学B",
+        unit: "統計的な推測",
+        title: "二項分布の平均と分散",
+        formula: math(mi("X"), mo("～"), mi("B"), row(mo("("), mi("n"), mo(","), mi("p"), mo(")")), mo("⇒"), mi("E"), row(mo("("), mi("X"), mo(")")), mo("="), mi("n"), mi("p"), mo(","), mi("V"), row(mo("("), mi("X"), mo(")")), mo("="), mi("n"), mi("p"), row(mo("("), mn("1"), mo("-"), mi("p"), mo(")"))),
+        whenToUse: "成功回数の分布、標本比率、期待値と分散。",
+        signals: ["成功確率 p", "n 回の独立試行", "二項分布"],
+        pitfalls: "成功確率と失敗確率を取り違えない。",
+        tags: ["統計", "二項分布"]
+      }),
+      F({
+        id: "b-normal-standard",
+        subject: "数学B",
+        unit: "統計的な推測",
+        title: "標準化",
+        formula: math(mi("Z"), mo("="), frac(row(mi("X"), mo("-"), mi("μ")), mi("σ"))),
+        conditions: math(mi("X"), mo("～"), mi("N"), row(mo("("), mi("μ"), mo(","), sup(mi("σ"), mn("2")), mo(")"))),
+        whenToUse: "正規分布表を使うために標準正規分布へ直す。",
+        signals: ["正規分布", "標準化", "確率を求める"],
+        pitfalls: "分散ではなく標準偏差 σ で割る。",
+        tags: ["統計", "正規分布"]
+      }),
+      F({
+        id: "b-confidence-mean",
+        subject: "数学B",
+        unit: "統計的な推測",
+        title: "母平均の信頼区間",
+        formula: math(moverText("X"), mo("±"), mi("z"), frac(mi("σ"), sqrt(mi("n")))),
+        whenToUse: "標本平均から母平均の範囲を推定する。",
+        signals: ["信頼区間", "標本平均", "標準誤差"],
+        pitfalls: "母標準偏差が不明な場合の扱いは問題設定に従う。",
+        tags: ["統計", "信頼区間"]
+      }),
+
+      F({
+        id: "c-vector-dot",
+        subject: "数学C",
+        unit: "ベクトル",
+        title: "内積",
+        formula: math(vec("a"), mo("・"), vec("b"), mo("="), abs(vec("a")), abs(vec("b")), row(mi("cos"), mi("θ"))),
+        whenToUse: "角度、垂直条件、射影、長さを調べる。",
+        signals: ["なす角", "垂直", "最短距離", "長さの二乗"],
+        pitfalls: "垂直なら内積 0。座標表示では成分同士を掛けて足す。",
+        tags: ["ベクトル", "内積"],
+        universities: ["共通頻出", "大工大", "立命館", "関大", "近大"]
+      }),
+      F({
+        id: "c-vector-angle",
+        subject: "数学C",
+        unit: "ベクトル",
+        title: "ベクトルのなす角",
+        formula: math(row(mi("cos"), mi("θ")), mo("="), frac(row(vec("a"), mo("・"), vec("b")), row(abs(vec("a")), abs(vec("b"))))),
+        whenToUse: "二直線の角、三角形の角、垂直判定。",
+        signals: ["なす角", "角度を求める", "cosθ"],
+        pitfalls: "分母は二つの長さの積。ゼロベクトルでは使えない。",
+        tags: ["ベクトル", "角"]
+      }),
+      F({
+        id: "c-vector-section",
+        subject: "数学C",
+        unit: "ベクトル",
+        title: "内分点の位置ベクトル",
+        formula: math(vec("p"), mo("="), frac(row(mi("n"), vec("a"), mo("+"), mi("m"), vec("b")), row(mi("m"), mo("+"), mi("n")))),
+        conditions: "点 P は AB を m:n に内分する。",
+        whenToUse: "重心、線分比、軌跡、空間ベクトル。",
+        signals: ["内分", "比", "重心"],
+        pitfalls: "m:n に内分なら係数は逆向きに n, m が付く。",
+        tags: ["ベクトル", "内分"]
+      }),
+      F({
+        id: "c-vector-line",
+        subject: "数学C",
+        unit: "ベクトル",
+        title: "直線のベクトル方程式",
+        formula: math(vec("p"), mo("="), vec("a"), mo("+"), mi("t"), vec("d")),
+        whenToUse: "直線上の点、交点、最短距離の計算。",
+        signals: ["方向ベクトル", "直線上", "媒介変数"],
+        pitfalls: "t は実数。始点ベクトルと方向ベクトルを分ける。",
+        tags: ["ベクトル", "直線"]
+      }),
+      F({
+        id: "c-vector-area",
+        subject: "数学C",
+        unit: "ベクトル",
+        title: "ベクトルでの三角形面積",
+        formula: math(mi("S"), mo("="), frac(mn("1"), mn("2")), sqrt(row(sup(abs(vec("a")), mn("2")), sup(abs(vec("b")), mn("2")), mo("-"), sup(row(vec("a"), mo("・"), vec("b")), mn("2"))))),
+        whenToUse: "二辺ベクトルから面積を求める。",
+        signals: ["三角形の面積", "内積がある", "座標ベクトル"],
+        pitfalls: "平行四辺形の面積の半分。",
+        tags: ["ベクトル", "面積"]
+      }),
+      F({
+        id: "c-parabola",
+        subject: "数学C",
+        unit: "平面上の曲線",
+        title: "放物線",
+        formula: math(sup(mi("y"), mn("2")), mo("="), mn("4"), mi("p"), mi("x")),
+        conditions: "焦点は (p,0)、準線は x=-p。",
+        whenToUse: "焦点・準線、軌跡、二次曲線の標準形。",
+        signals: ["焦点", "準線", "放物線"],
+        pitfalls: "軸の向きで x と y の役割が入れ替わる。",
+        tags: ["二次曲線"]
+      }),
+      F({
+        id: "c-ellipse",
+        subject: "数学C",
+        unit: "平面上の曲線",
+        title: "楕円",
+        formula: math(frac(sup(mi("x"), mn("2")), sup(mi("a"), mn("2"))), mo("+"), frac(sup(mi("y"), mn("2")), sup(mi("b"), mn("2"))), mo("="), mn("1")),
+        whenToUse: "楕円上の点、媒介変数表示、面積・接線。",
+        signals: ["楕円", "標準形", "長軸・短軸"],
+        pitfalls: "a と b の大小で焦点の軸が変わる。",
+        tags: ["二次曲線"]
+      }),
+      F({
+        id: "c-hyperbola",
+        subject: "数学C",
+        unit: "平面上の曲線",
+        title: "双曲線",
+        formula: math(frac(sup(mi("x"), mn("2")), sup(mi("a"), mn("2"))), mo("-"), frac(sup(mi("y"), mn("2")), sup(mi("b"), mn("2"))), mo("="), mn("1")),
+        whenToUse: "双曲線、漸近線、標準形の判定。",
+        signals: ["双曲線", "漸近線", "差が一定"],
+        pitfalls: "符号がプラスとマイナスで分かれる。",
+        tags: ["二次曲線"]
+      }),
+      F({
+        id: "c-polar",
+        subject: "数学C",
+        unit: "平面上の曲線",
+        title: "極座標",
+        formula: math(mi("x"), mo("="), mi("r"), row(mi("cos"), mi("θ")), mo(","), mi("y"), mo("="), mi("r"), row(mi("sin"), mi("θ"))),
+        whenToUse: "極方程式、極座標で与えられた曲線、面積公式。",
+        signals: ["r と θ", "極座標", "極方程式"],
+        pitfalls: "r が負になる表現もある。図形としての位置を確認する。",
+        tags: ["極座標", "曲線"]
+      }),
+      F({
+        id: "c-complex-polar",
+        subject: "数学C",
+        unit: "複素数平面",
+        title: "複素数の極形式",
+        formula: math(mi("z"), mo("="), mi("r"), row(mo("("), row(mi("cos"), mi("θ")), mo("+"), mi("i"), row(mi("sin"), mi("θ")), mo(")"))),
+        conditions: math(mi("r"), mo("="), abs(mi("z"))),
+        whenToUse: "積・商・累乗・回転を図形的に処理する。",
+        signals: ["偏角", "回転", "絶対値", "累乗"],
+        pitfalls: "偏角は 2π の整数倍だけずれる。",
+        tags: ["複素数平面", "極形式"],
+        universities: ["共通頻出", "立命館", "関大", "近大"]
+      }),
+      F({
+        id: "c-complex-multiply",
+        subject: "数学C",
+        unit: "複素数平面",
+        title: "複素数の積と回転",
+        formula: math(abs(row(mi("z"), mi("w"))), mo("="), abs(mi("z")), abs(mi("w")), mo(","), row(mi("arg"), row(mo("("), mi("z"), mi("w"), mo(")"))), mo("="), row(mi("arg"), mi("z")), mo("+"), row(mi("arg"), mi("w"))),
+        whenToUse: "回転移動、相似、正多角形、複素数平面の図形。",
+        signals: ["回転", "拡大縮小", "偏角の和"],
+        pitfalls: "掛け算は角を足し、絶対値を掛ける。",
+        tags: ["複素数平面", "回転"]
+      }),
+      F({
+        id: "c-demoivre",
+        subject: "数学C",
+        unit: "複素数平面",
+        title: "ド・モアブルの定理",
+        formula: math(sup(row(mo("("), row(mi("cos"), mi("θ")), mo("+"), mi("i"), row(mi("sin"), mi("θ")), mo(")")), mi("n")), mo("="), row(mi("cos"), mi("n"), mi("θ")), mo("+"), mi("i"), row(mi("sin"), mi("n"), mi("θ"))),
+        whenToUse: "複素数の累乗、方程式、正多角形の頂点。",
+        signals: ["n 乗", "1 の n 乗根", "偏角を n 倍"],
+        pitfalls: "偏角の一般形を忘れない。",
+        tags: ["複素数平面", "ドモアブル"]
+      }),
+      F({
+        id: "c-roots-unity",
+        subject: "数学C",
+        unit: "複素数平面",
+        title: "1 の n 乗根",
+        formula: math(mi("z"), mo("="), row(mi("cos"), frac(row(mn("2"), mi("k"), mi("π")), mi("n"))), mo("+"), mi("i"), row(mi("sin"), frac(row(mn("2"), mi("k"), mi("π")), mi("n")))),
+        conditions: math(mi("k"), mo("="), mn("0"), mo(","), mn("1"), mo(","), mo("…"), mo(","), mi("n"), mo("-"), mn("1")),
+        whenToUse: "複素数方程式、正 n 角形、回転対称。",
+        signals: ["z^n=1", "n 乗根", "正多角形"],
+        pitfalls: "k の範囲は n 個。2π ずつ同じ値になる。",
+        tags: ["複素数平面", "方程式"]
+      }),
+      F({
+        id: "c-complex-circle-locus",
+        subject: "数学C",
+        unit: "複素数平面",
+        title: "複素数平面の円",
+        formula: math(abs(row(mi("z"), mo("-"), mi("α"))), mo("="), mi("r")),
+        conditions: "中心 α、半径 r の円。",
+        whenToUse: "複素数の軌跡を図形として読む。",
+        signals: ["|z-α|=r", "軌跡", "中心と半径"],
+        pitfalls: "絶対値は距離。式を展開する前に図形で読む。",
+        tags: ["複素数平面", "軌跡"],
+        universities: ["共通頻出", "立命館", "関大", "近大"]
+      }),
+
+      F({
+        id: "iii-limit-sinx",
+        subject: "数学III",
+        unit: "極限",
+        title: "三角関数の基本極限",
+        formula: math(lim(row(mi("x"), mo("→"), mn("0")), frac(row(mi("sin"), mi("x")), mi("x"))), mo("="), mn("1")),
+        whenToUse: "sin x を含む 0/0 型極限を処理する。",
+        signals: ["x→0", "sin x", "0/0", "角をそろえる"],
+        pitfalls: "角が ax なら ax を作って係数を調整する。",
+        tags: ["極限", "三角関数"],
+        universities: ["共通頻出", "大工大", "立命館", "関大", "近大"],
+        priority: "最重点"
+      }),
+      F({
+        id: "iii-limit-e",
+        subject: "数学III",
+        unit: "極限",
+        title: "自然対数の底 e",
+        formula: math(lim(row(mi("x"), mo("→"), mn("0")), sup(row(mo("("), mn("1"), mo("+"), mi("x"), mo(")")), frac(mn("1"), mi("x")))), mo("="), mi("e")),
+        whenToUse: "指数型の極限、e の定義、対数微分への接続。",
+        signals: ["1+小さい量", "指数が逆数", "e に近づく形"],
+        pitfalls: "底を 1+u にして指数との積を調整する。",
+        tags: ["極限", "指数"],
+        priority: "最重点"
+      }),
+      F({
+        id: "iii-continuity",
+        subject: "数学III",
+        unit: "極限",
+        title: "連続性",
+        formula: math(lim(row(mi("x"), mo("→"), mi("a")), mi("f"), row(mo("("), mi("x"), mo(")"))), mo("="), mi("f"), row(mo("("), mi("a"), mo(")"))),
+        whenToUse: "連続条件、定数決定、中間値の定理の前提確認。",
+        signals: ["連続となるように", "定数を定める", "x=a でつながる"],
+        pitfalls: "左右極限と関数値が一致するか確認する。",
+        tags: ["極限", "連続"]
+      }),
+      F({
+        id: "iii-derivative-table",
+        subject: "数学III",
+        unit: "微分法",
+        title: "基本関数の導関数",
+        formula: math(row(mfracText("d", "dx")), row(mi("sin"), mi("x")), mo("="), row(mi("cos"), mi("x")), mo(","), row(mfracText("d", "dx")), sup(mi("e"), mi("x")), mo("="), sup(mi("e"), mi("x")), mo(","), row(mfracText("d", "dx")), row(mi("log"), mi("x")), mo("="), frac(mn("1"), mi("x"))),
+        conditions: "log x は x>0。",
+        whenToUse: "数IIIの微分計算の土台。",
+        signals: ["sin, cos", "e^x", "log x", "微分"],
+        pitfalls: "log x の定義域、合成関数の中身を忘れない。",
+        tags: ["微分", "導関数"],
+        priority: "最重点"
+      }),
+      F({
+        id: "iii-product-quotient",
+        subject: "数学III",
+        unit: "微分法",
+        title: "積・商の微分",
+        formula: math(row(mo("("), mi("f"), mi("g"), mo(")"), mo("'")), mo("="), mi("f"), mo("'"), mi("g"), mo("+"), mi("f"), mi("g"), mo("'"), mo(","), sup(row(mo("("), frac(mi("f"), mi("g")), mo(")")), mo("'")), mo("="), frac(row(mi("f"), mo("'"), mi("g"), mo("-"), mi("f"), mi("g"), mo("'")), sup(mi("g"), mn("2")))),
+        whenToUse: "関数の積・分数関数の微分。",
+        signals: ["積の形", "分数関数", "接線"],
+        pitfalls: "商の微分は分子の順序 f'g - fg' を崩さない。",
+        tags: ["微分", "計算"]
+      }),
+      F({
+        id: "iii-chain-rule",
+        subject: "数学III",
+        unit: "微分法",
+        title: "合成関数の微分",
+        formula: math(row(mo("{"), mi("f"), row(mo("("), mi("g"), row(mo("("), mi("x"), mo(")")), mo(")")), mo("}"), mo("'")), mo("="), mi("f"), mo("'"), row(mo("("), mi("g"), row(mo("("), mi("x"), mo(")")), mo(")")), mi("g"), mo("'"), row(mo("("), mi("x"), mo(")"))),
+        whenToUse: "中身がある三角・指数・対数・累乗関数を微分する。",
+        signals: ["かっこの中身", "合成関数", "置き換えて微分"],
+        pitfalls: "外側を微分した後、中身の微分を掛ける。",
+        tags: ["微分", "合成関数"],
+        universities: ["共通頻出", "大工大", "立命館", "関大", "近大"],
+        priority: "最重点"
+      }),
+      F({
+        id: "iii-param-derivative",
+        subject: "数学III",
+        unit: "微分法",
+        title: "媒介変数表示の微分",
+        formula: math(frac(row(mi("d"), mi("y")), row(mi("d"), mi("x"))), mo("="), frac(row(frac(row(mi("d"), mi("y")), row(mi("d"), mi("t")))), row(frac(row(mi("d"), mi("x")), row(mi("d"), mi("t")))))),
+        conditions: math(frac(row(mi("d"), mi("x")), row(mi("d"), mi("t"))), mo("≠"), mn("0")),
+        whenToUse: "媒介変数で与えられた曲線の接線・増減。",
+        signals: ["x=f(t), y=g(t)", "媒介変数", "接線"],
+        pitfalls: "dx/dt が 0 になる点は別に調べる。",
+        tags: ["媒介変数", "微分"],
+        priority: "最重点"
+      }),
+      F({
+        id: "iii-implicit",
+        subject: "数学III",
+        unit: "微分法",
+        title: "陰関数の微分",
+        formula: math(mi("F"), row(mo("("), mi("x"), mo(","), mi("y"), mo(")")), mo("="), mn("0"), mo("⇒"), frac(row(mi("d"), mi("y")), row(mi("d"), mi("x"))), mo("="), mo("-"), frac(sub(mi("F"), mi("x")), sub(mi("F"), mi("y")))),
+        conditions: math(sub(mi("F"), mi("y")), mo("≠"), mn("0")),
+        whenToUse: "円・楕円・陰関数で y を解かずに接線を出す。",
+        signals: ["x と y が混在", "陰関数", "接線"],
+        pitfalls: "y は x の関数として微分する。y の微分には dy/dx が付く。",
+        tags: ["陰関数", "接線"]
+      }),
+      F({
+        id: "iii-substitution",
+        subject: "数学III",
+        unit: "積分法",
+        title: "置換積分",
+        formula: math(row(mo("∫"), mi("f"), row(mo("("), mi("g"), row(mo("("), mi("x"), mo(")")), mo(")")), mi("g"), mo("'"), row(mo("("), mi("x"), mo(")")), row(mi("d"), mi("x"))), mo("="), row(mo("∫"), mi("f"), row(mo("("), mi("u"), mo(")")), row(mi("d"), mi("u")))),
+        conditions: math(mi("u"), mo("="), mi("g"), row(mo("("), mi("x"), mo(")"))),
+        whenToUse: "中身とその微分が見える積分、根号・分数・三角置換。",
+        signals: ["中身の微分が近い", "置換", "合成関数の逆"],
+        pitfalls: "定積分では積分区間も u に直す。",
+        tags: ["積分", "置換積分"],
+        priority: "最重点"
+      }),
+      F({
+        id: "iii-integration-parts",
+        subject: "数学III",
+        unit: "積分法",
+        title: "部分積分",
+        formula: math(row(mo("∫"), mi("f"), mo("'"), row(mo("("), mi("x"), mo(")")), mi("g"), row(mo("("), mi("x"), mo(")")), row(mi("d"), mi("x"))), mo("="), mi("f"), row(mo("("), mi("x"), mo(")")), mi("g"), row(mo("("), mi("x"), mo(")")), mo("-"), row(mo("∫"), mi("f"), row(mo("("), mi("x"), mo(")")), mi("g"), mo("'"), row(mo("("), mi("x"), mo(")")), row(mi("d"), mi("x")))),
+        whenToUse: "積の積分、log x、x e^x、x sin x など。",
+        signals: ["積の積分", "log", "片方を微分すると簡単"],
+        pitfalls: "どちらを微分側にするかで計算量が変わる。",
+        tags: ["積分", "部分積分"],
+        universities: ["共通頻出", "大工大", "立命館", "関大", "近大"],
+        priority: "最重点"
+      }),
+      F({
+        id: "iii-trig-integral",
+        subject: "数学III",
+        unit: "積分法",
+        title: "三角関数の次数下げ",
+        formula: math(sup(row(mi("sin"), mi("x")), mn("2")), mo("="), frac(row(mn("1"), mo("-"), row(mi("cos"), mn("2"), mi("x"))), mn("2")), mo(","), sup(row(mi("cos"), mi("x")), mn("2")), mo("="), frac(row(mn("1"), mo("+"), row(mi("cos"), mn("2"), mi("x"))), mn("2"))),
+        whenToUse: "sin²x, cos²x を含む積分。",
+        signals: ["二乗の三角関数", "積分", "次数を下げる"],
+        pitfalls: "符号は sin² が 1-cos2x、cos² が 1+cos2x。",
+        tags: ["積分", "三角関数"]
+      }),
+      F({
+        id: "iii-partial-fraction",
+        subject: "数学III",
+        unit: "積分法",
+        title: "部分分数分解",
+        formula: math(frac(mn("1"), row(mo("("), mi("x"), mo("-"), mi("α"), mo(")"), row(mo("("), mi("x"), mo("-"), mi("β"), mo(")")))), mo("="), frac(mn("1"), row(mi("α"), mo("-"), mi("β"))), row(mo("{"), frac(mn("1"), row(mi("x"), mo("-"), mi("α"))), mo("-"), frac(mn("1"), row(mi("x"), mo("-"), mi("β"))), mo("}"))),
+        conditions: math(mi("α"), mo("≠"), mi("β")),
+        whenToUse: "有理関数の積分、数列の望遠和。",
+        signals: ["分母が因数分解できる", "有理関数", "log が出る"],
+        pitfalls: "符号と係数を代入で確認する。",
+        tags: ["積分", "有理関数"]
+      }),
+      F({
+        id: "iii-area",
+        subject: "数学III",
+        unit: "面積・体積・弧長",
+        title: "定積分による面積",
+        formula: math(mi("S"), mo("="), integ(mi("a"), mi("b"), abs(row(mi("f"), row(mo("("), mi("x"), mo(")")), mo("-"), mi("g"), row(mo("("), mi("x"), mo(")")))))),
+        whenToUse: "曲線で囲まれた面積。上下が途中で入れ替わるときは絶対値で分割する。",
+        signals: ["囲まれた面積", "交点", "上下関係"],
+        pitfalls: "交点で区間を分け、符号を確認する。",
+        tags: ["面積", "積分"],
+        priority: "最重点"
+      }),
+      F({
+        id: "iii-volume",
+        subject: "数学III",
+        unit: "面積・体積・弧長",
+        title: "回転体の体積",
+        formula: math(mi("V"), mo("="), mi("π"), integ(mi("a"), mi("b"), sup(row(mi("f"), row(mo("("), mi("x"), mo(")"))), mn("2")))),
+        conditions: "x 軸まわりに y=f(x) を回転する。",
+        whenToUse: "回転体、断面積を積分する問題。",
+        signals: ["x軸のまわり", "回転体", "体積"],
+        pitfalls: "半径を二乗して π を掛ける。y 軸まわりは変数を変える。",
+        tags: ["体積", "積分"],
+        universities: ["共通頻出", "大工大", "立命館", "関大", "近大"],
+        priority: "最重点"
+      }),
+      F({
+        id: "iii-arc-length",
+        subject: "数学III",
+        unit: "面積・体積・弧長",
+        title: "曲線の長さ",
+        formula: math(mi("L"), mo("="), integ(mi("a"), mi("b"), sqrt(row(mn("1"), mo("+"), sup(row(mi("y"), mo("'")), mn("2")))))),
+        conditions: math(mi("y"), mo("="), mi("f"), row(mo("("), mi("x"), mo(")"))),
+        whenToUse: "曲線の弧長、媒介変数表示の長さ。",
+        signals: ["曲線の長さ", "弧長", "sqrt(1+y'^2)"],
+        pitfalls: "根号の中が平方に整理できるかを確認する。",
+        tags: ["弧長", "積分"]
+      }),
+      F({
+        id: "iii-polar-area",
+        subject: "数学III",
+        unit: "面積・体積・弧長",
+        title: "極方程式の面積",
+        formula: math(mi("S"), mo("="), frac(mn("1"), mn("2")), integ(mi("α"), mi("β"), sup(mi("r"), mn("2")), "θ")),
+        conditions: math(mi("r"), mo("="), mi("f"), row(mo("("), mi("θ"), mo(")"))),
+        whenToUse: "極座標で与えられた曲線の面積。",
+        signals: ["極方程式", "r=f(θ)", "面積"],
+        pitfalls: "θ の範囲が図形を一周するか重複するか確認する。",
+        tags: ["極座標", "面積"],
+        universities: ["共通頻出", "立命館", "関大"]
+      })
+    ];
+
+    function moverText(value) {
+      return `<mover>${mi(value)}<mo>¯</mo></mover>`;
+    }
+
+    function mfracText(top, bottom) {
+      return frac(row(mi(top)), row(mi(bottom)));
+    }
+
+    const cardData = [
+      C({
+        id: "card-quadratic-discriminant",
+        subject: "数学I",
+        unit: "二次関数",
+        title: "接する条件からパラメータを決める",
+        universities: ["共通頻出", "大工大", "関大", "近大"],
+        difficulty: "標準",
+        pattern: "交点個数",
+        prompt: `放物線 ${math(mi("y"), mo("="), sup(mi("x"), mn("2")), mo("-"), mn("2"), mi("k"), mi("x"), mo("+"), mi("k"))} と直線 ${math(mi("y"), mo("="), mi("x"), mo("+"), mn("1"))} が接するとき、実数 k を求めよ。`,
+        goal: "二次方程式にして判別式 D=0 を使う。",
+        hint1: "共有点の x 座標は、二つの y を等しくした方程式の解になる。",
+        formulaHint: "接するとは二次方程式が重解をもつこと。使う公式は判別式。",
+        solutionSteps: [
+          `等式 ${inline(sup(mi("x"), mn("2")), mo("-"), mn("2"), mi("k"), mi("x"), mo("+"), mi("k"), mo("="), mi("x"), mo("+"), mn("1"))} を作る。`,
+          `整理して ${inline(sup(mi("x"), mn("2")), mo("-"), row(mn("2"), mi("k"), mo("+"), mn("1")), mi("x"), mo("+"), mi("k"), mo("-"), mn("1"), mo("="), mn("0"))}。`,
+          "接するので判別式 D=0 とする。",
+          `D=${inline(sup(row(mn("2"), mi("k"), mo("+"), mn("1")), mn("2")), mo("-"), mn("4"), row(mo("("), mi("k"), mo("-"), mn("1"), mo(")")))} を整理する。`
+        ],
+        answer: `整理すると ${inline(mn("4"), sup(mi("k"), mn("2")), mo("+"), mn("5"), mo("="), mn("0"))} となり、実数解は存在しない。したがって接しない。問題文に「実数k」とある場合は、接する条件が成り立たないことまで判断する。`,
+        formulaIds: ["i-discriminant", "i-quadratic-formula"]
+      }),
+      C({
+        id: "card-triangle-area",
+        subject: "数学I",
+        unit: "図形と計量",
+        title: "余弦定理から面積へつなぐ",
+        universities: ["共通頻出", "大工大", "近大"],
+        difficulty: "標準",
+        pattern: "三角比計算",
+        prompt: `三角形 ABC で ${math(mi("AB"), mo("="), mn("5"), mo(","), mi("AC"), mo("="), mn("7"), mo(","), mi("BC"), mo("="), mn("8"))} のとき、面積を求めよ。`,
+        goal: "三辺から cosA を出し、sinA に直して面積公式を使う。",
+        hint1: "二辺とはさむ角の面積公式を使うには、まず余弦定理で角を作る。",
+        formulaHint: "余弦定理と S=1/2bc sinA。",
+        solutionSteps: [
+          `角 A の向かいは BC なので ${inline(sup(mn("8"), mn("2")), mo("="), sup(mn("5"), mn("2")), mo("+"), sup(mn("7"), mn("2")), mo("-"), mn("2"), mo("・"), mn("5"), mo("・"), mn("7"), row(mi("cos"), mi("A")))}。`,
+          `これより ${inline(row(mi("cos"), mi("A")), mo("="), frac(mn("1"), mn("7")))}。`,
+          `したがって ${inline(row(mi("sin"), mi("A")), mo("="), sqrt(row(mn("1"), mo("-"), frac(mn("1"), mn("49")))), mo("="), frac(row(mn("4"), sqrt(mn("3"))), mn("7")))}。`,
+          "面積公式に代入する。"
+        ],
+        answer: `${inline(mi("S"), mo("="), frac(mn("1"), mn("2")), mo("・"), mn("5"), mo("・"), mn("7"), mo("・"), frac(row(mn("4"), sqrt(mn("3"))), mn("7")), mo("="), mn("10"), sqrt(mn("3")))}。`,
+        formulaIds: ["i-cosine-law", "i-triangle-area"]
+      }),
+      C({
+        id: "card-conditional-probability",
+        subject: "数学A",
+        unit: "確率",
+        title: "条件付き確率を分母から読み直す",
+        universities: ["共通頻出", "大工大", "近大"],
+        difficulty: "標準",
+        pattern: "条件付き確率",
+        prompt: "赤玉3個、白玉2個が入った袋から同時に2個取り出す。少なくとも1個が赤玉であるとわかったとき、2個とも赤玉である確率を求めよ。",
+        goal: "条件側を新しい全体として数える。",
+        hint1: "分母は「少なくとも1個が赤玉」の場合の数。",
+        formulaHint: "条件付き確率 P(A|B)=P(A∩B)/P(B)。",
+        solutionSteps: [
+          "B: 少なくとも1個が赤玉、A: 2個とも赤玉 とおく。",
+          `全体は ${inline(sub(mi("C"), row(mn("5"), mn("2"))), mo("="), mn("10"))} 通り。`,
+          `白2個だけは ${inline(mn("1"))} 通りなので、B は 9 通り。`,
+          `A は ${inline(sub(mi("C"), row(mn("3"), mn("2"))), mo("="), mn("3"))} 通り。`
+        ],
+        answer: `${inline(frac(mn("3"), mn("9")), mo("="), frac(mn("1"), mn("3")))}。条件がついた時点で分母を取り直すのが合図。`,
+        formulaIds: ["a-conditional", "a-combination", "a-probability-classical"]
+      }),
+      C({
+        id: "card-congruence",
+        subject: "数学A",
+        unit: "整数の性質",
+        title: "余りの周期で巨大な指数を処理する",
+        universities: ["共通頻出", "大工大", "近大"],
+        difficulty: "標準",
+        pattern: "合同式",
+        prompt: `${math(sup(mn("7"), mn("2026")))} を 13 で割った余りを求めよ。`,
+        goal: "合同式で周期を見つける。",
+        hint1: "7 の累乗を 13 で割った余りを数個だけ調べる。",
+        formulaHint: "a≡b (mod m) なら累乗でも合同を保つ。",
+        solutionSteps: [
+          `${inline(sup(mn("7"), mn("2")), mo("="), mn("49"), mo("≡"), mn("10"), row(mo("("), mo("mod"), mn("13"), mo(")")))}。`,
+          `${inline(sup(mn("7"), mn("3")), mo("≡"), mn("70"), mo("≡"), mn("5"))}、${inline(sup(mn("7"), mn("4")), mo("≡"), mn("35"), mo("≡"), mn("9"))}。`,
+          `${inline(sup(mn("7"), mn("6")), mo("≡"), mn("1"))} まで確認できる。`,
+          `2026 を 6 で割ると余りは 4。`
+        ],
+        answer: `${inline(sup(mn("7"), mn("2026")), mo("≡"), sup(mn("7"), mn("4")), mo("≡"), mn("9"), row(mo("("), mo("mod"), mn("13"), mo(")")))}。余りは 9。`,
+        formulaIds: ["a-congruence"]
+      }),
+      C({
+        id: "card-circle-tangent",
+        subject: "数学II",
+        unit: "図形と方程式",
+        title: "円と直線の接する条件",
+        universities: ["共通頻出", "大工大", "関大", "近大"],
+        difficulty: "標準",
+        pattern: "距離と接線",
+        prompt: `円 ${math(sup(row(mo("("), mi("x"), mo("-"), mn("1"), mo(")")), mn("2")), mo("+"), sup(row(mo("("), mi("y"), mo("+"), mn("2"), mo(")")), mn("2")), mo("="), mn("9"))} と直線 ${math(mn("2"), mi("x"), mo("-"), mi("y"), mo("+"), mi("k"), mo("="), mn("0"))} が接するとき、k を求めよ。`,
+        goal: "中心と直線の距離が半径に等しい。",
+        hint1: "円の中心と半径を先に読む。",
+        formulaHint: "点と直線の距離公式。",
+        solutionSteps: [
+          "中心は (1, -2)、半径は 3。",
+          `距離は ${inline(frac(abs(row(mn("2"), mo("・"), mn("1"), mo("-"), row(mo("("), mo("-"), mn("2"), mo(")")), mo("+"), mi("k"))), sqrt(row(sup(mn("2"), mn("2")), mo("+"), sup(row(mo("-"), mn("1")), mn("2"))))))}。`,
+          `これが 3 なので ${inline(frac(abs(row(mi("k"), mo("+"), mn("4"))), sqrt(mn("5"))), mo("="), mn("3"))}。`
+        ],
+        answer: `${inline(abs(row(mi("k"), mo("+"), mn("4"))), mo("="), mn("3"), sqrt(mn("5")))} より ${inline(mi("k"), mo("="), mo("-"), mn("4"), mo("±"), mn("3"), sqrt(mn("5")))}。`,
+        formulaIds: ["ii-circle", "ii-point-line-distance"]
+      }),
+      C({
+        id: "card-trig-equation",
+        subject: "数学II",
+        unit: "三角関数",
+        title: "三角関数を合成して最大値を読む",
+        universities: ["共通頻出", "立命館", "関大", "近大"],
+        difficulty: "標準",
+        pattern: "合成と最大最小",
+        prompt: `${math(mi("f"), row(mo("("), mi("x"), mo(")")), mo("="), sqrt(mn("3")), row(mi("sin"), mi("x")), mo("+"), row(mi("cos"), mi("x")))} の最大値を求めよ。`,
+        goal: "a sinx + b cosx を R sin(x+α) に合成する。",
+        hint1: "係数の二乗和の平方根が最大値になる。",
+        formulaHint: "加法定理を逆向きに使う。",
+        solutionSteps: [
+          `係数から ${inline(mi("R"), mo("="), sqrt(row(sup(sqrt(mn("3")), mn("2")), mo("+"), sup(mn("1"), mn("2")))), mo("="), mn("2"))}。`,
+          `${inline(sqrt(mn("3")), row(mi("sin"), mi("x")), mo("+"), row(mi("cos"), mi("x")), mo("="), mn("2"), row(mi("sin"), row(mo("("), mi("x"), mo("+"), frac(mi("π"), mn("6")), mo(")"))))}。`,
+          "sin の最大値は 1。"
+        ],
+        answer: "最大値は 2。",
+        formulaIds: ["ii-trig-addition", "ii-trig-identity"]
+      }),
+      C({
+        id: "card-log-equation",
+        subject: "数学II",
+        unit: "指数・対数",
+        title: "真数条件を最後に戻す",
+        universities: ["共通頻出", "大工大", "近大"],
+        difficulty: "標準",
+        pattern: "対数方程式",
+        prompt: `${math(sub(mi("log"), mn("2")), row(mo("("), mi("x"), mo("-"), mn("1"), mo(")")), mo("+"), sub(mi("log"), mn("2")), row(mo("("), mi("x"), mo("-"), mn("3"), mo(")")), mo("="), mn("3"))} を解け。`,
+        goal: "対数の和を積にまとめ、真数条件を確認する。",
+        hint1: "真数条件は x>3。先にメモしておく。",
+        formulaHint: "log M + log N = log MN。",
+        solutionSteps: [
+          `真数条件から ${inline(mi("x"), mo("＞"), mn("3"))}。`,
+          `左辺は ${inline(sub(mi("log"), mn("2")), row(mo("{"), row(mo("("), mi("x"), mo("-"), mn("1"), mo(")")), row(mo("("), mi("x"), mo("-"), mn("3"), mo(")")), mo("}")))}。`,
+          `したがって ${inline(row(mo("("), mi("x"), mo("-"), mn("1"), mo(")")), row(mo("("), mi("x"), mo("-"), mn("3"), mo(")")), mo("="), mn("8"))}。`,
+          `整理して ${inline(sup(mi("x"), mn("2")), mo("-"), mn("4"), mi("x"), mo("-"), mn("5"), mo("="), mn("0"))}。`
+        ],
+        answer: `${inline(mi("x"), mo("="), mn("5"), mo(","), mo("-"), mn("1"))} のうち真数条件を満たすのは ${inline(mi("x"), mo("="), mn("5"))}。`,
+        formulaIds: ["ii-log-laws", "i-quadratic-formula"]
+      }),
+      C({
+        id: "card-cubic-extreme",
+        subject: "数学II",
+        unit: "微分積分",
+        title: "増減表で三次関数の極値を読む",
+        universities: ["共通頻出", "大工大", "関大", "近大"],
+        difficulty: "標準",
+        pattern: "微分と増減",
+        prompt: `${math(mi("f"), row(mo("("), mi("x"), mo(")")), mo("="), sup(mi("x"), mn("3")), mo("-"), mn("3"), sup(mi("x"), mn("2")), mo("+"), mn("2"))} の極値を求めよ。`,
+        goal: "f'(x)=0 の前後で符号を調べる。",
+        hint1: "まず導関数を因数分解する。",
+        formulaHint: "整式の微分と増減判定。",
+        solutionSteps: [
+          `${inline(mi("f"), mo("'"), row(mo("("), mi("x"), mo(")")), mo("="), mn("3"), sup(mi("x"), mn("2")), mo("-"), mn("6"), mi("x"), mo("="), mn("3"), mi("x"), row(mo("("), mi("x"), mo("-"), mn("2"), mo(")")))}。`,
+          `臨界点は ${inline(mi("x"), mo("="), mn("0"), mo(","), mn("2"))}。`,
+          "符号は +, -, + と変わる。",
+          "x=0 で極大、x=2 で極小。"
+        ],
+        answer: `${inline(mi("f"), row(mo("("), mn("0"), mo(")")), mo("="), mn("2"))} より極大値 2。${inline(mi("f"), row(mo("("), mn("2"), mo(")")), mo("="), mo("-"), mn("2"))} より極小値 -2。`,
+        formulaIds: ["ii-polynomial-derivative", "ii-monotonic-extreme"]
+      }),
+      C({
+        id: "card-area-between",
+        subject: "数学II",
+        unit: "微分積分",
+        title: "交点から面積区間を決める",
+        universities: ["共通頻出", "大工大", "関大", "近大"],
+        difficulty: "標準",
+        pattern: "定積分面積",
+        prompt: `放物線 ${math(mi("y"), mo("="), sup(mi("x"), mn("2")))} と直線 ${math(mi("y"), mo("="), mi("x"), mo("+"), mn("2"))} で囲まれる面積を求めよ。`,
+        goal: "交点を求め、上の関数から下の関数を引く。",
+        hint1: "まず x²=x+2 を解く。",
+        formulaHint: "二曲線間の面積 S=∫(上-下)dx。",
+        solutionSteps: [
+          `${inline(sup(mi("x"), mn("2")), mo("="), mi("x"), mo("+"), mn("2"))} より ${inline(row(mo("("), mi("x"), mo("-"), mn("2"), mo(")")), row(mo("("), mi("x"), mo("+"), mn("1"), mo(")")), mo("="), mn("0"))}。`,
+          `交点の x 座標は ${inline(mo("-"), mn("1"), mo(","), mn("2"))}。`,
+          "区間内では直線が上、放物線が下。",
+          `面積は ${inline(integ(row(mo("-"), mn("1")), mn("2"), row(mi("x"), mo("+"), mn("2"), mo("-"), sup(mi("x"), mn("2")))))}。`
+        ],
+        answer: `計算すると ${inline(frac(mn("9"), mn("2")))}。`,
+        formulaIds: ["ii-area-between", "ii-power-integral"]
+      }),
+      C({
+        id: "card-recurrence",
+        subject: "数学B",
+        unit: "数列",
+        title: "一次漸化式を等比数列へ直す",
+        universities: ["共通頻出", "立命館", "関大", "近大"],
+        difficulty: "標準",
+        pattern: "漸化式",
+        prompt: `${math(sub(mi("a"), mn("1")), mo("="), mn("2"), mo(","), sub(mi("a"), row(mi("n"), mo("+"), mn("1"))), mo("="), mn("3"), sub(mi("a"), mi("n")), mo("+"), mn("4"))} の一般項を求めよ。`,
+        goal: "固定点 α を引いて等比型にする。",
+        hint1: "α=3α+4 を満たす α を探す。",
+        formulaHint: "a_{n+1}=p a_n+q の一次漸化式。",
+        solutionSteps: [
+          `${inline(mi("α"), mo("="), mn("3"), mi("α"), mo("+"), mn("4"))} より ${inline(mi("α"), mo("="), mo("-"), mn("2"))}。`,
+          `${inline(sub(mi("a"), row(mi("n"), mo("+"), mn("1"))), mo("+"), mn("2"), mo("="), mn("3"), row(mo("("), sub(mi("a"), mi("n")), mo("+"), mn("2"), mo(")")))}。`,
+          `${inline(sub(mi("a"), mi("n")), mo("+"), mn("2"))} は初項 4、公比 3 の等比数列。`
+        ],
+        answer: `${inline(sub(mi("a"), mi("n")), mo("+"), mn("2"), mo("="), mn("4"), sup(mn("3"), row(mi("n"), mo("-"), mn("1"))))} より ${inline(sub(mi("a"), mi("n")), mo("="), mn("4"), sup(mn("3"), row(mi("n"), mo("-"), mn("1"))), mo("-"), mn("2"))}。`,
+        formulaIds: ["b-linear-recurrence", "b-geometric-sequence"]
+      }),
+      C({
+        id: "card-sigma",
+        subject: "数学B",
+        unit: "数列",
+        title: "シグマを公式に分解する",
+        universities: ["共通頻出", "大工大", "立命館", "関大", "近大"],
+        difficulty: "標準",
+        pattern: "シグマ計算",
+        prompt: `${math(sum(row(mi("k"), mo("="), mn("1")), mi("n"), row(mn("3"), sup(mi("k"), mn("2")), mo("-"), mn("2"), mi("k"), mo("+"), mn("1"))))} を n の式で表せ。`,
+        goal: "Σを項ごとに分けて基本公式へ落とす。",
+        hint1: "Σ は和に対して分配できる。",
+        formulaHint: "Σk と Σk² の公式。",
+        solutionSteps: [
+          `${inline(mn("3"), sum(row(mi("k"), mo("="), mn("1")), mi("n"), sup(mi("k"), mn("2"))), mo("-"), mn("2"), sum(row(mi("k"), mo("="), mn("1")), mi("n"), mi("k")), mo("+"), sum(row(mi("k"), mo("="), mn("1")), mi("n"), mn("1")))} に分ける。`,
+          "それぞれ公式を代入する。",
+          "最後に n でくくれるか確認する。"
+        ],
+        answer: `${inline(frac(row(mi("n"), row(mo("("), mi("n"), mo("+"), mn("1"), mo(")")), row(mo("("), mn("2"), mi("n"), mo("+"), mn("1"), mo(")"))), mn("2")), mo("-"), mi("n"), row(mo("("), mi("n"), mo("+"), mn("1"), mo(")")), mo("+"), mi("n"))}。整理してもよい。`,
+        formulaIds: ["b-sigma-basic"]
+      }),
+      C({
+        id: "card-vector-angle",
+        subject: "数学C",
+        unit: "ベクトル",
+        title: "内積から角度を決める",
+        universities: ["共通頻出", "大工大", "立命館", "関大", "近大"],
+        difficulty: "標準",
+        pattern: "ベクトル内積",
+        prompt: `${math(vec("a"), mo("="), row(mo("("), mn("2"), mo(","), mn("1"), mo(")")), mo(","), vec("b"), mo("="), row(mo("("), mn("1"), mo(","), mn("3"), mo(")")))} のなす角 θ を求めよ。`,
+        goal: "内積と長さから cosθ を出す。",
+        hint1: "成分の内積は x 成分同士、y 成分同士を掛けて足す。",
+        formulaHint: "cosθ=(a・b)/(|a||b|)。",
+        solutionSteps: [
+          `${inline(vec("a"), mo("・"), vec("b"), mo("="), mn("2"), mo("・"), mn("1"), mo("+"), mn("1"), mo("・"), mn("3"), mo("="), mn("5"))}。`,
+          `${inline(abs(vec("a")), mo("="), sqrt(mn("5")), mo(","), abs(vec("b")), mo("="), sqrt(mn("10")))}。`,
+          `${inline(row(mi("cos"), mi("θ")), mo("="), frac(mn("5"), row(sqrt(mn("5")), sqrt(mn("10")))), mo("="), frac(mn("1"), sqrt(mn("2"))))}。`
+        ],
+        answer: `${inline(mi("θ"), mo("="), frac(mi("π"), mn("4")))}。`,
+        formulaIds: ["c-vector-dot", "c-vector-angle"]
+      }),
+      C({
+        id: "card-complex-roots",
+        subject: "数学C",
+        unit: "複素数平面",
+        title: "1のn乗根を正多角形として見る",
+        universities: ["共通頻出", "立命館", "関大", "近大"],
+        difficulty: "標準",
+        pattern: "複素数平面",
+        prompt: `${math(sup(mi("z"), mn("4")), mo("="), mn("1"))} を満たす複素数 z をすべて求めよ。`,
+        goal: "偏角を 2π の等分として考える。",
+        hint1: "絶対値は 1、偏角は 2π の 4 等分。",
+        formulaHint: "1 の n 乗根。",
+        solutionSteps: [
+          `${inline(mi("z"), mo("="), row(mi("cos"), frac(row(mn("2"), mi("k"), mi("π")), mn("4"))), mo("+"), mi("i"), row(mi("sin"), frac(row(mn("2"), mi("k"), mi("π")), mn("4"))))}。`,
+          `k は ${inline(mn("0"), mo(","), mn("1"), mo(","), mn("2"), mo(","), mn("3"))}。`,
+          "複素数平面では単位円上の正方形の頂点。"
+        ],
+        answer: `${inline(mn("1"), mo(","), mi("i"), mo(","), mo("-"), mn("1"), mo(","), mo("-"), mi("i"))}。`,
+        formulaIds: ["c-roots-unity", "c-demoivre", "c-complex-polar"]
+      }),
+      C({
+        id: "card-complex-locus",
+        subject: "数学C",
+        unit: "複素数平面",
+        title: "絶対値の式を軌跡として読む",
+        universities: ["共通頻出", "立命館", "関大", "近大"],
+        difficulty: "標準",
+        pattern: "複素数軌跡",
+        prompt: `${math(abs(row(mi("z"), mo("-"), row(mo("("), mn("2"), mo("+"), mi("i"), mo(")")))), mo("="), mn("3"))} を満たす点 z の軌跡を答えよ。`,
+        goal: "|z-α|=r を中心 α、半径 r の円として読む。",
+        hint1: "絶対値は複素数平面で距離を表す。",
+        formulaHint: "複素数平面の円 |z-α|=r。",
+        solutionSteps: [
+          `${inline(mi("α"), mo("="), mn("2"), mo("+"), mi("i"))} は点 (2,1)。`,
+          `${inline(abs(row(mi("z"), mo("-"), mi("α"))), mo("="), mn("3"))} は z と α の距離が 3 という意味。`,
+          "したがって中心と半径を読む。"
+        ],
+        answer: "中心 (2,1)、半径 3 の円。",
+        formulaIds: ["c-complex-circle-locus"]
+      }),
+      C({
+        id: "card-limit-sinx",
+        subject: "数学III",
+        unit: "極限",
+        title: "sinの角をそろえて基本極限へ",
+        universities: ["共通頻出", "大工大", "立命館", "関大", "近大"],
+        difficulty: "標準",
+        pattern: "三角極限",
+        prompt: `${math(lim(row(mi("x"), mo("→"), mn("0")), frac(row(mi("sin"), mn("3"), mi("x")), row(mn("2"), mi("x")))))} を求めよ。`,
+        goal: "sin(3x)/(3x) を作る。",
+        hint1: "分子の角 3x と分母の x がずれている。",
+        formulaHint: "lim sin u / u = 1。",
+        solutionSteps: [
+          `${inline(frac(row(mi("sin"), mn("3"), mi("x")), row(mn("2"), mi("x"))), mo("="), frac(mn("3"), mn("2")), frac(row(mi("sin"), mn("3"), mi("x")), row(mn("3"), mi("x"))))}。`,
+          `x→0 のとき 3x→0。`,
+          "基本極限を使う。"
+        ],
+        answer: `${inline(frac(mn("3"), mn("2")))}。`,
+        formulaIds: ["iii-limit-sinx"]
+      }),
+      C({
+        id: "card-limit-e",
+        subject: "数学III",
+        unit: "極限",
+        title: "指数型極限をeの形へ直す",
+        universities: ["共通頻出", "立命館", "関大"],
+        difficulty: "やや応用",
+        pattern: "指数極限",
+        prompt: `${math(lim(row(mi("x"), mo("→"), mn("0")), sup(row(mo("("), mn("1"), mo("+"), mn("2"), mi("x"), mo(")")), frac(mn("3"), mi("x")))))} を求めよ。`,
+        goal: "(1+u)^{1/u} の形を作る。",
+        hint1: "u=2x とおくと指数は 6/u になる。",
+        formulaHint: "lim(1+u)^{1/u}=e。",
+        solutionSteps: [
+          `${inline(mi("u"), mo("="), mn("2"), mi("x"))} とおく。`,
+          `指数は ${inline(frac(mn("3"), mi("x")), mo("="), frac(mn("6"), mi("u")))}。`,
+          `${inline(sup(row(mo("("), mn("1"), mo("+"), mi("u"), mo(")")), frac(mn("6"), mi("u"))), mo("="), sup(row(sup(row(mo("("), mn("1"), mo("+"), mi("u"), mo(")")), frac(mn("1"), mi("u")))), mn("6")))}。`
+        ],
+        answer: `${inline(sup(mi("e"), mn("6")))}。`,
+        formulaIds: ["iii-limit-e"]
+      }),
+      C({
+        id: "card-param-tangent",
+        subject: "数学III",
+        unit: "微分法",
+        title: "媒介変数表示の接線",
+        universities: ["共通頻出", "大工大", "立命館", "関大", "近大"],
+        difficulty: "標準",
+        pattern: "媒介変数",
+        prompt: `${math(mi("x"), mo("="), sup(mi("t"), mn("2")), mo(","), mi("y"), mo("="), sup(mi("t"), mn("3")), mo("-"), mi("t"))} で表される曲線について、t=1 における接線を求めよ。`,
+        goal: "dy/dx=(dy/dt)/(dx/dt) で傾きを求める。",
+        hint1: "接点の座標と傾きを t=1 で出す。",
+        formulaHint: "媒介変数表示の微分。",
+        solutionSteps: [
+          `t=1 で接点は ${inline(row(mo("("), mn("1"), mo(","), mn("0"), mo(")")))}。`,
+          `${inline(frac(row(mi("d"), mi("x")), row(mi("d"), mi("t"))), mo("="), mn("2"), mi("t"), mo(","), frac(row(mi("d"), mi("y")), row(mi("d"), mi("t"))), mo("="), mn("3"), sup(mi("t"), mn("2")), mo("-"), mn("1"))}。`,
+          `t=1 で傾きは ${inline(frac(mn("2"), mn("2")), mo("="), mn("1"))}。`
+        ],
+        answer: `${inline(mi("y"), mo("-"), mn("0"), mo("="), mn("1"), row(mo("("), mi("x"), mo("-"), mn("1"), mo(")")))} より ${inline(mi("y"), mo("="), mi("x"), mo("-"), mn("1"))}。`,
+        formulaIds: ["iii-param-derivative", "ii-line"]
+      }),
+      C({
+        id: "card-implicit-tangent",
+        subject: "数学III",
+        unit: "微分法",
+        title: "陰関数の接線をyを解かずに出す",
+        universities: ["共通頻出", "立命館", "関大"],
+        difficulty: "標準",
+        pattern: "陰関数微分",
+        prompt: `${math(sup(mi("x"), mn("2")), mo("+"), sup(mi("y"), mn("2")), mo("="), mn("25"))} 上の点 (3,4) における接線を求めよ。`,
+        goal: "両辺を x で微分する。",
+        hint1: "y は x の関数として扱う。",
+        formulaHint: "陰関数の微分と接線の方程式。",
+        solutionSteps: [
+          `両辺微分して ${inline(mn("2"), mi("x"), mo("+"), mn("2"), mi("y"), frac(row(mi("d"), mi("y")), row(mi("d"), mi("x"))), mo("="), mn("0"))}。`,
+          `${inline(frac(row(mi("d"), mi("y")), row(mi("d"), mi("x"))), mo("="), mo("-"), frac(mi("x"), mi("y")))}。`,
+          `点 (3,4) で傾きは ${inline(mo("-"), frac(mn("3"), mn("4")))}。`
+        ],
+        answer: `${inline(mi("y"), mo("-"), mn("4"), mo("="), mo("-"), frac(mn("3"), mn("4")), row(mo("("), mi("x"), mo("-"), mn("3"), mo(")")))}。`,
+        formulaIds: ["iii-implicit", "ii-tangent-line"]
+      }),
+      C({
+        id: "card-substitution-integral",
+        subject: "数学III",
+        unit: "積分法",
+        title: "中身の微分を見つける置換積分",
+        universities: ["共通頻出", "大工大", "立命館", "関大", "近大"],
+        difficulty: "標準",
+        pattern: "置換積分",
+        prompt: `${math(row(mo("∫"), mn("2"), mi("x"), sqrt(row(sup(mi("x"), mn("2")), mo("+"), mn("1"))), row(mi("d"), mi("x"))))} を求めよ。`,
+        goal: "u=x²+1 と置く。",
+        hint1: "根号の中身 x²+1 の微分は 2x。",
+        formulaHint: "置換積分。",
+        solutionSteps: [
+          `${inline(mi("u"), mo("="), sup(mi("x"), mn("2")), mo("+"), mn("1"))} とおく。`,
+          `${inline(row(mi("d"), mi("u")), mo("="), mn("2"), mi("x"), row(mi("d"), mi("x")))}。`,
+          `積分は ${inline(row(mo("∫"), sqrt(mi("u")), row(mi("d"), mi("u"))))} になる。`
+        ],
+        answer: `${inline(frac(mn("2"), mn("3")), sup(row(mo("("), sup(mi("x"), mn("2")), mo("+"), mn("1"), mo(")")), frac(mn("3"), mn("2"))), mo("+"), mi("C"))}。`,
+        formulaIds: ["iii-substitution"]
+      }),
+      C({
+        id: "card-parts-integral",
+        subject: "数学III",
+        unit: "積分法",
+        title: "x e^x は部分積分で下げる",
+        universities: ["共通頻出", "大工大", "立命館", "関大", "近大"],
+        difficulty: "標準",
+        pattern: "部分積分",
+        prompt: `${math(row(mo("∫"), mi("x"), sup(mi("e"), mi("x")), row(mi("d"), mi("x"))))} を求めよ。`,
+        goal: "x を微分側、e^x を積分側にする。",
+        hint1: "多項式は微分すると簡単になる。",
+        formulaHint: "部分積分 ∫f'g=fg-∫fg'。",
+        solutionSteps: [
+          `${inline(mi("f"), mo("="), sup(mi("e"), mi("x")), mo(","), mi("g"), mo("="), mi("x"))} と見る。`,
+          `${inline(row(mo("∫"), mi("x"), sup(mi("e"), mi("x")), row(mi("d"), mi("x"))), mo("="), mi("x"), sup(mi("e"), mi("x")), mo("-"), row(mo("∫"), sup(mi("e"), mi("x")), row(mi("d"), mi("x"))))}。`
+        ],
+        answer: `${inline(row(mo("("), mi("x"), mo("-"), mn("1"), mo(")")), sup(mi("e"), mi("x")), mo("+"), mi("C"))}。`,
+        formulaIds: ["iii-integration-parts", "iii-derivative-table"]
+      }),
+      C({
+        id: "card-volume",
+        subject: "数学III",
+        unit: "面積・体積・弧長",
+        title: "回転体は半径の二乗を積分する",
+        universities: ["共通頻出", "大工大", "立命館", "関大", "近大"],
+        difficulty: "標準",
+        pattern: "回転体",
+        prompt: `曲線 ${math(mi("y"), mo("="), sqrt(mi("x")))}、x軸、直線 x=4 で囲まれる部分を x軸のまわりに1回転してできる立体の体積を求めよ。`,
+        goal: "半径 y の円断面を積分する。",
+        hint1: "断面積は πy²。",
+        formulaHint: "V=π∫y² dx。",
+        solutionSteps: [
+          `ここでは ${inline(sup(mi("y"), mn("2")), mo("="), mi("x"))}。`,
+          `体積は ${inline(mi("V"), mo("="), mi("π"), integ(mn("0"), mn("4"), mi("x")))}。`,
+          "定積分を計算する。"
+        ],
+        answer: `${inline(mi("V"), mo("="), mi("π"), frac(sup(mn("4"), mn("2")), mn("2")), mo("="), mn("8"), mi("π"))}。`,
+        formulaIds: ["iii-volume", "iii-substitution"]
+      }),
+      C({
+        id: "card-arc-length",
+        subject: "数学III",
+        unit: "面積・体積・弧長",
+        title: "弧長公式で根号を平方に直す",
+        universities: ["共通頻出", "立命館", "関大"],
+        difficulty: "やや応用",
+        pattern: "弧長",
+        prompt: `${math(mi("y"), mo("="), frac(mn("2"), mn("3")), sup(mi("x"), frac(mn("3"), mn("2"))))} の 0≦x≦1 における曲線の長さを求めよ。`,
+        goal: "L=∫√(1+y'²)dx を使う。",
+        hint1: "微分すると y'=√x になる。",
+        formulaHint: "曲線の長さの公式。",
+        solutionSteps: [
+          `${inline(mi("y"), mo("'"), mo("="), sqrt(mi("x")))}。`,
+          `根号の中は ${inline(mn("1"), mo("+"), sup(row(mi("y"), mo("'")), mn("2")), mo("="), mn("1"), mo("+"), mi("x"))}。`,
+          `長さは ${inline(integ(mn("0"), mn("1"), sqrt(row(mn("1"), mo("+"), mi("x")))))}。`,
+          "u=1+x と置換する。"
+        ],
+        answer: `${inline(frac(mn("2"), mn("3")), row(mo("("), mn("2"), sqrt(mn("2")), mo("-"), mn("1"), mo(")")))}。`,
+        formulaIds: ["iii-arc-length", "iii-substitution"]
+      }),
+      C({
+        id: "card-polar-area",
+        subject: "数学III",
+        unit: "面積・体積・弧長",
+        title: "極方程式の面積は二乗して半分",
+        universities: ["共通頻出", "立命館", "関大"],
+        difficulty: "やや応用",
+        pattern: "極座標面積",
+        prompt: `${math(mi("r"), mo("="), mn("2"), row(mi("sin"), mi("θ")))} で表される曲線の 0≦θ≦π の部分の面積を求めよ。`,
+        goal: "S=1/2∫r²dθ を使う。",
+        hint1: "r²=4sin²θ。sin²θ は次数下げする。",
+        formulaHint: "極方程式の面積と三角関数の次数下げ。",
+        solutionSteps: [
+          `${inline(mi("S"), mo("="), frac(mn("1"), mn("2")), integ(mn("0"), mi("π"), sup(row(mn("2"), row(mi("sin"), mi("θ"))), mn("2")), "θ"))}。`,
+          `つまり ${inline(mn("2"), integ(mn("0"), mi("π"), sup(row(mi("sin"), mi("θ")), mn("2")), "θ"))}。`,
+          `${inline(sup(row(mi("sin"), mi("θ")), mn("2")), mo("="), frac(row(mn("1"), mo("-"), row(mi("cos"), mn("2"), mi("θ"))), mn("2")))} を使う。`
+        ],
+        answer: `${inline(mi("π"))}。`,
+        formulaIds: ["iii-polar-area", "iii-trig-integral"]
+      })
+    ];
+
+    const state = {
+      activeTab: "formulas",
+      formulaUniversity: "全大学",
+      practiceUniversity: "共通頻出",
+      activeFormulaId: formulaData[0].id,
+      activeCardId: cardData[0].id,
+      revealed: new Set(),
+      progress: loadProgress()
+    };
+
+    const $ = (selector) => document.querySelector(selector);
+    const $$ = (selector) => [...document.querySelectorAll(selector)];
+
+    function loadProgress() {
+      try {
+        return JSON.parse(localStorage.getItem("kansaiMathProgress") || "{}");
+      } catch {
+        return {};
+      }
+    }
+
+    function saveProgress() {
+      localStorage.setItem("kansaiMathProgress", JSON.stringify(state.progress));
+    }
+
+    function formulaById(id) {
+      return formulaData.find((item) => item.id === id);
+    }
+
+    function cardById(id) {
+      return cardData.find((item) => item.id === id);
+    }
+
+    function subjectUnits(subject) {
+      const source = subject === "全科目" ? formulaData : formulaData.filter((item) => item.subject === subject);
+      return ["全単元", ...new Set(source.map((item) => item.unit))];
+    }
+
+    function optionList(select, values, current) {
+      select.innerHTML = values.map((value) => `<option value="${esc(value)}"${value === current ? " selected" : ""}>${esc(value)}</option>`).join("");
+    }
+
+    function chipList(container, current, handler) {
+      container.innerHTML = universities.map((name) => `<button class="chip${name === current ? " active" : ""}" type="button" data-university="${esc(name)}">${esc(name)}</button>`).join("");
+      container.querySelectorAll("button").forEach((button) => {
+        button.addEventListener("click", () => handler(button.dataset.university));
+      });
+    }
+
+    function listItems(items) {
+      if (!items || !items.length) return "<p>なし</p>";
+      return `<ul class="clean">${items.map((item) => `<li>${esc(item)}</li>`).join("")}</ul>`;
+    }
+
+    function badges(items, style = "") {
+      return items.map((item) => `<span class="badge ${style}">${esc(item)}</span>`).join("");
+    }
+
+    function typeMath() {
+      if (window.MathJax && window.MathJax.typesetPromise) {
+        window.MathJax.typesetPromise().catch(() => {});
+      }
+    }
+
+    function matchesUniversity(item, selected) {
+      return selected === "全大学" || item.universities.includes(selected);
+    }
+
+    function filteredFormulas() {
+      const subject = $("#subjectSelect").value || "全科目";
+      const unit = $("#unitSelect").value || "全単元";
+      const search = ($("#formulaSearch").value || "").trim().toLowerCase();
+      return formulaData.filter((item) => {
+        const targetText = [
+          item.title,
+          item.subject,
+          item.unit,
+          item.whenToUse,
+          item.pitfalls,
+          ...item.signals,
+          ...item.tags,
+          ...item.universities
+        ].join(" ").toLowerCase();
+        return (subject === "全科目" || item.subject === subject)
+          && (unit === "全単元" || item.unit === unit)
+          && matchesUniversity(item, state.formulaUniversity)
+          && (!search || targetText.includes(search));
+      });
+    }
+
+    function renderFormulaControls() {
+      const subject = $("#subjectSelect").value || "全科目";
+      optionList($("#subjectSelect"), subjects, subject);
+      optionList($("#unitSelect"), subjectUnits(subject), $("#unitSelect").value || "全単元");
+      const formulas = filteredFormulas();
+      const currentExists = formulas.some((item) => item.id === state.activeFormulaId);
+      if (!currentExists && formulas[0]) state.activeFormulaId = formulas[0].id;
+      $("#formulaSelect").innerHTML = formulas.map((item) => `<option value="${esc(item.id)}"${item.id === state.activeFormulaId ? " selected" : ""}>${esc(item.title)}</option>`).join("");
+      chipList($("#formulaUniversityChips"), state.formulaUniversity, (value) => {
+        state.formulaUniversity = value;
+        renderFormulaArea();
+      });
+    }
+
+    function renderFormulaList() {
+      const formulas = filteredFormulas();
+      const list = $("#formulaList");
+      if (!formulas.length) {
+        list.innerHTML = `<div class="empty">条件に合う公式がありません。</div>`;
+        return;
+      }
+      list.innerHTML = formulas.map((item) => `
+        <button class="formula-item${item.id === state.activeFormulaId ? " active" : ""}" type="button" data-formula-id="${esc(item.id)}">
+          <span class="item-title">${esc(item.title)}</span>
+          <span class="item-meta">${esc(item.subject)} / ${esc(item.unit)} / ${esc(item.priority)}</span>
+        </button>
+      `).join("");
+      list.querySelectorAll("button").forEach((button) => {
+        button.addEventListener("click", () => {
+          state.activeFormulaId = button.dataset.formulaId;
+          $("#formulaSelect").value = state.activeFormulaId;
+          renderFormulaArea();
+        });
+      });
+    }
+
+    function renderFormulaDetail() {
+      const item = formulaById(state.activeFormulaId) || filteredFormulas()[0];
+      const target = $("#formulaDetail");
+      if (!item) {
+        target.innerHTML = `<div class="empty">公式を選択してください。</div>`;
+        return;
+      }
+      state.activeFormulaId = item.id;
+      const relatedCards = cardData.filter((card) => card.formulaIds.includes(item.id));
+      target.innerHTML = `
+        <div class="detail-title-row">
+          <div>
+            <h2>${esc(item.title)}</h2>
+            <div class="item-meta">${esc(item.subject)} / ${esc(item.unit)} / ${esc(item.difficulty)}</div>
+          </div>
+          <div class="status-stack">${badges(item.universities, "blue")}${item.priority === "最重点" ? `<span class="badge hot">最重点</span>` : ""}</div>
+        </div>
+        <div class="formula-box">${item.formula}</div>
+        <div class="info-grid">
+          <div class="info-block"><h3>成立条件</h3><div>${typeof item.conditions === "string" ? esc(item.conditions) : item.conditions}</div></div>
+          <div class="info-block"><h3>使い所</h3><p>${esc(item.whenToUse)}</p></div>
+          <div class="info-block"><h3>問題文のサイン</h3>${listItems(item.signals)}</div>
+          <div class="info-block"><h3>注意点</h3><p>${esc(item.pitfalls)}</p></div>
+        </div>
+        <div class="info-block">
+          <h3>ミニ例題・確認</h3>
+          <p>${typeof item.example === "string" ? item.example : esc(item.example)}</p>
+        </div>
+        <div class="related-area">
+          <h3 class="panel-title">この公式を使うカード</h3>
+          <div class="action-row">
+            ${relatedCards.length ? relatedCards.map((card) => `<button class="secondary-button" type="button" data-open-card="${esc(card.id)}">${esc(card.title)}</button>`).join("") : `<span class="badge">準備中</span>`}
+          </div>
+        </div>
+      `;
+      target.querySelectorAll("[data-open-card]").forEach((button) => {
+        button.addEventListener("click", () => {
+          state.activeCardId = button.dataset.openCard;
+          switchTab("practice");
+          renderPracticeArea();
+        });
+      });
+      typeMath();
+    }
+
+    function renderFormulaArea() {
+      renderFormulaControls();
+      renderFormulaList();
+      renderFormulaDetail();
+    }
+
+    function filteredCards() {
+      const subject = $("#practiceSubject").value || "全科目";
+      const search = ($("#practiceSearch").value || "").trim().toLowerCase();
+      return cardData.filter((card) => {
+        const linkedTitles = card.formulaIds.map((id) => formulaById(id)?.title || "").join(" ");
+        const text = [
+          card.title,
+          card.subject,
+          card.unit,
+          card.goal,
+          card.hint1,
+          card.pattern,
+          linkedTitles,
+          ...card.universities,
+          ...card.tags
+        ].join(" ").toLowerCase();
+        return (subject === "全科目" || card.subject === subject)
+          && matchesUniversity(card, state.practiceUniversity)
+          && (!search || text.includes(search));
+      });
+    }
+
+    function renderPracticeControls() {
+      optionList($("#practiceSubject"), subjects, $("#practiceSubject").value || "全科目");
+      chipList($("#practiceUniversityChips"), state.practiceUniversity, (value) => {
+        state.practiceUniversity = value;
+        renderPracticeArea();
+      });
+    }
+
+    function renderPracticeList() {
+      const cards = filteredCards();
+      if (!cards.some((card) => card.id === state.activeCardId) && cards[0]) {
+        state.activeCardId = cards[0].id;
+        state.revealed.clear();
+      }
+      const list = $("#practiceList");
+      if (!cards.length) {
+        list.innerHTML = `<div class="empty">条件に合うカードがありません。</div>`;
+        return;
+      }
+      list.innerHTML = cards.map((card) => {
+        const mark = state.progress[card.id]?.review ? `<span class="badge hot">要復習</span>` : "";
+        return `
+          <button class="practice-card${card.id === state.activeCardId ? " active" : ""}" type="button" data-card-id="${esc(card.id)}">
+            <span class="item-title">${esc(card.title)}</span>
+            <span class="item-meta">${esc(card.subject)} / ${esc(card.unit)} / ${esc(card.pattern)}</span>
+            <span class="item-meta">${badges(card.universities.slice(0, 3), "blue")}${mark}</span>
+          </button>
+        `;
+      }).join("");
+      list.querySelectorAll("[data-card-id]").forEach((button) => {
+        button.addEventListener("click", () => {
+          state.activeCardId = button.dataset.cardId;
+          state.revealed.clear();
+          renderPracticeArea();
+        });
+      });
+    }
+
+    function revealSection(key) {
+      state.revealed.add(key);
+      renderCardDetail();
+    }
+
+    function markCard(cardId, review) {
+      const current = state.progress[cardId] || { solved: 0, reviewCount: 0 };
+      if (review) {
+        current.review = true;
+        current.reviewCount = (current.reviewCount || 0) + 1;
+        showToast("要復習に入れました。");
+      } else {
+        current.review = false;
+        current.solved = (current.solved || 0) + 1;
+        showToast("できたカードとして記録しました。");
+      }
+      current.lastTouched = new Date().toISOString();
+      state.progress[cardId] = current;
+      saveProgress();
+      renderPracticeArea();
+      renderReview();
+      renderWeakness();
+    }
+
+    function formulaButtons(card) {
+      return card.formulaIds.map((id) => {
+        const formula = formulaById(id);
+        if (!formula) return "";
+        return `<button class="chip" type="button" data-open-formula="${esc(id)}">${esc(formula.title)}</button>`;
+      }).join("");
+    }
+
+    function renderReveal(key, title, content) {
+      const isOpen = state.revealed.has(key);
+      return `
+        <div class="reveal-block">
+          <h3>${esc(title)}</h3>
+          <div class="reveal-content" ${isOpen ? "" : "hidden"}>
+            ${content}
+          </div>
+          ${isOpen ? "" : `<div class="reveal-content"><button class="secondary-button" type="button" data-reveal="${esc(key)}">${esc(title)}を表示</button></div>`}
+        </div>
+      `;
+    }
+
+    function renderCardDetail() {
+      const card = cardById(state.activeCardId);
+      const target = $("#cardDetail");
+      if (!card) {
+        target.innerHTML = `<div class="empty">カードを選択してください。</div>`;
+        return;
+      }
+      target.innerHTML = `
+        <div class="detail-title-row">
+          <div>
+            <h2>${esc(card.title)}</h2>
+            <div class="item-meta">${esc(card.subject)} / ${esc(card.unit)} / ${esc(card.difficulty)} / ${esc(card.pattern)}</div>
+          </div>
+          <div class="status-stack">${badges(card.universities, "blue")}</div>
+        </div>
+        <div class="math-box">${card.prompt}</div>
+        <div class="info-block">
+          <h3>到達目標</h3>
+          <p>${esc(card.goal)}</p>
+        </div>
+        ${renderReveal("hint1", "着眼点", `<p>${esc(card.hint1)}</p>`)}
+        ${renderReveal("formula", "使う公式", `<p>${esc(card.formulaHint)}</p><div class="chip-row">${formulaButtons(card)}</div>`)}
+        ${renderReveal("solution", "解法ステップ", `<ol class="steps">${card.solutionSteps.map((step) => `<li>${step}</li>`).join("")}</ol>`)}
+        ${renderReveal("answer", "答え", `<p>${card.answer}</p>`)}
+        <div class="action-row">
+          <button class="primary-button" type="button" data-mark="done">できた</button>
+          <button class="secondary-button" type="button" data-mark="review">要復習</button>
+        </div>
+      `;
+      target.querySelectorAll("[data-reveal]").forEach((button) => {
+        button.addEventListener("click", () => revealSection(button.dataset.reveal));
+      });
+      target.querySelectorAll("[data-mark]").forEach((button) => {
+        button.addEventListener("click", () => markCard(card.id, button.dataset.mark === "review"));
+      });
+      target.querySelectorAll("[data-open-formula]").forEach((button) => {
+        button.addEventListener("click", () => {
+          state.activeFormulaId = button.dataset.openFormula;
+          switchTab("formulas");
+          renderFormulaArea();
+        });
+      });
+      typeMath();
+    }
+
+    function renderPracticeArea() {
+      renderPracticeControls();
+      renderPracticeList();
+      renderCardDetail();
+    }
+
+    function reviewCards() {
+      return cardData.filter((card) => state.progress[card.id]?.review);
+    }
+
+    function renderStats(container, rows) {
+      container.innerHTML = rows.map((rowData) => `
+        <div class="stat">
+          <strong>${esc(rowData.value)}</strong>
+          <span>${esc(rowData.label)}</span>
+        </div>
+      `).join("");
+    }
+
+    function renderReview() {
+      const cards = reviewCards();
+      const solved = Object.values(state.progress).reduce((total, item) => total + (item.solved || 0), 0);
+      renderStats($("#reviewStats"), [
+        { label: "要復習カード", value: cards.length },
+        { label: "できた記録", value: solved },
+        { label: "総カード", value: cardData.length },
+        { label: "公式数", value: formulaData.length }
+      ]);
+      const list = $("#reviewList");
+      if (!cards.length) {
+        list.innerHTML = `<div class="empty">まだ要復習カードはありません。演習で「要復習」を押すとここに集まります。</div>`;
+        return;
+      }
+      list.innerHTML = cards.map((card) => `
+        <button class="practice-card" type="button" data-review-card="${esc(card.id)}">
+          <span class="item-title">${esc(card.title)}</span>
+          <span class="item-meta">${esc(card.subject)} / ${esc(card.unit)} / ${esc(card.pattern)}</span>
+          <span class="item-meta">${badges(card.universities.slice(0, 4), "blue")}</span>
+        </button>
+      `).join("");
+      list.querySelectorAll("[data-review-card]").forEach((button) => {
+        button.addEventListener("click", () => {
+          state.activeCardId = button.dataset.reviewCard;
+          state.revealed.clear();
+          switchTab("practice");
+          renderPracticeArea();
+        });
+      });
+    }
+
+    function weaknessRows() {
+      const review = reviewCards();
+      const map = new Map();
+      review.forEach((card) => {
+        const key = `${card.subject} / ${card.unit}`;
+        if (!map.has(key)) map.set(key, { key, count: 0, formulas: new Set(), cards: [] });
+        const rowData = map.get(key);
+        rowData.count += 1;
+        card.formulaIds.forEach((id) => rowData.formulas.add(formulaById(id)?.title || id));
+        rowData.cards.push(card.title);
+      });
+      return [...map.values()].sort((a, b) => b.count - a.count);
+    }
+
+    function renderWeakness() {
+      const rows = weaknessRows();
+      const review = reviewCards();
+      const touched = Object.keys(state.progress).length;
+      renderStats($("#weakStats"), [
+        { label: "記録済みカード", value: touched },
+        { label: "弱点単元", value: rows.length },
+        { label: "要復習", value: review.length },
+        { label: "大学タグ", value: "4校" }
+      ]);
+      const list = $("#weakList");
+      if (!rows.length) {
+        list.innerHTML = `<div class="empty">弱点はまだ記録されていません。迷ったカードを「要復習」に入れると、単元と公式で整理されます。</div>`;
+        return;
+      }
+      list.innerHTML = rows.map((rowData) => `
+        <div class="weak-item">
+          <div class="item-title">${esc(rowData.key)} <span class="badge hot">要復習 ${rowData.count}</span></div>
+          <div><strong>関連公式:</strong> ${[...rowData.formulas].map((name) => `<span class="badge">${esc(name)}</span>`).join(" ")}</div>
+          <div><strong>カード:</strong> ${rowData.cards.map(esc).join("、")}</div>
+        </div>
+      `).join("");
+    }
+
+    function switchTab(name) {
+      state.activeTab = name;
+      $$(".tab-button").forEach((button) => {
+        const active = button.dataset.tab === name;
+        button.setAttribute("aria-selected", active ? "true" : "false");
+      });
+      $$(".tab-panel").forEach((panel) => {
+        panel.classList.toggle("active", panel.id === `tab-${name}`);
+      });
+      if (name === "review") renderReview();
+      if (name === "weakness") renderWeakness();
+      typeMath();
+    }
+
+    function dataCheck() {
+      const formulaIds = new Set(formulaData.map((item) => item.id));
+      const cardIds = new Set(cardData.map((item) => item.id));
+      const duplicateFormulaIds = formulaData.length - formulaIds.size;
+      const duplicateCardIds = cardData.length - cardIds.size;
+      const missing = cardData.flatMap((card) => card.formulaIds.filter((id) => !formulaIds.has(id)).map((id) => `${card.id}:${id}`));
+      const status = $("#checkStatus");
+      if (duplicateFormulaIds || duplicateCardIds || missing.length) {
+        status.textContent = `要確認 ${duplicateFormulaIds + duplicateCardIds + missing.length}`;
+        status.style.borderColor = "#df9d8e";
+        status.style.background = "#fff2ee";
+      } else {
+        status.textContent = "データチェック OK";
+        status.style.borderColor = "#b9dbc8";
+        status.style.background = "#effaf3";
+      }
+    }
+
+    function showToast(message) {
+      const toast = $("#toast");
+      toast.textContent = message;
+      toast.classList.add("show");
+      window.clearTimeout(showToast.timer);
+      showToast.timer = window.setTimeout(() => toast.classList.remove("show"), 1800);
+    }
+
+    function boot() {
+      $("#formulaCount").textContent = `公式 ${formulaData.length}`;
+      $("#cardCount").textContent = `演習 ${cardData.length}`;
+      optionList($("#subjectSelect"), subjects, "全科目");
+      optionList($("#unitSelect"), subjectUnits("全科目"), "全単元");
+      optionList($("#practiceSubject"), subjects, "全科目");
+      $$(".tab-button").forEach((button) => {
+        button.addEventListener("click", () => switchTab(button.dataset.tab));
+      });
+      $("#subjectSelect").addEventListener("change", () => {
+        optionList($("#unitSelect"), subjectUnits($("#subjectSelect").value), "全単元");
+        renderFormulaArea();
+      });
+      $("#unitSelect").addEventListener("change", renderFormulaArea);
+      $("#formulaSearch").addEventListener("input", renderFormulaArea);
+      $("#formulaSelect").addEventListener("change", (event) => {
+        state.activeFormulaId = event.target.value;
+        renderFormulaArea();
+      });
+      $("#practiceSubject").addEventListener("change", renderPracticeArea);
+      $("#practiceSearch").addEventListener("input", renderPracticeArea);
+      $("#randomReviewBtn").addEventListener("click", () => {
+        const cards = reviewCards();
+        if (!cards.length) {
+          showToast("要復習カードがまだありません。");
+          return;
+        }
+        const card = cards[Math.floor(Math.random() * cards.length)];
+        state.activeCardId = card.id;
+        state.revealed.clear();
+        switchTab("practice");
+        renderPracticeArea();
+      });
+      $("#clearReviewBtn").addEventListener("click", () => {
+        Object.keys(state.progress).forEach((id) => {
+          state.progress[id].review = false;
+        });
+        saveProgress();
+        renderReview();
+        renderWeakness();
+        renderPracticeArea();
+        showToast("要復習を全解除しました。");
+      });
+      $("#resetProgressBtn").addEventListener("click", () => {
+        state.progress = {};
+        saveProgress();
+        renderReview();
+        renderWeakness();
+        renderPracticeArea();
+        showToast("学習記録をリセットしました。");
+      });
+      dataCheck();
+      renderFormulaArea();
+      renderPracticeArea();
+      renderReview();
+      renderWeakness();
+      window.addEventListener("load", typeMath);
+    }
+
+    boot();
+  </script>
+</body>
+</html>
