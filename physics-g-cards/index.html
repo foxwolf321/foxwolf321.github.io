@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>物理受験カード v3.0.7｜年間固定版</title>
+<title>物理受験カード v3.0.8｜年間固定版</title>
 <link rel="manifest" href="/physics-g-cards/manifest.webmanifest">
 <meta name="theme-color" content="#8ec5ff">
 <script src="https://accounts.google.com/gsi/client" async defer></script>
@@ -133,7 +133,7 @@ sup,sub{font-size:.65em}
       </div>
     </div>
     <div class="actions">
-      <button class="act primary" data-action="switch" data-view="learn"><span>▣</span>カード学習を始める<small>弱点優先＋ランダム出題</small></button>
+      <button class="act primary" data-action="switch" data-view="learn"><span>▣</span>カード学習を始める<small>弱点優先・自動保存</small></button>
       <button class="act" data-action="switch" data-view="formulas"><span>📖</span>公式集を開く</button>
       <button class="act" data-action="switch" data-view="progress"><span>📊</span>進捗を見る</button>
     </div>
@@ -170,10 +170,6 @@ sup,sub{font-size:.65em}
       <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px">
         <button class="soft" data-action="next">次へ</button>
         <button class="soft" data-action="export">進捗書き出し</button>
-        <button class="soft" data-action="gconnect">Google接続</button>
-        <button class="soft" data-action="gbackup">Drive保存</button>
-        <button class="soft" data-action="grestore">Drive読込</button>
-        <button class="soft" data-action="switch" data-view="info">Google設定</button>
         <label class="soft">読み込み<input id="importFile" type="file" accept="application/json" style="display:none"></label>
       </div>
     </div>
@@ -216,7 +212,7 @@ sup,sub{font-size:.65em}
     </div>
     <div class="panel strong" id="gdrivePanel">
       <h2>Google Drive保存 <span class="small">v3専用</span></h2>
-      <p class="note">Google Cloudで作成済みの <b>OAuth クライアントID（Webアプリ）</b> を入れると、進捗をGoogle DriveのappDataFolderへ保存・復元できます。Cloud側の作り直しは不要です。</p>
+      <p class="note">Google Cloudで作成済みの <b>OAuth クライアントID（Webアプリ）</b> を入れて接続すると、回答するたびに進捗をGoogle DriveのappDataFolderへ自動保存します。Cloud側の作り直しは不要です。</p>
       <div class="gdrive-box">
         <div class="gdrive-grid">
           <input id="gClientIdInput" type="text" placeholder="OAuth クライアントIDを貼り付け">
@@ -256,7 +252,7 @@ sup,sub{font-size:.65em}
 <script>
 (function(){
 "use strict";
-const APP_VERSION="3.0.7-class-random-fix";
+const APP_VERSION="3.0.8-learning-flow-fix";
 const SAVE_KEY="physics-g-cards-v3-annual-progress-local";
 const EXPORT_NAME="physics-g-cards-v3-annual-progress.json";
 const CLIENT_KEY="physics-g-cards-v3-google-client-id";
@@ -283,25 +279,28 @@ function counts(){const c={total:CARDS.length,mastered:0,review:0,new:0,learning
 function updateDash(){const c=counts(),p=Math.round(c.mastered/c.total*100),r=Math.round(c.review/c.total*100);$("pct").textContent=p+"%";$("ring").style.setProperty("--p",p);$("ring").style.setProperty("--r",r);$("cM").textContent=c.mastered+"枚";$("cR").textContent=c.review+"枚";$("cN").textContent=c.new+"枚";$("bM").style.width=p+"%";$("bR").style.width=r+"%";$("bN").style.width=Math.round(c.new/c.total*100)+"%"}
 function filteredCards(){return CARDS.filter(c=>(state.filters.unit==="全分野"||c.unit===state.filters.unit)&&(state.filters.type==="全タイプ"||c.type===state.filters.type))}
 const STATUS_ORDER={"苦手":0,"復習":1,"未着手":2,"学習中":3,"習得":4};
+let deckQueue=[],lastFilterKey="";
 function sortPool(pool){return pool.sort((a,b)=>STATUS_ORDER[status(a)]-STATUS_ORDER[status(b)]||(prog(a.id).due||0)-(prog(b.id).due||0)||a.id.localeCompare(b.id))}
-function randomFrom(list){return list[Math.floor(Math.random()*list.length)]}
+function shuffle(list){const a=list.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
 function priorityCandidates(pool){pool=sortPool(pool);if(!pool.length)return[];const top=STATUS_ORDER[status(pool[0])];return pool.filter(c=>STATUS_ORDER[status(c)]===top)}
-function choose(){let pool=priorityCandidates(filteredCards());if(!pool.length){state.current=CARDS[0];renderCard();return}if(state.current&&pool.length>1){pool=pool.filter(c=>c.id!==state.current.id)}state.current=randomFrom(pool);renderCard()}
-function nextCard(){let pool=priorityCandidates(filteredCards());if(!pool.length){state.current=CARDS[0];renderCard();return}if(state.current&&pool.length>1){pool=pool.filter(c=>c.id!==state.current.id)}state.current=randomFrom(pool);renderCard()}
+function filterKey(){return state.filters.unit+"|"+state.filters.type+"|"+Object.keys(state.progress).length}
+function refillQueue(){const key=filterKey();let pool=priorityCandidates(filteredCards());if(state.current&&pool.length>1)pool=pool.filter(c=>c.id!==state.current.id);deckQueue=shuffle(pool);lastFilterKey=key}
+function choose(){refillQueue();state.current=deckQueue.shift()||CARDS[0];renderCard()}
+function nextCard(){const key=filterKey();if(!deckQueue.length||key!==lastFilterKey)refillQueue();const next=deckQueue.shift();if(next){state.current=next;renderCard();return}let pool=filteredCards();if(state.current&&pool.length>1)pool=pool.filter(c=>c.id!==state.current.id);state.current=shuffle(pool)[0]||CARDS[0];renderCard()}
 function renderCard(){const c=state.current,f=fById(c.fid);$("meta").innerHTML=`<span class="pill">${c.unit}</span><span class="pill p">${c.type}</span><span class="pill">${f.section}</span><span class="pill">状態：${status(c)}</span>`;$("q").textContent=c.q;$("aFormula").innerHTML=f.formula;$("aText").innerHTML=`<b>${f.tag}</b><br>${c.a}<br><span class="small">${f.desc}</span>`;$("ans").classList.remove("show")}
 function renderFormulas(){const u=$("funit").value||"全分野",q=($("fsearch").value||"").trim();const list=FORMULAS.filter(f=>(u==="全分野"||f.unit===u)&&(!q||(f.unit+f.section+f.tag+f.desc+f.condition+f.typical+f.caution).includes(q)));$("fcount").textContent=list.length+"公式";$("flist").innerHTML=list.map(formulaHTML).join("")}
 function renderPickup(){$("pickup").innerHTML=FORMULAS.filter(f=>["運動方程式","力学的エネルギー保存","クーロンの法則","熱力学第一法則","屈折の法則"].includes(f.tag)).slice(0,5).map(formulaHTML).join("")}
 function renderSearch(){const q=($("search").value||"").trim();const list=(q?CARDS.filter(c=>(c.q+c.a+c.topic+c.unit+c.type).includes(q)):CARDS.slice(0,16)).slice(0,60);$("results").innerHTML=list.map(c=>`<div class="row"><b>${c.unit}｜${c.topic}｜${c.type}</b><div class="note">${c.q}</div></div>`).join("")}
 function renderProgress(){const by={};CARDS.forEach(c=>{by[c.unit]=by[c.unit]||{total:0,mastered:0,review:0,new:0,learning:0,weak:0};const x=by[c.unit];x.total++;const s=status(c);if(s==="習得")x.mastered++;else if(s==="未着手")x.new++;else if(s==="苦手"){x.weak++;x.review++}else if(s==="復習")x.review++;else x.learning++});$("progress").innerHTML=Object.keys(by).map(k=>{const x=by[k],p=Math.round(x.mastered/x.total*100);return `<div class="row"><header><span>${k}</span><span>${x.mastered}/${x.total}枚</span></header><div class="bar"><i style="width:${p}%"></i></div><div class="note">習得 ${x.mastered} / 復習 ${x.review} / 学習中 ${x.learning} / 未着手 ${x.new} / 苦手 ${x.weak}</div></div>`}).join("")}
 function switchView(v){document.querySelectorAll(".view").forEach(x=>x.classList.remove("active"));$("view-"+v).classList.add("active");document.querySelectorAll(".nav").forEach(b=>b.classList.toggle("active",b.dataset.view===v));if(v==="formulas")renderFormulas();if(v==="search")renderSearch();if(v==="progress")renderProgress();window.scrollTo({top:0,behavior:"smooth"})}
-function rate(g){const c=state.current,p=prog(c.id),now=Date.now(),delta=[-2,-1,1,2][g]||0;p.score=Math.max(-3,Math.min(5,(p.score||0)+delta));p.reviews=(p.reviews||0)+1;p.last=now;p.due=now+[0,1,3,7][g]*86400000;state.progress[c.id]=p;save();updateDash();if(g===0){choose()}else{nextCard()}toast(["忘れた：すぐ復習","あやしい：復習へ","できた：少し先へ","余裕：安定へ"][g])}
+function rate(g){const c=state.current,p=prog(c.id),now=Date.now(),delta=[-2,-1,1,2][g]||0;p.score=Math.max(-3,Math.min(5,(p.score||0)+delta));p.reviews=(p.reviews||0)+1;p.last=now;p.due=now+[0,1,3,7][g]*86400000;state.progress[c.id]=p;save();updateDash();nextCard();toast(["忘れた：すぐ復習","あやしい：復習へ","できた：少し先へ","余裕：安定へ"][g])}
 function exportProgress(){const blob=new Blob([JSON.stringify({version:APP_VERSION,file:EXPORT_NAME,progress:state.progress},null,2)],{type:"application/json"});const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=EXPORT_NAME;a.click();URL.revokeObjectURL(a.href)}
 function importProgress(file){if(!file)return;const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result);state.progress=d.progress||d||{};save();updateDash();choose();toast("進捗を読み込みました")}catch(e){toast("読み込みに失敗しました")}};r.readAsText(file)}
 function initSelects(){const units=["全分野"].concat([...new Set(FORMULAS.map(f=>f.unit))]);$("unit").innerHTML=units.map(x=>`<option>${x}</option>`).join("");$("funit").innerHTML=units.map(x=>`<option>${x}</option>`).join("");$("type").innerHTML=["全タイプ"].concat(TYPES).map(x=>`<option>${x}</option>`).join("")}
 async function clearOld(){try{if("serviceWorker" in navigator){const regs=await navigator.serviceWorker.getRegistrations();regs.forEach(r=>r.unregister())}if(window.caches){const keys=await caches.keys();keys.filter(k=>k.includes("physics-g-cards")).forEach(k=>caches.delete(k))}}catch(e){}}
 
 function driveSetStatus(msg){const s=$("gSyncStatus");if(s)s.textContent=msg;const d=$("drive");if(d)d.textContent=(accessToken&&Date.now()<tokenExpiresAt)?"Google Drive":"ローカル"}
-function driveLoadSettings(){const input=$("gClientIdInput"),auto=$("gAutoBackup");if(input)input.value=localStorage.getItem(CLIENT_KEY)||"";if(auto)auto.checked=localStorage.getItem(AUTO_KEY)==="1"}
+function driveLoadSettings(){const input=$("gClientIdInput"),auto=$("gAutoBackup");if(input)input.value=localStorage.getItem(CLIENT_KEY)||"";if(auto)auto.checked=localStorage.getItem(AUTO_KEY)!=="0"}
 function driveSaveSettings(){const input=$("gClientIdInput"),auto=$("gAutoBackup");if(input)localStorage.setItem(CLIENT_KEY,input.value.trim());if(auto)localStorage.setItem(AUTO_KEY,auto.checked?"1":"0")}
 function driveClientId(){const input=$("gClientIdInput");return ((input&&input.value)||localStorage.getItem(CLIENT_KEY)||"").trim()}
 function ensureGis(){return new Promise((resolve,reject)=>{if(window.google&&google.accounts&&google.accounts.oauth2){resolve();return}if(!document.querySelector("script[data-gis-client]")){const s=document.createElement("script");s.src="https://accounts.google.com/gsi/client";s.async=true;s.defer=true;s.dataset.gisClient="1";document.head.appendChild(s)}let n=0;const timer=setInterval(()=>{if(window.google&&google.accounts&&google.accounts.oauth2){clearInterval(timer);resolve();return}if(++n>120){clearInterval(timer);reject(new Error("Google認証ライブラリを読み込めませんでした"))}},100)})}
@@ -311,11 +310,11 @@ async function driveJson(url,options={}){options.headers=Object.assign({},option
 function escQueryName(name){return String(name||"").replace(/\\/g,"\\\\").replace(/'/g,"\\'")}
 async function findDriveFile(){const q="name='"+escQueryName(DRIVE_FILE_NAME)+"' and trashed=false";const url="https://www.googleapis.com/drive/v3/files?spaces=appDataFolder&pageSize=10&fields=files(id,name,modifiedTime)&q="+encodeURIComponent(q);const data=await driveJson(url);return data.files&&data.files.length?data.files[0]:null}
 function drivePayload(){return {app:"physics-g-cards-v3-annual",version:APP_VERSION,exportedAt:new Date().toISOString(),file:DRIVE_FILE_NAME,formulaCount:FORMULAS.length,cardCount:CARDS.length,progress:state.progress}}
-async function connectDrive(){try{await requestToken(true);const f=await findDriveFile();driveSetStatus(f?"Googleに接続しました。v3バックアップがあります。":"Googleに接続しました。まだv3バックアップはありません。")}catch(e){driveSetStatus("接続エラー: "+(e&&e.message?e.message:e))}}
+async function connectDrive(){try{await requestToken(true);const f=await findDriveFile();driveSetStatus(f?"Googleに接続しました。v3バックアップがあります。以後は回答ごとに自動保存します。":"Googleに接続しました。以後は回答ごとに自動保存します。");scheduleDriveBackup()}catch(e){driveSetStatus("接続エラー: "+(e&&e.message?e.message:e))}}
 async function backupDrive(){if(driveBusy)return;driveBusy=true;try{if(!accessToken||Date.now()>=tokenExpiresAt)await requestToken(true);driveSetStatus("Driveへ保存中…");const existing=await findDriveFile();const boundary="physicsv3_"+Date.now();const metadata=existing?{name:DRIVE_FILE_NAME,mimeType:"application/json"}:{name:DRIVE_FILE_NAME,parents:["appDataFolder"],mimeType:"application/json"};const body="--"+boundary+"\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n"+JSON.stringify(metadata)+"\r\n--"+boundary+"\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n"+JSON.stringify(drivePayload())+"\r\n--"+boundary+"--";const url=existing?"https://www.googleapis.com/upload/drive/v3/files/"+encodeURIComponent(existing.id)+"?uploadType=multipart&fields=id,name,modifiedTime":"https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id,name,modifiedTime";const res=await fetch(url,{method:existing?"PATCH":"POST",headers:Object.assign({"Content-Type":"multipart/related; boundary="+boundary},authHeaders()),body});if(!res.ok)throw new Error("Drive保存失敗 "+res.status+" "+(await res.text()).slice(0,180));const data=await res.json();driveSetStatus("Driveへ保存しました。"+(data.modifiedTime?" 最終更新: "+new Date(data.modifiedTime).toLocaleString():""))}catch(e){driveSetStatus("Drive保存エラー: "+(e&&e.message?e.message:e))}finally{driveBusy=false}}
 async function restoreDrive(){try{if(!accessToken||Date.now()>=tokenExpiresAt)await requestToken(true);driveSetStatus("Driveから復元を確認中…");const file=await findDriveFile();if(!file){driveSetStatus("Driveにv3バックアップが見つかりません。");return}if(!confirm("Drive上のv3進捗で、この端末の進捗を上書きしますか？")){driveSetStatus("復元を中止しました。");return}const res=await fetch("https://www.googleapis.com/drive/v3/files/"+encodeURIComponent(file.id)+"?alt=media",{headers:authHeaders()});if(!res.ok)throw new Error("Drive読込失敗 "+res.status+" "+(await res.text()).slice(0,180));const payload=await res.json();const next=payload.progress||(payload.state&&payload.state.progress);if(!next||typeof next!=="object")throw new Error("バックアップ形式が不正です。");state.progress=next;localStorage.setItem(SAVE_KEY,JSON.stringify(state.progress));updateDash();choose();renderProgress();driveSetStatus("Driveから復元しました。")}catch(e){driveSetStatus("Drive復元エラー: "+(e&&e.message?e.message:e))}}
 function disconnectDrive(){try{if(window.google&&google.accounts&&google.accounts.oauth2&&accessToken)google.accounts.oauth2.revoke(accessToken,()=>{})}catch(e){}accessToken="";tokenExpiresAt=0;driveSetStatus("Google接続を解除しました。端末内保存に戻ります。")}
-function scheduleDriveBackup(){try{if(localStorage.getItem(AUTO_KEY)!=="1")return;if(!accessToken||Date.now()>=tokenExpiresAt)return;clearTimeout(syncTimer);syncTimer=setTimeout(backupDrive,2500)}catch(e){}}
+function scheduleDriveBackup(){try{if(localStorage.getItem(AUTO_KEY)==="0")return;if(!accessToken||Date.now()>=tokenExpiresAt)return;clearTimeout(syncTimer);syncTimer=setTimeout(backupDrive,2500)}catch(e){}}
 
 function bind(){document.body.addEventListener("click",e=>{const b=e.target.closest("[data-action]");if(!b)return;const a=b.dataset.action;if(a==="switch")switchView(b.dataset.view);if(a==="show")$("ans").classList.add("show");if(a==="rate")rate(Number(b.dataset.grade));if(a==="next")nextCard();if(a==="export")exportProgress();if(a==="reset"&&confirm("進捗をリセットしますか？")){state.progress={};save();updateDash();choose();renderProgress()}if(a==="toast")toast(b.dataset.msg||"準備中です");if(a==="gclient"){driveSaveSettings();driveSetStatus("OAuthクライアントIDを保存しました。")}if(a==="gconnect")connectDrive();if(a==="gbackup")backupDrive();if(a==="grestore")restoreDrive();if(a==="gdisconnect")disconnectDrive()});$("unit").addEventListener("change",e=>{state.filters.unit=e.target.value;choose()});$("type").addEventListener("change",e=>{state.filters.type=e.target.value;choose()});$("funit").addEventListener("change",renderFormulas);$("fsearch").addEventListener("input",renderFormulas);$("search").addEventListener("input",renderSearch);$("importFile").addEventListener("change",e=>importProgress(e.target.files[0]));$("gClientIdInput").addEventListener("change",driveSaveSettings);$("gAutoBackup").addEventListener("change",driveSaveSettings)}
 

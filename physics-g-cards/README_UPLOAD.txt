@@ -3,11 +3,11 @@
 GitHub の `physics-g-cards` フォルダ直下に、このZIP内の `physics-g-cards` フォルダの中身を上書きしてください。
 
 確認URL：
-https://foxwolf321.github.io/physics-g-cards/?v=307
+https://foxwolf321.github.io/physics-g-cards/?v=308
 
 確認ポイント：
-1. 分母が画面下に飛ばない
-2. 公式の分数が自然に見える
-3. `次へ` でカードがランダムに切り替わる
-4. 公式集の最後「放射能」が崩れない
-5. Google接続・Drive保存ができる
+1. 学習画面にGoogle保存ボタンがない
+2. Google設定は説明タブにある
+3. `次へ` で別カードに移る
+4. 評価後に次カードへ移る
+5. Google接続後は回答ごとに自動保存される
