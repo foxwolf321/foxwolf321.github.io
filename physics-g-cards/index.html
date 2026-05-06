@@ -3,32 +3,32 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>物理受験カード v3.0.4｜年間固定版</title>
+<title>物理受験カード v3.0.5｜年間固定版</title>
 <link rel="manifest" href="/physics-g-cards/manifest.webmanifest">
 <meta name="theme-color" content="#8ec5ff">
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <style>
-:root{--ink:#15264b;--muted:#64728c;--blue:#68b7ff;--pink:#f6a6c9;--mint:#72d6c6;--card:rgba(255,255,255,.62);--strong:rgba(255,255,255,.72);--line:rgba(63,60,90,.14);--shadow:0 18px 42px rgba(35,50,88,.15);--r:28px}
+:root{--ink:#15264b;--muted:#64728c;--blue:#68b7ff;--pink:#f6a6c9;--mint:#72d6c6;--card:rgba(255,255,255,.50);--strong:rgba(255,255,255,.58);--line:rgba(63,60,90,.14);--shadow:0 18px 42px rgba(35,50,88,.15);--r:28px}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{margin:0;color:var(--ink);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI","Hiragino Sans","Yu Gothic",sans-serif;background:#f7fbff;min-height:100vh;overflow-x:hidden}
-body::before{content:"";position:fixed;inset:0;background:url("/physics-g-cards/bg-bike-physics.png") center center/cover no-repeat;opacity:.88;z-index:-3;pointer-events:none}
-body::after{content:"";position:fixed;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.16) 0%,rgba(255,255,255,.10) 28%,rgba(255,247,252,.13) 68%,rgba(255,255,255,.22));z-index:-2;pointer-events:none}
+body::before{content:"";position:fixed;inset:0;background:url("/physics-g-cards/bg-bike-physics.png") center center/cover no-repeat;opacity:.98;z-index:-3;pointer-events:none}
+body::after{content:"";position:fixed;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.08) 0%,rgba(255,255,255,.05) 28%,rgba(255,247,252,.08) 68%,rgba(255,255,255,.14));z-index:-2;pointer-events:none}
 button{font-family:inherit;cursor:pointer}
-.app{max-width:780px;margin:0 auto;padding:8px 16px 100px}
+.app{max-width:780px;margin:0 auto;padding:8px 16px 150px}
 .topbar{display:flex;justify-content:space-between;align-items:center;margin:0 0 7px}
 .topbar>div:last-child{display:flex;gap:8px;align-items:center}
 .chip{display:inline-flex;gap:8px;align-items:center;padding:8px 12px;border-radius:999px;background:rgba(255,255,255,.78);box-shadow:0 8px 20px rgba(40,65,105,.12);font-weight:800;color:#51617b}
 .dot{width:9px;height:9px;border-radius:50%;background:var(--mint);box-shadow:0 0 0 3px rgba(114,214,198,.18)}
 .iconbtn{border:0;border-radius:50%;width:42px;height:42px;background:rgba(255,255,255,.86);box-shadow:0 8px 18px rgba(40,58,92,.12);font-size:20px;display:grid;place-items:center}
-.hero{position:relative;border-radius:32px;padding:18px;background:rgba(255,255,255,.46);box-shadow:var(--shadow);border:1px solid rgba(255,255,255,.55);backdrop-filter:blur(8px);overflow:hidden}
+.hero{position:relative;border-radius:32px;padding:18px;background:rgba(255,255,255,.34);box-shadow:var(--shadow);border:1px solid rgba(255,255,255,.46);backdrop-filter:blur(6px);overflow:hidden}
 .hero::after{content:"♡";position:absolute;right:22px;top:84px;font-size:34px;color:#ef9fbe;transform:rotate(-8deg);opacity:.72}
 .hero-row{display:flex;gap:14px;align-items:center}
 .appicon{width:70px;height:70px;border-radius:20px;object-fit:cover;filter:drop-shadow(0 8px 15px rgba(55,91,147,.22))}
 h1{font-size:clamp(27px,7vw,42px);line-height:1.12;margin:0;color:#183158;letter-spacing:.02em;text-shadow:0 1px 0 rgba(255,255,255,.55)}
 .sub{font-size:14px;color:#3f5575;line-height:1.6;margin:8px 0 0}
 .actions{display:grid;grid-template-columns:1.12fr 1fr 1fr;gap:10px;margin-top:14px}
-.act{border:0;border-radius:21px;min-height:76px;padding:13px;background:rgba(255,255,255,.72);box-shadow:0 10px 22px rgba(40,55,88,.12);font-weight:900;font-size:15px;text-align:left;color:#23375c;display:flex;flex-direction:column;gap:7px;justify-content:center}
+.act{border:0;border-radius:21px;min-height:76px;padding:13px;background:rgba(255,255,255,.54);box-shadow:0 10px 22px rgba(40,55,88,.12);font-weight:900;font-size:15px;text-align:left;color:#23375c;display:flex;flex-direction:column;gap:7px;justify-content:center}
 .act.primary{background:linear-gradient(135deg,#5fb1f7,#82c5ff);color:white;font-size:16px}
 .act span{font-size:28px}
 .panel{margin-top:18px;border-radius:var(--r);padding:18px;background:var(--card);box-shadow:var(--shadow);border:1px solid rgba(255,255,255,.86);backdrop-filter:blur(12px)}
@@ -48,23 +48,23 @@ h2{font-size:21px;margin:0 0 14px;display:flex;justify-content:space-between;ali
 .pink i{background:#f5a2c7}
 .gray i{background:#99a6bc}
 .controls{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:12px 0}
-select,input{width:100%;border:1px solid var(--line);border-radius:18px;background:rgba(255,255,255,.78);padding:12px 13px;font-size:15px;color:#273551;outline:none}
-.fgrid{display:grid;gap:13px}
-.fcard{display:grid;grid-template-columns:minmax(132px,.78fr) 1.22fr;gap:13px;align-items:center;background:rgba(255,255,255,.82);border:1px solid var(--line);border-radius:21px;padding:14px}
+select,input{width:100%;border:1px solid var(--line);border-radius:18px;background:rgba(255,255,255,.62);padding:12px 13px;font-size:15px;color:#273551;outline:none}
+.fgrid{display:grid;gap:13px;padding-bottom:18px}
+.fcard{display:grid;grid-template-columns:minmax(132px,.78fr) 1.22fr;gap:13px;align-items:center;background:rgba(255,255,255,.68);border:1px solid var(--line);border-radius:21px;padding:14px;overflow:visible}
 .tag{display:inline-flex;border-radius:999px;padding:6px 11px;background:#e4f2ff;color:#41658e;font-weight:900;font-size:12px;margin-bottom:9px}
 .tag.p{background:#ffe3ef;color:#a84670}
-.math{font-family:Georgia,"Times New Roman",serif;font-style:italic;font-size:26px;line-height:1.15;color:#11192f;word-break:normal}
-.math.big{font-size:32px}
-.frac{display:inline-flex;vertical-align:middle;flex-direction:column;align-items:center;line-height:1}
-.frac .top{border-bottom:2px solid currentColor;padding:0 .18em .08em}
-.frac .bottom{padding:.08em .18em 0}
-.radicand{border-top:1.6px solid currentColor;padding-left:2px}
+.math{font-family:Georgia,"Times New Roman",serif;font-style:italic;font-size:26px;line-height:1.75;color:#11192f;word-break:normal;overflow:visible;padding:.08em 0 .14em}
+.math.big{font-size:32px;line-height:1.75}
+.frac{display:inline-flex;vertical-align:middle;flex-direction:column;align-items:center;line-height:1.18;margin:0 .08em;overflow:visible;transform:translateY(.08em)}
+.frac .top{border-bottom:2px solid currentColor;padding:0 .26em .18em;white-space:nowrap}
+.frac .bottom{padding:.18em .26em 0;white-space:nowrap}
+.radicand{border-top:1.6px solid currentColor;padding-left:3px;display:inline-block;line-height:1.45}
 sup,sub{font-size:.65em}
 .meta{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
 .pill{border-radius:999px;padding:6px 10px;background:#eef5ff;color:#436283;font-weight:850;font-size:12px}
 .pill.p{background:#ffeaf2;color:#ad4b72}
 .q{font-size:22px;font-weight:900;line-height:1.45;margin:12px 0}
-.answer{display:none;margin-top:12px;padding:14px;border-radius:21px;background:rgba(255,255,255,.82);border:1px solid var(--line)}
+.answer{display:none;margin-top:12px;padding:14px;border-radius:21px;background:rgba(255,255,255,.68);border:1px solid var(--line)}
 .answer.show{display:block}
 .btn,.soft,.eval button{border:0;border-radius:999px;padding:12px 13px;font-weight:900;box-shadow:0 8px 18px rgba(41,49,82,.1)}
 .btn{background:linear-gradient(135deg,#f6a1c9,#c9a8ff);color:#261f38}
@@ -75,9 +75,9 @@ sup,sub{font-size:.65em}
 .eval button:nth-child(3){background:#dff4ff;color:#245a84}
 .eval button:nth-child(4){background:#dcfbf3;color:#1c6d62}
 .rows{display:grid;gap:10px}
-.row{padding:12px;border-radius:17px;background:rgba(255,255,255,.76);border:1px solid var(--line)}
+.row{padding:12px;border-radius:17px;background:rgba(255,255,255,.62);border:1px solid var(--line)}
 .row header{display:flex;justify-content:space-between;font-weight:900;margin-bottom:8px}
-.bottom{position:fixed;left:50%;transform:translateX(-50%);bottom:12px;width:min(720px,calc(100% - 24px));display:grid;grid-template-columns:repeat(5,1fr);padding:8px;background:rgba(255,255,255,.92);border-radius:28px;box-shadow:0 16px 36px rgba(27,38,70,.2);z-index:20;backdrop-filter:blur(14px)}
+.bottom{position:fixed;left:50%;transform:translateX(-50%);bottom:12px;width:min(720px,calc(100% - 24px));display:grid;grid-template-columns:repeat(5,1fr);padding:8px;background:rgba(255,255,255,.78);border-radius:28px;box-shadow:0 16px 36px rgba(27,38,70,.2);z-index:20;backdrop-filter:blur(14px)}
 .nav{border:0;background:transparent;border-radius:20px;padding:8px 4px;color:#55637c;font-weight:900;font-size:12px}
 .nav i{display:block;font-style:normal;font-size:21px}
 .nav.active{background:linear-gradient(135deg,#6fb7f8,#98ccff);color:white}
@@ -170,6 +170,7 @@ sup,sub{font-size:.65em}
       <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px">
         <button class="soft" data-action="next">次へ</button>
         <button class="soft" data-action="export">進捗書き出し</button>
+        <button class="soft" data-action="gconnect">Google接続</button>
         <button class="soft" data-action="gbackup">Drive保存</button>
         <button class="soft" data-action="grestore">Drive読込</button>
         <button class="soft" data-action="switch" data-view="info">Google設定</button>
@@ -200,6 +201,7 @@ sup,sub{font-size:.65em}
       <div style="display:flex;gap:10px;margin-top:12px;flex-wrap:wrap">
         <button class="soft" data-action="reset">進捗リセット</button>
         <button class="soft" data-action="export">書き出し</button>
+        <button class="soft" data-action="gconnect">Google接続</button>
         <button class="soft" data-action="gbackup">Drive保存</button>
         <button class="soft" data-action="grestore">Drive読込</button>
       </div>
@@ -254,7 +256,7 @@ sup,sub{font-size:.65em}
 <script>
 (function(){
 "use strict";
-const APP_VERSION="3.0.4-direct-fix";
+const APP_VERSION="3.0.5-direct-fix";
 const SAVE_KEY="physics-g-cards-v3-annual-progress-local";
 const EXPORT_NAME="physics-g-cards-v3-annual-progress.json";
 const CLIENT_KEY="physics-g-cards-v3-google-client-id";
@@ -280,14 +282,16 @@ function status(c){const p=prog(c.id),now=Date.now();if(!p.reviews)return"未着
 function counts(){const c={total:CARDS.length,mastered:0,review:0,new:0,learning:0,weak:0};CARDS.forEach(card=>{const s=status(card);if(s==="習得")c.mastered++;else if(s==="未着手")c.new++;else if(s==="苦手"){c.weak++;c.review++}else if(s==="復習")c.review++;else c.learning++});return c}
 function updateDash(){const c=counts(),p=Math.round(c.mastered/c.total*100),r=Math.round(c.review/c.total*100);$("pct").textContent=p+"%";$("ring").style.setProperty("--p",p);$("ring").style.setProperty("--r",r);$("cM").textContent=c.mastered+"枚";$("cR").textContent=c.review+"枚";$("cN").textContent=c.new+"枚";$("bM").style.width=p+"%";$("bR").style.width=r+"%";$("bN").style.width=Math.round(c.new/c.total*100)+"%"}
 function filteredCards(){return CARDS.filter(c=>(state.filters.unit==="全分野"||c.unit===state.filters.unit)&&(state.filters.type==="全タイプ"||c.type===state.filters.type))}
-function choose(){let pool=filteredCards();const order={"苦手":0,"復習":1,"未着手":2,"学習中":3,"習得":4};pool.sort((a,b)=>order[status(a)]-order[status(b)]||(prog(a.id).due||0)-(prog(b.id).due||0));state.current=pool[0]||CARDS[0];renderCard()}
+function sortPool(pool){const order={"苦手":0,"復習":1,"未着手":2,"学習中":3,"習得":4};return pool.sort((a,b)=>order[status(a)]-order[status(b)]||(prog(a.id).due||0)-(prog(b.id).due||0)||a.id.localeCompare(b.id))}
+function choose(){let pool=sortPool(filteredCards());state.current=pool[0]||CARDS[0];renderCard()}
+function nextCard(){let pool=sortPool(filteredCards());if(!pool.length){state.current=CARDS[0];renderCard();return}if(!state.current){state.current=pool[0];renderCard();return}const idx=pool.findIndex(c=>c.id===state.current.id);state.current=pool[(idx+1+pool.length)%pool.length]||pool[0];renderCard()}
 function renderCard(){const c=state.current,f=fById(c.fid);$("meta").innerHTML=`<span class="pill">${c.unit}</span><span class="pill p">${c.type}</span><span class="pill">${f.section}</span><span class="pill">状態：${status(c)}</span>`;$("q").textContent=c.q;$("aFormula").innerHTML=f.formula;$("aText").innerHTML=`<b>${f.tag}</b><br>${c.a}<br><span class="small">${f.desc}</span>`;$("ans").classList.remove("show")}
 function renderFormulas(){const u=$("funit").value||"全分野",q=($("fsearch").value||"").trim();const list=FORMULAS.filter(f=>(u==="全分野"||f.unit===u)&&(!q||(f.unit+f.section+f.tag+f.desc+f.condition+f.typical+f.caution).includes(q)));$("fcount").textContent=list.length+"公式";$("flist").innerHTML=list.map(formulaHTML).join("")}
 function renderPickup(){$("pickup").innerHTML=FORMULAS.filter(f=>["運動方程式","力学的エネルギー保存","クーロンの法則","熱力学第一法則","屈折の法則"].includes(f.tag)).slice(0,5).map(formulaHTML).join("")}
 function renderSearch(){const q=($("search").value||"").trim();const list=(q?CARDS.filter(c=>(c.q+c.a+c.topic+c.unit+c.type).includes(q)):CARDS.slice(0,16)).slice(0,60);$("results").innerHTML=list.map(c=>`<div class="row"><b>${c.unit}｜${c.topic}｜${c.type}</b><div class="note">${c.q}</div></div>`).join("")}
 function renderProgress(){const by={};CARDS.forEach(c=>{by[c.unit]=by[c.unit]||{total:0,mastered:0,review:0,new:0,learning:0,weak:0};const x=by[c.unit];x.total++;const s=status(c);if(s==="習得")x.mastered++;else if(s==="未着手")x.new++;else if(s==="苦手"){x.weak++;x.review++}else if(s==="復習")x.review++;else x.learning++});$("progress").innerHTML=Object.keys(by).map(k=>{const x=by[k],p=Math.round(x.mastered/x.total*100);return `<div class="row"><header><span>${k}</span><span>${x.mastered}/${x.total}枚</span></header><div class="bar"><i style="width:${p}%"></i></div><div class="note">習得 ${x.mastered} / 復習 ${x.review} / 学習中 ${x.learning} / 未着手 ${x.new} / 苦手 ${x.weak}</div></div>`}).join("")}
 function switchView(v){document.querySelectorAll(".view").forEach(x=>x.classList.remove("active"));$("view-"+v).classList.add("active");document.querySelectorAll(".nav").forEach(b=>b.classList.toggle("active",b.dataset.view===v));if(v==="formulas")renderFormulas();if(v==="search")renderSearch();if(v==="progress")renderProgress();window.scrollTo({top:0,behavior:"smooth"})}
-function rate(g){const c=state.current,p=prog(c.id),now=Date.now(),delta=[-2,-1,1,2][g]||0;p.score=Math.max(-3,Math.min(5,(p.score||0)+delta));p.reviews=(p.reviews||0)+1;p.last=now;p.due=now+[0,1,3,7][g]*86400000;state.progress[c.id]=p;save();updateDash();choose();toast(["忘れた：すぐ復習","あやしい：復習へ","できた：少し先へ","余裕：安定へ"][g])}
+function rate(g){const c=state.current,p=prog(c.id),now=Date.now(),delta=[-2,-1,1,2][g]||0;p.score=Math.max(-3,Math.min(5,(p.score||0)+delta));p.reviews=(p.reviews||0)+1;p.last=now;p.due=now+[0,1,3,7][g]*86400000;state.progress[c.id]=p;save();updateDash();if(g===0){choose()}else{nextCard()}toast(["忘れた：すぐ復習","あやしい：復習へ","できた：少し先へ","余裕：安定へ"][g])}
 function exportProgress(){const blob=new Blob([JSON.stringify({version:APP_VERSION,file:EXPORT_NAME,progress:state.progress},null,2)],{type:"application/json"});const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=EXPORT_NAME;a.click();URL.revokeObjectURL(a.href)}
 function importProgress(file){if(!file)return;const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result);state.progress=d.progress||d||{};save();updateDash();choose();toast("進捗を読み込みました")}catch(e){toast("読み込みに失敗しました")}};r.readAsText(file)}
 function initSelects(){const units=["全分野"].concat([...new Set(FORMULAS.map(f=>f.unit))]);$("unit").innerHTML=units.map(x=>`<option>${x}</option>`).join("");$("funit").innerHTML=units.map(x=>`<option>${x}</option>`).join("");$("type").innerHTML=["全タイプ"].concat(TYPES).map(x=>`<option>${x}</option>`).join("")}
@@ -310,7 +314,7 @@ async function restoreDrive(){try{if(!accessToken||Date.now()>=tokenExpiresAt)aw
 function disconnectDrive(){try{if(window.google&&google.accounts&&google.accounts.oauth2&&accessToken)google.accounts.oauth2.revoke(accessToken,()=>{})}catch(e){}accessToken="";tokenExpiresAt=0;driveSetStatus("Google接続を解除しました。端末内保存に戻ります。")}
 function scheduleDriveBackup(){try{if(localStorage.getItem(AUTO_KEY)!=="1")return;if(!accessToken||Date.now()>=tokenExpiresAt)return;clearTimeout(syncTimer);syncTimer=setTimeout(backupDrive,2500)}catch(e){}}
 
-function bind(){document.body.addEventListener("click",e=>{const b=e.target.closest("[data-action]");if(!b)return;const a=b.dataset.action;if(a==="switch")switchView(b.dataset.view);if(a==="show")$("ans").classList.add("show");if(a==="rate")rate(Number(b.dataset.grade));if(a==="next")choose();if(a==="export")exportProgress();if(a==="reset"&&confirm("進捗をリセットしますか？")){state.progress={};save();updateDash();choose();renderProgress()}if(a==="toast")toast(b.dataset.msg||"準備中です");if(a==="gclient"){driveSaveSettings();driveSetStatus("OAuthクライアントIDを保存しました。")}if(a==="gconnect")connectDrive();if(a==="gbackup")backupDrive();if(a==="grestore")restoreDrive();if(a==="gdisconnect")disconnectDrive()});$("unit").addEventListener("change",e=>{state.filters.unit=e.target.value;choose()});$("type").addEventListener("change",e=>{state.filters.type=e.target.value;choose()});$("funit").addEventListener("change",renderFormulas);$("fsearch").addEventListener("input",renderFormulas);$("search").addEventListener("input",renderSearch);$("importFile").addEventListener("change",e=>importProgress(e.target.files[0]));$("gClientIdInput").addEventListener("change",driveSaveSettings);$("gAutoBackup").addEventListener("change",driveSaveSettings)}
+function bind(){document.body.addEventListener("click",e=>{const b=e.target.closest("[data-action]");if(!b)return;const a=b.dataset.action;if(a==="switch")switchView(b.dataset.view);if(a==="show")$("ans").classList.add("show");if(a==="rate")rate(Number(b.dataset.grade));if(a==="next")nextCard();if(a==="export")exportProgress();if(a==="reset"&&confirm("進捗をリセットしますか？")){state.progress={};save();updateDash();choose();renderProgress()}if(a==="toast")toast(b.dataset.msg||"準備中です");if(a==="gclient"){driveSaveSettings();driveSetStatus("OAuthクライアントIDを保存しました。")}if(a==="gconnect")connectDrive();if(a==="gbackup")backupDrive();if(a==="grestore")restoreDrive();if(a==="gdisconnect")disconnectDrive()});$("unit").addEventListener("change",e=>{state.filters.unit=e.target.value;choose()});$("type").addEventListener("change",e=>{state.filters.type=e.target.value;choose()});$("funit").addEventListener("change",renderFormulas);$("fsearch").addEventListener("input",renderFormulas);$("search").addEventListener("input",renderSearch);$("importFile").addEventListener("change",e=>importProgress(e.target.files[0]));$("gClientIdInput").addEventListener("change",driveSaveSettings);$("gAutoBackup").addEventListener("change",driveSaveSettings)}
 
 document.addEventListener("DOMContentLoaded",()=>{try{load();driveLoadSettings();initSelects();bind();renderPickup();renderFormulas();renderSearch();updateDash();choose();driveSetStatus("未接続です。進捗は端末内に保存されています。");toast("準備完了 v"+APP_VERSION);clearOld().catch(()=>{});}catch(e){console.error(e);toast("初期化エラー: "+(e&&e.message?e.message:e));const q=$("q");if(q)q.textContent="初期化エラー: "+(e&&e.message?e.message:e);}});
 })();
