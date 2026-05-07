@@ -2399,8 +2399,17 @@
           state.activeFormulaId = button.dataset.formulaId;
           $("#formulaSelect").value = state.activeFormulaId;
           renderFormulaArea();
+          scrollFormulaDetailIntoView();
         });
       });
+    }
+
+    function scrollFormulaDetailIntoView() {
+      if (!window.matchMedia("(max-width: 860px)").matches) return;
+      window.setTimeout(() => {
+        const panel = $("#formulaDetail")?.closest(".panel");
+        if (panel) panel.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 40);
     }
 
     function renderFormulaDetail() {
@@ -2750,6 +2759,7 @@
       $("#formulaSelect").addEventListener("change", (event) => {
         state.activeFormulaId = event.target.value;
         renderFormulaArea();
+        scrollFormulaDetailIntoView();
       });
       $("#practiceSubject").addEventListener("change", renderPracticeArea);
       $("#practiceSearch").addEventListener("input", renderPracticeArea);
