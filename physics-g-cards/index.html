@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>物理受験カード v3.0.9｜年間固定版</title>
+<title>物理受験カード v3.0.10｜年間固定版</title>
 <link rel="manifest" href="/physics-g-cards/manifest.webmanifest">
 <meta name="theme-color" content="#8ec5ff">
 <script src="https://accounts.google.com/gsi/client" async defer></script>
@@ -260,7 +260,7 @@ sup,sub{font-size:.65em}
 <script>
 (function(){
 "use strict";
-const APP_VERSION="3.0.9-card-flow-clean";
+const APP_VERSION="3.0.10-card-history-wording-fix";
 const SAVE_KEY="physics-g-cards-v3-annual-progress-local";
 const EXPORT_NAME="physics-g-cards-v3-annual-progress.json";
 const CLIENT_KEY="physics-g-cards-v3-google-client-id";
@@ -278,7 +278,7 @@ let tokenClient=null,accessToken="",tokenExpiresAt=0,syncTimer=null,driveBusy=fa
 function load(){try{state.progress=JSON.parse(localStorage.getItem(SAVE_KEY)||"{}")||{}}catch(e){state.progress={}}}
 function save(){localStorage.setItem(SAVE_KEY,JSON.stringify(state.progress));scheduleDriveBackup()}
 function formulaHTML(f,i=0){return `<div class="fcard"><div><span class="tag ${i%2?'p':''}">${f.tag}</span><div class="math">${f.formula}</div></div><div class="note"><b>条件：</b>${f.condition}<br><b>典型：</b>${f.typical}<br>${f.desc}${f.unitnote?`<br><b>単位：</b>${f.unitnote}`:''}${f.caution?`<br><b>注意：</b>${f.caution}`:''}</div></div>`}
-function makeCards(){let cards=[];FORMULAS.forEach(f=>{cards.push({id:f.id+"_f",unit:f.unit,type:"公式",topic:f.tag,q:`【${f.tag}】公式は？`,a:f.desc,fid:f.id});cards.push({id:f.id+"_c",unit:f.unit,type:"条件",topic:f.tag,q:`【${f.tag}】この公式を使う条件は？`,a:f.condition,fid:f.id});cards.push({id:f.id+"_t",unit:f.unit,type:"典型判断",topic:f.tag,q:`【${f.tag}】どんな問題で使う？`,a:f.typical,fid:f.id});cards.push({id:f.id+"_u",unit:f.unit,type:"単位",topic:f.tag,q:`【${f.tag}】単位・量の意味で注意することは？`,a:f.unitnote||"問題文中の量と単位を確認する。",fid:f.id});cards.push({id:f.id+"_m",unit:f.unit,type:"混同注意",topic:f.tag,q:`【${f.tag}】混同しやすい点は？`,a:f.caution||"似た公式との条件の違いを確認する。",fid:f.id})});return cards}
+function makeCards(){let cards=[];FORMULAS.forEach(f=>{cards.push({id:f.id+"_f",unit:f.unit,type:"公式",topic:f.tag,q:`【${f.tag}】公式は？`,a:f.desc,fid:f.id});cards.push({id:f.id+"_c",unit:f.unit,type:"条件",topic:f.tag,q:`【${f.tag}】この公式を使う条件は？`,a:f.condition,fid:f.id});cards.push({id:f.id+"_t",unit:f.unit,type:"典型判断",topic:f.tag,q:`【${f.tag}】どんな問題で使う？`,a:f.typical,fid:f.id});cards.push({id:f.id+"_u",unit:f.unit,type:"単位",topic:f.tag,q:`【${f.tag}】単位と意味は？`,a:f.unitnote||"問題文中の量と単位を確認する。",fid:f.id});cards.push({id:f.id+"_m",unit:f.unit,type:"混同注意",topic:f.tag,q:`【${f.tag}】混同しやすい点は？`,a:f.caution||"似た公式との条件の違いを確認する。",fid:f.id})});return cards}
 const CARDS=makeCards();
 function fById(id){return FORMULAS.find(f=>f.id===id)||FORMULAS[0]}
 function prog(id){return state.progress[id]||{score:0,reviews:0,due:0,last:0}}
@@ -287,15 +287,16 @@ function counts(){const c={total:CARDS.length,mastered:0,review:0,new:0,learning
 function updateDash(){const c=counts(),p=Math.round(c.mastered/c.total*100),r=Math.round(c.review/c.total*100);$("pct").textContent=p+"%";$("ring").style.setProperty("--p",p);$("ring").style.setProperty("--r",r);$("cM").textContent=c.mastered+"枚";$("cR").textContent=c.review+"枚";$("cN").textContent=c.new+"枚";$("bM").style.width=p+"%";$("bR").style.width=r+"%";$("bN").style.width=Math.round(c.new/c.total*100)+"%"}
 function filteredCards(){return CARDS.filter(c=>(state.filters.unit==="全分野"||c.unit===state.filters.unit)&&(state.filters.type==="全タイプ"||c.type===state.filters.type))}
 const STATUS_ORDER={"苦手":0,"復習":1,"未着手":2,"学習中":3,"習得":4};
-let deckQueue=[],lastFilterKey="";
+let deckQueue=[],lastFilterKey="",recentCards=[];
+function rememberCard(c){if(!c)return;recentCards=recentCards.filter(id=>id!==c.id);recentCards.unshift(c.id);recentCards=recentCards.slice(0,24)}
 function sortPool(pool){return pool.sort((a,b)=>STATUS_ORDER[status(a)]-STATUS_ORDER[status(b)]||(prog(a.id).due||0)-(prog(b.id).due||0)||a.id.localeCompare(b.id))}
 function shuffle(list){const a=list.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
 function priorityCandidates(pool){pool=sortPool(pool);if(!pool.length)return[];const top=STATUS_ORDER[status(pool[0])];return pool.filter(c=>STATUS_ORDER[status(c)]===top)}
-function filterKey(){return state.filters.unit+"|"+state.filters.type+"|"+Object.keys(state.progress).length+"|"+(state.current?state.current.id:"")}
-function candidatesExcludingCurrent(){let all=filteredCards();if(state.current&&all.length>1){all=all.filter(c=>c.id!==state.current.id)}return priorityCandidates(all)}
-function refillQueue(){const key=filterKey();deckQueue=shuffle(candidatesExcludingCurrent());lastFilterKey=key}
-function choose(){let pool=priorityCandidates(filteredCards());deckQueue=shuffle(pool);state.current=deckQueue.shift()||CARDS[0];renderCard()}
-function nextCard(){const key=filterKey();if(!deckQueue.length||key!==lastFilterKey)refillQueue();let next=deckQueue.shift();if(!next&&state.current){deckQueue=shuffle(candidatesExcludingCurrent());next=deckQueue.shift()}state.current=next||CARDS[0];renderCard()}
+function filterKey(){return state.filters.unit+"|"+state.filters.type+"|"+Object.keys(state.progress).length}
+function poolWithoutRecent(){let all=filteredCards();if(all.length<=1)return all;let strict=all.filter(c=>!recentCards.includes(c.id)&&(state.current?c.id!==state.current.id:true));if(strict.length)return strict;let loose=all.filter(c=>state.current?c.id!==state.current.id:true);return loose.length?loose:all}
+function refillQueue(){const key=filterKey();deckQueue=shuffle(priorityCandidates(poolWithoutRecent()));lastFilterKey=key}
+function choose(){deckQueue=shuffle(priorityCandidates(poolWithoutRecent()));const next=deckQueue.shift()||filteredCards()[0]||CARDS[0];state.current=next;rememberCard(next);renderCard()}
+function nextCard(){if(!deckQueue.length||filterKey()!==lastFilterKey)refillQueue();let next=deckQueue.shift();if(!next){deckQueue=shuffle(priorityCandidates(poolWithoutRecent()));next=deckQueue.shift()}state.current=next||filteredCards()[0]||CARDS[0];rememberCard(state.current);renderCard()}
 function renderCard(){const c=state.current,f=fById(c.fid);$("meta").innerHTML=`<span class="pill">${c.unit}</span><span class="pill p">${c.type}</span><span class="pill">${f.section}</span><span class="pill">状態：${status(c)}</span>`;$("q").textContent=c.q;$("aFormula").innerHTML=f.formula;$("aText").innerHTML=`<b>${f.tag}</b><br>${c.a}<br><span class="small">${f.desc}</span>`;$("ans").classList.remove("show")}
 function renderFormulas(){const u=$("funit").value||"全分野",q=($("fsearch").value||"").trim();const list=FORMULAS.filter(f=>(u==="全分野"||f.unit===u)&&(!q||(f.unit+f.section+f.tag+f.desc+f.condition+f.typical+f.caution).includes(q)));$("fcount").textContent=list.length+"公式";$("flist").innerHTML=list.map(formulaHTML).join("")}
 function renderPickup(){$("pickup").innerHTML=FORMULAS.filter(f=>["運動方程式","力学的エネルギー保存","クーロンの法則","熱力学第一法則","屈折の法則"].includes(f.tag)).slice(0,5).map(formulaHTML).join("")}
@@ -325,7 +326,7 @@ async function restoreDrive(){try{if(!accessToken||Date.now()>=tokenExpiresAt)aw
 function disconnectDrive(){try{if(window.google&&google.accounts&&google.accounts.oauth2&&accessToken)google.accounts.oauth2.revoke(accessToken,()=>{})}catch(e){}accessToken="";tokenExpiresAt=0;driveSetStatus("Google接続を解除しました。端末内保存に戻ります。")}
 function scheduleDriveBackup(){try{if(localStorage.getItem(AUTO_KEY)==="0")return;if(!accessToken||Date.now()>=tokenExpiresAt)return;clearTimeout(syncTimer);syncTimer=setTimeout(backupDrive,2500)}catch(e){}}
 
-function bind(){document.body.addEventListener("click",e=>{const b=e.target.closest("[data-action]");if(!b)return;const a=b.dataset.action;if(a==="switch")switchView(b.dataset.view);if(a==="show")$("ans").classList.add("show");if(a==="rate")rate(Number(b.dataset.grade));if(a==="next")nextCard();if(a==="export")exportProgress();if(a==="reset"&&confirm("進捗をリセットしますか？")){state.progress={};save();updateDash();choose();renderProgress()}if(a==="toast")toast(b.dataset.msg||"準備中です");if(a==="gclient"){driveSaveSettings();driveSetStatus("OAuthクライアントIDを保存しました。")}if(a==="gconnect")connectDrive();if(a==="gbackup")backupDrive();if(a==="grestore")restoreDrive();if(a==="gdisconnect")disconnectDrive()});$("unit").addEventListener("change",e=>{state.filters.unit=e.target.value;choose()});$("type").addEventListener("change",e=>{state.filters.type=e.target.value;choose()});$("funit").addEventListener("change",renderFormulas);$("fsearch").addEventListener("input",renderFormulas);$("search").addEventListener("input",renderSearch);const imp=$("importFile");if(imp)imp.addEventListener("change",e=>importProgress(e.target.files[0]));$("gClientIdInput").addEventListener("change",driveSaveSettings);$("gAutoBackup").addEventListener("change",driveSaveSettings)}
+function bind(){document.body.addEventListener("click",e=>{const b=e.target.closest("[data-action]");if(!b)return;const a=b.dataset.action;if(a==="switch")switchView(b.dataset.view);if(a==="show")$("ans").classList.add("show");if(a==="rate")rate(Number(b.dataset.grade));if(a==="next")nextCard();if(a==="export")exportProgress();if(a==="reset"&&confirm("進捗をリセットしますか？")){state.progress={};save();updateDash();choose();renderProgress()}if(a==="toast")toast(b.dataset.msg||"準備中です");if(a==="gclient"){driveSaveSettings();driveSetStatus("OAuthクライアントIDを保存しました。")}if(a==="gconnect")connectDrive();if(a==="gbackup")backupDrive();if(a==="grestore")restoreDrive();if(a==="gdisconnect")disconnectDrive()});$("unit").addEventListener("change",e=>{state.filters.unit=e.target.value;deckQueue=[];recentCards=[];choose()});$("type").addEventListener("change",e=>{state.filters.type=e.target.value;deckQueue=[];recentCards=[];choose()});$("funit").addEventListener("change",renderFormulas);$("fsearch").addEventListener("input",renderFormulas);$("search").addEventListener("input",renderSearch);const imp=$("importFile");if(imp)imp.addEventListener("change",e=>importProgress(e.target.files[0]));$("gClientIdInput").addEventListener("change",driveSaveSettings);$("gAutoBackup").addEventListener("change",driveSaveSettings)}
 
 document.addEventListener("DOMContentLoaded",()=>{try{load();driveLoadSettings();initSelects();bind();renderPickup();renderFormulas();renderSearch();updateDash();choose();driveSetStatus("未接続です。進捗は端末内に保存されています。");toast("準備完了 v"+APP_VERSION);clearOld().catch(()=>{});}catch(e){console.error(e);toast("初期化エラー: "+(e&&e.message?e.message:e));const q=$("q");if(q)q.textContent="初期化エラー: "+(e&&e.message?e.message:e);}});
 })();
