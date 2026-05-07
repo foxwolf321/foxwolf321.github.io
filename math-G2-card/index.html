@@ -2408,7 +2408,11 @@
       if (!window.matchMedia("(max-width: 860px)").matches) return;
       window.setTimeout(() => {
         const panel = $("#formulaDetail")?.closest(".panel");
-        if (panel) panel.scrollIntoView({ behavior: "smooth", block: "start" });
+        const headerOffset = (document.querySelector("header")?.offsetHeight || 0) + 12;
+        if (panel) {
+          const targetTop = panel.getBoundingClientRect().top + window.scrollY - headerOffset;
+          window.scrollTo({ top: Math.max(0, targetTop), behavior: "smooth" });
+        }
       }, 40);
     }
 
@@ -2452,6 +2456,7 @@
           state.activeCardId = button.dataset.openCard;
           switchTab("practice");
           renderPracticeArea();
+          scrollCardDetailIntoView();
         });
       });
       typeMath();
@@ -2519,6 +2524,7 @@
           state.activeCardId = button.dataset.cardId;
           state.revealed.clear();
           renderPracticeArea();
+          scrollCardDetailIntoView();
         });
       });
     }
@@ -2619,6 +2625,18 @@
       renderCardDetail();
     }
 
+    function scrollCardDetailIntoView() {
+      if (!window.matchMedia("(max-width: 860px)").matches) return;
+      window.setTimeout(() => {
+        const panel = $("#cardDetail")?.closest(".panel");
+        const headerOffset = (document.querySelector("header")?.offsetHeight || 0) + 12;
+        if (panel) {
+          const targetTop = panel.getBoundingClientRect().top + window.scrollY - headerOffset;
+          window.scrollTo({ top: Math.max(0, targetTop), behavior: "smooth" });
+        }
+      }, 40);
+    }
+
     function reviewCards() {
       return cardData.filter((card) => state.progress[card.id]?.review);
     }
@@ -2659,6 +2677,7 @@
           state.revealed.clear();
           switchTab("practice");
           renderPracticeArea();
+          scrollCardDetailIntoView();
         });
       });
     }
