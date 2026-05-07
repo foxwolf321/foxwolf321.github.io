@@ -1,3 +1,3 @@
 GitHubの physics-g-cards/HANDOFF.md を正本として扱ってください。
-現在版は v3.0.10 card history / wording fix です。
+現在版は v3.0.11 symbol notes fix です。
 v3.0.0年間固定版を基本最終版とし、今後は誤字・表示崩れ・Google Drive保存まわりのエラー補修だけにしてください。

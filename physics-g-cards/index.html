@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>物理受験カード v3.0.10｜年間固定版</title>
+<title>物理受験カード v3.0.11｜年間固定版</title>
 <link rel="manifest" href="/physics-g-cards/manifest.webmanifest">
 <meta name="theme-color" content="#8ec5ff">
 <script src="https://accounts.google.com/gsi/client" async defer></script>
@@ -260,7 +260,7 @@ sup,sub{font-size:.65em}
 <script>
 (function(){
 "use strict";
-const APP_VERSION="3.0.10-card-history-wording-fix";
+const APP_VERSION="3.0.11-symbol-notes-fix";
 const SAVE_KEY="physics-g-cards-v3-annual-progress-local";
 const EXPORT_NAME="physics-g-cards-v3-annual-progress.json";
 const CLIENT_KEY="physics-g-cards-v3-google-client-id";
@@ -272,13 +272,103 @@ const TYPES=["公式","条件","典型判断","単位","混同注意"];
 
 function $(id){return document.getElementById(id)}
 function toast(m){const t=$("toast");t.textContent=m;t.style.display="block";clearTimeout(toast.t);toast.t=setTimeout(()=>t.style.display="none",1800)}
+
+const SYMBOL_NOTES={
+  m_avg_speed:"道のり：実際に進んだ長さ、時間：かかった時間",
+  m_avg_velocity:"x<sub>1</sub>, x<sub>2</sub>：位置、t<sub>1</sub>, t<sub>2</sub>：時刻、v：平均速度",
+  m_acceleration:"a：加速度、v：後の速度、v<sub>0</sub>：初速度、t：時間",
+  m_v:"v：速度、v<sub>0</sub>：初速度、a：加速度、t：時間",
+  m_x:"x：変位、v<sub>0</sub>：初速度、a：加速度、t：時間",
+  m_x_avgv:"x：変位、v<sub>0</sub>：初速度、v：後の速度、t：時間",
+  m_v2:"v：後の速度、v<sub>0</sub>：初速度、a：加速度、x：変位",
+  m_free_v:"v：速度、g：重力加速度、t：落下時間",
+  m_free_y:"y：落下距離、g：重力加速度、t：時間",
+  m_vertical:"y：高さ/変位、v<sub>0</sub>：初速度、g：重力加速度、t：時間",
+  m_newton:"F：合力、m：質量、a：加速度",
+  m_weight:"W：重力/重さ、m：質量、g：重力加速度",
+  m_hooke:"F：弾性力、k：ばね定数、x：自然長からの伸び縮み",
+  m_work:"W：仕事、F：力、x：移動距離/変位、θ：力と変位のなす角",
+  m_power:"P：仕事率、W：仕事、t：時間",
+  m_power_fv:"P：仕事率、F：力、v：速さ",
+  m_ke:"K：運動エネルギー、m：質量、v：速さ",
+  m_gpe:"U：重力による位置エネルギー、m：質量、g：重力加速度、h：高さ",
+  m_spe:"U：ばねの弾性エネルギー、k：ばね定数、x：伸び縮み",
+  m_momentum:"p：運動量、m：質量、v：速度",
+  m_impulse:"F：力、t：力が働いた時間、m：質量、v：後の速度、v<sub>0</sub>：初速度",
+  m_v_rw:"v：速さ、r：半径、ω：角速度",
+  m_cent_acc:"a：向心加速度、v：速さ、r：半径、ω：角速度",
+  m_cent_force:"F：向心力、m：質量、v：速さ、r：半径、ω：角速度",
+  m_omega:"ω：角速度、T：周期、f：振動数",
+  m_gravity:"F：万有引力、G：万有引力定数、M,m：質量、r：中心間距離",
+  m_shm_a:"a：加速度、ω：角振動数、x：変位",
+  m_shm_x:"x：変位、A：振幅、ω：角振動数、t：時間、φ：初期位相",
+  t_heat:"Q：熱量、m：質量、c：比熱、T<sub>1</sub>,T<sub>2</sub>：温度",
+  t_latent:"Q：熱量、m：質量、L：潜熱",
+  t_state:"P：圧力、V：体積、n：物質量、R：気体定数、T：絶対温度",
+  t_first:"Q：加えた熱量、U：内部エネルギー、W：気体が外部にした仕事",
+  e_coulomb:"F：静電気力、k：クーロン定数、q<sub>1</sub>,q<sub>2</sub>：電荷、r：距離",
+  e_field_def:"E：電場、F：力、q：試験電荷",
+  e_field_point:"E：電場、k：クーロン定数、Q：電荷、r：距離",
+  e_potential_def:"V：電位、W：仕事、q：電荷",
+  e_potential_point:"V：電位、k：クーロン定数、Q：電荷、r：距離",
+  e_VEd:"V：電位差、E：電場、d：距離",
+  e_cap_q:"Q：電気量、C：電気容量、V：電圧",
+  e_cap_plate:"C：電気容量、ε：誘電率、S：極板面積、d：極板間隔",
+  e_current:"I：電流、q：電気量、t：時間",
+  e_ohm:"V：電圧、I：電流、R：抵抗",
+  e_power:"P：電力、I：電流、V：電圧、R：抵抗",
+  e_terminal:"V：端子電圧、E：起電力、r：内部抵抗、I：電流",
+  mag_lorentz:"F：ローレンツ力、q：電荷、v：速さ、B：磁束密度、θ：角度",
+  mag_flux:"Φ：磁束、B：磁束密度、S：面積、θ：面の法線と磁場の角",
+  mag_faraday:"V：誘導起電力、N：巻数、Φ：磁束、t：時間",
+  w_v:"v：波の速さ、f：振動数、λ：波長",
+  w_f:"f：振動数、T：周期",
+  w_snell:"n<sub>1</sub>,n<sub>2</sub>：屈折率、θ<sub>1</sub>,θ<sub>2</sub>：法線からの角度",
+  w_lens:"a：物体距離、b：像距離、f：焦点距離",
+  a_photon:"E：光子のエネルギー、h：プランク定数、f：振動数",
+  a_photo:"K<sub>max</sub>：最大運動エネルギー、h：プランク定数、f：振動数、W：仕事関数",
+  a_debroglie:"λ：ド・ブロイ波長、h：プランク定数、p：運動量",
+  a_halflife:"N：残っている原子核数、N<sub>0</sub>：最初の数、t：時間、T：半減期",
+  a_activity:"A：放射能、λ：崩壊定数、N：原子核数"
+};
+function plainFormula(f){return (f.formula||"").replace(/<[^>]*>/g,"").replace(/&[^;]+;/g,"").replace(/\s+/g,"")}
+function hasSym(s,x){return s.includes(x)}
+function genericSymbolNote(f){
+  const s=plainFormula(f), notes=[];
+  function add(sym,desc){if(notes.some(n=>n.startsWith(sym+"：")))return;notes.push(sym+"："+desc)}
+  if(f.unit==="力学"){
+    if(hasSym(s,"F"))add("F","力/合力"); if(hasSym(s,"m"))add("m","質量"); if(hasSym(s,"a"))add("a","加速度");
+    if(hasSym(s,"v0"))add("v<sub>0</sub>","初速度"); if(hasSym(s,"v"))add("v","速度/速さ");
+    if(hasSym(s,"t"))add("t","時間"); if(hasSym(s,"x"))add("x","変位"); if(hasSym(s,"g"))add("g","重力加速度");
+    if(hasSym(s,"r"))add("r","半径/距離"); if(hasSym(s,"ω"))add("ω","角速度/角振動数"); if(hasSym(s,"T"))add("T","周期");
+  }else if(f.unit==="熱"){
+    if(hasSym(s,"Q"))add("Q","熱量"); if(hasSym(s,"P"))add("P","圧力"); if(hasSym(s,"V"))add("V","体積");
+    if(hasSym(s,"n"))add("n","物質量"); if(hasSym(s,"R"))add("R","気体定数"); if(hasSym(s,"T"))add("T","絶対温度");
+    if(hasSym(s,"U"))add("U","内部エネルギー"); if(hasSym(s,"W"))add("W","気体がした仕事");
+  }else if(f.unit==="電磁気"){
+    if(hasSym(s,"I"))add("I","電流"); if(hasSym(s,"V"))add("V","電圧/電位差"); if(hasSym(s,"R"))add("R","抵抗");
+    if(hasSym(s,"Q"))add("Q","電気量"); if(hasSym(s,"C"))add("C","電気容量"); if(hasSym(s,"E"))add("E","電場または起電力");
+    if(hasSym(s,"B"))add("B","磁束密度"); if(hasSym(s,"Φ"))add("Φ","磁束"); if(hasSym(s,"q"))add("q","電荷");
+  }else if(f.unit==="波動"){
+    if(hasSym(s,"v"))add("v","波の速さ"); if(hasSym(s,"f"))add("f","振動数"); if(hasSym(s,"λ"))add("λ","波長");
+    if(hasSym(s,"T"))add("T","周期"); if(hasSym(s,"n"))add("n","屈折率/次数"); if(hasSym(s,"θ"))add("θ","角度");
+  }else if(f.unit==="原子"){
+    if(hasSym(s,"E"))add("E","エネルギー"); if(hasSym(s,"h"))add("h","プランク定数"); if(hasSym(s,"f"))add("f","振動数");
+    if(hasSym(s,"λ"))add("λ","波長"); if(hasSym(s,"p"))add("p","運動量"); if(hasSym(s,"N"))add("N","原子核数");
+  }
+  return notes.join("、");
+}
+function symbolNote(f){return SYMBOL_NOTES[f.id]||genericSymbolNote(f)||"記号の意味は問題文の定義に従う"}
+function symbolBlock(f){return `<br><b>記号：</b>${symbolNote(f)}`}
+function unitAnswer(f){return `${f.unitnote?`単位：${f.unitnote}<br>`:""}記号：${symbolNote(f)}`}
+
 let state={progress:{},current:null,filters:{unit:"全分野",type:"全タイプ"}};
 let tokenClient=null,accessToken="",tokenExpiresAt=0,syncTimer=null,driveBusy=false;
 
 function load(){try{state.progress=JSON.parse(localStorage.getItem(SAVE_KEY)||"{}")||{}}catch(e){state.progress={}}}
 function save(){localStorage.setItem(SAVE_KEY,JSON.stringify(state.progress));scheduleDriveBackup()}
-function formulaHTML(f,i=0){return `<div class="fcard"><div><span class="tag ${i%2?'p':''}">${f.tag}</span><div class="math">${f.formula}</div></div><div class="note"><b>条件：</b>${f.condition}<br><b>典型：</b>${f.typical}<br>${f.desc}${f.unitnote?`<br><b>単位：</b>${f.unitnote}`:''}${f.caution?`<br><b>注意：</b>${f.caution}`:''}</div></div>`}
-function makeCards(){let cards=[];FORMULAS.forEach(f=>{cards.push({id:f.id+"_f",unit:f.unit,type:"公式",topic:f.tag,q:`【${f.tag}】公式は？`,a:f.desc,fid:f.id});cards.push({id:f.id+"_c",unit:f.unit,type:"条件",topic:f.tag,q:`【${f.tag}】この公式を使う条件は？`,a:f.condition,fid:f.id});cards.push({id:f.id+"_t",unit:f.unit,type:"典型判断",topic:f.tag,q:`【${f.tag}】どんな問題で使う？`,a:f.typical,fid:f.id});cards.push({id:f.id+"_u",unit:f.unit,type:"単位",topic:f.tag,q:`【${f.tag}】単位と意味は？`,a:f.unitnote||"問題文中の量と単位を確認する。",fid:f.id});cards.push({id:f.id+"_m",unit:f.unit,type:"混同注意",topic:f.tag,q:`【${f.tag}】混同しやすい点は？`,a:f.caution||"似た公式との条件の違いを確認する。",fid:f.id})});return cards}
+function formulaHTML(f,i=0){return `<div class="fcard"><div><span class="tag ${i%2?'p':''}">${f.tag}</span><div class="math">${f.formula}</div></div><div class="note"><b>記号：</b>${symbolNote(f)}<br><b>条件：</b>${f.condition}<br><b>典型：</b>${f.typical}<br>${f.desc}${f.unitnote?`<br><b>単位：</b>${f.unitnote}`:''}${f.caution?`<br><b>注意：</b>${f.caution}`:''}</div></div>`}
+function makeCards(){let cards=[];FORMULAS.forEach(f=>{cards.push({id:f.id+"_f",unit:f.unit,type:"公式",topic:f.tag,q:`【${f.tag}】公式は？`,a:f.desc,fid:f.id});cards.push({id:f.id+"_c",unit:f.unit,type:"条件",topic:f.tag,q:`【${f.tag}】この公式を使う条件は？`,a:f.condition,fid:f.id});cards.push({id:f.id+"_t",unit:f.unit,type:"典型判断",topic:f.tag,q:`【${f.tag}】どんな問題で使う？`,a:f.typical,fid:f.id});cards.push({id:f.id+"_u",unit:f.unit,type:"単位",topic:f.tag,q:`【${f.tag}】単位と意味は？`,a:unitAnswer(f),fid:f.id});cards.push({id:f.id+"_m",unit:f.unit,type:"混同注意",topic:f.tag,q:`【${f.tag}】混同しやすい点は？`,a:f.caution||"似た公式との条件の違いを確認する。",fid:f.id})});return cards}
 const CARDS=makeCards();
 function fById(id){return FORMULAS.find(f=>f.id===id)||FORMULAS[0]}
 function prog(id){return state.progress[id]||{score:0,reviews:0,due:0,last:0}}
@@ -297,8 +387,8 @@ function poolWithoutRecent(){let all=filteredCards();if(all.length<=1)return all
 function refillQueue(){const key=filterKey();deckQueue=shuffle(priorityCandidates(poolWithoutRecent()));lastFilterKey=key}
 function choose(){deckQueue=shuffle(priorityCandidates(poolWithoutRecent()));const next=deckQueue.shift()||filteredCards()[0]||CARDS[0];state.current=next;rememberCard(next);renderCard()}
 function nextCard(){if(!deckQueue.length||filterKey()!==lastFilterKey)refillQueue();let next=deckQueue.shift();if(!next){deckQueue=shuffle(priorityCandidates(poolWithoutRecent()));next=deckQueue.shift()}state.current=next||filteredCards()[0]||CARDS[0];rememberCard(state.current);renderCard()}
-function renderCard(){const c=state.current,f=fById(c.fid);$("meta").innerHTML=`<span class="pill">${c.unit}</span><span class="pill p">${c.type}</span><span class="pill">${f.section}</span><span class="pill">状態：${status(c)}</span>`;$("q").textContent=c.q;$("aFormula").innerHTML=f.formula;$("aText").innerHTML=`<b>${f.tag}</b><br>${c.a}<br><span class="small">${f.desc}</span>`;$("ans").classList.remove("show")}
-function renderFormulas(){const u=$("funit").value||"全分野",q=($("fsearch").value||"").trim();const list=FORMULAS.filter(f=>(u==="全分野"||f.unit===u)&&(!q||(f.unit+f.section+f.tag+f.desc+f.condition+f.typical+f.caution).includes(q)));$("fcount").textContent=list.length+"公式";$("flist").innerHTML=list.map(formulaHTML).join("")}
+function renderCard(){const c=state.current,f=fById(c.fid),sym=(c.type==="単位"?"":symbolBlock(f));$("meta").innerHTML=`<span class="pill">${c.unit}</span><span class="pill p">${c.type}</span><span class="pill">${f.section}</span><span class="pill">状態：${status(c)}</span>`;$("q").textContent=c.q;$("aFormula").innerHTML=f.formula;$("aText").innerHTML=`<b>${f.tag}</b><br>${c.a}<br><span class="small">${f.desc}</span>${sym}`;$("ans").classList.remove("show")}
+function renderFormulas(){const u=$("funit").value||"全分野",q=($("fsearch").value||"").trim();const list=FORMULAS.filter(f=>(u==="全分野"||f.unit===u)&&(!q||(f.unit+f.section+f.tag+f.desc+f.condition+f.typical+f.caution+symbolNote(f)).includes(q)));$("fcount").textContent=list.length+"公式";$("flist").innerHTML=list.map(formulaHTML).join("")}
 function renderPickup(){$("pickup").innerHTML=FORMULAS.filter(f=>["運動方程式","力学的エネルギー保存","クーロンの法則","熱力学第一法則","屈折の法則"].includes(f.tag)).slice(0,5).map(formulaHTML).join("")}
 function renderSearch(){const q=($("search").value||"").trim();const list=(q?CARDS.filter(c=>(c.q+c.a+c.topic+c.unit+c.type).includes(q)):CARDS.slice(0,16)).slice(0,60);$("results").innerHTML=list.map(c=>`<div class="row"><b>${c.unit}｜${c.topic}｜${c.type}</b><div class="note">${c.q}</div></div>`).join("")}
 function renderProgress(){const by={};CARDS.forEach(c=>{by[c.unit]=by[c.unit]||{total:0,mastered:0,review:0,new:0,learning:0,weak:0};const x=by[c.unit];x.total++;const s=status(c);if(s==="習得")x.mastered++;else if(s==="未着手")x.new++;else if(s==="苦手"){x.weak++;x.review++}else if(s==="復習")x.review++;else x.learning++});$("progress").innerHTML=Object.keys(by).map(k=>{const x=by[k],p=Math.round(x.mastered/x.total*100);return `<div class="row"><header><span>${k}</span><span>${x.mastered}/${x.total}枚</span></header><div class="bar"><i style="width:${p}%"></i></div><div class="note">習得 ${x.mastered} / 復習 ${x.review} / 学習中 ${x.learning} / 未着手 ${x.new} / 苦手 ${x.weak}</div></div>`}).join("")}
