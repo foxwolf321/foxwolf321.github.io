@@ -2,7 +2,7 @@
   "name": "物理受験カード v3 年間固定版",
   "short_name": "物理v3",
   "id": "/physics-g-cards/",
-  "start_url": "/physics-g-cards/?v=308",
+  "start_url": "/physics-g-cards/?v=309",
   "scope": "/physics-g-cards/",
   "display": "standalone",
   "background_color": "#f7fbff",
