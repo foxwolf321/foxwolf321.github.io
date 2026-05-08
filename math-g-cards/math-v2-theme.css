@@ -1,0 +1,123 @@
+/* math-g-cards v2 theme overlay
+   目的: 背景画像・透過カード・落ち着いた教科書風UI
+   2026-05-09 */
+:root{
+  --bg:#f3ead7;
+  --panel:rgba(255,252,244,.74);
+  --line:rgba(92,76,54,.24);
+  --text:#27221c;
+  --sub:#625746;
+  --accent:#7a5a2f;
+  --soft:rgba(255,246,222,.78);
+  --danger:rgba(255,235,238,.82);
+  --warn:rgba(255,246,224,.86);
+  --ok:rgba(236,248,236,.82);
+  --easy:rgba(234,246,255,.80);
+}
+html{background:#efe3cf;}
+body{
+  min-height:100vh;
+  background:
+    linear-gradient(180deg,rgba(248,242,230,.50),rgba(238,225,204,.74)),
+    url('./app-bg.jpg') center top/cover fixed no-repeat !important;
+  color:var(--text);
+}
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  background:
+    radial-gradient(circle at 20% 10%,rgba(255,255,255,.28),transparent 28%),
+    linear-gradient(180deg,rgba(255,251,242,.10),rgba(65,49,34,.18));
+  z-index:-1;
+}
+.wrap{max-width:1040px;padding:clamp(10px,2.8vw,18px);}
+.panel,.flashcard,.formula-item,.stat,.sync-box,#status,#syncStatus,input[type=search],input[type=text]{
+  backdrop-filter:blur(10px) saturate(1.06);
+  -webkit-backdrop-filter:blur(10px) saturate(1.06);
+}
+.panel{
+  background:rgba(255,252,244,.72) !important;
+  border-color:rgba(101,82,56,.24) !important;
+  box-shadow:0 16px 34px rgba(54,39,24,.20) !important;
+}
+header.panel{background:linear-gradient(135deg,rgba(255,252,242,.80),rgba(244,231,205,.68)) !important;}
+h1{letter-spacing:.01em;text-shadow:0 1px 0 rgba(255,255,255,.72);}
+button{
+  background:rgba(255,252,244,.82) !important;
+  border-color:rgba(96,77,52,.28) !important;
+  box-shadow:0 4px 10px rgba(49,36,21,.08);
+}
+button.primary{background:linear-gradient(135deg,#72522c,#9d7340) !important;border-color:#6e4f2b !important;color:#fff !important;}
+button.soft{background:rgba(255,244,215,.82) !important;color:#604418 !important;}
+button.active{background:#2c251c !important;color:#fff !important;border-color:#2c251c !important;}
+button.danger{background:rgba(255,235,238,.86) !important;}
+button.ok{background:rgba(232,248,232,.86) !important;}
+button.warn{background:rgba(255,243,216,.90) !important;}
+button.easy{background:rgba(231,245,255,.86) !important;}
+.flashcard{
+  background:linear-gradient(180deg,rgba(255,255,251,.74),rgba(255,248,235,.62)) !important;
+  border-color:rgba(115,91,61,.24) !important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.52),0 10px 24px rgba(42,29,16,.10);
+}
+.answer,.stat,.formula-item,.sync-box,#status,#syncStatus{
+  background:rgba(255,252,244,.70) !important;
+  border-color:rgba(104,84,57,.21) !important;
+}
+input[type=search],input[type=text]{background:rgba(255,253,248,.84) !important;}
+.settings-panel{
+  margin-top:12px;
+  border:1px solid rgba(101,82,56,.24);
+  border-radius:18px;
+  background:rgba(255,252,244,.52);
+  overflow:hidden;
+  backdrop-filter:blur(10px) saturate(1.06);
+  -webkit-backdrop-filter:blur(10px) saturate(1.06);
+}
+.settings-panel[open]{background:rgba(255,252,244,.72);}
+.settings-panel summary{
+  list-style:none;
+  cursor:pointer;
+  padding:12px 14px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  font-weight:700;
+  color:#3a3024;
+}
+.settings-panel summary::-webkit-details-marker{display:none;}
+.settings-panel summary::after{
+  content:"開く";
+  font-size:.86rem;
+  color:#6f5e49;
+  border:1px solid rgba(111,94,73,.25);
+  border-radius:999px;
+  padding:3px 10px;
+  background:rgba(255,255,255,.46);
+}
+.settings-panel[open] summary::after{content:"閉じる";}
+.settings-body{padding:0 12px 12px;}
+.settings-body .sync-grid{display:grid !important;grid-template-columns:1fr 1fr;gap:12px;margin-top:0;}
+.math-plain{white-space:pre-wrap;}
+.formula-enhanced .math-plain{margin-bottom:8px;}
+.math-formula-list{display:grid;gap:7px;margin-top:8px;}
+.math-formula{
+  overflow-x:auto;
+  -webkit-overflow-scrolling:touch;
+  padding:10px 12px;
+  border-radius:13px;
+  background:rgba(255,255,255,.60);
+  border:1px solid rgba(109,89,60,.16);
+}
+.math-formula .katex{font-size:1.12em;}
+.prompt .math-formula .katex{font-size:1.02em;}
+.katex-display{margin:.2em 0 !important;}
+@media(max-width:720px){
+  body{background-attachment:scroll !important;}
+  .panel{border-radius:16px;}
+  .flashcard{min-height:220px;}
+  .settings-body .sync-grid{grid-template-columns:1fr;}
+  .math-formula{padding:8px 10px;}
+}
