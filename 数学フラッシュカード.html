@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>数学公式カード｜理系大学受験</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+body{min-height:100vh;background:#0b0c14;font-family:Georgia,'Yu Mincho',serif;color:#ddd4be;overscroll-behavior:none;}
+header{position:sticky;top:0;z-index:200;border-bottom:1px solid rgba(200,164,76,0.22);background:rgba(11,12,20,0.97);backdrop-filter:blur(12px);}
+.header-inner{max-width:920px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:0 16px;height:56px;}
+.logo{font-size:18px;color:#c8a44c;letter-spacing:2px;font-weight:bold;}
+.logo-sub{font-size:10px;color:#6a5a3a;letter-spacing:1px;display:block;margin-top:1px;}
+.tab-btns{display:flex;gap:5px;}
+.tab-btn{padding:6px 14px;border-radius:20px;cursor:pointer;font-size:13px;transition:all .2s;border:1px solid rgba(200,164,76,0.2);background:transparent;color:#7a6a48;font-family:Georgia,serif;}
+.tab-btn.active{border-color:#c8a44c;background:rgba(200,164,76,0.12);color:#c8a44c;}
+.page{display:none;max-width:680px;margin:0 auto;padding:20px 16px 100px;}
+.page.active{display:block;}
+.page.ref-page{max-width:940px;}
+
+/* Save bar */
+.save-bar{display:flex;align-items:center;justify-content:space-between;padding:7px 14px;border-radius:10px;margin-bottom:14px;font-size:12px;border:1px solid;}
+.save-bar.local{background:rgba(74,222,128,0.05);border-color:rgba(74,222,128,0.18);color:#4a8a5a;}
+.save-bar.drive{background:rgba(66,133,244,0.08);border-color:rgba(66,133,244,0.28);color:#6898f4;}
+.save-bar.saving{background:rgba(200,164,76,0.06);border-color:rgba(200,164,76,0.2);color:#a88a3c;}
+.save-bar.error{background:rgba(244,63,94,0.06);border-color:rgba(244,63,94,0.2);color:#c85060;}
+.save-dot{width:6px;height:6px;border-radius:50%;margin-right:6px;display:inline-block;}
+.save-bar.local .save-dot{background:#4ade80;}
+.save-bar.drive .save-dot{background:#4285f4;}
+.save-bar.saving .save-dot{background:#c8a44c;animation:pulse 1s infinite;}
+.save-bar.error .save-dot{background:#f43f5e;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.drive-btn-small{font-size:11px;padding:3px 9px;border-radius:4px;cursor:pointer;border:1px solid currentColor;background:transparent;color:inherit;font-family:Georgia,serif;}
+
+/* Category filter - STUDY MODE */
+.study-cat-wrap{margin-bottom:14px;}
+.study-cat-label{font-size:11px;color:#6a5a3a;margin-bottom:6px;letter-spacing:1px;}
+.study-cat-filters{display:flex;gap:7px;flex-wrap:wrap;}
+.study-cat-btn{padding:6px 14px;border-radius:20px;border:1px solid rgba(200,164,76,0.2);background:transparent;color:#7a6a48;cursor:pointer;font-size:12px;transition:all .2s;font-family:Georgia,serif;}
+.study-cat-btn.active{border-color:#c8a44c;background:rgba(200,164,76,0.15);color:#c8a44c;}
+.cat-progress{font-size:11px;color:#5a4a28;margin-top:6px;}
+
+/* Stats */
+.stats-row{display:flex;gap:8px;margin-bottom:14px;justify-content:center;flex-wrap:wrap;}
+.stat-box{background:rgba(255,255,255,0.03);border:1px solid rgba(200,164,76,0.1);border-radius:10px;padding:6px 13px;text-align:center;min-width:60px;}
+.stat-label{font-size:10px;color:#6a5a3a;letter-spacing:1px;margin-bottom:2px;}
+.stat-val{font-size:18px;font-weight:bold;}
+.weak-btn{background:rgba(255,255,255,0.03);border:1px solid rgba(200,164,76,0.1);border-radius:10px;padding:6px 12px;color:#6a5a3a;cursor:pointer;font-size:12px;font-family:Georgia,serif;}
+.weak-btn.open{background:rgba(200,164,76,0.1);border-color:rgba(200,164,76,0.4);color:#c8a44c;}
+.weak-panel{background:rgba(255,255,255,0.02);border:1px solid rgba(200,164,76,0.14);border-radius:14px;padding:14px;margin-bottom:14px;}
+.weak-title{font-size:12px;color:#c8a44c;letter-spacing:1px;margin-bottom:10px;}
+.weak-row{display:flex;justify-content:space-between;align-items:center;padding:5px 8px;border-radius:6px;margin-bottom:4px;background:rgba(255,255,255,0.02);}
+.weak-name{font-size:13px;color:#c0b090;}
+.weak-meta{display:flex;gap:6px;align-items:center;}
+.weak-cat{font-size:11px;color:#6a5a3a;}
+.dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.mini-btn{font-size:11px;color:#c8a44c;background:none;border:1px solid rgba(200,164,76,0.28);border-radius:4px;padding:2px 7px;cursor:pointer;font-family:Georgia,serif;}
+
+/* Progress */
+.prog-bar{height:3px;background:rgba(255,255,255,0.05);border-radius:2px;margin-bottom:16px;overflow:hidden;}
+.prog-fill{height:100%;background:linear-gradient(90deg,#c8a44c,#4ade80);border-radius:2px;transition:width .4s;}
+
+/* Card */
+.card-wrap{perspective:1200px;cursor:pointer;margin-bottom:16px;user-select:none;}
+.card-inner{position:relative;min-height:300px;transform-style:preserve-3d;transition:transform .55s cubic-bezier(.35,.15,.15,1);}
+.card-inner.flipped{transform:rotateY(180deg);}
+.card-face{position:absolute;top:0;left:0;right:0;min-height:300px;-webkit-backface-visibility:hidden;backface-visibility:hidden;border-radius:20px;padding:26px 24px 22px;display:flex;flex-direction:column;justify-content:space-between;box-shadow:0 20px 50px rgba(0,0,0,0.6);}
+.card-front{background:linear-gradient(145deg,#131525,#0e1a22);border:1px solid rgba(200,164,76,0.28);}
+.card-back{background:linear-gradient(145deg,#0f1f14,#0a141e);border:1px solid rgba(74,222,128,0.28);transform:rotateY(180deg);}
+.card-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;}
+.card-cat-badge{font-size:11px;letter-spacing:2px;color:#c8a44c;background:rgba(200,164,76,0.1);border:1px solid rgba(200,164,76,0.28);border-radius:4px;padding:3px 10px;}
+.card-name{font-size:13px;color:#6a5a3a;margin-top:7px;}
+.card-meta{display:flex;flex-direction:column;align-items:flex-end;gap:4px;}
+.card-id{font-size:10px;color:#3a3020;}
+.card-question{font-size:22px;line-height:1.75;color:#e8dfc8;margin-top:10px;}
+.card-hint{text-align:center;color:rgba(200,164,76,0.22);font-size:13px;margin-top:16px;letter-spacing:2px;}
+.card-ans-label{font-size:11px;letter-spacing:2px;color:#4ade80;margin-bottom:10px;}
+.card-answer{font-size:18px;line-height:1.9;color:#cceedd;background:rgba(74,222,128,0.04);border:1px solid rgba(74,222,128,0.12);border-radius:12px;padding:14px 17px;margin-bottom:12px;font-family:'Courier New',monospace;}
+.card-detail{font-size:14px;color:#5a7a5a;line-height:1.65;}
+.ref-link-btn{align-self:flex-start;background:rgba(200,164,76,0.07);border:1px solid rgba(200,164,76,0.22);border-radius:8px;padding:7px 13px;color:#c8a44c;cursor:pointer;font-size:12px;margin-top:10px;font-family:Georgia,serif;}
+
+/* Answer buttons */
+.ans-btns{display:flex;gap:12px;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s;}
+.ans-btns.show{opacity:1;pointer-events:auto;}
+.ans-btn{flex:1;max-width:220px;padding:15px 10px;border-radius:14px;font-size:16px;cursor:pointer;transition:background .2s;font-family:Georgia,serif;}
+.btn-wrong{background:rgba(244,63,94,0.09);border:1px solid rgba(244,63,94,0.38);color:#f87090;}
+.btn-wrong:active{background:rgba(244,63,94,0.2);}
+.btn-ok{background:rgba(74,222,128,0.09);border:1px solid rgba(74,222,128,0.38);color:#5de89a;}
+.btn-ok:active{background:rgba(74,222,128,0.2);}
+.hint-text{text-align:center;font-size:11px;color:rgba(120,100,60,0.4);margin-top:12px;letter-spacing:1px;}
+
+/* Reference */
+.ref-search{width:100%;padding:13px 20px;font-size:16px;background:rgba(255,255,255,0.04);border:1px solid rgba(200,164,76,0.28);border-radius:14px;color:#ddd4be;outline:none;font-family:Georgia,serif;margin-bottom:12px;}
+.cat-filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;}
+.cat-btn{padding:6px 14px;border-radius:20px;border:1px solid rgba(200,164,76,0.18);background:transparent;color:#7a6a48;cursor:pointer;font-size:12px;transition:all .18s;font-family:Georgia,serif;}
+.cat-btn.active{border-color:#c8a44c;background:rgba(200,164,76,0.14);color:#c8a44c;}
+.ref-count{font-size:12px;color:#5a4a28;margin-bottom:14px;}
+.cat-section{margin-bottom:32px;}
+.cat-header{font-size:13px;letter-spacing:2px;color:#c8a44c;border-bottom:1px solid rgba(200,164,76,0.16);padding-bottom:8px;margin-bottom:12px;display:flex;gap:10px;align-items:center;}
+.cat-count{font-size:11px;color:#5a4a28;}
+.formula-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(265px,1fr));gap:11px;}
+.formula-card{background:rgba(255,255,255,0.025);border:1px solid rgba(200,164,76,0.1);border-radius:13px;padding:14px 16px;transition:all .4s;}
+.formula-card.highlight{background:rgba(200,164,76,0.1);border-color:rgba(200,164,76,0.52);box-shadow:0 0 20px rgba(200,164,76,0.12);}
+.fc-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:7px;}
+.fc-name{font-size:14px;color:#c0b090;font-weight:bold;}
+.fc-right{display:flex;gap:5px;align-items:center;margin-left:8px;}
+.fc-q{font-size:12px;color:#6a5a38;margin-bottom:8px;line-height:1.5;}
+.fc-ans{font-size:14px;color:#a0d8a8;background:rgba(74,222,128,0.04);border:1px solid rgba(74,222,128,0.08);border-radius:8px;padding:9px 12px;line-height:1.75;font-family:'Courier New',monospace;}
+.fc-detail{font-size:12px;color:#4a6a4a;margin-top:7px;line-height:1.55;}
+.fab{position:fixed;bottom:26px;right:26px;width:54px;height:54px;border-radius:50%;background:linear-gradient(135deg,#c8a44c,#9a7c2c);border:none;color:#0b0c14;font-size:22px;cursor:pointer;box-shadow:0 8px 28px rgba(200,164,76,0.4);display:none;align-items:center;justify-content:center;z-index:300;}
+.fab.show{display:flex;}
+.reset-row{text-align:center;margin-top:10px;}
+.reset-link{font-size:12px;color:#4a3a28;cursor:pointer;text-decoration:underline;background:none;border:none;font-family:Georgia,serif;}
+
+/* Modal */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:500;display:none;align-items:center;justify-content:center;padding:20px;}
+.modal-bg.show{display:flex;}
+.modal{background:#131525;border:1px solid rgba(200,164,76,0.3);border-radius:20px;padding:24px 22px;max-width:480px;width:100%;max-height:90vh;overflow-y:auto;}
+.modal h2{font-size:18px;color:#c8a44c;margin-bottom:6px;}
+.modal-sub{font-size:13px;color:#6a5a3a;margin-bottom:18px;line-height:1.6;}
+.step-block{background:rgba(255,255,255,0.03);border:1px solid rgba(200,164,76,0.1);border-radius:10px;padding:14px 16px;margin-bottom:12px;}
+.step-num{font-size:11px;color:#c8a44c;letter-spacing:1px;margin-bottom:6px;}
+.step-text{font-size:14px;color:#c0b090;line-height:1.65;}
+.step-link{color:#6898f4;text-decoration:none;word-break:break-all;}
+.modal-input{width:100%;padding:10px 14px;font-size:13px;background:rgba(255,255,255,0.05);border:1px solid rgba(200,164,76,0.3);border-radius:8px;color:#ddd4be;outline:none;font-family:monospace;margin-top:10px;}
+.modal-input::placeholder{color:#4a4030;}
+.modal-actions{display:flex;gap:10px;margin-top:18px;}
+.modal-btn{flex:1;padding:12px;border-radius:10px;cursor:pointer;font-size:14px;font-family:Georgia,serif;transition:background .2s;}
+.modal-btn-cancel{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);color:#7a6a48;}
+.modal-btn-ok{background:rgba(66,133,244,0.15);border:1px solid rgba(66,133,244,0.4);color:#6898f4;}
+.modal-btn-ok:active{background:rgba(66,133,244,0.25);}
+.warning-box{background:rgba(200,164,76,0.07);border:1px solid rgba(200,164,76,0.2);border-radius:8px;padding:10px 12px;margin-top:12px;font-size:12px;color:#9a8040;line-height:1.6;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div>
+      <span class="logo">数学公式カード</span>
+      <span class="logo-sub">理系大学受験 全98公式</span>
+    </div>
+    <div class="tab-btns">
+      <button class="tab-btn active" onclick="switchMode('study')">📚 問題</button>
+      <button class="tab-btn" onclick="switchMode('reference')">📖 公式集</button>
+    </div>
+  </div>
+</header>
+
+<!-- STUDY PAGE -->
+<div class="page active" id="study-page">
+  <div class="save-bar local" id="save-bar">
+    <span><span class="save-dot"></span><span id="save-text">ローカルに自動保存中</span></span>
+    <button class="drive-btn-small" id="drive-toggle-btn" onclick="openDriveModal()">☁️ Drive連携</button>
+  </div>
+
+  <!-- Category filter -->
+  <div class="study-cat-wrap">
+    <div class="study-cat-label">📂 ジャンルを選ぶ</div>
+    <div class="study-cat-filters" id="study-cat-filters"></div>
+    <div class="cat-progress" id="cat-progress"></div>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat-box"><div class="stat-label">正解</div><div class="stat-val" id="s-c" style="color:#4ade80">0</div></div>
+    <div class="stat-box"><div class="stat-label">不正解</div><div class="stat-val" id="s-w" style="color:#f43f5e">0</div></div>
+    <div class="stat-box"><div class="stat-label">正答率</div><div class="stat-val" id="s-acc" style="color:#c8a44c">--</div></div>
+    <div class="stat-box"><div class="stat-label">回答数</div><div class="stat-val" id="s-t" style="color:#94a3b8">0</div></div>
+    <button class="weak-btn" id="weak-toggle" onclick="toggleWeak()">🔥 苦手</button>
+  </div>
+
+  <div class="weak-panel" id="weak-panel" style="display:none">
+    <div class="weak-title">苦手な公式 TOP 10</div>
+    <div id="weak-list"></div>
+  </div>
+
+  <div class="prog-bar"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
+
+  <div class="card-wrap" onclick="flipCard()">
+    <div class="card-inner" id="card-inner">
+      <div class="card-face card-front">
+        <div>
+          <div class="card-top">
+            <div>
+              <span class="card-cat-badge" id="f-cat">　</span>
+              <div class="card-name" id="f-name"></div>
+            </div>
+            <div class="card-meta">
+              <div class="dot" id="f-dot"></div>
+              <span class="card-id" id="f-id"></span>
+            </div>
+          </div>
+          <div class="card-question" id="f-question"></div>
+        </div>
+        <div class="card-hint">── タップして答えを見る ──</div>
+      </div>
+      <div class="card-face card-back">
+        <div>
+          <div class="card-ans-label">▸ 解答</div>
+          <div class="card-answer" id="b-answer"></div>
+          <div class="card-detail" id="b-detail"></div>
+        </div>
+        <button class="ref-link-btn" onclick="event.stopPropagation();jumpToFormula(currentCardId)">📖 公式集で確認 →</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="ans-btns" id="ans-btns">
+    <button class="ans-btn btn-wrong" onclick="answer(false)">✗ わからなかった</button>
+    <button class="ans-btn btn-ok" onclick="answer(true)">○ わかった！</button>
+  </div>
+  <div class="hint-text">✦ 間違えた問題ほど出現頻度が増加します ✦</div>
+  <div class="reset-row"><button class="reset-link" onclick="confirmReset()">学習データをリセット</button></div>
+</div>
+
+<!-- REFERENCE PAGE -->
+<div class="page ref-page" id="reference-page">
+  <input class="ref-search" type="text" id="ref-search" placeholder="🔍  公式名・キーワード・分野で検索..." oninput="filterRef()">
+  <div class="cat-filters" id="cat-filters"></div>
+  <div class="ref-count" id="ref-count"></div>
+  <div id="ref-content"></div>
+</div>
+
+<button class="fab" id="fab" onclick="switchMode('study')">📚</button>
+
+<!-- DRIVE MODAL -->
+<div class="modal-bg" id="drive-modal">
+  <div class="modal">
+    <h2>☁️ Google Drive 連携</h2>
+    <div class="modal-sub">設定すると学習データが自動でGoogleドライブに保存されます。スマホを買い替えても引き継げます。</div>
+    <div id="modal-setup">
+      <div class="step-block">
+        <div class="step-num">STEP 1</div>
+        <div class="step-text"><a class="step-link" href="https://console.cloud.google.com/" target="_blank">Google Cloud Console</a> で新しいプロジェクトを作成（無料）。</div>
+      </div>
+      <div class="step-block">
+        <div class="step-num">STEP 2</div>
+        <div class="step-text">「APIとサービス」→「ライブラリ」→「Google Drive API」を有効化。</div>
+      </div>
+      <div class="step-block">
+        <div class="step-num">STEP 3</div>
+        <div class="step-text">「認証情報」→「OAuthクライアントID」→ウェブアプリ→承認済みJS生成元に <code style="color:#c8a44c">https://あなたのユーザー名.github.io</code> を追加。</div>
+      </div>
+      <div class="step-block">
+        <div class="step-num">STEP 4</div>
+        <div class="step-text">作成された「クライアントID」を下に貼り付ける。</div>
+        <input class="modal-input" type="text" id="client-id-input" placeholder="例: 123456789-xxxxx.apps.googleusercontent.com">
+      </div>
+      <div class="warning-box">⚠️ クライアントIDはこのファイル内にのみ保存されます。</div>
+    </div>
+    <div id="modal-connected" style="display:none">
+      <div class="step-block" style="border-color:rgba(66,133,244,0.3)">
+        <div class="step-num" style="color:#6898f4">接続済み</div>
+        <div class="step-text" id="connected-email" style="color:#6898f4">Googleアカウントに接続されています。</div>
+      </div>
+      <div style="margin-top:12px;display:flex;gap:10px;">
+        <button class="modal-btn modal-btn-ok" onclick="forceDriveSync()" style="font-size:13px">🔄 今すぐ同期</button>
+        <button class="modal-btn modal-btn-cancel" onclick="disconnectDrive()" style="font-size:13px;flex:0.6">連携解除</button>
+      </div>
+    </div>
+    <div class="modal-actions" id="modal-actions">
+      <button class="modal-btn modal-btn-cancel" onclick="closeDriveModal()">キャンセル</button>
+      <button class="modal-btn modal-btn-ok" onclick="connectDrive()">🔗 連携する</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://apis.google.com/js/api.js" async onload="gapiLoaded()"></script>
+<script src="https://accounts.google.com/gsi/client" async onload="gisLoaded()"></script>
+
+<script>
+const FORMULAS = [
+  {id:1,category:"数と式",name:"展開公式①",question:"(a+b)² を展開せよ",answer:"(a+b)² = a² + 2ab + b²",detail:"基本展開公式。符号に注意。"},
+  {id:2,category:"数と式",name:"展開公式②",question:"(a-b)² を展開せよ",answer:"(a-b)² = a² - 2ab + b²",detail:"中間項がマイナス。"},
+  {id:3,category:"数と式",name:"展開公式③",question:"(a+b)(a-b) を展開せよ",answer:"(a+b)(a-b) = a² - b²",detail:"和と差の積＝差の平方。"},
+  {id:4,category:"数と式",name:"展開公式④",question:"(a+b)³ を展開せよ",answer:"(a+b)³ = a³ + 3a²b + 3ab² + b³",detail:"係数は 1, 3, 3, 1。"},
+  {id:5,category:"数と式",name:"展開公式⑤",question:"(a-b)³ を展開せよ",answer:"(a-b)³ = a³ - 3a²b + 3ab² - b³",detail:"奇数乗の項がマイナス。"},
+  {id:6,category:"数と式",name:"因数分解①",question:"a³+b³ を因数分解せよ",answer:"a³+b³ = (a+b)(a²-ab+b²)",detail:"立方和の因数分解。"},
+  {id:7,category:"数と式",name:"因数分解②",question:"a³-b³ を因数分解せよ",answer:"a³-b³ = (a-b)(a²+ab+b²)",detail:"立方差の因数分解。"},
+  {id:8,category:"数と式",name:"二項定理",question:"二項定理の一般項を述べよ",answer:"(a+b)ⁿ の第k+1項 = nCk・aⁿ⁻ᵏ・bᵏ",detail:"全体：Σ[k=0→n] nCk aⁿ⁻ᵏ bᵏ"},
+  {id:9,category:"方程式・不等式",name:"解の公式",question:"2次方程式 ax²+bx+c=0 の解の公式",answer:"x = (-b ± √(b²-4ac)) / 2a",detail:"D=b²-4ac。D>0:2実解、D=0:重解、D<0:虚数解。"},
+  {id:10,category:"方程式・不等式",name:"解と係数の関係",question:"ax²+bx+c=0 の2解α,βの和と積",answer:"α+β = -b/a ,  αβ = c/a",detail:"ヴィエタの公式。対称式の計算に使う。"},
+  {id:11,category:"方程式・不等式",name:"絶対値不等式①",question:"|x| < a  (a>0) の解",answer:"-a < x < a",detail:"絶対値が小さい＝間にはさまれる。"},
+  {id:12,category:"方程式・不等式",name:"絶対値不等式②",question:"|x| > a  (a>0) の解",answer:"x < -a  または  x > a",detail:"絶対値が大きい＝両側に離れる。"},
+  {id:13,category:"二次関数",name:"平方完成",question:"ax²+bx+c を平方完成せよ",answer:"a(x + b/2a)² - (b²-4ac)/4a",detail:"頂点の x 座標は -b/2a。"},
+  {id:14,category:"二次関数",name:"放物線の頂点",question:"y=ax²+bx+c の頂点座標",answer:"頂点 = ( -b/2a ,  -(b²-4ac)/4a )",detail:"x 座標＝軸の方程式。"},
+  {id:15,category:"三角関数",name:"ピタゴラス恒等式",question:"sin²θ + cos²θ = ?",answer:"sin²θ + cos²θ = 1",detail:"三角関数の最重要恒等式。"},
+  {id:16,category:"三角関数",name:"tanの恒等式",question:"1 + tan²θ = ?",answer:"1 + tan²θ = 1/cos²θ",detail:"sin²+cos²=1 を cos² で割ると得られる。"},
+  {id:17,category:"三角関数",name:"加法定理①",question:"sin(α+β) = ?",answer:"sin(α+β) = sinα cosβ + cosα sinβ",detail:"加法定理の基本。符号は +。"},
+  {id:18,category:"三角関数",name:"加法定理②",question:"cos(α+β) = ?",answer:"cos(α+β) = cosα cosβ - sinα sinβ",detail:"cos は引き算（符号注意）。"},
+  {id:19,category:"三角関数",name:"加法定理③",question:"tan(α+β) = ?",answer:"tan(α+β) = (tanα + tanβ) / (1 - tanα・tanβ)",detail:"分母の符号はマイナス。"},
+  {id:20,category:"三角関数",name:"2倍角①",question:"sin2θ = ?",answer:"sin2θ = 2 sinθ cosθ",detail:"加法定理で α=β=θ として導出。"},
+  {id:21,category:"三角関数",name:"2倍角②",question:"cos2θ の3つの形",answer:"cos²θ-sin²θ = 2cos²θ-1 = 1-2sin²θ",detail:"半角公式の導出に使う。"},
+  {id:22,category:"三角関数",name:"半角公式",question:"sin²(θ/2) と cos²(θ/2)",answer:"sin²(θ/2)=(1-cosθ)/2 ,  cos²(θ/2)=(1+cosθ)/2",detail:"cos2α の変形から。積分で頻出。"},
+  {id:23,category:"三角関数",name:"積和公式",question:"sinα cosβ を和に変換せよ",answer:"[sin(α+β) + sin(α-β)] / 2",detail:"加法定理の和から導出。"},
+  {id:24,category:"三角関数",name:"三角関数の合成",question:"a sinθ + b cosθ を合成せよ",answer:"√(a²+b²)・sin(θ+φ),  tanφ = b/a",detail:"最大値は √(a²+b²)。"},
+  {id:25,category:"三角関数",name:"正弦定理",question:"正弦定理を述べよ",answer:"a/sinA = b/sinB = c/sinC = 2R",detail:"R は外接円の半径。"},
+  {id:26,category:"三角関数",name:"余弦定理",question:"余弦定理を述べよ",answer:"a² = b² + c² - 2bc cosA",detail:"ピタゴラスの定理の一般化。"},
+  {id:27,category:"三角関数",name:"三角形の面積",question:"△ABCの面積Sを2辺と夾角で表せ",answer:"S = (1/2) bc sinA",detail:"底辺×高さ÷2 の一般形。"},
+  {id:28,category:"指数・対数",name:"指数法則①",question:"aᵐ・aⁿ = ?",answer:"aᵐ・aⁿ = aᵐ⁺ⁿ",detail:"底が同じ積は指数を加える。"},
+  {id:29,category:"指数・対数",name:"指数法則②",question:"(aᵐ)ⁿ = ?",answer:"(aᵐ)ⁿ = aᵐⁿ",detail:"指数の指数は掛け算。"},
+  {id:30,category:"指数・対数",name:"指数法則③",question:"(ab)ⁿ = ?",answer:"(ab)ⁿ = aⁿbⁿ",detail:"積の指数は分配できる。"},
+  {id:31,category:"指数・対数",name:"対数の定義",question:"log_a M = p の意味",answer:"aᵖ = M  (a>0, a≠1, M>0)",detail:"対数と指数は逆演算。"},
+  {id:32,category:"指数・対数",name:"対数の性質①",question:"log_a MN = ?",answer:"log_a MN = log_a M + log_a N",detail:"積の対数＝対数の和。"},
+  {id:33,category:"指数・対数",name:"対数の性質②",question:"log_a (M/N) = ?",answer:"log_a (M/N) = log_a M - log_a N",detail:"商の対数＝対数の差。"},
+  {id:34,category:"指数・対数",name:"対数の性質③",question:"log_a Mⁿ = ?",answer:"log_a Mⁿ = n log_a M",detail:"指数を前に出せる。"},
+  {id:35,category:"指数・対数",name:"底の変換公式",question:"底の変換公式を述べよ",answer:"log_a b = log_c b / log_c a",detail:"c=10 や c=e でよく使う。"},
+  {id:36,category:"数列",name:"等差数列の一般項",question:"初項a, 公差d の等差数列の一般項",answer:"aₙ = a + (n-1)d",detail:"n 番目の項の公式。"},
+  {id:37,category:"数列",name:"等差数列の和",question:"初項a, 末項l, 項数n の等差数列の和",answer:"Sₙ = n(a+l)/2 = n{2a+(n-1)d}/2",detail:"初項と末項の平均×項数。"},
+  {id:38,category:"数列",name:"等比数列の一般項",question:"初項a, 公比r の等比数列の一般項",answer:"aₙ = a・rⁿ⁻¹",detail:"n-1 乗に注意。"},
+  {id:39,category:"数列",name:"等比数列の和①",question:"r≠1 のとき等比数列の和 Sₙ",answer:"Sₙ = a(1-rⁿ)/(1-r)",detail:"分子の符号に注意。"},
+  {id:40,category:"数列",name:"等比数列の和②",question:"r=1 のとき等比数列の和 Sₙ",answer:"Sₙ = na",detail:"全項が等しいので n 倍。"},
+  {id:41,category:"数列",name:"Σ公式①",question:"Σ[k=1→n] k = ?",answer:"n(n+1)/2",detail:"1 から n の和。ガウスの公式。"},
+  {id:42,category:"数列",name:"Σ公式②",question:"Σ[k=1→n] k² = ?",answer:"n(n+1)(2n+1)/6",detail:"平方数の和。"},
+  {id:43,category:"数列",name:"Σ公式③",question:"Σ[k=1→n] k³ = ?",answer:"{n(n+1)/2}²",detail:"立方和＝（Σk）の二乗。"},
+  {id:44,category:"数列",name:"漸化式（等差型）",question:"aₙ₊₁ = aₙ + d の一般解",answer:"aₙ = a₁ + (n-1)d",detail:"等差数列の漸化式。"},
+  {id:45,category:"数列",name:"漸化式（等比型）",question:"aₙ₊₁ = r・aₙ の一般解",answer:"aₙ = a₁・rⁿ⁻¹",detail:"等比数列の漸化式。"},
+  {id:46,category:"数列",name:"漸化式（線形型）",question:"aₙ₊₁ = p・aₙ + q (p≠1) の解法",answer:"α=q/(1-p) として bₙ=aₙ-α → bₙ₊₁=p・bₙ",detail:"等比数列に変換して解く。"},
+  {id:47,category:"極限",name:"重要極限①",question:"lim[x→0] (sinx)/x = ?",answer:"lim[x→0] (sinx)/x = 1",detail:"三角関数の微分の基礎。"},
+  {id:48,category:"極限",name:"重要極限②",question:"lim[x→∞] (1+1/x)ˣ = ?",answer:"lim[x→∞] (1+1/x)ˣ = e ≈ 2.71828…",detail:"自然対数の底 e の定義。"},
+  {id:49,category:"極限",name:"等比数列の極限",question:"|r|<1 のとき lim[n→∞] rⁿ = ?",answer:"lim[n→∞] rⁿ = 0",detail:"|r|>1:発散、r=1:1、r=-1:振動。"},
+  {id:50,category:"極限",name:"無限等比級数",question:"|r|<1 のとき Σ[n=0→∞] arⁿ = ?",answer:"a/(1-r)",detail:"|r|≥1 では発散。"},
+  {id:51,category:"図形と方程式",name:"2点間の距離",question:"2点(x₁,y₁),(x₂,y₂) 間の距離",answer:"d = √{(x₂-x₁)²+(y₂-y₁)²}",detail:"ピタゴラスの定理の応用。"},
+  {id:52,category:"図形と方程式",name:"内分点の公式",question:"2点A,Bを m:n に内分する点の座標",answer:"P = ( (mx₂+nx₁)/(m+n) ,  (my₂+ny₁)/(m+n) )",detail:"外分は n を -n に置き換え。"},
+  {id:53,category:"図形と方程式",name:"円の方程式",question:"中心(a,b), 半径r の円の方程式",answer:"(x-a)² + (y-b)² = r²",detail:"中心・半径形式。"},
+  {id:54,category:"図形と方程式",name:"点と直線の距離",question:"点(x₀,y₀) から直線 ax+by+c=0 への距離",answer:"d = |ax₀+by₀+c| / √(a²+b²)",detail:"分母は係数の二乗和の平方根。"},
+  {id:55,category:"図形と方程式",name:"直線の方程式",question:"点(x₁,y₁), 傾き m の直線",answer:"y - y₁ = m(x - x₁)",detail:"点傾き形式。"},
+  {id:56,category:"図形と方程式",name:"楕円の方程式",question:"楕円の標準形を述べよ",answer:"x²/a² + y²/b² = 1  (a>0, b>0)",detail:"a=b のとき円になる。"},
+  {id:57,category:"図形と方程式",name:"双曲線の方程式",question:"双曲線の標準形と漸近線",answer:"x²/a² - y²/b² = 1,  漸近線 y = ±(b/a)x",detail:"双曲線は2つの枝を持つ。"},
+  {id:58,category:"ベクトル",name:"内積の定義",question:"ベクトル a, b の内積",answer:"a・b = |a||b| cosθ",detail:"θ は2ベクトルのなす角。"},
+  {id:59,category:"ベクトル",name:"内積の成分表示",question:"a=(a₁,a₂), b=(b₁,b₂) の内積",answer:"a・b = a₁b₁ + a₂b₂",detail:"対応する成分の積の和。"},
+  {id:60,category:"ベクトル",name:"ベクトルの大きさ",question:"|a|² を成分で表せ",answer:"|a|² = a₁²+a₂²   (3次元: +a₃²)",detail:"内積 a・a と等しい。"},
+  {id:61,category:"ベクトル",name:"外積の大きさ",question:"|a × b| を述べよ",answer:"|a × b| = |a||b| sinθ",detail:"平行四辺形の面積に等しい。"},
+  {id:62,category:"ベクトル",name:"位置ベクトルと内分",question:"A,Bを m:n に内分するPの位置ベクトル",answer:"OP = (n・OA + m・OB) / (m+n)",detail:"m と n の係数の位置に注意。"},
+  {id:63,category:"複素数",name:"複素数の絶対値",question:"z = a+bi の絶対値 |z|",answer:"|z| = √(a²+b²)",detail:"複素平面上の原点からの距離。"},
+  {id:64,category:"複素数",name:"複素数の積（極形式）",question:"r₁(cosθ₁+i sinθ₁)・r₂(cosθ₂+i sinθ₂) = ?",answer:"r₁r₂{ cos(θ₁+θ₂) + i sin(θ₁+θ₂) }",detail:"絶対値は積、偏角は和。"},
+  {id:65,category:"複素数",name:"ド・モアブルの定理",question:"ド・モアブルの定理を述べよ",answer:"(cosθ + i sinθ)ⁿ = cos(nθ) + i sin(nθ)",detail:"n 乗すると偏角が n 倍。"},
+  {id:66,category:"微分・積分",name:"微分の定義",question:"f'(x) の定義",answer:"f'(x) = lim[h→0] { f(x+h)-f(x) } / h",detail:"差商の極限。接線の傾き。"},
+  {id:67,category:"微分・積分",name:"xⁿ の微分",question:"d/dx [xⁿ] = ?",answer:"d/dx [xⁿ] = nxⁿ⁻¹",detail:"多項式微分の基本。"},
+  {id:68,category:"微分・積分",name:"積の微分",question:"{f(x)g(x)}' = ?",answer:"f'(x)g(x) + f(x)g'(x)",detail:"ライプニッツ則。"},
+  {id:69,category:"微分・積分",name:"商の微分",question:"{f(x)/g(x)}' = ?",answer:"{ f'(x)g(x) - f(x)g'(x) } / g(x)²",detail:"分母の g² に注意。"},
+  {id:70,category:"微分・積分",name:"合成関数の微分",question:"{f(g(x))}' = ?",answer:"f'(g(x))・g'(x)",detail:"チェーンルール。外から内の順。"},
+  {id:71,category:"微分・積分",name:"sinx の微分",question:"(sinx)' = ?",answer:"(sinx)' = cosx",detail:"sin と cos は互いに微分し合う。"},
+  {id:72,category:"微分・積分",name:"cosx の微分",question:"(cosx)' = ?",answer:"(cosx)' = -sinx",detail:"マイナスの符号に注意。"},
+  {id:73,category:"微分・積分",name:"tanx の微分",question:"(tanx)' = ?",answer:"(tanx)' = 1/cos²x",detail:"sin/cos を商の微分で導出できる。"},
+  {id:74,category:"微分・積分",name:"eˣ の微分",question:"(eˣ)' = ?",answer:"(eˣ)' = eˣ",detail:"eˣ は微分しても変わらない。"},
+  {id:75,category:"微分・積分",name:"aˣ の微分",question:"(aˣ)' = ?",answer:"(aˣ)' = aˣ ln a",detail:"a=e のとき eˣ に帰着。"},
+  {id:76,category:"微分・積分",name:"ln x の微分",question:"(ln x)' = ?",answer:"(ln x)' = 1/x",detail:"∫(1/x)dx = ln|x|+C と対応。"},
+  {id:77,category:"微分・積分",name:"不定積分①",question:"∫xⁿ dx = ?  (n≠-1)",answer:"xⁿ⁺¹/(n+1) + C",detail:"指数に1を足して、それで割る。"},
+  {id:78,category:"微分・積分",name:"不定積分②",question:"∫eˣ dx = ?",answer:"eˣ + C",detail:"eˣ は積分しても変わらない。"},
+  {id:79,category:"微分・積分",name:"不定積分③",question:"∫sinx dx = ?",answer:"-cosx + C",detail:"マイナスの符号に注意。"},
+  {id:80,category:"微分・積分",name:"不定積分④",question:"∫cosx dx = ?",answer:"sinx + C",detail:"微分の逆。"},
+  {id:81,category:"微分・積分",name:"不定積分⑤",question:"∫(1/x) dx = ?",answer:"ln|x| + C",detail:"絶対値に注意。"},
+  {id:82,category:"微分・積分",name:"定積分と面積",question:"y=f(x) と x 軸の間の面積 S",answer:"S = ∫[a→b] |f(x)| dx",detail:"絶対値を忘れずに。"},
+  {id:83,category:"微分・積分",name:"2曲線間の面積",question:"y=f(x) と y=g(x) の間の面積 S",answer:"S = ∫[a→b] |f(x)-g(x)| dx",detail:"上の曲線 - 下の曲線 を積分。"},
+  {id:84,category:"微分・積分",name:"部分積分",question:"∫f(x)g'(x) dx = ?",answer:"f(x)g(x) - ∫f'(x)g(x) dx",detail:"∫xeˣ, ∫x sinx などに使う。"},
+  {id:85,category:"微分・積分",name:"置換積分",question:"x=φ(t) のとき ∫f(x)dx を置換せよ",answer:"∫f(φ(t))φ'(t)dt   (dx = φ'(t)dt)",detail:"積分範囲も変換すること。"},
+  {id:86,category:"微分・積分",name:"1/3公式",question:"放物線と直線で囲む面積の 1/3 公式",answer:"S = (1/6)|a|(β-α)³",detail:"α,β は交点のx座標、a は x² の係数。"},
+  {id:87,category:"確率・統計",name:"順列",question:"n 個から r 個取る順列の数",answer:"nPr = n! / (n-r)!",detail:"順番を考慮した選び方。"},
+  {id:88,category:"確率・統計",name:"組合せ",question:"n 個から r 個取る組合せの数",answer:"nCr = n! / { r!(n-r)! }",detail:"順番を考慮しない選び方。"},
+  {id:89,category:"確率・統計",name:"確率の加法定理",question:"P(A∪B) = ?",answer:"P(A∪B) = P(A) + P(B) - P(A∩B)",detail:"排反なら P(A∪B) = P(A)+P(B)。"},
+  {id:90,category:"確率・統計",name:"条件付き確率",question:"P(B|A) = ?",answer:"P(B|A) = P(A∩B) / P(A)",detail:"A のもとで B が起きる確率。"},
+  {id:91,category:"確率・統計",name:"乗法定理",question:"P(A∩B) = ?",answer:"P(A∩B) = P(A)・P(B|A)",detail:"独立なら P(A∩B)=P(A)P(B)。"},
+  {id:92,category:"確率・統計",name:"ベイズの定理",question:"ベイズの定理を述べよ",answer:"P(A|B) = P(B|A)P(A) / P(B)",detail:"事後確率の更新。"},
+  {id:93,category:"確率・統計",name:"期待値",question:"確率変数 X の期待値 E[X]",answer:"E[X] = Σ xᵢP(X=xᵢ)",detail:"各値と確率の積の総和。"},
+  {id:94,category:"確率・統計",name:"分散",question:"分散 V(X) を述べよ",answer:"V(X) = E[X²] - {E[X]}²",detail:"標準偏差 σ = √V(X)。"},
+  {id:95,category:"確率・統計",name:"二項分布",question:"B(n,p) の期待値と分散",answer:"E[X] = np ,  V(X) = np(1-p)",detail:"n 回試行、1回成功確率 p。"},
+  {id:96,category:"行列・線形代数",name:"2×2行列の行列式",question:"A=[[a,b],[c,d]] の行列式",answer:"det A = ad - bc",detail:"逆行列の分母。det=0 なら逆行列なし。"},
+  {id:97,category:"行列・線形代数",name:"2×2行列の逆行列",question:"A=[[a,b],[c,d]] の逆行列",answer:"A⁻¹ = (1/(ad-bc))・[[d,-b],[-c,a]]",detail:"ad-bc ≠ 0 のとき存在。"},
+  {id:98,category:"行列・線形代数",name:"ケーリー・ハミルトン",question:"2次正方行列 A のケーリー・ハミルトンの定理",answer:"A² - (trA)・A + (detA)・E = O",detail:"特性方程式にA代入。trA=a+d, detA=ad-bc。"},
+];
+
+const CATEGORIES = [...new Set(FORMULAS.map(f=>f.category))];
+const LS_KEY = 'mathcard_save_v2';
+let weights = FORMULAS.map(()=>1);
+let currentIdx = 0;
+let currentCardId = FORMULAS[0].id;
+let isFlipped = false;
+let stats = {c:0,w:0,t:0};
+let weakOpen = false;
+let studyCat = 'すべて';
+let refCat = 'すべて';
+let refSearch = '';
+
+// Drive
+let gapiReady=false, gisReady=false, tokenClient=null, accessToken=null;
+let driveFileId=null, driveEmail=null;
+let clientId = localStorage.getItem('mathcard_client_id')||'';
+let savedEmail = localStorage.getItem('mathcard_email')||'';
+let driveSaveTimer=null;
+const DRIVE_FILE_NAME='math-flashcards-data.json';
+const DRIVE_SCOPE='https://www.googleapis.com/auth/drive.appdata';
+
+// ── LOCAL STORAGE ──
+function saveLocal(){try{localStorage.setItem(LS_KEY,JSON.stringify({weights,stats,currentIdx}));}catch(e){}}
+function loadLocal(){try{const d=JSON.parse(localStorage.getItem(LS_KEY));if(!d)return;if(d.weights&&d.weights.length===FORMULAS.length)weights=d.weights;if(d.stats)stats=d.stats;if(typeof d.currentIdx==='number')currentIdx=d.currentIdx;}catch(e){}}
+
+// ── SAVE BAR ──
+function setSaveBar(type,text){document.getElementById('save-bar').className='save-bar '+type;document.getElementById('save-text').textContent=text;}
+function autoSave(){
+  saveLocal();
+  if(accessToken){
+    setSaveBar('saving','Driveに保存中…');
+    clearTimeout(driveSaveTimer);
+    driveSaveTimer=setTimeout(()=>driveSave().then(()=>setSaveBar('drive','☁️ Driveに自動保存済み')).catch(()=>setSaveBar('error','Drive保存に失敗')),1500);
+  }
+}
+
+// ── GOOGLE AUTH (改善版: emailヒントで自動選択) ──
+function gapiLoaded(){gapi.load('client',async()=>{await gapi.client.init({discoveryDocs:['https://www.googleapis.com/discovery/v1/apis/drive/v3/rest']});gapiReady=true;if(clientId&&gisReady)tryAutoConnect();});}
+function gisLoaded(){gisReady=true;if(clientId&&gapiReady)tryAutoConnect();}
+
+function tryAutoConnect(){
+  if(!clientId) return;
+  initTokenClient(clientId);
+  // emailヒントを使って自動選択を促す（アカウント選択画面を出にくくする）
+  tokenClient.requestAccessToken({
+    prompt: '',
+    hint: savedEmail
+  });
+}
+
+function initTokenClient(cid){
+  tokenClient=google.accounts.oauth2.initTokenClient({
+    client_id:cid,
+    scope:DRIVE_SCOPE,
+    callback:async(resp)=>{
+      if(resp.error){
+        // サイレント失敗時は何もしない（ユーザー操作なしでエラーを出さない）
+        if(resp.error !== 'interaction_required' && resp.error !== 'access_denied'){
+          setSaveBar('error','Drive認証に失敗');
+        }
+        return;
+      }
+      accessToken=resp.access_token;
+      gapi.client.setToken({access_token:accessToken});
+      driveEmail=await getEmail();
+      if(driveEmail){
+        localStorage.setItem('mathcard_email', driveEmail);
+        savedEmail = driveEmail;
+      }
+      document.getElementById('connected-email').textContent=driveEmail?driveEmail+'で接続中':'接続済み';
+      document.getElementById('modal-setup').style.display='none';
+      document.getElementById('modal-connected').style.display='block';
+      document.getElementById('modal-actions').style.display='none';
+      updateDriveBtn();
+      await driveLoad();
+      setSaveBar('drive','☁️ Driveに自動保存済み');
+    }
+  });
+}
+
+async function getEmail(){try{const r=await gapi.client.request({path:'https://www.googleapis.com/oauth2/v3/userinfo'});return r.result.email;}catch(e){return null;}}
+async function findDriveFile(){const r=await gapi.client.drive.files.list({spaces:'appDataFolder',q:`name='${DRIVE_FILE_NAME}'`,fields:'files(id)',pageSize:1});return r.result.files[0]?.id||null;}
+async function driveLoad(){try{driveFileId=await findDriveFile();if(!driveFileId)return;const r=await gapi.client.drive.files.get({fileId:driveFileId,alt:'media'});const d=typeof r.result==='string'?JSON.parse(r.result):r.result;if(d.weights&&d.weights.length===FORMULAS.length)weights=d.weights;if(d.stats)stats=d.stats;if(typeof d.currentIdx==='number')currentIdx=d.currentIdx;currentCardId=FORMULAS[currentIdx]?.id||FORMULAS[0].id;renderCard();updateStats();if(weakOpen)renderWeakList();}catch(e){}}
+async function driveSave(){const body=JSON.stringify({weights,stats,currentIdx,updated:new Date().toISOString()});if(!driveFileId){const r=await gapi.client.request({path:'/upload/drive/v3/files',method:'POST',params:{uploadType:'multipart',fields:'id'},headers:{'Content-Type':'multipart/related; boundary=foo'},body:'--foo\r\nContent-Type: application/json\r\n\r\n'+JSON.stringify({name:DRIVE_FILE_NAME,parents:['appDataFolder']})+'\r\n--foo\r\nContent-Type: application/json\r\n\r\n'+body+'\r\n--foo--'});driveFileId=r.result.id;}else{await gapi.client.request({path:'/upload/drive/v3/files/'+driveFileId,method:'PATCH',params:{uploadType:'media'},headers:{'Content-Type':'application/json'},body});}}
+function updateDriveBtn(){const btn=document.getElementById('drive-toggle-btn');if(accessToken){btn.textContent='☁️ Drive接続中';btn.style.color='#6898f4';btn.style.borderColor='rgba(66,133,244,0.4)';}else{btn.textContent='☁️ Drive連携';btn.style.color='';btn.style.borderColor='';}}
+function openDriveModal(){if(accessToken){document.getElementById('modal-setup').style.display='none';document.getElementById('modal-connected').style.display='block';document.getElementById('modal-actions').style.display='none';}else{document.getElementById('modal-setup').style.display='block';document.getElementById('modal-connected').style.display='none';document.getElementById('modal-actions').style.display='flex';document.getElementById('client-id-input').value=clientId;}document.getElementById('drive-modal').classList.add('show');}
+function closeDriveModal(){document.getElementById('drive-modal').classList.remove('show');}
+function connectDrive(){const cid=document.getElementById('client-id-input').value.trim();if(!cid){alert('クライアントIDを入力してください');return;}clientId=cid;localStorage.setItem('mathcard_client_id',cid);if(!gapiReady||!gisReady){alert('Google APIの読み込みが完了していません。リロードしてお試しください。');return;}initTokenClient(cid);tokenClient.requestAccessToken({prompt:'consent'});closeDriveModal();}
+function disconnectDrive(){if(accessToken)google.accounts.oauth2.revoke(accessToken);accessToken=null;driveFileId=null;driveEmail=null;localStorage.removeItem('mathcard_client_id');localStorage.removeItem('mathcard_email');clientId='';savedEmail='';setSaveBar('local','ローカルに自動保存中');updateDriveBtn();closeDriveModal();}
+function forceDriveSync(){if(!accessToken){alert('まずDriveに接続してください');return;}setSaveBar('saving','同期中…');driveSave().then(()=>{setSaveBar('drive','☁️ 同期完了');closeDriveModal();}).catch(()=>setSaveBar('error','同期に失敗'));}
+
+// ── CARD LOGIC ──
+function dc(w){return w<=0.8?"#4ade80":w<=2?"#fbbf24":w<=5?"#f97316":"#f43f5e";}
+
+function getFilteredFormulas(){
+  return studyCat==='すべて' ? FORMULAS : FORMULAS.filter(f=>f.category===studyCat);
+}
+
+function pickNext(wts,lastId){
+  const pool = getFilteredFormulas();
+  const eligible = pool.map(f=>({i:FORMULAS.findIndex(x=>x.id===f.id), f, w:f.id===lastId?0:wts[FORMULAS.findIndex(x=>x.id===f.id)]}));
+  const total = eligible.reduce((s,e)=>s+e.w,0);
+  if(!total) return eligible[0]?.i||0;
+  let r=Math.random()*total;
+  for(const e of eligible){r-=e.w;if(r<=0)return e.i;}
+  return eligible[0].i;
+}
+
+function renderCard(){
+  const f=FORMULAS[currentIdx];currentCardId=f.id;
+  document.getElementById('f-cat').textContent=f.category;
+  document.getElementById('f-name').textContent=f.name;
+  document.getElementById('f-question').textContent=f.question;
+  document.getElementById('f-id').textContent='#'+f.id+'/'+FORMULAS.length;
+  const dot=document.getElementById('f-dot');dot.style.background=dc(weights[currentIdx]);dot.style.boxShadow='0 0 7px '+dc(weights[currentIdx]);
+  document.getElementById('b-answer').textContent=f.answer;
+  document.getElementById('b-detail').textContent='💡 '+f.detail;
+  document.getElementById('card-inner').classList.remove('flipped');
+  isFlipped=false;document.getElementById('ans-btns').classList.remove('show');
+  updateCatProgress();
+}
+
+function flipCard(){isFlipped=!isFlipped;document.getElementById('card-inner').classList.toggle('flipped',isFlipped);document.getElementById('ans-btns').classList.toggle('show',isFlipped);}
+
+function answer(ok){
+  const nw=[...weights];nw[currentIdx]=ok?Math.max(0.3,nw[currentIdx]*0.55):nw[currentIdx]*4+3;
+  weights=nw;stats.c+=ok?1:0;stats.w+=ok?0:1;stats.t++;
+  updateStats();autoSave();currentIdx=pickNext(weights,currentCardId);renderCard();if(weakOpen)renderWeakList();
+}
+
+function updateStats(){
+  document.getElementById('s-c').textContent=stats.c;
+  document.getElementById('s-w').textContent=stats.w;
+  document.getElementById('s-t').textContent=stats.t;
+  document.getElementById('s-acc').textContent=stats.t>0?Math.round(stats.c/stats.t*100)+'%':'--';
+  document.getElementById('prog-fill').style.width=Math.min(100,stats.t/FORMULAS.length*100)+'%';
+}
+
+function updateCatProgress(){
+  const pool=getFilteredFormulas();
+  const masterd=pool.filter(f=>weights[FORMULAS.findIndex(x=>x.id===f.id)]<=0.8).length;
+  document.getElementById('cat-progress').textContent=
+    studyCat==='すべて'
+    ? `全${pool.length}問 / 習得済み ${masterd}問`
+    : `${studyCat}：${pool.length}問 / 習得済み ${masterd}問`;
+}
+
+function toggleWeak(){weakOpen=!weakOpen;document.getElementById('weak-panel').style.display=weakOpen?'block':'none';document.getElementById('weak-toggle').classList.toggle('open',weakOpen);if(weakOpen)renderWeakList();}
+
+function renderWeakList(){
+  const sorted=[...FORMULAS].map((f,i)=>({...f,w:weights[i]})).sort((a,b)=>b.w-a.w).slice(0,10);
+  document.getElementById('weak-list').innerHTML=sorted.map(f=>`
+    <div class="weak-row">
+      <span class="weak-name">${f.name}</span>
+      <div class="weak-meta">
+        <span class="weak-cat">${f.category}</span>
+        <div class="dot" style="background:${dc(f.w)};box-shadow:0 0 5px ${dc(f.w)}"></div>
+        <button class="mini-btn" onclick="jumpToFormula(${f.id})">確認</button>
+      </div>
+    </div>`).join('');
+}
+
+function confirmReset(){if(confirm('学習データをすべてリセットしますか？')){weights=FORMULAS.map(()=>1);stats={c:0,w:0,t:0};currentIdx=0;saveLocal();if(accessToken)driveSave();updateStats();renderCard();if(weakOpen)renderWeakList();}}
+
+// ── STUDY CATEGORY FILTER ──
+function setStudyCat(c){
+  studyCat=c;
+  document.querySelectorAll('.study-cat-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.study-cat-btn').forEach(b=>{if(b.dataset.cat===c)b.classList.add('active');});
+  // pick first card from new category
+  const pool=getFilteredFormulas();
+  if(pool.length>0){
+    currentIdx=FORMULAS.findIndex(x=>x.id===pool[0].id);
+    currentIdx=pickNext(weights,null);
+  }
+  renderCard();
+}
+
+function initStudyCatFilters(){
+  const wrap=document.getElementById('study-cat-filters');
+  let html=`<button class="study-cat-btn active" data-cat="すべて" onclick="setStudyCat('すべて')">すべて</button>`;
+  CATEGORIES.forEach(c=>{html+=`<button class="study-cat-btn" data-cat="${c}" onclick="setStudyCat('${c}')">${c}</button>`;});
+  wrap.innerHTML=html;
+}
+
+// ── MODE & REFERENCE ──
+function switchMode(mode){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById(mode+'-page').classList.add('active');
+  document.querySelectorAll('.tab-btn')[mode==='study'?0:1].classList.add('active');
+  document.getElementById('fab').classList.toggle('show',mode==='reference');
+  if(mode==='reference')renderRef();
+}
+
+function jumpToFormula(id){
+  refCat='すべて';refSearch='';document.getElementById('ref-search').value='';
+  switchMode('reference');
+  setTimeout(()=>{const el=document.getElementById('fc-'+id);if(el){el.scrollIntoView({behavior:'smooth',block:'center'});el.classList.add('highlight');setTimeout(()=>el.classList.remove('highlight'),2500);}},200);
+}
+
+function filterRef(){refSearch=document.getElementById('ref-search').value;renderRef();}
+
+function setCat(c,btn){
+  refCat=c;
+  document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderRef();
+}
+
+function renderRef(){
+  const q=refSearch.toLowerCase();
+  const filtered=FORMULAS.filter(f=>{const mc=refCat==='すべて'||f.category===refCat;const mq=!q||f.name.toLowerCase().includes(q)||f.question.toLowerCase().includes(q)||f.answer.toLowerCase().includes(q)||f.category.toLowerCase().includes(q);return mc&&mq;});
+  document.getElementById('ref-count').textContent=filtered.length+' 件 / 全 '+FORMULAS.length+' 公式';
+  const cats=CATEGORIES.filter(c=>refCat==='すべて'||refCat===c);
+  let html='';
+  for(const c of cats){
+    const list=filtered.filter(f=>f.category===c);if(!list.length)continue;
+    html+=`<div class="cat-section"><div class="cat-header">▸ ${c} <span class="cat-count">${list.length} 公式</span></div><div class="formula-grid">`;
+    for(const f of list){const fi=FORMULAS.findIndex(x=>x.id===f.id);html+=`<div class="formula-card" id="fc-${f.id}"><div class="fc-top"><span class="fc-name">${f.name}</span><div class="fc-right"><div class="dot" style="background:${dc(weights[fi])}"></div><button class="mini-btn" onclick="goToCard(${fi})">問題へ</button></div></div><div class="fc-q">${f.question}</div><div class="fc-ans">${f.answer}</div><div class="fc-detail">${f.detail}</div></div>`;}
+    html+='</div></div>';
+  }
+  document.getElementById('ref-content').innerHTML=html;
+}
+
+function goToCard(i){currentIdx=i;switchMode('study');renderCard();}
+
+function initCatFilters(){
+  let html=`<button class="cat-btn active" onclick="setCat('すべて',this)">すべて</button>`;
+  CATEGORIES.forEach(c=>{html+=`<button class="cat-btn" onclick="setCat('${c}',this)">${c}</button>`;});
+  document.getElementById('cat-filters').innerHTML=html;
+}
+
+// ── INIT ──
+loadLocal();
+initStudyCatFilters();
+initCatFilters();
+renderCard();
+updateStats();
+renderRef();
+setSaveBar('local','ローカルに自動保存中');
+if(clientId) setSaveBar('local','Drive連携を確認中…');
+</script>
+</body>
+</html>
