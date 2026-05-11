@@ -1,87 +1,153 @@
-/* math-g-cards v2 theme overlay - stronger transparency
-   目的: 背景画像を濃く見せ、カード・公式集・設定欄の透過感を強める
-   2026-05-11 */
+/* math-g-cards v2 theme overlay - fixed clear background / strong transparency
+   目的:
+   - 背景をぼかさず原画のまま表示
+   - 背景をスクロールで動かさない
+   - カード・公式集・設定欄の透過を強める
+   2026-05-13 */
 :root{
   --bg:#f3ead7;
-  --panel:rgba(255,252,244,.48);
-  --line:rgba(92,76,54,.22);
-  --text:#27221c;
-  --sub:#625746;
+  --panel:rgba(255,252,244,.24);
+  --line:rgba(92,76,54,.24);
+  --text:#241f18;
+  --sub:#554b3d;
   --accent:#7a5a2f;
-  --soft:rgba(255,246,222,.62);
-  --danger:rgba(255,235,238,.70);
-  --warn:rgba(255,246,224,.74);
-  --ok:rgba(236,248,236,.70);
-  --easy:rgba(234,246,255,.66);
+  --soft:rgba(255,246,222,.38);
+  --danger:rgba(255,235,238,.42);
+  --warn:rgba(255,246,224,.44);
+  --ok:rgba(236,248,236,.42);
+  --easy:rgba(234,246,255,.38);
 }
-html{background:#efe3cf;}
+
+html{
+  min-height:100%;
+  background:#efe3cf;
+}
+
+/* 背景画像は body ではなく固定レイヤーに置く。
+   Android Chrome でも background-attachment:fixed より動きにくい方式。 */
 body{
   min-height:100vh;
-  background:
-    linear-gradient(180deg,rgba(248,242,230,.18),rgba(238,225,204,.28)),
-    url('./app-bg.jpg') center top/cover fixed no-repeat !important;
+  margin:0;
+  background:transparent !important;
   color:var(--text);
 }
+
+/* 原画そのまま。blur/filter/白い膜なし。 */
 body::before{
   content:"";
   position:fixed;
   inset:0;
+  z-index:-2;
   pointer-events:none;
-  background:
-    radial-gradient(circle at 20% 10%,rgba(255,255,255,.12),transparent 28%),
-    linear-gradient(180deg,rgba(255,251,242,.04),rgba(65,49,34,.08));
-  z-index:-1;
+  background:url('./app-bg.jpg') center center / cover no-repeat;
+  transform:translateZ(0);
 }
-.wrap{max-width:1040px;padding:clamp(10px,2.8vw,18px);}
-.panel,.flashcard,.formula-item,.stat,.sync-box,#status,#syncStatus,input[type=search],input[type=text]{
-  backdrop-filter:blur(8px) saturate(1.04);
-  -webkit-backdrop-filter:blur(8px) saturate(1.04);
+
+/* 背景を原画に近く見せるため、全体の白かぶりレイヤーは置かない */
+body::after{
+  content:none !important;
 }
+
+.wrap{
+  max-width:1040px;
+  padding:clamp(10px,2.8vw,18px);
+}
+
+/* 背景がボケる原因なので blur は完全停止 */
+.panel,
+.flashcard,
+.formula-item,
+.stat,
+.sync-box,
+#status,
+#syncStatus,
+input[type=search],
+input[type=text],
+.settings-panel{
+  backdrop-filter:none !important;
+  -webkit-backdrop-filter:none !important;
+}
+
 .panel{
-  background:rgba(255,252,244,.48) !important;
-  border-color:rgba(101,82,56,.22) !important;
-  box-shadow:0 12px 26px rgba(54,39,24,.14) !important;
+  background:rgba(255,252,244,.24) !important;
+  border-color:rgba(101,82,56,.25) !important;
+  box-shadow:0 8px 18px rgba(54,39,24,.10) !important;
 }
+
 header.panel{
-  background:linear-gradient(135deg,rgba(255,252,242,.46),rgba(244,231,205,.34)) !important;
+  background:rgba(255,252,244,.22) !important;
 }
-h1{letter-spacing:.01em;text-shadow:0 1px 0 rgba(255,255,255,.56);}
+
+h1{
+  letter-spacing:.01em;
+  text-shadow:
+    0 1px 0 rgba(255,255,255,.60),
+    0 0 8px rgba(255,252,244,.40);
+}
+
 button{
-  background:rgba(255,252,244,.64) !important;
-  border-color:rgba(96,77,52,.26) !important;
-  box-shadow:0 3px 8px rgba(49,36,21,.07);
+  background:rgba(255,252,244,.42) !important;
+  border-color:rgba(96,77,52,.30) !important;
+  box-shadow:0 2px 6px rgba(49,36,21,.06);
 }
+
 button.primary{
-  background:linear-gradient(135deg,rgba(114,82,44,.92),rgba(157,115,64,.92)) !important;
-  border-color:#6e4f2b !important;
+  background:linear-gradient(135deg,rgba(114,82,44,.86),rgba(157,115,64,.86)) !important;
+  border-color:rgba(110,79,43,.78) !important;
   color:#fff !important;
 }
-button.soft{background:rgba(255,244,215,.62) !important;color:#604418 !important;}
-button.active{background:rgba(44,37,28,.92) !important;color:#fff !important;border-color:#2c251c !important;}
-button.danger{background:rgba(255,235,238,.70) !important;}
-button.ok{background:rgba(232,248,232,.68) !important;}
-button.warn{background:rgba(255,243,216,.74) !important;}
-button.easy{background:rgba(231,245,255,.66) !important;}
+
+button.soft{
+  background:rgba(255,244,215,.34) !important;
+  color:#604418 !important;
+}
+
+button.active{
+  background:rgba(44,37,28,.84) !important;
+  color:#fff !important;
+  border-color:rgba(44,37,28,.86) !important;
+}
+
+button.danger{background:rgba(255,235,238,.38) !important;}
+button.ok{background:rgba(232,248,232,.36) !important;}
+button.warn{background:rgba(255,243,216,.40) !important;}
+button.easy{background:rgba(231,245,255,.34) !important;}
+
 .flashcard{
-  background:linear-gradient(180deg,rgba(255,255,251,.42),rgba(255,248,235,.26)) !important;
-  border-color:rgba(115,91,61,.22) !important;
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.28),0 8px 18px rgba(42,29,16,.08);
+  background:rgba(255,252,244,.18) !important;
+  border-color:rgba(115,91,61,.24) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.22),
+    0 6px 14px rgba(42,29,16,.07);
 }
-.answer,.stat,.formula-item,.sync-box,#status,#syncStatus{
-  background:rgba(255,252,244,.40) !important;
-  border-color:rgba(104,84,57,.20) !important;
+
+.answer,
+.stat,
+.formula-item,
+.sync-box,
+#status,
+#syncStatus{
+  background:rgba(255,252,244,.22) !important;
+  border-color:rgba(104,84,57,.22) !important;
 }
-input[type=search],input[type=text]{background:rgba(255,253,248,.56) !important;}
+
+input[type=search],
+input[type=text]{
+  background:rgba(255,253,248,.36) !important;
+}
+
 .settings-panel{
   margin-top:12px;
-  border:1px solid rgba(101,82,56,.22);
+  border:1px solid rgba(101,82,56,.24);
   border-radius:18px;
-  background:rgba(255,252,244,.30);
+  background:rgba(255,252,244,.18);
   overflow:hidden;
-  backdrop-filter:blur(8px) saturate(1.04);
-  -webkit-backdrop-filter:blur(8px) saturate(1.04);
 }
-.settings-panel[open]{background:rgba(255,252,244,.42);}
+
+.settings-panel[open]{
+  background:rgba(255,252,244,.24);
+}
+
 .settings-panel summary{
   list-style:none;
   cursor:pointer;
@@ -91,39 +157,97 @@ input[type=search],input[type=text]{background:rgba(255,253,248,.56) !important;
   justify-content:space-between;
   gap:10px;
   font-weight:700;
-  color:#3a3024;
+  color:#30271c;
 }
-.settings-panel summary::-webkit-details-marker{display:none;}
+
+.settings-panel summary::-webkit-details-marker{
+  display:none;
+}
+
 .settings-panel summary::after{
   content:"開く";
   font-size:.86rem;
-  color:#6f5e49;
-  border:1px solid rgba(111,94,73,.25);
+  color:#5b4a35;
+  border:1px solid rgba(111,94,73,.28);
   border-radius:999px;
   padding:3px 10px;
-  background:rgba(255,255,255,.34);
+  background:rgba(255,255,255,.24);
 }
-.settings-panel[open] summary::after{content:"閉じる";}
-.settings-body{padding:0 12px 12px;}
-.settings-body .sync-grid{display:grid !important;grid-template-columns:1fr 1fr;gap:12px;margin-top:0;}
-.math-plain{white-space:pre-wrap;}
-.formula-enhanced .math-plain{margin-bottom:8px;}
-.math-formula-list{display:grid;gap:7px;margin-top:8px;}
+
+.settings-panel[open] summary::after{
+  content:"閉じる";
+}
+
+.settings-body{
+  padding:0 12px 12px;
+}
+
+.settings-body .sync-grid{
+  display:grid !important;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+  margin-top:0;
+}
+
+.math-plain{
+  white-space:pre-wrap;
+}
+
+.formula-enhanced .math-plain{
+  margin-bottom:8px;
+}
+
+.math-formula-list{
+  display:grid;
+  gap:7px;
+  margin-top:8px;
+}
+
 .math-formula{
   overflow-x:auto;
   -webkit-overflow-scrolling:touch;
   padding:10px 12px;
   border-radius:13px;
-  background:rgba(255,255,255,.28);
-  border:1px solid rgba(109,89,60,.14);
+  background:rgba(255,255,255,.18);
+  border:1px solid rgba(109,89,60,.16);
 }
-.math-formula .katex{font-size:1.12em;}
-.prompt .math-formula .katex{font-size:1.02em;}
-.katex-display{margin:.2em 0 !important;}
+
+.math-formula .katex{
+  font-size:1.12em;
+}
+
+.prompt .math-formula .katex{
+  font-size:1.02em;
+}
+
+.katex-display{
+  margin:.2em 0 !important;
+}
+
+/* 透過を強めるぶん、文字の読みやすさだけ少し補強 */
+.prompt,
+.answer,
+.formula-item,
+.stat,
+#status,
+#syncStatus,
+.note,
+.meta,
+.formula-item .ans{
+  text-shadow:0 1px 2px rgba(255,255,255,.46);
+}
+
 @media(max-width:720px){
-  body{background-attachment:scroll !important;}
-  .panel{border-radius:16px;}
-  .flashcard{min-height:220px;}
-  .settings-body .sync-grid{grid-template-columns:1fr;}
-  .math-formula{padding:8px 10px;}
+  .panel{
+    border-radius:16px;
+  }
+  .flashcard{
+    min-height:220px;
+  }
+  .settings-body .sync-grid{
+    grid-template-columns:1fr;
+  }
+  .math-formula{
+    padding:8px 10px;
+  }
 }
