@@ -1,197 +1,29 @@
-/* math-g-cards v2 enhancement overlay - full textbook math rendering
-   2026-05-18 */
+/* math-g-cards v2.0.19: no duplicate + textbook inline math */
 (function(){
-  'use strict';
-  var busy=false, debounceTimer=null, THEME_VERSION='20260518';
-
-  function ready(fn){ if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', fn); else fn(); }
-
-  function ensureLatestTheme(){
-    var latest='./math-v2-theme.css?v='+THEME_VERSION;
-    var hasLatest=[].slice.call(document.querySelectorAll('link[rel="stylesheet"]')).some(function(l){
-      return (l.getAttribute('href')||'').indexOf('math-v2-theme.css?v='+THEME_VERSION)!==-1;
-    });
-    if(!hasLatest){
-      var l=document.createElement('link'); l.rel='stylesheet'; l.href=latest; document.head.appendChild(l);
-    }
-    setTimeout(function(){
-      [].slice.call(document.querySelectorAll('link[rel="stylesheet"]')).forEach(function(l){
-        var h=l.getAttribute('href')||'';
-        if(h.indexOf('math-v2-theme.css')!==-1 && h.indexOf('v='+THEME_VERSION)===-1){
-          l.parentNode && l.parentNode.removeChild(l);
-        }
-      });
-    },0);
-  }
-
-  function addCss(href){
-    var base=href.split('/').pop().split('?')[0];
-    if(document.querySelector('link[href*="'+base+'"]')) return;
-    var l=document.createElement('link'); l.rel='stylesheet'; l.href=href; document.head.appendChild(l);
-  }
-  function addScript(src, cb){
-    if(window.katex){ cb&&cb(); return; }
-    var existing=document.querySelector('script[src*="katex.min.js"]');
-    if(existing){ existing.addEventListener('load', function(){cb&&cb();}); setTimeout(function(){cb&&cb();},800); return; }
-    var s=document.createElement('script'); s.src=src; s.defer=true; s.onload=function(){cb&&cb();}; document.head.appendChild(s);
-  }
-  function ensureAssets(cb){
-    ensureLatestTheme();
-    addCss('https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css');
-    addScript('https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js', cb);
-  }
-
-  function wrapDriveSettings(){
-    var header=document.querySelector('header.panel');
-    if(!header || header.querySelector('.settings-panel')) return;
-    var sync=header.querySelector(':scope > .sync-grid') || header.querySelector('.sync-grid');
-    if(!sync) return;
-    var details=document.createElement('details'); details.className='settings-panel';
-    var summary=document.createElement('summary'); summary.textContent='設定・Google Drive保存';
-    var body=document.createElement('div'); body.className='settings-body'; body.appendChild(sync);
-    details.appendChild(summary); details.appendChild(body); header.appendChild(details);
-  }
-
-  var supMap={'⁰':'0','¹':'1','²':'2','³':'3','⁴':'4','⁵':'5','⁶':'6','⁷':'7','⁸':'8','⁹':'9','ⁿ':'n'};
-  var subMap={'₀':'0','₁':'1','₂':'2','₃':'3','₄':'4','₅':'5','₆':'6','₇':'7','₈':'8','₉':'9'};
-
-  function hasMath(s){ return /[=√∑∫±×÷<>≤≥∞πθθαβγxyabcABCrlmnRSTuvDEFGHIJKLMNOPQXYZ\/²³₀₁₂₃₄₅₆₇₈₉]|sin|cos|tan|log|ln|lim|rad|dx|dy/.test(s||''); }
-
-  function formulaish(s){
-    s=(s||'').trim(); if(!s) return false;
-    if(/[=√∑∫±×÷<>≤≥∞πθθαβγ\/²³₀₁₂₃₄₅₆₇₈₉°]/.test(s)) return true;
-    if(/\b(sin|cos|tan|log|ln|lim|rad)\b/i.test(s)) return true;
-    if(/[A-Za-z]\s*\([^)]*\)/.test(s)) return true;
-    if(/[A-Za-z]\s*,\s*[A-Za-z]/.test(s)) return true;
-    if(/[A-Za-z]\s*[+\-*]\s*[A-Za-z0-9]/.test(s)) return true;
-    if(s.length<=2 && /^[A-Za-z]$/.test(s)) return false;
-    if(/^[A-Za-z0-9]+$/.test(s) && s.length<=3) return false;
-    return /[A-Za-z].*\d|\d.*[A-Za-z]/.test(s);
-  }
-  function isFormulaChar(ch){ return /[A-Za-z0-9αβγθπ√∑∫±×÷=<>≤≥∞^+\-*\/(){}[\],._|°²³⁰¹⁴⁵⁶⁷⁸⁹ⁿ₀₁₂₃₄₅₆₇₈₉]/.test(ch); }
-
-  function splitSegments(line){
-    var segs=[], buf='', mode=null;
-    function flush(){
-      if(!buf) return;
-      if(mode==='math' && formulaish(buf)) segs.push({type:'math',text:buf});
-      else segs.push({type:'text',text:buf});
-      buf=''; mode=null;
-    }
-    for(var i=0;i<line.length;i++){
-      var ch=line.charAt(i);
-      if(ch===' ' || ch==='　'){ buf+=ch; if(!mode) mode='text'; continue; }
-      var m=isFormulaChar(ch);
-      if(m){ if(mode==='text') flush(); mode='math'; buf+=ch; }
-      else{ if(mode==='math') flush(); mode='text'; buf+=ch; }
-    }
-    flush();
-    var merged=[];
-    for(var j=0;j<segs.length;j++){
-      if(segs[j].type==='text' && /^[\s　]+$/.test(segs[j].text) &&
-         merged.length && merged[merged.length-1].type==='math' && segs[j+1] && segs[j+1].type==='math'){
-        merged[merged.length-1].text += segs[j].text + segs[j+1].text; j++;
-      }else merged.push(segs[j]);
-    }
-    return merged;
-  }
-
-  function mapSeq(s,map,mark){
-    var keys=Object.keys(map).join(''), re=new RegExp('['+keys+']+','g');
-    return s.replace(re,function(m){ return mark+'{'+m.split('').map(function(c){return map[c]||c;}).join('')+'}'; });
-  }
-  function findMatchingLeftParen(s, closeIdx){
-    var depth=0; for(var i=closeIdx;i>=0;i--){ if(s[i]===')') depth++; else if(s[i]==='('){ depth--; if(depth===0) return i; } } return -1;
-  }
-  function findMatchingRightParen(s, openIdx){
-    var depth=0; for(var i=openIdx;i<s.length;i++){ if(s[i]==='(') depth++; else if(s[i]===')'){ depth--; if(depth===0) return i; } } return -1;
-  }
-  function isFracBoundary(ch){ return !ch || /[=,+;、，]/.test(ch); }
-  function convertFractions(s){
-    var guard=0;
-    while(s.indexOf('/')!==-1 && guard<20){
-      guard++;
-      var i=s.indexOf('/'), le=i-1, rs=i+1;
-      while(le>=0 && /\s/.test(s[le])) le--;
-      while(rs<s.length && /\s/.test(s[rs])) rs++;
-      if(le<0 || rs>=s.length) break;
-      var ns,ne,num,ds,de,den;
-      if(s[le]===')'){ var lp=findMatchingLeftParen(s,le); if(lp<0) break; ns=lp; ne=le+1; num=s.slice(lp+1,le); }
-      else{ ns=le; while(ns>=0 && !isFracBoundary(s[ns]) && s[ns]!==')' && s[ns]!=='(' && !/\s/.test(s[ns])) ns--; ns++; ne=le+1; num=s.slice(ns,ne); }
-      if(s[rs]==='('){ var rp=findMatchingRightParen(s,rs); if(rp<0) break; ds=rs; de=rp+1; den=s.slice(rs+1,rp); }
-      else{ ds=rs; de=rs; while(de<s.length && !isFracBoundary(s[de]) && s[de]!==')' && !/\s/.test(s[de])) de++; den=s.slice(ds,de); }
-      if(!num || !den || num.indexOf('\\frac')!==-1 || den.indexOf('\\frac')!==-1){ s=s.slice(0,i)+'\\,/\\,'+s.slice(i+1); continue; }
-      s=s.slice(0,ns)+'\\frac{'+num+'}{'+den+'}'+s.slice(de);
-    }
-    return s;
-  }
-  function normalizeLatex(s){
-    s=(s||'').trim().replace(/[。]/g,'').replace(/　/g,' ');
-    s=s.replace(/≠/g,'\\ne ').replace(/≥/g,'\\ge ').replace(/≤/g,'\\le ').replace(/±/g,'\\pm ')
-       .replace(/×/g,'\\times ').replace(/÷/g,'\\div ').replace(/∞/g,'\\infty ')
-       .replace(/π/g,'\\pi ').replace(/θ/g,'\\theta ').replace(/α/g,'\\alpha ').replace(/β/g,'\\beta ').replace(/γ/g,'\\gamma ')
-       .replace(/Δ/g,'\\Delta ').replace(/°/g,'^{\\circ}');
-    s=mapSeq(s,supMap,'^'); s=mapSeq(s,subMap,'_');
-    s=s.replace(/√\\?\\{([^{}]+)\\}/g,'\\sqrt{$1}').replace(/√\(([^()]+)\)/g,'\\sqrt{$1}').replace(/√([A-Za-z0-9\\{}_^+\-]+)/g,'\\sqrt{$1}');
-    s=s.replace(/\b(sin|cos|tan|log|ln)(\^\{[^}]+\})?\s*([A-Za-z\\][A-Za-z0-9\\{}_^]*)?/g,function(_,fn,pow,arg){ return '\\'+fn+(pow||'')+(arg?' '+arg:''); });
-    s=convertFractions(s);
-    return s;
-  }
-  function mostlyMath(line,segs){
-    var jp=(line.match(/[ぁ-んァ-ン一-龯]/g)||[]).length;
-    if(jp>0) return false;
-    if(line.indexOf('=')!==-1) return true;
-    return segs.length===1 && segs[0].type==='math' && line.length>7;
-  }
-  function sourceText(el){
-    var raw=el.getAttribute('data-v2-source');
-    if(raw) return raw;
-    var oldPlain=el.querySelector('.math-plain');
-    raw=oldPlain ? oldPlain.textContent : el.textContent;
-    raw=(raw||'').trim();
-    if(raw) el.setAttribute('data-v2-source', raw);
-    return raw;
-  }
-  function renderMathSpan(parent,text,displayMode){
-    var span=document.createElement('span'); span.className=displayMode?'textbook-display-math':'textbook-math';
-    var latex=normalizeLatex(text);
-    try{ window.katex.render(latex, span, {displayMode:displayMode, throwOnError:false, strict:'ignore'}); }
-    catch(e){ span.textContent=text; }
-    parent.appendChild(span);
-  }
-  function renderLine(parent,line,targetKind){
-    var lineBox=document.createElement('span'); lineBox.className='textbook-line';
-    var segs=splitSegments(line), display=mostlyMath(line,segs) && targetKind!=='prompt';
-    if(display){ renderMathSpan(lineBox,line,true); parent.appendChild(lineBox); return; }
-    segs.forEach(function(seg){ if(seg.type==='math') renderMathSpan(lineBox,seg.text,false); else lineBox.appendChild(document.createTextNode(seg.text)); });
-    parent.appendChild(lineBox);
-  }
-  function renderTextbook(el,targetKind){
-    if(!el || busy || !window.katex) return;
-    var raw=sourceText(el); if(!raw) return;
-    if(el.getAttribute('data-v2-rendered')===THEME_VERSION && el.getAttribute('data-v2-rendered-raw')===raw) return;
-    busy=true;
-    el.innerHTML=''; el.classList.add('textbook-rendered'); el.setAttribute('data-v2-rendered',THEME_VERSION); el.setAttribute('data-v2-rendered-raw',raw);
-    raw.split(/\n+/).forEach(function(line){ renderLine(el,line,targetKind); });
-    busy=false;
-  }
-  function enhanceAll(){
-    ensureLatestTheme();
-    if(!window.katex) return;
-    renderTextbook(document.querySelector('#cardPrompt'),'prompt');
-    renderTextbook(document.querySelector('#cardAnswer'),'answer');
-    document.querySelectorAll('.formula-item .ans').forEach(function(el){ renderTextbook(el,'formula'); });
-  }
-  function scheduleEnhance(){ clearTimeout(debounceTimer); debounceTimer=setTimeout(enhanceAll,80); }
-
-  ready(function(){
-    ensureAssets(function(){
-      wrapDriveSettings(); enhanceAll();
-      var observer=new MutationObserver(function(){ if(!busy) scheduleEnhance(); });
-      observer.observe(document.body,{childList:true,subtree:true,characterData:true});
-      ['click','input','change'].forEach(function(ev){
-        document.addEventListener(ev,function(){ setTimeout(function(){ wrapDriveSettings(); enhanceAll(); },120); },true);
-      });
-    });
-  });
+'use strict';
+var V='20260519',busy=false,timer=null;
+function ready(f){document.readyState==='loading'?document.addEventListener('DOMContentLoaded',f):f();}
+function ensureTheme(){var href='./math-v2-theme.css?v='+V,ok=[].slice.call(document.querySelectorAll('link[rel="stylesheet"]')).some(function(l){return (l.href||'').indexOf('math-v2-theme.css?v='+V)>=0});if(!ok){var l=document.createElement('link');l.rel='stylesheet';l.href=href;document.head.appendChild(l);}setTimeout(function(){[].slice.call(document.querySelectorAll('link[rel="stylesheet"]')).forEach(function(l){var h=l.getAttribute('href')||'';if(h.indexOf('math-v2-theme.css')>=0&&h.indexOf('v='+V)<0)l.remove();});},0);}
+function addCss(h){if(document.querySelector('link[href*="'+h.split('/').pop().split('?')[0]+'"]'))return;var l=document.createElement('link');l.rel='stylesheet';l.href=h;document.head.appendChild(l);}
+function addScript(s,cb){if(window.katex){cb&&cb();return;}var e=document.querySelector('script[src*="katex.min.js"]');if(e){e.addEventListener('load',function(){cb&&cb();});setTimeout(function(){cb&&cb();},800);return;}var x=document.createElement('script');x.src=s;x.defer=true;x.onload=function(){cb&&cb();};document.head.appendChild(x);}
+function assets(cb){ensureTheme();addCss('https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css');addScript('https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js',cb);}
+function wrapDrive(){var h=document.querySelector('header.panel');if(!h||h.querySelector('.settings-panel'))return;var s=h.querySelector(':scope > .sync-grid')||h.querySelector('.sync-grid');if(!s)return;var d=document.createElement('details');d.className='settings-panel';var sm=document.createElement('summary');sm.textContent='設定・Google Drive保存';var b=document.createElement('div');b.className='settings-body';b.appendChild(s);d.appendChild(sm);d.appendChild(b);h.appendChild(d);}
+function labels(){var k=document.querySelector('#cardBox .kicker');if(k)k.textContent='問題';var a=document.querySelector('#cardAnswer');if(!a)return;var t=document.querySelector('#cardAnswerTitle');if(!t){t=document.createElement('div');t.id='cardAnswerTitle';t.className='answer-title';t.textContent='答え';a.parentNode.insertBefore(t,a);}t.classList.toggle('visible',getComputedStyle(a).display!=='none');}
+var sup={'⁰':'0','¹':'1','²':'2','³':'3','⁴':'4','⁵':'5','⁶':'6','⁷':'7','⁸':'8','⁹':'9','ⁿ':'n'},sub={'₀':'0','₁':'1','₂':'2','₃':'3','₄':'4','₅':'5','₆':'6','₇':'7','₈':'8','₉':'9'};
+function mathChar(c){return /[A-Za-z0-9αβγθπ√∑∫±×÷=<>≤≥∞^+\-*\/(){}[\],._|°²³⁰¹⁴⁵⁶⁷⁸⁹ⁿ₀₁₂₃₄₅₆₇₈₉]/.test(c);}
+function formulaish(s){s=(s||'').trim();if(!s)return false;if(/[=√∑∫±×÷<>≤≥∞πθθαβγ\/²³₀₁₂₃₄₅₆₇₈₉°]/.test(s))return true;if(/\b(sin|cos|tan|log|ln|lim|rad)\b/i.test(s))return true;if(/[A-Za-z]\s*\([^)]*\)/.test(s))return true;if(/[A-Za-z]\s*,\s*[A-Za-z]/.test(s))return true;if(/[A-Za-z]\s*[+\-*]\s*[A-Za-z0-9]/.test(s))return true;if(/^[A-Za-z]$/.test(s))return false;if(/^[A-Za-z0-9]+$/.test(s)&&s.length<=3)return false;return /[A-Za-z].*\d|\d.*[A-Za-z]/.test(s);}
+function splitLine(line){var a=[],b='',m=null;function flush(){if(!b)return;a.push({type:m==='math'&&formulaish(b)?'math':'text',text:b});b='';m=null;}for(var i=0;i<line.length;i++){var c=line[i],sp=(c===' '||c==='　'),mc=mathChar(c);if(sp){b+=c;if(!m)m='text';continue;}if(mc){if(m==='text')flush();m='math';b+=c;}else{if(m==='math')flush();m='text';b+=c;}}flush();var r=[];for(var j=0;j<a.length;j++){if(a[j].type==='text'&&/^[\s　]+$/.test(a[j].text)&&r.length&&r[r.length-1].type==='math'&&a[j+1]&&a[j+1].type==='math'){r[r.length-1].text+=a[j].text+a[j+1].text;j++;}else r.push(a[j]);}return r;}
+function mapSeq(s,map,mark){var re=new RegExp('['+Object.keys(map).join('')+']+','g');return s.replace(re,function(m){return mark+'{'+m.split('').map(function(c){return map[c]||c;}).join('')+'}';});}
+function lp(s,i){var d=0;for(;i>=0;i--){if(s[i]===')')d++;else if(s[i]==='('){d--;if(d===0)return i;}}return-1;}
+function rp(s,i){var d=0;for(;i<s.length;i++){if(s[i]==='(')d++;else if(s[i]===')'){d--;if(d===0)return i;}}return-1;}
+function frac(s){var g=0;while(s.indexOf('/')>=0&&g++<20){var i=s.indexOf('/'),le=i-1,rs=i+1;while(le>=0&&/\s/.test(s[le]))le--;while(rs<s.length&&/\s/.test(s[rs]))rs++;if(le<0||rs>=s.length)break;var ns,ne,num,ds,de,den;if(s[le]===')'){var L=lp(s,le);if(L<0)break;ns=L;ne=le+1;num=s.slice(L+1,le);}else{ns=le;while(ns>=0&&!/[=,+;、，]/.test(s[ns])&&s[ns]!==')'&&s[ns]!=='('&&!/\s/.test(s[ns]))ns--;ns++;ne=le+1;num=s.slice(ns,ne);}if(s[rs]==='('){var R=rp(s,rs);if(R<0)break;ds=rs;de=R+1;den=s.slice(rs+1,R);}else{ds=rs;de=rs;while(de<s.length&&!/[=,+;、，]/.test(s[de])&&s[de]!==')'&&!/\s/.test(s[de]))de++;den=s.slice(ds,de);}if(!num||!den||num.indexOf('\\frac')>=0||den.indexOf('\\frac')>=0){s=s.slice(0,i)+'\\,/\\,'+s.slice(i+1);continue;}s=s.slice(0,ns)+'\\frac{'+num+'}{'+den+'}'+s.slice(de);}return s;}
+function latex(s){s=(s||'').trim().replace(/[。]/g,'').replace(/　/g,' ');s=s.replace(/≠/g,'\\ne ').replace(/≥/g,'\\ge ').replace(/≤/g,'\\le ').replace(/±/g,'\\pm ').replace(/×/g,'\\times ').replace(/÷/g,'\\div ').replace(/∞/g,'\\infty ').replace(/π/g,'\\pi ').replace(/θ/g,'\\theta ').replace(/α/g,'\\alpha ').replace(/β/g,'\\beta ').replace(/γ/g,'\\gamma ').replace(/Δ/g,'\\Delta ').replace(/°/g,'^{\\circ}');s=mapSeq(s,sup,'^');s=mapSeq(s,sub,'_');s=s.replace(/√\\?\{([^{}]+)\}/g,'\\sqrt{$1}').replace(/√\(([^()]+)\)/g,'\\sqrt{$1}').replace(/√([A-Za-z0-9\\{}_^+\-]+)/g,'\\sqrt{$1}');s=s.replace(/\b(sin|cos|tan|log|ln)(\^\{[^}]+\})?\s*([A-Za-z\\][A-Za-z0-9\\{}_^]*)?/g,function(_,fn,pow,arg){return '\\'+fn+(pow||'')+(arg?' '+arg:'');});return frac(s);}
+function source(el){var raw=el.getAttribute('data-v2-source');if(raw)return raw;var p=el.querySelector(':scope > .math-plain');if(p)raw=p.textContent;else{var c=el.cloneNode(true);c.querySelectorAll('.math-formula-list,.textbook-display-math,.textbook-math,.katex,.katex-html,.katex-mathml').forEach(function(n){n.remove();});raw=c.textContent;}raw=(raw||'').trim();var seen={};raw=raw.split(/\n+/).map(function(x){return x.trim();}).filter(function(x){if(!x)return false;var k=x.replace(/\s+/g,'');if(seen[k])return false;seen[k]=true;return true;}).join('\n');if(raw)el.setAttribute('data-v2-source',raw);return raw;}
+function putMath(p,t,disp){var s=document.createElement('span');s.className=disp?'textbook-display-math':'textbook-math';try{katex.render(latex(t),s,{displayMode:disp,throwOnError:false,strict:'ignore'});}catch(e){s.textContent=t;}p.appendChild(s);}
+function mostly(line,segs,kind){if(kind==='prompt')return false;if((line.match(/[ぁ-んァ-ン一-龯]/g)||[]).length)return false;if(line.indexOf('=')>=0)return true;if(segs.length===1&&segs[0].type==='math'&&line.length>8)return true;return false;}
+function renderLine(p,line,kind){var b=document.createElement('span');b.className='textbook-line';var segs=splitLine(line);if(mostly(line,segs,kind)){putMath(b,line,true);p.appendChild(b);return;}segs.forEach(function(s){if(s.type==='math')putMath(b,s.text,false);else b.appendChild(document.createTextNode(s.text));});p.appendChild(b);}
+function render(el,kind){if(!el||busy||!window.katex)return;var raw=source(el);if(!raw)return;if(el.getAttribute('data-v2-rendered')===V&&el.getAttribute('data-v2-rendered-raw')===raw)return;busy=true;el.innerHTML='';el.classList.add('textbook-rendered');el.setAttribute('data-v2-rendered',V);el.setAttribute('data-v2-rendered-raw',raw);raw.split(/\n+/).forEach(function(line){renderLine(el,line,kind);});busy=false;}
+function enhance(){ensureTheme();labels();if(!window.katex)return;render(document.querySelector('#cardPrompt'),'prompt');render(document.querySelector('#cardAnswer'),'answer');document.querySelectorAll('.formula-item .ans').forEach(function(el){render(el,'formula');});labels();}
+function schedule(){clearTimeout(timer);timer=setTimeout(enhance,80);}
+ready(function(){assets(function(){wrapDrive();enhance();var mo=new MutationObserver(function(){if(!busy)schedule();});mo.observe(document.body,{childList:true,subtree:true,characterData:true});['click','input','change'].forEach(function(e){document.addEventListener(e,function(){setTimeout(function(){wrapDrive();enhance();},120);},true);});});});
 })();
