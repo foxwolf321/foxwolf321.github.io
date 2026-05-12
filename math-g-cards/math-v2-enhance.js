@@ -1,38 +1,66 @@
-/* math-g-cards v2 enhancement overlay
+/* math-g-cards v2 enhancement overlay - fixed theme cache
+   - 古い theme CSS を後から再注入しない
    - Google Drive欄を「設定」に格納
    - KaTeXで数式の縦分数表示を追加
-   - 既存アプリ本体は壊さないため、DOM上の表示だけを拡張する
 */
 (function(){
   'use strict';
   var busy=false;
   var debounceTimer=null;
+  var THEME_VERSION='20260514';
+
   function ready(fn){
     if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', fn);
     else fn();
   }
+
+  function ensureLatestTheme(){
+    var latest='./math-v2-theme.css?v='+THEME_VERSION;
+    var links=[].slice.call(document.querySelectorAll('link[rel="stylesheet"]'));
+    var hasLatest=links.some(function(l){return (l.getAttribute('href')||'').indexOf('math-v2-theme.css?v='+THEME_VERSION)!==-1;});
+    if(!hasLatest){
+      var l=document.createElement('link');
+      l.rel='stylesheet';
+      l.href=latest;
+      document.head.appendChild(l);
+    }
+    // 古いv=20260509/11/12/13が後から勝つのを防ぐ
+    setTimeout(function(){
+      [].slice.call(document.querySelectorAll('link[rel="stylesheet"]')).forEach(function(l){
+        var h=l.getAttribute('href')||'';
+        if(h.indexOf('math-v2-theme.css')!==-1 && h.indexOf('v='+THEME_VERSION)===-1){
+          l.parentNode && l.parentNode.removeChild(l);
+        }
+      });
+    },0);
+  }
+
   function addCss(href){
-    if(document.querySelector('link[href*="'+href.split('/').pop()+'"]')) return;
+    var base=href.split('/').pop().split('?')[0];
+    if(document.querySelector('link[href*="'+base+'"]')) return;
     var l=document.createElement('link');
     l.rel='stylesheet';
     l.href=href;
     document.head.appendChild(l);
   }
+
   function addScript(src, cb){
     if(window.katex){ cb&&cb(); return; }
     var existing=document.querySelector('script[src*="katex.min.js"]');
-    if(existing){ existing.addEventListener('load', function(){cb&&cb();}); return; }
+    if(existing){ existing.addEventListener('load', function(){cb&&cb();}); setTimeout(function(){cb&&cb();},800); return; }
     var s=document.createElement('script');
     s.src=src;
     s.defer=true;
     s.onload=function(){cb&&cb();};
     document.head.appendChild(s);
   }
+
   function ensureAssets(cb){
-    addCss('./math-v2-theme.css?v=20260509');
+    ensureLatestTheme();
     addCss('https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css');
     addScript('https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js', cb);
   }
+
   function wrapDriveSettings(){
     var header=document.querySelector('header.panel');
     if(!header || header.querySelector('.settings-panel')) return;
@@ -49,16 +77,20 @@
     details.appendChild(body);
     header.appendChild(details);
   }
+
   function hasMath(s){
     return /[=√∑∫±×÷<>≤≥∞πθθαβγxyabcABCrlmnRSTuvDEFGHIJKLMNOPQXYZ\/²³₀₁₂₃₄₅₆₇₈₉]|sin|cos|tan|log|ln|lim|dx|dy/.test(s || '');
   }
+
   var supMap={'⁰':'0','¹':'1','²':'2','³':'3','⁴':'4','⁵':'5','⁶':'6','⁷':'7','⁸':'8','⁹':'9','ⁿ':'n'};
   var subMap={'₀':'0','₁':'1','₂':'2','₃':'3','₄':'4','₅':'5','₆':'6','₇':'7','₈':'8','₉':'9'};
+
   function mapSeq(s,map,mark){
     var keys=Object.keys(map).join('');
     var re=new RegExp('['+keys+']+','g');
     return s.replace(re,function(m){return mark+'{'+m.split('').map(function(c){return map[c]||c;}).join('')+'}';});
   }
+
   function normalizeLatex(s){
     s=(s||'').trim();
     s=s.replace(/[。]/g,'');
@@ -83,24 +115,21 @@
     s=s.replace(/√\(([^()]+)\)/g,'\\sqrt{$1}');
     s=s.replace(/√([A-Za-z0-9\\{}_^+\-]+)/g,'\\sqrt{$1}');
     s=s.replace(/\b(sin|cos|tan|log|ln)\s*([A-Za-z\\][A-Za-z0-9\\{}_^]*)?/g,function(_,fn,arg){return '\\'+fn+(arg?' '+arg:'');});
-    // common parenthesized fractions
     s=s.replace(/\(([^()]+)\)\s*\/\s*\(([^()]+)\)/g,'\\frac{$1}{$2}');
     s=s.replace(/\(([^()]+)\)\s*\/\s*([A-Za-z0-9\\{}_^+\-]+)/g,'\\frac{$1}{$2}');
     s=s.replace(/([A-Za-z0-9\\{}_^+\-]+)\s*\/\s*\(([^()]+)\)/g,'\\frac{$1}{$2}');
-    // simple a/b style fractions. Repeated twice catches αβ = c/a, etc.
     for(var i=0;i<2;i++){
       s=s.replace(/([A-Za-z0-9\\{}_^+\-]+)\s*\/\s*([A-Za-z0-9\\{}_^+\-]+)/g,'\\frac{$1}{$2}');
     }
-    // Put Japanese prose into text mode when it remains inside a candidate.
     s=s.replace(/([ぁ-んァ-ン一-龯]+(?:[ぁ-んァ-ン一-龯0-9A-Za-z]*)?)/g,function(m){return '\\text{'+m+'}';});
     return s;
   }
+
   function extractCandidates(raw){
     var out=[];
     String(raw||'').split(/\n+/).forEach(function(line){
       line=line.trim();
       if(!line || !hasMath(line)) return;
-      // Keep full line, but also split very long explanatory lines at Japanese comma.
       var parts=line.length>46 ? line.split(/[、；;]/) : [line];
       parts.forEach(function(p){
         p=p.trim();
@@ -109,6 +138,7 @@
     });
     return out.slice(0,4);
   }
+
   function enhanceElement(el){
     if(!el || busy || !window.katex) return;
     var raw;
@@ -143,24 +173,31 @@
     el.appendChild(list);
     busy=false;
   }
+
   function enhanceAll(){
+    ensureLatestTheme();
     if(!window.katex) return;
-    var selectors=['#cardPrompt','#cardAnswer','.formula-item .ans'];
-    selectors.forEach(function(sel){
+    ['#cardPrompt','#cardAnswer','.formula-item .ans'].forEach(function(sel){
       document.querySelectorAll(sel).forEach(enhanceElement);
     });
   }
+
   function scheduleEnhance(){
     clearTimeout(debounceTimer);
     debounceTimer=setTimeout(enhanceAll,80);
   }
+
   ready(function(){
     ensureAssets(function(){
       wrapDriveSettings();
       enhanceAll();
       var observer=new MutationObserver(function(){ if(!busy) scheduleEnhance(); });
       observer.observe(document.body,{childList:true,subtree:true,characterData:true});
-      ['click','input','change'].forEach(function(ev){document.addEventListener(ev,function(){setTimeout(function(){wrapDriveSettings();enhanceAll();},120);},true);});
+      ['click','input','change'].forEach(function(ev){
+        document.addEventListener(ev,function(){
+          setTimeout(function(){wrapDriveSettings();enhanceAll();},120);
+        },true);
+      });
     });
   });
 })();

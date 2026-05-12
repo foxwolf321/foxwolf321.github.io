@@ -1,38 +1,25 @@
-/* math-g-cards v2 theme overlay - fixed clear background / strong transparency
-   目的:
-   - 背景をぼかさず原画のまま表示
-   - 背景をスクロールで動かさない
-   - カード・公式集・設定欄の透過を強める
-   2026-05-13 */
+/* math-g-cards v2 theme overlay - NO MEMBRANE / fixed clear background / strong transparency
+   2026-05-14 */
 :root{
   --bg:#f3ead7;
-  --panel:rgba(255,252,244,.24);
+  --panel:rgba(255,252,244,.18);
   --line:rgba(92,76,54,.24);
   --text:#241f18;
   --sub:#554b3d;
   --accent:#7a5a2f;
-  --soft:rgba(255,246,222,.38);
-  --danger:rgba(255,235,238,.42);
-  --warn:rgba(255,246,224,.44);
-  --ok:rgba(236,248,236,.42);
-  --easy:rgba(234,246,255,.38);
+  --soft:rgba(255,246,222,.30);
+  --danger:rgba(255,235,238,.34);
+  --warn:rgba(255,246,224,.36);
+  --ok:rgba(236,248,236,.34);
+  --easy:rgba(234,246,255,.30);
 }
-
-html{
-  min-height:100%;
-  background:#efe3cf;
-}
-
-/* 背景画像は body ではなく固定レイヤーに置く。
-   Android Chrome でも background-attachment:fixed より動きにくい方式。 */
+html{min-height:100%;background:#efe3cf;}
 body{
   min-height:100vh;
   margin:0;
   background:transparent !important;
   color:var(--text);
 }
-
-/* 原画そのまま。blur/filter/白い膜なし。 */
 body::before{
   content:"";
   position:fixed;
@@ -42,112 +29,56 @@ body::before{
   background:url('./app-bg.jpg') center center / cover no-repeat;
   transform:translateZ(0);
 }
-
-/* 背景を原画に近く見せるため、全体の白かぶりレイヤーは置かない */
-body::after{
-  content:none !important;
-}
-
-.wrap{
-  max-width:1040px;
-  padding:clamp(10px,2.8vw,18px);
-}
-
-/* 背景がボケる原因なので blur は完全停止 */
-.panel,
-.flashcard,
-.formula-item,
-.stat,
-.sync-box,
-#status,
-#syncStatus,
-input[type=search],
-input[type=text],
-.settings-panel{
+body::after{content:none !important;}
+.wrap{max-width:1040px;padding:clamp(10px,2.8vw,18px);}
+.panel,.flashcard,.formula-item,.stat,.sync-box,#status,#syncStatus,input[type=search],input[type=text],.settings-panel{
   backdrop-filter:none !important;
   -webkit-backdrop-filter:none !important;
 }
-
 .panel{
-  background:rgba(255,252,244,.24) !important;
-  border-color:rgba(101,82,56,.25) !important;
-  box-shadow:0 8px 18px rgba(54,39,24,.10) !important;
+  background:rgba(255,252,244,.18) !important;
+  border-color:rgba(101,82,56,.24) !important;
+  box-shadow:0 6px 14px rgba(54,39,24,.08) !important;
 }
-
-header.panel{
-  background:rgba(255,252,244,.22) !important;
-}
-
+header.panel{background:rgba(255,252,244,.16) !important;}
 h1{
   letter-spacing:.01em;
-  text-shadow:
-    0 1px 0 rgba(255,255,255,.60),
-    0 0 8px rgba(255,252,244,.40);
+  text-shadow:0 1px 0 rgba(255,255,255,.68),0 0 7px rgba(255,252,244,.42);
 }
-
 button{
-  background:rgba(255,252,244,.42) !important;
+  background:rgba(255,252,244,.32) !important;
   border-color:rgba(96,77,52,.30) !important;
-  box-shadow:0 2px 6px rgba(49,36,21,.06);
+  box-shadow:0 2px 5px rgba(49,36,21,.05);
 }
-
 button.primary{
-  background:linear-gradient(135deg,rgba(114,82,44,.86),rgba(157,115,64,.86)) !important;
-  border-color:rgba(110,79,43,.78) !important;
+  background:linear-gradient(135deg,rgba(114,82,44,.84),rgba(157,115,64,.84)) !important;
+  border-color:rgba(110,79,43,.75) !important;
   color:#fff !important;
 }
-
-button.soft{
-  background:rgba(255,244,215,.34) !important;
-  color:#604418 !important;
-}
-
-button.active{
-  background:rgba(44,37,28,.84) !important;
-  color:#fff !important;
-  border-color:rgba(44,37,28,.86) !important;
-}
-
-button.danger{background:rgba(255,235,238,.38) !important;}
-button.ok{background:rgba(232,248,232,.36) !important;}
-button.warn{background:rgba(255,243,216,.40) !important;}
-button.easy{background:rgba(231,245,255,.34) !important;}
-
+button.soft{background:rgba(255,244,215,.28) !important;color:#604418 !important;}
+button.active{background:rgba(44,37,28,.80) !important;color:#fff !important;border-color:rgba(44,37,28,.84) !important;}
+button.danger{background:rgba(255,235,238,.30) !important;}
+button.ok{background:rgba(232,248,232,.28) !important;}
+button.warn{background:rgba(255,243,216,.32) !important;}
+button.easy{background:rgba(231,245,255,.28) !important;}
 .flashcard{
-  background:rgba(255,252,244,.18) !important;
+  background:rgba(255,252,244,.12) !important;
   border-color:rgba(115,91,61,.24) !important;
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.22),
-    0 6px 14px rgba(42,29,16,.07);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.18),0 5px 12px rgba(42,29,16,.06);
 }
-
-.answer,
-.stat,
-.formula-item,
-.sync-box,
-#status,
-#syncStatus{
-  background:rgba(255,252,244,.22) !important;
+.answer,.stat,.formula-item,.sync-box,#status,#syncStatus{
+  background:rgba(255,252,244,.16) !important;
   border-color:rgba(104,84,57,.22) !important;
 }
-
-input[type=search],
-input[type=text]{
-  background:rgba(255,253,248,.36) !important;
-}
-
+input[type=search],input[type=text]{background:rgba(255,253,248,.28) !important;}
 .settings-panel{
   margin-top:12px;
   border:1px solid rgba(101,82,56,.24);
   border-radius:18px;
-  background:rgba(255,252,244,.18);
+  background:rgba(255,252,244,.12);
   overflow:hidden;
 }
-
-.settings-panel[open]{
-  background:rgba(255,252,244,.24);
-}
-
+.settings-panel[open]{background:rgba(255,252,244,.18);}
 .settings-panel summary{
   list-style:none;
   cursor:pointer;
@@ -159,11 +90,7 @@ input[type=text]{
   font-weight:700;
   color:#30271c;
 }
-
-.settings-panel summary::-webkit-details-marker{
-  display:none;
-}
-
+.settings-panel summary::-webkit-details-marker{display:none;}
 .settings-panel summary::after{
   content:"開く";
   font-size:.86rem;
@@ -171,83 +98,31 @@ input[type=text]{
   border:1px solid rgba(111,94,73,.28);
   border-radius:999px;
   padding:3px 10px;
-  background:rgba(255,255,255,.24);
+  background:rgba(255,255,255,.18);
 }
-
-.settings-panel[open] summary::after{
-  content:"閉じる";
-}
-
-.settings-body{
-  padding:0 12px 12px;
-}
-
-.settings-body .sync-grid{
-  display:grid !important;
-  grid-template-columns:1fr 1fr;
-  gap:12px;
-  margin-top:0;
-}
-
-.math-plain{
-  white-space:pre-wrap;
-}
-
-.formula-enhanced .math-plain{
-  margin-bottom:8px;
-}
-
-.math-formula-list{
-  display:grid;
-  gap:7px;
-  margin-top:8px;
-}
-
+.settings-panel[open] summary::after{content:"閉じる";}
+.settings-body{padding:0 12px 12px;}
+.settings-body .sync-grid{display:grid !important;grid-template-columns:1fr 1fr;gap:12px;margin-top:0;}
+.math-plain{white-space:pre-wrap;}
+.formula-enhanced .math-plain{margin-bottom:8px;}
+.math-formula-list{display:grid;gap:7px;margin-top:8px;}
 .math-formula{
   overflow-x:auto;
   -webkit-overflow-scrolling:touch;
   padding:10px 12px;
   border-radius:13px;
-  background:rgba(255,255,255,.18);
+  background:rgba(255,255,255,.14);
   border:1px solid rgba(109,89,60,.16);
 }
-
-.math-formula .katex{
-  font-size:1.12em;
+.math-formula .katex{font-size:1.12em;}
+.prompt .math-formula .katex{font-size:1.02em;}
+.katex-display{margin:.2em 0 !important;}
+.prompt,.answer,.formula-item,.stat,#status,#syncStatus,.note,.meta,.formula-item .ans{
+  text-shadow:0 1px 2px rgba(255,255,255,.52);
 }
-
-.prompt .math-formula .katex{
-  font-size:1.02em;
-}
-
-.katex-display{
-  margin:.2em 0 !important;
-}
-
-/* 透過を強めるぶん、文字の読みやすさだけ少し補強 */
-.prompt,
-.answer,
-.formula-item,
-.stat,
-#status,
-#syncStatus,
-.note,
-.meta,
-.formula-item .ans{
-  text-shadow:0 1px 2px rgba(255,255,255,.46);
-}
-
 @media(max-width:720px){
-  .panel{
-    border-radius:16px;
-  }
-  .flashcard{
-    min-height:220px;
-  }
-  .settings-body .sync-grid{
-    grid-template-columns:1fr;
-  }
-  .math-formula{
-    padding:8px 10px;
-  }
+  .panel{border-radius:16px;}
+  .flashcard{min-height:220px;}
+  .settings-body .sync-grid{grid-template-columns:1fr;}
+  .math-formula{padding:8px 10px;}
 }
