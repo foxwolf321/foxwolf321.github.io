@@ -1,19 +1,15 @@
-/* math-g-cards v2 enhancement overlay - fixed theme cache
-   - 古い theme CSS を後から再注入しない
-   - Google Drive欄を「設定」に格納
-   - KaTeXで数式の縦分数表示を追加
-*/
+/* math-g-cards v2 enhancement overlay - version bump for theme cache
+   2026-05-15 */
 (function(){
   'use strict';
   var busy=false;
   var debounceTimer=null;
-  var THEME_VERSION='20260514';
+  var THEME_VERSION='20260515';
 
   function ready(fn){
     if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', fn);
     else fn();
   }
-
   function ensureLatestTheme(){
     var latest='./math-v2-theme.css?v='+THEME_VERSION;
     var links=[].slice.call(document.querySelectorAll('link[rel="stylesheet"]'));
@@ -24,7 +20,6 @@
       l.href=latest;
       document.head.appendChild(l);
     }
-    // 古いv=20260509/11/12/13が後から勝つのを防ぐ
     setTimeout(function(){
       [].slice.call(document.querySelectorAll('link[rel="stylesheet"]')).forEach(function(l){
         var h=l.getAttribute('href')||'';
@@ -34,7 +29,6 @@
       });
     },0);
   }
-
   function addCss(href){
     var base=href.split('/').pop().split('?')[0];
     if(document.querySelector('link[href*="'+base+'"]')) return;
@@ -43,7 +37,6 @@
     l.href=href;
     document.head.appendChild(l);
   }
-
   function addScript(src, cb){
     if(window.katex){ cb&&cb(); return; }
     var existing=document.querySelector('script[src*="katex.min.js"]');
@@ -54,13 +47,11 @@
     s.onload=function(){cb&&cb();};
     document.head.appendChild(s);
   }
-
   function ensureAssets(cb){
     ensureLatestTheme();
     addCss('https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css');
     addScript('https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js', cb);
   }
-
   function wrapDriveSettings(){
     var header=document.querySelector('header.panel');
     if(!header || header.querySelector('.settings-panel')) return;
@@ -77,38 +68,22 @@
     details.appendChild(body);
     header.appendChild(details);
   }
-
   function hasMath(s){
     return /[=√∑∫±×÷<>≤≥∞πθθαβγxyabcABCrlmnRSTuvDEFGHIJKLMNOPQXYZ\/²³₀₁₂₃₄₅₆₇₈₉]|sin|cos|tan|log|ln|lim|dx|dy/.test(s || '');
   }
-
   var supMap={'⁰':'0','¹':'1','²':'2','³':'3','⁴':'4','⁵':'5','⁶':'6','⁷':'7','⁸':'8','⁹':'9','ⁿ':'n'};
   var subMap={'₀':'0','₁':'1','₂':'2','₃':'3','₄':'4','₅':'5','₆':'6','₇':'7','₈':'8','₉':'9'};
-
   function mapSeq(s,map,mark){
     var keys=Object.keys(map).join('');
     var re=new RegExp('['+keys+']+','g');
     return s.replace(re,function(m){return mark+'{'+m.split('').map(function(c){return map[c]||c;}).join('')+'}';});
   }
-
   function normalizeLatex(s){
     s=(s||'').trim();
     s=s.replace(/[。]/g,'');
     s=s.replace(/　/g,' ');
     s=s.replace(/（.*?）/g,function(m){return '\\quad \\text{'+m.slice(1,-1).replace(/[{}]/g,'')+'}';});
-    s=s.replace(/≠/g,'\\ne ')
-       .replace(/≥/g,'\\ge ')
-       .replace(/≤/g,'\\le ')
-       .replace(/±/g,'\\pm ')
-       .replace(/×/g,'\\times ')
-       .replace(/÷/g,'\\div ')
-       .replace(/∞/g,'\\infty ')
-       .replace(/π/g,'\\pi ')
-       .replace(/θ/g,'\\theta ')
-       .replace(/α/g,'\\alpha ')
-       .replace(/β/g,'\\beta ')
-       .replace(/γ/g,'\\gamma ')
-       .replace(/Δ/g,'\\Delta ');
+    s=s.replace(/≠/g,'\\ne ').replace(/≥/g,'\\ge ').replace(/≤/g,'\\le ').replace(/±/g,'\\pm ').replace(/×/g,'\\times ').replace(/÷/g,'\\div ').replace(/∞/g,'\\infty ').replace(/π/g,'\\pi ').replace(/θ/g,'\\theta ').replace(/α/g,'\\alpha ').replace(/β/g,'\\beta ').replace(/γ/g,'\\gamma ').replace(/Δ/g,'\\Delta ');
     s=mapSeq(s,supMap,'^');
     s=mapSeq(s,subMap,'_');
     s=s.replace(/√\{([^{}]+)\}/g,'\\sqrt{$1}');
@@ -118,13 +93,10 @@
     s=s.replace(/\(([^()]+)\)\s*\/\s*\(([^()]+)\)/g,'\\frac{$1}{$2}');
     s=s.replace(/\(([^()]+)\)\s*\/\s*([A-Za-z0-9\\{}_^+\-]+)/g,'\\frac{$1}{$2}');
     s=s.replace(/([A-Za-z0-9\\{}_^+\-]+)\s*\/\s*\(([^()]+)\)/g,'\\frac{$1}{$2}');
-    for(var i=0;i<2;i++){
-      s=s.replace(/([A-Za-z0-9\\{}_^+\-]+)\s*\/\s*([A-Za-z0-9\\{}_^+\-]+)/g,'\\frac{$1}{$2}');
-    }
+    for(var i=0;i<2;i++){ s=s.replace(/([A-Za-z0-9\\{}_^+\-]+)\s*\/\s*([A-Za-z0-9\\{}_^+\-]+)/g,'\\frac{$1}{$2}'); }
     s=s.replace(/([ぁ-んァ-ン一-龯]+(?:[ぁ-んァ-ン一-龯0-9A-Za-z]*)?)/g,function(m){return '\\text{'+m+'}';});
     return s;
   }
-
   function extractCandidates(raw){
     var out=[];
     String(raw||'').split(/\n+/).forEach(function(line){
@@ -138,7 +110,6 @@
     });
     return out.slice(0,4);
   }
-
   function enhanceElement(el){
     if(!el || busy || !window.katex) return;
     var raw;
@@ -162,18 +133,14 @@
       var box=document.createElement('div');
       box.className='math-formula';
       var latex=normalizeLatex(f);
-      try{
-        window.katex.render(latex, box, {displayMode:true, throwOnError:false, strict:'ignore'});
-      }catch(e){
-        box.textContent=f;
-      }
+      try{ window.katex.render(latex, box, {displayMode:true, throwOnError:false, strict:'ignore'}); }
+      catch(e){ box.textContent=f; }
       list.appendChild(box);
     });
     el.appendChild(plainDiv);
     el.appendChild(list);
     busy=false;
   }
-
   function enhanceAll(){
     ensureLatestTheme();
     if(!window.katex) return;
@@ -181,12 +148,10 @@
       document.querySelectorAll(sel).forEach(enhanceElement);
     });
   }
-
   function scheduleEnhance(){
     clearTimeout(debounceTimer);
     debounceTimer=setTimeout(enhanceAll,80);
   }
-
   ready(function(){
     ensureAssets(function(){
       wrapDriveSettings();
