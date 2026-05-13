@@ -1,195 +1,169 @@
-/* math-g-cards v2.0.21: visual cleanup */
-:root{
-  --bg:#efe7d9;
-  --panel:rgba(255,250,242,.50);
-  --line:rgba(92,76,54,.25);
-  --text:#241f18;
-  --sub:#4b4034;
-  --accent:#7a5a2f;
-}
-html{min-height:100%;background:#efe3cf}
-body{min-height:100vh;margin:0;background:transparent!important;color:var(--text)}
-body:before{
-  content:"";
-  position:fixed;
-  inset:0;
-  z-index:-2;
-  pointer-events:none;
-  background:url('./app-bg.jpg') center center/cover no-repeat;
-  transform:translateZ(0)
-}
-body:after{content:none!important}
-.wrap{max-width:1040px;padding:clamp(10px,2.8vw,18px)}
+/* math-g-cards v20260523
+   分数の分子上部切れ修正 + 前回の見た目調整維持
+*/
 
-.panel,.flashcard,.formula-item,.stat,.sync-box,#status,#syncStatus,input[type=search],input[type=text],.settings-panel{
-  backdrop-filter:none!important;
-  -webkit-backdrop-filter:none!important
+/* 前回までの薄め背景 */
+:root{
+  --panel:rgba(255,250,242,.48) !important;
+  --panel2:rgba(255,250,242,.42) !important;
+  --sub:#4a4034 !important;
 }
 
 .panel{
-  background:rgba(255,250,242,.50)!important;
-  border-color:rgba(101,82,56,.24)!important;
-  box-shadow:0 8px 18px rgba(54,39,24,.08)!important
+  background:rgba(255,250,242,.48) !important;
+  border-color:rgba(101,82,56,.22) !important;
+  box-shadow:0 7px 16px rgba(54,39,24,.08) !important;
 }
-header.panel{background:rgba(255,250,242,.46)!important}
-
-button{
-  background:rgba(255,250,242,.66)!important;
-  border-color:rgba(96,77,52,.30)!important;
-  box-shadow:0 2px 5px rgba(49,36,21,.05)
-}
-button.primary{
-  background:linear-gradient(135deg,rgba(114,82,44,.92),rgba(157,115,64,.92))!important;
-  border-color:rgba(110,79,43,.82)!important;
-  color:#fff!important
-}
-button.soft{background:rgba(255,244,215,.58)!important;color:#604418!important}
-button.active{background:rgba(44,37,28,.88)!important;color:#fff!important;border-color:rgba(44,37,28,.88)!important}
-
+header.panel{background:rgba(255,250,242,.42) !important;}
 .flashcard{
-  background:rgba(255,250,242,.52)!important;
-  border-color:rgba(115,91,61,.23)!important;
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.20),0 4px 10px rgba(42,29,16,.05);
-  overflow:visible!important
+  background:rgba(255,250,242,.50) !important;
+  border-color:rgba(99,76,48,.18) !important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.18),0 4px 10px rgba(40,28,14,.05) !important;
+  overflow:visible !important;
 }
-.answer,.stat,.formula-item,.sync-box,#status,#syncStatus{
-  background:rgba(255,250,242,.46)!important;
-  border-color:rgba(104,84,57,.20)!important
+.answer,.stat,.chart-card,.formula-item,.status,.settings-panel{
+  background:rgba(255,250,242,.42) !important;
+  border-color:rgba(99,76,48,.16) !important;
 }
-.formula-item{overflow:visible!important}
-input[type=search],input[type=text]{background:rgba(255,253,248,.70)!important}
 
-.settings-panel{
-  margin-top:12px;
-  border:1px solid rgba(101,82,56,.22);
-  border-radius:18px;
-  background:rgba(255,250,242,.44);
-  overflow:hidden
+/* 小さい字 */
+.meta,.note,.kicker,.answer-title,#queueLabel,#currentMeta,#schedulePreview,#status,#syncStatus,
+.stat span:not(.n),.formula-item .meta,.formula-item .mini,.legend,.unit-block,.section-title{
+  color:#3f352a !important;
+  font-weight:650 !important;
+  text-shadow:0 1px 2px rgba(255,255,255,.46) !important;
 }
-.settings-panel[open]{background:rgba(255,250,242,.50)}
-.settings-panel summary{
-  list-style:none;
-  cursor:pointer;
-  padding:12px 14px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:10px;
-  font-weight:700;
-  color:#30271c
-}
-.settings-panel summary::-webkit-details-marker{display:none}
-.settings-panel summary:after{
-  content:"開く";
-  font-size:.86rem;
-  color:#5b4a35;
-  border:1px solid rgba(111,94,73,.28);
-  border-radius:999px;
-  padding:3px 10px;
-  background:rgba(255,255,255,.28)
-}
-.settings-panel[open] summary:after{content:"閉じる"}
-.settings-body{padding:0 12px 12px}
-.settings-body .sync-grid{display:grid!important;grid-template-columns:1fr 1fr;gap:12px;margin-top:0}
 
-.kicker{font-weight:700}
-.answer-title{
-  display:none;
-  margin:14px 0 6px;
-  font-size:.82rem;
-  color:var(--sub);
-  letter-spacing:.04em;
-  font-weight:700
+/* 既存のスクロールバー消し */
+.mathblock,.prompt,.answer,.formula-item,.formula-item .ans,.katex-display,.katex,.katex-html,
+.tb-math,.tb-display,.flashcard,#cardPrompt,#cardAnswer{
+  scrollbar-width:none !important;
+  -ms-overflow-style:none !important;
 }
-.answer-title.visible{display:block}
+.mathblock::-webkit-scrollbar,.prompt::-webkit-scrollbar,.answer::-webkit-scrollbar,
+.formula-item::-webkit-scrollbar,.formula-item .ans::-webkit-scrollbar,.katex-display::-webkit-scrollbar,
+.katex::-webkit-scrollbar,.katex-html::-webkit-scrollbar,.tb-math::-webkit-scrollbar,
+.tb-display::-webkit-scrollbar,.flashcard::-webkit-scrollbar,#cardPrompt::-webkit-scrollbar,
+#cardAnswer::-webkit-scrollbar{
+  width:0 !important;
+  height:0 !important;
+  display:none !important;
+  background:transparent !important;
+}
 
-.prompt,.answer,.formula-item .ans,#cardPrompt,#cardAnswer{
-  white-space:normal!important;
-  overflow:visible!important;
-  overflow-wrap:anywhere;
-  word-break:normal
+/* ===== 分子上部切れ修正の本体 ===== */
+.tb-line,
+.tb-math,
+.tb-frac,
+.tb-frac .num,
+.tb-frac .den,
+.answer,
+.prompt,
+.formula-item .ans{
+  overflow:visible !important;
 }
-.textbook-rendered{white-space:normal!important;overflow-wrap:anywhere}
-.tb-line{display:block;margin:.18em 0;line-height:1.8}
-.prompt .tb-line{font-weight:700;line-height:1.72}
+
+.tb-line{
+  line-height:1.95 !important;
+}
+
+.prompt .tb-line{
+  line-height:1.85 !important;
+}
+
 .tb-math{
-  font-family:"Times New Roman","Cambria Math","STIX Two Math",serif;
-  font-style:italic;
-  white-space:nowrap;
-  overflow:visible!important
+  display:inline-block !important;
+  vertical-align:middle !important;
+  line-height:1.35 !important;
+  padding-top:.08em !important;
+  padding-bottom:.05em !important;
 }
-.tb-fn{font-style:normal}
+
 .tb-frac{
-  display:inline-grid;
-  grid-template-rows:auto auto;
-  align-items:center;
-  justify-items:center;
-  vertical-align:-.48em;
-  margin:0 .12em;
-  line-height:1.05;
-  font-family:"Times New Roman","Cambria Math","STIX Two Math",serif;
-  font-style:italic
+  display:inline-grid !important;
+  grid-template-rows:auto auto !important;
+  align-items:center !important;
+  justify-items:center !important;
+  vertical-align:-.42em !important;
+  line-height:1.12 !important;
+  margin:0 .14em !important;
+  padding-top:.16em !important;   /* 分子の頭を切らない */
+  padding-bottom:.08em !important;
 }
+
 .tb-frac .num{
-  display:block;
-  padding:0 .12em .03em;
-  border-bottom:1.5px solid rgba(50,40,28,.88);
-  min-width:1.2em;
-  text-align:center
+  display:block !important;
+  padding:.10em .14em .05em !important;  /* 上部余白を増やす */
+  border-bottom:1.5px solid rgba(50,40,28,.88) !important;
+  min-width:1.25em !important;
+  text-align:center !important;
+  line-height:1.15 !important;
 }
+
 .tb-frac .den{
-  display:block;
-  padding:.03em .12em 0;
-  min-width:1.2em;
-  text-align:center
+  display:block !important;
+  padding:.06em .14em 0 !important;
+  min-width:1.25em !important;
+  text-align:center !important;
+  line-height:1.15 !important;
 }
-.tb-sqrt{display:inline-flex;align-items:flex-start;gap:.02em}
+
+/* sqrt も念のため上部余白 */
+.tb-sqrt{
+  display:inline-flex !important;
+  align-items:flex-start !important;
+  gap:.02em !important;
+  padding-top:.06em !important;
+}
 .tb-sqrt .rad{
-  border-top:1.5px solid rgba(50,40,28,.88);
-  padding:0 .10em 0 .12em;
-  display:inline-block
-}
-.tb-display{
-  display:block;
-  max-width:100%;
-  margin:.42em 0;
-  padding:.30em .46em;
-  border-radius:10px;
-  background:rgba(255,255,255,.20);
-  border:1px solid rgba(109,89,60,.10)
+  border-top:1.5px solid rgba(50,40,28,.88) !important;
+  padding:.02em .10em 0 .12em !important;
+  display:inline-block !important;
 }
 
-/* scrollbar hide */
-.tb-math,.tb-display,.flashcard,.formula-item,#cardPrompt,#cardAnswer,.prompt,.answer{
-  scrollbar-width:none!important;
-  -ms-overflow-style:none!important
-}
-.tb-math::-webkit-scrollbar,
-.tb-display::-webkit-scrollbar,
-.flashcard::-webkit-scrollbar,
-.formula-item::-webkit-scrollbar,
-#cardPrompt::-webkit-scrollbar,
-#cardAnswer::-webkit-scrollbar,
-.prompt::-webkit-scrollbar,
-.answer::-webkit-scrollbar{
-  width:0!important;
-  height:0!important;
-  display:none!important;
-  background:transparent!important
+/* KaTeX表示が残っている箇所の上部切れ保険 */
+.katex-display,
+.answer .katex-display,
+.formula-item .katex-display,
+.mathblock .katex-display{
+  overflow:visible !important;
+  padding-top:.08em !important;
+  padding-bottom:0 !important;
+  margin:.30em 0 !important;
+  background:transparent !important;
+  border:none !important;
+  box-shadow:none !important;
 }
 
-/* small text readability */
-small,.meta,.sub,.muted,.note,.caption,.kicker,.answer-title,#cardMeta,#status,#syncStatus,.formula-item > :not(.ans){
-  color:#4a4034!important;
-  font-weight:600
+.katex{
+  overflow:visible !important;
+  line-height:1.25 !important;
 }
-.stat,.formula-item,#status,#syncStatus{color:#241f18!important}
-.stat small,.stat .label,.formula-item .label{color:#4a4034!important;font-weight:700}
+
+.katex .mord,
+.katex .mfrac,
+.katex .vlist-t,
+.katex .vlist-r{
+  overflow:visible !important;
+}
+
+/* ボタン等 */
+button{background:rgba(255,250,242,.62) !important;}
+button.active{background:rgba(46,38,29,.90) !important;}
 
 @media(max-width:720px){
-  .panel{border-radius:16px}
-  .flashcard{min-height:220px}
-  .settings-body .sync-grid{grid-template-columns:1fr}
-  .tb-frac{margin:0 .08em}
-  .tb-display{padding:.24em .38em}
+  .panel{background:rgba(255,250,242,.46) !important;}
+  .flashcard{background:rgba(255,250,242,.48) !important;}
+  .answer,.stat,.chart-card,.formula-item,.status,.settings-panel{
+    background:rgba(255,250,242,.40) !important;
+  }
+  .tb-line{line-height:1.9 !important;}
+  .prompt .tb-line{line-height:1.8 !important;}
+  .tb-frac{
+    margin:0 .10em !important;
+    padding-top:.18em !important;
+  }
+  .tb-frac .num{
+    padding:.12em .12em .04em !important;
+  }
 }
