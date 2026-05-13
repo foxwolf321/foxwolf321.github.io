@@ -1,14 +1,14 @@
 {
-  "name": "数学公式カード Drive同期版",
+  "name": "数学公式カード v3 教科書表示版",
   "short_name": "数学公式カード",
   "id": "/math-g-cards/",
-  "start_url": "/math-g-cards/",
+  "start_url": "/math-g-cards/?v=300",
   "scope": "/math-g-cards/",
   "display": "standalone",
-  "background_color": "#f6f7fb",
-  "theme_color": "#2f5fe3",
+  "background_color": "#efe3cf",
+  "theme_color": "#8a6a40",
   "lang": "ja",
-  "description": "理系大学受験向けの数学公式カード式問題集。検索・一覧・間隔反復・Google Drive同期対応。",
+  "description": "大学受験数学の公式カード。教科書風の縦分数表示、カード学習、公式集、進捗管理、JSON/Google Drive保存に対応。",
   "icons": [
     {
       "src": "/math-g-cards/icon-192.png",
