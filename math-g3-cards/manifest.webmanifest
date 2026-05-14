@@ -1,0 +1,9 @@
+{
+  "name": "大学受験数学 公式カード",
+  "short_name": "数学公式",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#f7fbff",
+  "theme_color": "#f7fbff",
+  "lang": "ja"
+}
